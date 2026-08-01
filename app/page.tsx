@@ -110,7 +110,8 @@ export default function Home(){
           {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoId?"PLAY HERE / YOUTUBE":"VIDEO LINK PENDING"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span></div>
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
-          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer"><span>▶</span> OPEN CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">YOUTUBE ↗</a></div>
+          <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}>PLAY</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
+          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"FIND ON YOUTUBE"}</a></div>
           <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>MARKET CODE</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>
