@@ -22,15 +22,11 @@ function formatDate(value:string,includeTime=false) {
 
 export default function Home(){
   const [data]=useState<ChartData>(initialData);
-  const status:"ready"="ready";
   const [activeId,setActiveId]=useState(initialData.charts[0]?.id??"");
   const [market,setMarket]=useState<Market|"ALL">("ALL");
   const [query,setQuery]=useState("");
   const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
 
-  useEffect(()=>{ fetch(`charts.json?v=${Date.now()}`).then((response)=>{ if(!response.ok) throw new Error(); return response.json(); })
-    .then((next:ChartData)=>{ setData(next); setActiveId(next.charts[0]?.id??""); setSelected(next.charts[0]?.songs[0]??null); setStatus("ready"); })
-    .catch(()=>setStatus("error")); },[]);
   const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
   useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
   const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
@@ -84,9 +80,7 @@ export default function Home(){
         </div>
         <div className="column-head"><span>#</span><span>TRACK</span><span>SCORE</span><span>MARKET</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
-        {status==="loading"&&<div className="empty-state">Loading chart snapshots…</div>}
-        {status==="error"&&<div className="empty-state error">We could not load the data. Please try again later.</div>}
-        {status==="ready"&&songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
+        {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
         <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>setSelected(song)}>
           <span className="rank">{String(song.rank).padStart(2,"0")}</span>
           <span className="track"><span className="art cover-art"><b>{String(song.rank).padStart(2,"0")}</b><i>▶</i></span><span className="song-main"><b>{song.title}</b><small>{song.artist}</small></span></span>
