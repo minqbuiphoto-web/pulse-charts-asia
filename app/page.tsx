@@ -63,7 +63,7 @@ export default function Home(){
       <div className="hero-copy">
         <p className="kicker"><span>01</span> THE SOUND OF RIGHT NOW</p>
         <h1>Turn up<br/><em>what’s next.</em></h1>
-        <p>Seven charts across South Korea, Japan and Mainland China — national rankings, genre views and curated OST discovery in one place.</p>
+        <p>Current official rankings from South Korea, Japan and Mainland China — with visible chart periods, scores and sources.</p>
         <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE ALL 7 CHARTS</a>
       </div>
       <div className="hero-art" aria-hidden="true">
@@ -92,7 +92,7 @@ export default function Home(){
       <div className="chart-panel">
         <div className="panel-heading">
           <div><p className="kicker"><span>02</span> CURRENT TOP 10</p><h2>{active?.label??"Loading chart"}</h2></div>
-          {data&&<div className="sync-time"><span className="status-dot"/>UPDATED<br/><b>{formatDate(data.generatedAt,true)}</b></div>}
+          {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
         <div className="column-head"><span>#</span><span>TRACK</span><span>SCORE</span><span>MARKET</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
@@ -117,6 +117,7 @@ export default function Home(){
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Seven charts. Transparent sources.<br/>Built for music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>UPDATED {formatDate(active.updatedAt,true)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official chart snapshots. Transparent periods.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
+

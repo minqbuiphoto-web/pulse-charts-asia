@@ -1,1 +1,371 @@
-{"generatedAt":"2026-08-01T23:30:00+07:00","charts":[{"id":"kr-ost","label":"Korea OST","shortLabel":"KR ? OST","market":"KR","source":"Curated OST snapshot","sourceUrl":"https://minqbuiphoto-web.github.io/my-music-charts/","updatedAt":"2026-08-01T23:30:00+07:00","syncWarning":"Korean soundtrack discovery chart restored from the original system.","songs":[{"rank":1,"id":"kr-ost-1","title":"Sudden Shower","artist":"ECLIPSE","releaseDate":"KR","genre":"Lovely Runner","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":2,"id":"kr-ost-2","title":"I Don?t Know","artist":"Seventeen BSS","releaseDate":"KR","genre":"Queen of Tears","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":3,"id":"kr-ost-3","title":"Love You With All My Heart","artist":"Crush","releaseDate":"KR","genre":"Queen of Tears","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":4,"id":"kr-ost-4","title":"Run Run","artist":"ECLIPSE","releaseDate":"KR","genre":"Lovely Runner","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":5,"id":"kr-ost-5","title":"Like a Dream","artist":"Minnie","releaseDate":"KR","genre":"Lovely Runner","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":6,"id":"kr-ost-6","title":"Stay With Me","artist":"Chanyeol & Punch","releaseDate":"KR","genre":"Goblin","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":7,"id":"kr-ost-7","title":"Christmas Tree","artist":"V (BTS)","releaseDate":"KR","genre":"Our Beloved Summer","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":8,"id":"kr-ost-8","title":"Sunset","artist":"Davichi","releaseDate":"KR","genre":"Crash Landing on You","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":9,"id":"kr-ost-9","title":"A Little Girl","artist":"Oh Hyuk","releaseDate":"KR","genre":"Reply 1988","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":10,"id":"kr-ost-10","title":"All With You","artist":"Taeyeon","releaseDate":"KR","genre":"Moon Lovers","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"}]},{"id":"jp-ost","label":"Japan OST","shortLabel":"JP ? OST","market":"JP","source":"Curated OST snapshot","sourceUrl":"https://minqbuiphoto-web.github.io/my-music-charts/","updatedAt":"2026-08-01T23:30:00+07:00","syncWarning":"Japanese soundtrack discovery chart restored from the original system.","songs":[{"rank":1,"id":"jp-ost-1","title":"Rain","artist":"Motohiro Hata","releaseDate":"JP","genre":"The Garden of Words","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":2,"id":"jp-ost-2","title":"Sparkle","artist":"RADWIMPS","releaseDate":"JP","genre":"Your Name","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":3,"id":"jp-ost-3","title":"Nandemonaiya","artist":"RADWIMPS","releaseDate":"JP","genre":"Your Name","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":4,"id":"jp-ost-4","title":"Kamado Tanjirou no Uta","artist":"Go Shiina","releaseDate":"JP","genre":"Demon Slayer","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":5,"id":"jp-ost-5","title":"Homura","artist":"LiSA","releaseDate":"JP","genre":"Demon Slayer","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":6,"id":"jp-ost-6","title":"Cry Baby","artist":"Official HIGE DANDISM","releaseDate":"JP","genre":"Tokyo Revengers","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":7,"id":"jp-ost-7","title":"Suzume","artist":"RADWIMPS","releaseDate":"JP","genre":"Suzume","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":8,"id":"jp-ost-8","title":"Utsukushii Hire","artist":"Spitz","releaseDate":"JP","genre":"Detective Conan","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":9,"id":"jp-ost-9","title":"Ao no Sumika","artist":"Tatsuya Kitani","releaseDate":"JP","genre":"Jujutsu Kaisen S2","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":10,"id":"jp-ost-10","title":"Leo","artist":"Tacica","releaseDate":"JP","genre":"Haikyuu!!","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"}]},{"id":"cn-ost","label":"China OST","shortLabel":"CN ? OST","market":"CN","source":"Curated OST snapshot","sourceUrl":"https://minqbuiphoto-web.github.io/my-music-charts/","updatedAt":"2026-08-01T23:30:00+07:00","syncWarning":"Chinese soundtrack discovery chart; eight original entries plus two curated additions.","songs":[{"rank":1,"id":"cn-ost-1","title":"凉凉","artist":"张碧晨","releaseDate":"CN","genre":"Eternal Love","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":2,"id":"cn-ost-2","title":"左手指月","artist":"萨顶顶","releaseDate":"CN","genre":"Ashes of Love","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":3,"id":"cn-ost-3","title":"不染","artist":"毛不易","releaseDate":"CN","genre":"Ashes of Love","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":4,"id":"cn-ost-4","title":"无羁","artist":"肖战","releaseDate":"CN","genre":"The Untamed","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":5,"id":"cn-ost-5","title":"烟雨唱扬州","artist":"李玉刚","releaseDate":"CN","genre":"Wrong Carriage, Right Groom","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":6,"id":"cn-ost-6","title":"知否知否","artist":"胡夏","releaseDate":"CN","genre":"The Story of Ming Lan","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":7,"id":"cn-ost-7","title":"爱若琉璃","artist":"周深","releaseDate":"CN","genre":"Love and Redemption","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":8,"id":"cn-ost-8","title":"孤勇者","artist":"陈奕迅","releaseDate":"CN","genre":"Arcane","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":9,"id":"cn-ost-9","title":"只要平凡","artist":"张杰, 张碧晨","releaseDate":"CN","genre":"Dying to Survive","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"},{"rank":10,"id":"cn-ost-10","title":"大鱼","artist":"周深","releaseDate":"CN","genre":"Big Fish & Begonia","artworkUrl":"","url":"https://minqbuiphoto-web.github.io/my-music-charts/","artistUrl":"https://minqbuiphoto-web.github.io/my-music-charts/"}]}]}
+{
+  "generatedAt": "2026-08-02T10:00:00+07:00",
+  "charts": [
+    {
+      "id": "jp-hot100-next",
+      "label": "Japan Hot 100 Next 10",
+      "shortLabel": "JP · NEXT 10",
+      "market": "JP",
+      "source": "Billboard Japan Hot 100",
+      "sourceUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+      "updatedAt": "2026-07-22T00:00:00+09:00",
+      "syncWarning": "Official positions 11–20 from the same current Japan Hot 100.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "jp-hot100-next-1",
+          "title": "爆裂愛してる",
+          "artist": "M!LK",
+          "releaseDate": "JP",
+          "genre": "Official #11 · 4,434",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 2,
+          "id": "jp-hot100-next-2",
+          "title": "烏",
+          "artist": "Kenshi Yonezu",
+          "releaseDate": "JP",
+          "genre": "Official #12 · 4,298",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 3,
+          "id": "jp-hot100-next-3",
+          "title": "夜の踊り子",
+          "artist": "Sakanaction",
+          "releaseDate": "JP",
+          "genre": "Official #13 · 4,198",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 4,
+          "id": "jp-hot100-next-4",
+          "title": "Missing",
+          "artist": "BE:FIRST",
+          "releaseDate": "JP",
+          "genre": "Official #14 · 4,111",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 5,
+          "id": "jp-hot100-next-5",
+          "title": "It's Me",
+          "artist": "ILLIT",
+          "releaseDate": "JP",
+          "genre": "Official #15 · 3,801",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 6,
+          "id": "jp-hot100-next-6",
+          "title": "IRIS OUT",
+          "artist": "Kenshi Yonezu",
+          "releaseDate": "JP",
+          "genre": "Official #16 · 3,683",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 7,
+          "id": "jp-hot100-next-7",
+          "title": "Yes! 東京",
+          "artist": "EBiDAN",
+          "releaseDate": "JP",
+          "genre": "Official #17 · 3,537",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 8,
+          "id": "jp-hot100-next-8",
+          "title": "lulu.",
+          "artist": "Mrs. GREEN APPLE",
+          "releaseDate": "JP",
+          "genre": "Official #18 · 2,596",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 9,
+          "id": "jp-hot100-next-9",
+          "title": "グッタイム",
+          "artist": "Snow Man",
+          "releaseDate": "JP",
+          "genre": "Official #19 · 2,518",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 10,
+          "id": "jp-hot100-next-10",
+          "title": "You!Joy!Parade!",
+          "artist": "M!LK",
+          "releaseDate": "JP",
+          "genre": "Official #20 · 2,482",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        }
+      ]
+    },
+    {
+      "id": "cn-tme-uni",
+      "label": "China TME Uni Chart",
+      "shortLabel": "CN · UNI",
+      "market": "CN",
+      "source": "Tencent Music Uni Chart",
+      "sourceUrl": "https://chart.tencentmusic.com/uni-chart",
+      "updatedAt": "2026-07-26T23:59:00+08:00",
+      "syncWarning": "Official 2026 Issue 30 · nationwide Chinese-language listener-data chart.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-tme-uni-1",
+          "title": "唯我论者的独白",
+          "artist": "马嘉祺",
+          "releaseDate": "CN",
+          "genre": "99.36 score · NEW",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 2,
+          "id": "cn-tme-uni-2",
+          "title": "如约",
+          "artist": "周深",
+          "releaseDate": "CN",
+          "genre": "96.95 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 3,
+          "id": "cn-tme-uni-3",
+          "title": "失重色",
+          "artist": "世勋",
+          "releaseDate": "CN",
+          "genre": "96.82 score · NEW",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 4,
+          "id": "cn-tme-uni-4",
+          "title": "宇宙游乐场",
+          "artist": "梓渝",
+          "releaseDate": "CN",
+          "genre": "96.25 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 5,
+          "id": "cn-tme-uni-5",
+          "title": "我想",
+          "artist": "刘宇宁",
+          "releaseDate": "CN",
+          "genre": "95.90 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 6,
+          "id": "cn-tme-uni-6",
+          "title": "不渝",
+          "artist": "梓渝",
+          "releaseDate": "CN",
+          "genre": "95.61 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 7,
+          "id": "cn-tme-uni-7",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
+          "releaseDate": "CN",
+          "genre": "95.48 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 8,
+          "id": "cn-tme-uni-8",
+          "title": "见山河",
+          "artist": "刘宇宁",
+          "releaseDate": "CN",
+          "genre": "95.39 score · NEW",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 9,
+          "id": "cn-tme-uni-9",
+          "title": "Cold Blooded (Moon Version)",
+          "artist": "严浩翔",
+          "releaseDate": "CN",
+          "genre": "95.21 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 10,
+          "id": "cn-tme-uni-10",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
+          "releaseDate": "CN",
+          "genre": "94.70 score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        }
+      ]
+    },
+    {
+      "id": "cn-tme-wave",
+      "label": "China TME Wave Chart",
+      "shortLabel": "CN · WAVE",
+      "market": "CN",
+      "source": "Tencent Music Wave Chart",
+      "sourceUrl": "https://chart.tencentmusic.com/wave-chart",
+      "updatedAt": "2026-06-30T23:59:00+08:00",
+      "syncWarning": "Official June 2026 expert-voted quality music chart.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-tme-wave-1",
+          "title": "一个人",
+          "artist": "A-Lin",
+          "releaseDate": "CN",
+          "genre": "8.57 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 2,
+          "id": "cn-tme-wave-2",
+          "title": "生死未定",
+          "artist": "胡彦斌",
+          "releaseDate": "CN",
+          "genre": "8.53 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 3,
+          "id": "cn-tme-wave-3",
+          "title": "让你知道",
+          "artist": "汪苏泷 / G.E.M. 邓紫棋",
+          "releaseDate": "CN",
+          "genre": "8.50 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 4,
+          "id": "cn-tme-wave-4",
+          "title": "鹿回头",
+          "artist": "陈楚生",
+          "releaseDate": "CN",
+          "genre": "8.46 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 5,
+          "id": "cn-tme-wave-5",
+          "title": "别来无恙",
+          "artist": "任素汐",
+          "releaseDate": "CN",
+          "genre": "8.46 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 6,
+          "id": "cn-tme-wave-6",
+          "title": "Somewhere In Winter (失重)",
+          "artist": "火星电台 / 窦靖童",
+          "releaseDate": "CN",
+          "genre": "8.39 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 7,
+          "id": "cn-tme-wave-7",
+          "title": "起初说",
+          "artist": "萨顶顶",
+          "releaseDate": "CN",
+          "genre": "8.32 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 8,
+          "id": "cn-tme-wave-8",
+          "title": "潜到海底说爱你",
+          "artist": "万妮达 Vinida Weng",
+          "releaseDate": "CN",
+          "genre": "8.29 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 9,
+          "id": "cn-tme-wave-9",
+          "title": "寂寞是什么 (feat. 陈娴静)",
+          "artist": "马念先 / 陳嫺靜",
+          "releaseDate": "CN",
+          "genre": "8.25 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 10,
+          "id": "cn-tme-wave-10",
+          "title": "他与世纪的落幕",
+          "artist": "许钧",
+          "releaseDate": "CN",
+          "genre": "8.25 expert score",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        }
+      ]
+    }
+  ]
+}
