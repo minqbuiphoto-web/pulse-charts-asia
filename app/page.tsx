@@ -56,15 +56,15 @@ export default function Home(){
     <header className="topbar">
       <a className="brand" href="#top" aria-label="Pulse Charts — back to top"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></a>
       <nav><a href="#charts">Charts</a><a href="#about">About</a></nav>
-      <div className="live-pill"><span/> 7 CHARTS · 3 MARKETS</div>
+      <div className="live-pill"><span/> {data.charts.length} CHARTS · 3 MARKETS</div>
     </header>
 
     <section className="hero" id="top">
       <div className="hero-copy">
         <p className="kicker"><span>01</span> THE SOUND OF RIGHT NOW</p>
         <h1>Turn up<br/><em>what’s next.</em></h1>
-        <p>Current official rankings from South Korea, Japan and Mainland China — with visible chart periods, scores and sources.</p>
-        <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE ALL 7 CHARTS</a>
+        <p>Official national rankings plus current OST and ballad discovery across South Korea, Japan and Mainland China.</p>
+        <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE ALL {data.charts.length} CHARTS</a>
       </div>
       <div className="hero-art" aria-hidden="true">
         <div className="orb"/>
@@ -84,7 +84,7 @@ export default function Home(){
     </section>
 
     <section className="chart-tabs" aria-label="Choose a chart">
-      <p>ALL 7 MUSIC CHARTS</p>
+      <p>ALL {data.charts.length} MUSIC CHARTS</p>
       <div>{charts.map((chart)=><button key={chart.id} className={active?.id===chart.id?"active":""} onClick={()=>chooseChart(chart)}><span>{chart.shortLabel}</span>{chart.label}</button>)}</div>
     </section>
 
@@ -117,7 +117,7 @@ export default function Home(){
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official chart snapshots. Transparent periods.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official rankings + transparent trending lists.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 

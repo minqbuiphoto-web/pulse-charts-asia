@@ -1,128 +1,6 @@
 {
-  "generatedAt": "2026-08-02T10:00:00+07:00",
+  "generatedAt": "2026-08-02T12:00:00+07:00",
   "charts": [
-    {
-      "id": "jp-hot100-next",
-      "label": "Japan Hot 100 Next 10",
-      "shortLabel": "JP · NEXT 10",
-      "market": "JP",
-      "source": "Billboard Japan Hot 100",
-      "sourceUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-      "updatedAt": "2026-07-22T00:00:00+09:00",
-      "syncWarning": "Official positions 11–20 from the same current Japan Hot 100.",
-      "songs": [
-        {
-          "rank": 1,
-          "id": "jp-hot100-next-1",
-          "title": "爆裂愛してる",
-          "artist": "M!LK",
-          "releaseDate": "JP",
-          "genre": "Official #11 · 4,434",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 2,
-          "id": "jp-hot100-next-2",
-          "title": "烏",
-          "artist": "Kenshi Yonezu",
-          "releaseDate": "JP",
-          "genre": "Official #12 · 4,298",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 3,
-          "id": "jp-hot100-next-3",
-          "title": "夜の踊り子",
-          "artist": "Sakanaction",
-          "releaseDate": "JP",
-          "genre": "Official #13 · 4,198",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 4,
-          "id": "jp-hot100-next-4",
-          "title": "Missing",
-          "artist": "BE:FIRST",
-          "releaseDate": "JP",
-          "genre": "Official #14 · 4,111",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 5,
-          "id": "jp-hot100-next-5",
-          "title": "It's Me",
-          "artist": "ILLIT",
-          "releaseDate": "JP",
-          "genre": "Official #15 · 3,801",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 6,
-          "id": "jp-hot100-next-6",
-          "title": "IRIS OUT",
-          "artist": "Kenshi Yonezu",
-          "releaseDate": "JP",
-          "genre": "Official #16 · 3,683",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 7,
-          "id": "jp-hot100-next-7",
-          "title": "Yes! 東京",
-          "artist": "EBiDAN",
-          "releaseDate": "JP",
-          "genre": "Official #17 · 3,537",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 8,
-          "id": "jp-hot100-next-8",
-          "title": "lulu.",
-          "artist": "Mrs. GREEN APPLE",
-          "releaseDate": "JP",
-          "genre": "Official #18 · 2,596",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 9,
-          "id": "jp-hot100-next-9",
-          "title": "グッタイム",
-          "artist": "Snow Man",
-          "releaseDate": "JP",
-          "genre": "Official #19 · 2,518",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        },
-        {
-          "rank": 10,
-          "id": "jp-hot100-next-10",
-          "title": "You!Joy!Parade!",
-          "artist": "M!LK",
-          "releaseDate": "JP",
-          "genre": "Official #20 · 2,482",
-          "artworkUrl": "",
-          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
-          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
-        }
-      ]
-    },
     {
       "id": "cn-tme-uni",
       "label": "China TME Uni Chart",
@@ -364,6 +242,250 @@
           "artworkUrl": "",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        }
+      ]
+    },
+    {
+      "id": "cn-ost-trending",
+      "label": "China OST Trending",
+      "shortLabel": "CN · OST",
+      "market": "CN",
+      "source": "Recent official drama OST releases",
+      "sourceUrl": "https://y.qq.com/",
+      "updatedAt": "2026-07-31T23:59:00+08:00",
+      "syncWarning": "Editorial discovery list of Chinese drama OSTs released or actively promoted from Apr–Jul 2026. Ranked by recency and current attention; not a national chart.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-ost-trending-1",
+          "title": "独家童话",
+          "artist": "Wen Junhui",
+          "releaseDate": "CN",
+          "genre": "Exclusive Fairy Tale · 26 Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 2,
+          "id": "cn-ost-trending-2",
+          "title": "满天星",
+          "artist": "Zhai Xiaowen",
+          "releaseDate": "CN",
+          "genre": "My Drama Missy · Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 3,
+          "id": "cn-ost-trending-3",
+          "title": "缠",
+          "artist": "Na Ying",
+          "releaseDate": "CN",
+          "genre": "Overdo · 18 Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 4,
+          "id": "cn-ost-trending-4",
+          "title": "红尘慌慌",
+          "artist": "Zhou Shen",
+          "releaseDate": "CN",
+          "genre": "The Revenge of Begonia · 8 Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 5,
+          "id": "cn-ost-trending-5",
+          "title": "吹向花开",
+          "artist": "Curley G",
+          "releaseDate": "CN",
+          "genre": "Road to Success · 2 Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 6,
+          "id": "cn-ost-trending-6",
+          "title": "千香",
+          "artist": "Zhou Shen",
+          "releaseDate": "CN",
+          "genre": "The Eternal Fragrance · Jul 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 7,
+          "id": "cn-ost-trending-7",
+          "title": "何故",
+          "artist": "Liu Yuning",
+          "releaseDate": "CN",
+          "genre": "The Legend of Rosy Clouds · 19 Jun 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 8,
+          "id": "cn-ost-trending-8",
+          "title": "心世界",
+          "artist": "Zhou Shen",
+          "releaseDate": "CN",
+          "genre": "The First Jasmine · 6 Jun 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 9,
+          "id": "cn-ost-trending-9",
+          "title": "一念",
+          "artist": "Zhang Zining / Li Xinyi",
+          "releaseDate": "CN",
+          "genre": "Chasing Jade · Apr 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 10,
+          "id": "cn-ost-trending-10",
+          "title": "追风",
+          "artist": "Liu Yuning",
+          "releaseDate": "CN",
+          "genre": "Rebirth · 1 Apr 2026",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/",
+          "artistUrl": "https://y.qq.com/"
+        }
+      ]
+    },
+    {
+      "id": "cn-ballad-trending",
+      "label": "China Ballad Trending",
+      "shortLabel": "CN · BALLAD",
+      "market": "CN",
+      "source": "Tencent Music Uni & Wave Charts",
+      "sourceUrl": "https://chart.tencentmusic.com/uni-chart",
+      "updatedAt": "2026-07-26T23:59:00+08:00",
+      "syncWarning": "Editorial ballad filter from songs currently ranked by Tencent Music Uni and the latest Wave expert chart. Source positions are displayed.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-ballad-trending-1",
+          "title": "如约",
+          "artist": "Zhou Shen",
+          "releaseDate": "CN",
+          "genre": "TME Uni #2 · 96.95",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 2,
+          "id": "cn-ballad-trending-2",
+          "title": "我想",
+          "artist": "Liu Yuning",
+          "releaseDate": "CN",
+          "genre": "TME Uni #5 · 95.90",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 3,
+          "id": "cn-ballad-trending-3",
+          "title": "不渝",
+          "artist": "Zi Yu",
+          "releaseDate": "CN",
+          "genre": "TME Uni #6 · 95.61",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 4,
+          "id": "cn-ballad-trending-4",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "Jess Lee",
+          "releaseDate": "CN",
+          "genre": "TME Uni #7 · 95.48",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 5,
+          "id": "cn-ballad-trending-5",
+          "title": "见山河",
+          "artist": "Liu Yuning",
+          "releaseDate": "CN",
+          "genre": "TME Uni #8 · 95.39",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 6,
+          "id": "cn-ballad-trending-6",
+          "title": "Steal The Moon",
+          "artist": "Karry Wang",
+          "releaseDate": "CN",
+          "genre": "TME Uni #10 · 94.70",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 7,
+          "id": "cn-ballad-trending-7",
+          "title": "一个人",
+          "artist": "A-Lin",
+          "releaseDate": "CN",
+          "genre": "TME Wave #1 · 8.57",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 8,
+          "id": "cn-ballad-trending-8",
+          "title": "生死未定",
+          "artist": "Tiger Hu",
+          "releaseDate": "CN",
+          "genre": "TME Wave #2 · 8.53",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 9,
+          "id": "cn-ballad-trending-9",
+          "title": "让你知道",
+          "artist": "Silence Wang / G.E.M.",
+          "releaseDate": "CN",
+          "genre": "TME Wave #3 · 8.50",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 10,
+          "id": "cn-ballad-trending-10",
+          "title": "别来无恙",
+          "artist": "Ren Suxi",
+          "releaseDate": "CN",
+          "genre": "TME Wave #5 · 8.46",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
         }
       ]
     }

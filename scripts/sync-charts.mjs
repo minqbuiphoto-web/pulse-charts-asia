@@ -5,11 +5,11 @@ const main = JSON.parse(await readFile(new URL("charts-main.json", appDir), "utf
 const secondary = JSON.parse(await readFile(new URL("charts-ost.json", appDir), "utf8"));
 const data = { generatedAt: main.generatedAt, charts: [...main.charts, ...secondary.charts] };
 const expectedIds = new Set([
-  "kr-circle-digital", "kr-circle-next", "kr-circle-download",
-  "jp-hot100", "jp-hot100-next", "cn-tme-uni", "cn-tme-wave",
+  "kr-circle-digital", "kr-circle-download", "kr-ost-trending", "kr-ballad-trending",
+  "jp-hot100", "cn-tme-uni", "cn-tme-wave", "cn-ost-trending", "cn-ballad-trending",
 ]);
 
-if (data.charts.length !== expectedIds.size) throw new Error("Pulse Charts requires exactly seven charts.");
+if (data.charts.length !== expectedIds.size) throw new Error("Pulse Charts requires exactly nine charts.");
 for (const chart of data.charts) {
   if (!expectedIds.has(chart.id)) throw new Error(`Unexpected chart: ${chart.id}`);
   if (!chart.sourceUrl || !chart.updatedAt) throw new Error(`Missing source metadata: ${chart.label}`);
@@ -21,4 +21,4 @@ for (const chart of data.charts) {
 const publicDir = new URL("../public/", import.meta.url);
 await mkdir(publicDir, { recursive: true });
 await writeFile(new URL("charts.json", publicDir), JSON.stringify(data, null, 2) + "\n", "utf8");
-console.log("Verified and exported 7 current charts / 70 ranked tracks.");
+console.log("Verified and exported 9 current charts / 90 ranked tracks.");

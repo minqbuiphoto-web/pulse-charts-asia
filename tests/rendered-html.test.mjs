@@ -13,21 +13,23 @@ async function render() {
   );
 }
 
-test("renders the seven-chart Pulse Charts shell", async () => {
+test("renders the nine-chart Pulse Charts shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /THE SOUND OF RIGHT NOW/);
-  assert.match(html, /7 CHARTS/);
+  assert.match(html, /9(?:<!-- -->)? CHARTS/);
   assert.match(html, /Search tracks, artists, chart entries/);
   assert.doesNotMatch(html, /APPLE MUSIC DATA|PLAY ON APPLE MUSIC/i);
 });
 
-test("ships all seven chart snapshots", async () => {
+test("ships all nine chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
-  assert.equal(data.charts.length, 7);
+  assert.equal(data.charts.length, 9);
   assert.deepEqual(new Set(data.charts.map((chart) => chart.market)), new Set(["KR", "JP", "CN"]));
   assert.ok(data.charts.every((chart) => chart.songs.length === 10));
+  assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
+  assert.ok(data.charts.some((chart) => chart.id === "cn-ballad-trending"));
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
   assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "")));
 });
