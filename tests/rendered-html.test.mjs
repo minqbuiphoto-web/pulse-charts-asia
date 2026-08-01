@@ -30,4 +30,5 @@ test("ships three verified domestic chart snapshots", async () => {
   assert.deepEqual(new Set(data.charts.map((chart) => chart.source)), new Set(["Circle Chart", "Billboard Japan", "Tencent Music"]));
   assert.ok(data.charts.every((chart) => chart.songs.length === 10));
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
+  assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==")));
 });
