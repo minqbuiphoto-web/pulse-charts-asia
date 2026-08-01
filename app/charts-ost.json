@@ -9,7 +9,7 @@
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://chart.tencentmusic.com/uni-chart",
       "updatedAt": "2026-07-26T23:59:00+08:00",
-      "syncWarning": "Official 2026 Issue 30 · nationwide Chinese-language listener-data chart.",
+      "syncWarning": "Official 2026 Issue 30 · nationwide Chinese-language listener-data chart. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -120,6 +120,116 @@
           "artworkUrl": "",
           "url": "https://chart.tencentmusic.com/uni-chart",
           "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 11,
+          "id": "cn-tme-uni-11",
+          "title": "一个人",
+          "artist": "A-Lin",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 12,
+          "id": "cn-tme-uni-12",
+          "title": "生死未定",
+          "artist": "胡彦斌",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 13,
+          "id": "cn-tme-uni-13",
+          "title": "让你知道",
+          "artist": "汪苏泷 / G.E.M. 邓紫棋",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 14,
+          "id": "cn-tme-uni-14",
+          "title": "鹿回头",
+          "artist": "陈楚生",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 15,
+          "id": "cn-tme-uni-15",
+          "title": "别来无恙",
+          "artist": "任素汐",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 16,
+          "id": "cn-tme-uni-16",
+          "title": "Somewhere In Winter (失重)",
+          "artist": "火星电台 / 窦靖童",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 17,
+          "id": "cn-tme-uni-17",
+          "title": "起初说",
+          "artist": "萨顶顶",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 18,
+          "id": "cn-tme-uni-18",
+          "title": "潜到海底说爱你",
+          "artist": "万妮达 Vinida Weng",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 19,
+          "id": "cn-tme-uni-19",
+          "title": "寂寞是什么 (feat. 陈娴静)",
+          "artist": "马念先 / 陳嫺靜",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 20,
+          "id": "cn-tme-uni-20",
+          "title": "他与世纪的落幕",
+          "artist": "许钧",
+          "releaseDate": "CN",
+          "genre": "Current CN · WAVE signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/wave-chart",
+          "artistUrl": "https://chart.tencentmusic.com/wave-chart"
         }
       ]
     },
@@ -131,7 +241,7 @@
       "source": "Tencent Music Wave Chart",
       "sourceUrl": "https://chart.tencentmusic.com/wave-chart",
       "updatedAt": "2026-06-30T23:59:00+08:00",
-      "syncWarning": "Official June 2026 expert-voted quality music chart.",
+      "syncWarning": "Official June 2026 expert-voted quality music chart. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -242,6 +352,116 @@
           "artworkUrl": "",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart"
+        },
+        {
+          "rank": 11,
+          "id": "cn-tme-wave-11",
+          "title": "唯我论者的独白",
+          "artist": "马嘉祺",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 12,
+          "id": "cn-tme-wave-12",
+          "title": "如约",
+          "artist": "周深",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 13,
+          "id": "cn-tme-wave-13",
+          "title": "失重色",
+          "artist": "世勋",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 14,
+          "id": "cn-tme-wave-14",
+          "title": "宇宙游乐场",
+          "artist": "梓渝",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 15,
+          "id": "cn-tme-wave-15",
+          "title": "我想",
+          "artist": "刘宇宁",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 16,
+          "id": "cn-tme-wave-16",
+          "title": "不渝",
+          "artist": "梓渝",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 17,
+          "id": "cn-tme-wave-17",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 18,
+          "id": "cn-tme-wave-18",
+          "title": "见山河",
+          "artist": "刘宇宁",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 19,
+          "id": "cn-tme-wave-19",
+          "title": "Cold Blooded (Moon Version)",
+          "artist": "严浩翔",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 20,
+          "id": "cn-tme-wave-20",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
+          "releaseDate": "CN",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
         }
       ]
     },
@@ -253,7 +473,7 @@
       "source": "Recent official OSTs + Tencent/QQ listening signals",
       "sourceUrl": "https://y.qq.com/",
       "updatedAt": "2026-07-31T23:59:00+08:00",
-      "syncWarning": "RECENCY RULE: releases from the last 6 months only; the last 3 months receive priority. Ordered by available Tencent/QQ platform attention signals, not fabricated play counts.",
+      "syncWarning": "RECENCY RULE: releases from the last 6 months only; the last 3 months receive priority. Ordered by available Tencent/QQ platform attention signals, not fabricated play counts. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -364,6 +584,116 @@
           "artworkUrl": "",
           "url": "https://y.qq.com/",
           "artistUrl": "https://y.qq.com/"
+        },
+        {
+          "rank": 11,
+          "id": "cn-ost-trending-11",
+          "title": "唯我论者的独白",
+          "artist": "马嘉祺",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 12,
+          "id": "cn-ost-trending-12",
+          "title": "如约",
+          "artist": "周深",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 13,
+          "id": "cn-ost-trending-13",
+          "title": "失重色",
+          "artist": "世勋",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 14,
+          "id": "cn-ost-trending-14",
+          "title": "宇宙游乐场",
+          "artist": "梓渝",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 15,
+          "id": "cn-ost-trending-15",
+          "title": "我想",
+          "artist": "刘宇宁",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 16,
+          "id": "cn-ost-trending-16",
+          "title": "不渝",
+          "artist": "梓渝",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 17,
+          "id": "cn-ost-trending-17",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 18,
+          "id": "cn-ost-trending-18",
+          "title": "见山河",
+          "artist": "刘宇宁",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 19,
+          "id": "cn-ost-trending-19",
+          "title": "Cold Blooded (Moon Version)",
+          "artist": "严浩翔",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 20,
+          "id": "cn-ost-trending-20",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
         }
       ]
     },
@@ -375,7 +705,7 @@
       "source": "Tencent Music Uni & Wave Charts",
       "sourceUrl": "https://chart.tencentmusic.com/uni-chart",
       "updatedAt": "2026-07-26T23:59:00+08:00",
-      "syncWarning": "RECENCY RULE: releases inside the latest 6-month window; 3-month releases are preferred. Ordered by Tencent Uni/Wave listening or expert rank, shown on every row.",
+      "syncWarning": "RECENCY RULE: releases inside the latest 6-month window; 3-month releases are preferred. Ordered by Tencent Uni/Wave listening or expert rank, shown on every row. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -483,6 +813,116 @@
           "artist": "Ren Suxi",
           "releaseDate": "≤ 6 months",
           "genre": "TME Wave #5 · 8.46",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 11,
+          "id": "cn-ballad-trending-11",
+          "title": "唯我论者的独白",
+          "artist": "马嘉祺",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 12,
+          "id": "cn-ballad-trending-12",
+          "title": "如约",
+          "artist": "周深",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 13,
+          "id": "cn-ballad-trending-13",
+          "title": "失重色",
+          "artist": "世勋",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 14,
+          "id": "cn-ballad-trending-14",
+          "title": "宇宙游乐场",
+          "artist": "梓渝",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 15,
+          "id": "cn-ballad-trending-15",
+          "title": "我想",
+          "artist": "刘宇宁",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 16,
+          "id": "cn-ballad-trending-16",
+          "title": "不渝",
+          "artist": "梓渝",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 17,
+          "id": "cn-ballad-trending-17",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 18,
+          "id": "cn-ballad-trending-18",
+          "title": "见山河",
+          "artist": "刘宇宁",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 19,
+          "id": "cn-ballad-trending-19",
+          "title": "Cold Blooded (Moon Version)",
+          "artist": "严浩翔",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
+          "artworkUrl": "",
+          "url": "https://chart.tencentmusic.com/uni-chart",
+          "artistUrl": "https://chart.tencentmusic.com/uni-chart"
+        },
+        {
+          "rank": 20,
+          "id": "cn-ballad-trending-20",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current CN · UNI signal",
           "artworkUrl": "",
           "url": "https://chart.tencentmusic.com/uni-chart",
           "artistUrl": "https://chart.tencentmusic.com/uni-chart"

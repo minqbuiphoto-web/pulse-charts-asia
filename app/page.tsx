@@ -186,7 +186,7 @@ export default function Home(){
         <div className="vinyl"><i/><b>PULSE<br/>CHARTS</b></div>
         <div className="cover-stack">
           {heroCovers.map((song,index)=><span className="cover-card" key={song.id} style={{"--i":index} as React.CSSProperties}><b>{String(song.rank).padStart(2,"0")}</b><i>{song.title.slice(0,2)}</i></span>)}
-          {!heroCovers.length&&<div className="cover-placeholder">LIVE<br/>TOP 10</div>}
+          {!heroCovers.length&&<div className="cover-placeholder">LIVE<br/>TOP 20</div>}
         </div>
         <div className="waveform">{Array.from({length:18},(_,index)=><i key={index}/>)}</div>
       </div>
@@ -206,7 +206,7 @@ export default function Home(){
     <section className="workspace">
       <div className="chart-panel">
         <div className="panel-heading">
-          <div><p className="kicker"><span>02</span> CURRENT TOP 10</p><h2>{active?.label??"Loading chart"}</h2></div>
+          <div><p className="kicker"><span>02</span> CURRENT TOP 20</p><h2>{active?.label??"Loading chart"}</h2></div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
         <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")?"RELEASED":"MARKET"}</span><span/></div>

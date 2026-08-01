@@ -27,7 +27,8 @@ test("ships all nine chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 9);
   assert.deepEqual(new Set(data.charts.map((chart) => chart.market)), new Set(["KR", "JP", "CN"]));
-  assert.ok(data.charts.every((chart) => chart.songs.length === 10));
+  assert.ok(data.charts.every((chart) => chart.songs.length === 20));
+  assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 180);
   assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
   assert.ok(data.charts.some((chart) => chart.id === "cn-ballad-trending"));
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);

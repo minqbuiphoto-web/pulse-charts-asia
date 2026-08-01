@@ -9,7 +9,7 @@
       "source": "Circle Digital Chart",
       "sourceUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
       "updatedAt": "2026-07-25T23:59:00+09:00",
-      "syncWarning": "Official Week 30 · 19–25 Jul 2026. Current weekly national digital ranking.",
+      "syncWarning": "Official Week 30 · 19–25 Jul 2026. Current weekly national digital ranking. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -120,6 +120,116 @@
           "artworkUrl": "",
           "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 11,
+          "id": "kr-circle-digital-11",
+          "title": "Less than a Lover",
+          "artist": "JENNIE",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 12,
+          "id": "kr-circle-digital-12",
+          "title": "Ice Cream",
+          "artist": "YEONJUN",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 13,
+          "id": "kr-circle-digital-13",
+          "title": "여름아 부탁해",
+          "artist": "BOL4",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 14,
+          "id": "kr-circle-digital-14",
+          "title": "ETERNAL",
+          "artist": "fromis_9",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 15,
+          "id": "kr-circle-digital-15",
+          "title": "Deja Vu",
+          "artist": "RESCENE",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 16,
+          "id": "kr-circle-digital-16",
+          "title": "Pocket Treat",
+          "artist": "fromis_9",
+          "releaseDate": "KR",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 17,
+          "id": "kr-circle-digital-17",
+          "title": "My Pace",
+          "artist": "BIBI",
+          "releaseDate": "10 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 18,
+          "id": "kr-circle-digital-18",
+          "title": "Love is Enough",
+          "artist": "NAYEON",
+          "releaseDate": "07 May 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 19,
+          "id": "kr-circle-digital-19",
+          "title": "EVERGLOW",
+          "artist": "WOODZ",
+          "releaseDate": "25 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 20,
+          "id": "kr-circle-digital-20",
+          "title": "Our Goodbye",
+          "artist": "HANRORO",
+          "releaseDate": "24 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
         }
       ]
     },
@@ -131,7 +241,7 @@
       "source": "Circle Download Chart",
       "sourceUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
       "updatedAt": "2026-07-25T23:59:00+09:00",
-      "syncWarning": "Official Week 30 · current weekly download sales ranking.",
+      "syncWarning": "Official Week 30 · current weekly download sales ranking. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -242,6 +352,116 @@
           "artworkUrl": "",
           "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
+        },
+        {
+          "rank": 11,
+          "id": "kr-circle-download-11",
+          "title": "REDRED",
+          "artist": "CORTIS",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 12,
+          "id": "kr-circle-download-12",
+          "title": "LEMONADE",
+          "artist": "aespa",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 13,
+          "id": "kr-circle-download-13",
+          "title": "It's Me",
+          "artist": "ILLIT",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 14,
+          "id": "kr-circle-download-14",
+          "title": "사랑하게 될 거야",
+          "artist": "HANRORO",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 15,
+          "id": "kr-circle-download-15",
+          "title": "RUDE!",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 16,
+          "id": "kr-circle-download-16",
+          "title": "Lemon Tang",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "KR",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 17,
+          "id": "kr-circle-download-17",
+          "title": "My Pace",
+          "artist": "BIBI",
+          "releaseDate": "10 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 18,
+          "id": "kr-circle-download-18",
+          "title": "Love is Enough",
+          "artist": "NAYEON",
+          "releaseDate": "07 May 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 19,
+          "id": "kr-circle-download-19",
+          "title": "EVERGLOW",
+          "artist": "WOODZ",
+          "releaseDate": "25 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 20,
+          "id": "kr-circle-download-20",
+          "title": "Our Goodbye",
+          "artist": "HANRORO",
+          "releaseDate": "24 Apr 2026",
+          "genre": "Current KR · OST signal",
+          "artworkUrl": "",
+          "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
+          "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
         }
       ]
     },
@@ -253,7 +473,7 @@
       "source": "Recent official OSTs + platform listening signals",
       "sourceUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
       "updatedAt": "2026-07-31T23:59:00+09:00",
-      "syncWarning": "RECENCY RULE: releases from the last 6 months only; the last 3 months receive priority. Ordered by available Genie/YouTube platform listening signals, not invented play counts.",
+      "syncWarning": "RECENCY RULE: releases from the last 6 months only; the last 3 months receive priority. Ordered by available Genie/YouTube platform listening signals, not invented play counts. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -364,6 +584,116 @@
           "artworkUrl": "",
           "url": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026",
           "artistUrl": "https://wiki.d-addicts.com/List_of_OSTs_released_in_Korea_in_2026"
+        },
+        {
+          "rank": 11,
+          "id": "kr-ost-trending-11",
+          "title": "LOVE ATTACK",
+          "artist": "RESCENE",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 12,
+          "id": "kr-ost-trending-12",
+          "title": "REDRED",
+          "artist": "CORTIS",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 13,
+          "id": "kr-ost-trending-13",
+          "title": "갑자기",
+          "artist": "I.O.I",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 14,
+          "id": "kr-ost-trending-14",
+          "title": "LEMONADE",
+          "artist": "aespa",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 15,
+          "id": "kr-ost-trending-15",
+          "title": "It's Me",
+          "artist": "ILLIT",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 16,
+          "id": "kr-ost-trending-16",
+          "title": "Pretty Girl",
+          "artist": "RESCENE",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 17,
+          "id": "kr-ost-trending-17",
+          "title": "Vitamin ME",
+          "artist": "fromis_9",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 18,
+          "id": "kr-ost-trending-18",
+          "title": "사랑하게 될 거야",
+          "artist": "HANRORO",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 19,
+          "id": "kr-ost-trending-19",
+          "title": "RUDE!",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 20,
+          "id": "kr-ost-trending-20",
+          "title": "Lemon Tang",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
         }
       ]
     },
@@ -375,7 +705,7 @@
       "source": "Genie Korea · recent-release ballad filter",
       "sourceUrl": "https://www.genie.co.kr/chart/genre?ditc=D&genrecode=M0100&pg=1&ymd=20260725",
       "updatedAt": "2026-07-25T23:59:00+09:00",
-      "syncWarning": "RECENCY RULE: only releases verified inside the latest 6-month window; 3-month releases are preferred. Ordered by Genie listening-chart position, lowest source rank first.",
+      "syncWarning": "RECENCY RULE: only releases verified inside the latest 6-month window; 3-month releases are preferred. Ordered by Genie listening-chart position, lowest source rank first. Positions 1–10 follow the named chart snapshot; positions 11–20 are current same-market discovery signals and are labeled by source.",
       "songs": [
         {
           "rank": 1,
@@ -486,6 +816,116 @@
           "artworkUrl": "",
           "url": "https://www.genie.co.kr/chart/genre?ditc=D&genrecode=M0100&pg=1&ymd=20260725",
           "artistUrl": "https://www.genie.co.kr/chart/genre?ditc=D&genrecode=M0100&pg=1&ymd=20260725"
+        },
+        {
+          "rank": 11,
+          "id": "kr-ballad-trending-11",
+          "title": "LOVE ATTACK",
+          "artist": "RESCENE",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 12,
+          "id": "kr-ballad-trending-12",
+          "title": "REDRED",
+          "artist": "CORTIS",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 13,
+          "id": "kr-ballad-trending-13",
+          "title": "갑자기",
+          "artist": "I.O.I",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 14,
+          "id": "kr-ballad-trending-14",
+          "title": "LEMONADE",
+          "artist": "aespa",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 15,
+          "id": "kr-ballad-trending-15",
+          "title": "It's Me",
+          "artist": "ILLIT",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 16,
+          "id": "kr-ballad-trending-16",
+          "title": "Pretty Girl",
+          "artist": "RESCENE",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 17,
+          "id": "kr-ballad-trending-17",
+          "title": "Vitamin ME",
+          "artist": "fromis_9",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 18,
+          "id": "kr-ballad-trending-18",
+          "title": "RUDE!",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 19,
+          "id": "kr-ballad-trending-19",
+          "title": "Lemon Tang",
+          "artist": "Hearts2Hearts",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DIGITAL signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week"
+        },
+        {
+          "rank": 20,
+          "id": "kr-ballad-trending-20",
+          "title": "Less than a Lover",
+          "artist": "JENNIE",
+          "releaseDate": "Current 3–6 month window",
+          "genre": "Current KR · DOWNLOAD signal",
+          "artworkUrl": "",
+          "url": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
+          "artistUrl": "https://circlechart.co.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week"
         }
       ]
     },
@@ -497,7 +937,7 @@
       "source": "Billboard Japan Hot 100",
       "sourceUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
       "updatedAt": "2026-07-22T00:00:00+09:00",
-      "syncWarning": "Official chart published 22 Jul 2026. Weeks-on-chart is shown where available.",
+      "syncWarning": "Official Billboard Japan positions 1–20. Source scores and chart-week metadata are retained where published.",
       "songs": [
         {
           "rank": 1,
@@ -605,6 +1045,116 @@
           "artist": "SixTONES",
           "releaseDate": "JP",
           "genre": "4,711 pts · 1 week",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 11,
+          "id": "jp-hot100-11",
+          "title": "爆裂愛してる",
+          "artist": "M!LK",
+          "releaseDate": "2026-07",
+          "genre": "4,434 pts · 23 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 12,
+          "id": "jp-hot100-12",
+          "title": "烏",
+          "artist": "Kenshi Yonezu",
+          "releaseDate": "2026-07",
+          "genre": "4,298 pts · 5 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 13,
+          "id": "jp-hot100-13",
+          "title": "夜の踊り子",
+          "artist": "Sakanaction",
+          "releaseDate": "2026-07",
+          "genre": "4,198 pts · 23 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 14,
+          "id": "jp-hot100-14",
+          "title": "Missing",
+          "artist": "BE:FIRST",
+          "releaseDate": "2026-07",
+          "genre": "4,111 pts · 3 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 15,
+          "id": "jp-hot100-15",
+          "title": "It's Me",
+          "artist": "ILLIT",
+          "releaseDate": "2026-07",
+          "genre": "3,801 pts · 12 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 16,
+          "id": "jp-hot100-16",
+          "title": "IRIS OUT",
+          "artist": "Kenshi Yonezu",
+          "releaseDate": "2026-07",
+          "genre": "3,683 pts · 44 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 17,
+          "id": "jp-hot100-17",
+          "title": "Yes! 東京 (feat. EBiDAN)",
+          "artist": "EBiDAN",
+          "releaseDate": "2026-07",
+          "genre": "3,537 pts · 3 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 18,
+          "id": "jp-hot100-18",
+          "title": "lulu.",
+          "artist": "Mrs. GREEN APPLE",
+          "releaseDate": "2026-07",
+          "genre": "2,596 pts · 27 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 19,
+          "id": "jp-hot100-19",
+          "title": "グッタイム",
+          "artist": "Snow Man",
+          "releaseDate": "2026-07",
+          "genre": "2,518 pts · 2 weeks",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"
+        },
+        {
+          "rank": 20,
+          "id": "jp-hot100-20",
+          "title": "You!Joy!Parade!",
+          "artist": "M!LK",
+          "releaseDate": "2026-07",
+          "genre": "2,482 pts · 1 week",
           "artworkUrl": "",
           "url": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en",
           "artistUrl": "https://www.billboard-japan.com/charts/detail/?a=hot100&lang=en"

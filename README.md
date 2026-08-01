@@ -1,6 +1,6 @@
 # Pulse Charts
 
-Pulse Charts is an independent English-language music discovery site with seven Top 10 views:
+Pulse Charts is an independent English-language music discovery site with nine Top 20 views:
 
 - Korea Pop
 - Korea Ballad
