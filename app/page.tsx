@@ -25,6 +25,13 @@ type LookupStatus="idle"|"loading"|"ready"|"missing"|"error";
 type LyricsResult={ plainLyrics?:string|null; syncedLyrics?:string|null; trackName?:string; artistName?:string };
 const pipedInstances=["https://pipedapi.kavin.rocks","https://pipedapi.adminforge.de","https://pipedapi.reallyaweso.me"];
 const invidiousInstances=["https://inv.nadeko.net","https://invidious.nerdvpn.de"];
+const youtubeTracks:Record<string,string>={
+  "love attack::rescene":"9XttLI0oH0I",
+};
+
+function trackKey(song:Pick<Song,"title"|"artist">){
+  return `${song.title}::${song.artist}`.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g," ").trim();
+}
 
 function cleanSyncedLyrics(value:string){
   return value.replace(/^\[[0-9:.]+\]\s*/gm,"").replace(/\n{3,}/g,"\n\n").trim();
@@ -55,24 +62,29 @@ export default function Home(){
   const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
   const [playingId,setPlayingId]=useState("");
   const [resolvedVideos,setResolvedVideos]=useState<Record<string,string>>({});
+  const [customVideos,setCustomVideos]=useState<Record<string,string>>({});
+  const [videoLink,setVideoLink]=useState("");
   const [videoStatus,setVideoStatus]=useState<LookupStatus>("idle");
   const [lyrics,setLyrics]=useState("");
   const [lyricsStatus,setLyricsStatus]=useState<LookupStatus>("idle");
 
+  useEffect(()=>{ try{setCustomVideos(JSON.parse(localStorage.getItem("pulse-custom-videos")??"{}"));}catch{} },[]);
   const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
   useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
   const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
   const songs=useMemo(()=>{ const needle=query.trim().toLocaleLowerCase("en"); if(!active) return []; if(!needle) return active.songs; return active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle)); },[active,query]);
-  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setLyrics("");setLyricsStatus("idle"); };
+  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setVideoLink("");setLyrics("");setLyricsStatus("idle"); };
   const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
   const displaySong=selected??active?.songs[0]??null;
-  const videoId=displaySong?(youtubeVideos[displaySong.id]??resolvedVideos[displaySong.id]):undefined;
+  const currentTrackKey=displaySong?trackKey(displaySong):"";
+  const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
   const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official music video`)}`:"#";
   const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const selectSong=(song:Song)=>{ setSelected(song); resetTrackTools(); };
 
   const resolveVideo=async(song:Song)=>{
-    const cached=youtubeVideos[song.id]??resolvedVideos[song.id];
+    const key=trackKey(song);
+    const cached=youtubeTracks[key]??customVideos[key]??youtubeVideos[song.id]??resolvedVideos[key];
     if(cached)return cached;
     setVideoStatus("loading");
     const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
@@ -83,7 +95,7 @@ export default function Home(){
         const payload=await response.json();
         const items=Array.isArray(payload)?payload:(payload?.items??[]);
         const id=items.map(videoIdFromResult).find(Boolean);
-        if(id){setResolvedVideos((current)=>({...current,[song.id]:id}));setVideoStatus("ready");return id;}
+        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
       }catch{}
     }
     for(const instance of invidiousInstances){
@@ -92,7 +104,7 @@ export default function Home(){
         if(!response.ok)continue;
         const items=await response.json();
         const id=Array.isArray(items)?items.map(videoIdFromResult).find(Boolean):"";
-        if(id){setResolvedVideos((current)=>({...current,[song.id]:id}));setVideoStatus("ready");return id;}
+        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
       }catch{}
     }
     setVideoStatus("missing");
@@ -103,6 +115,17 @@ export default function Home(){
     if(!displaySong)return;
     const id=videoId??await resolveVideo(displaySong);
     if(id)setPlayingId(displaySong.id);
+  };
+
+  const saveVideoLink=()=>{
+    if(!displaySong)return;
+    const id=videoIdFromResult({url:videoLink.trim()});
+    if(!id){setVideoStatus("error");return;}
+    const key=trackKey(displaySong);
+    const next={...customVideos,[key]:id};
+    setCustomVideos(next);setResolvedVideos((current)=>({...current,[key]:id}));
+    localStorage.setItem("pulse-custom-videos",JSON.stringify(next));
+    setVideoStatus("ready");setPlayingId(displaySong.id);setVideoLink("");
   };
 
   const loadLyrics=async()=>{
@@ -182,6 +205,8 @@ export default function Home(){
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
           <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
           {videoStatus==="missing"&&<p className="media-note">No embeddable result was found automatically. Use YouTube search and choose the official upload.</p>}
+          {videoStatus==="error"&&<p className="media-note">That link is not a valid YouTube video URL or 11-character video ID.</p>}
+          <details className="video-link-editor"><summary>UPDATE YOUTUBE LINK</summary><div><input value={videoLink} onChange={(event)=>setVideoLink(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")saveVideoLink();}} placeholder="Paste YouTube URL or video ID"/><button onClick={saveVideoLink} disabled={!videoLink.trim()}>USE VIDEO</button></div><small>Saved free on this browser for the same track and artist.</small></details>
           <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"SEARCH YOUTUBE"}</a></div>
           <div className="lyrics-tools"><button onClick={loadLyrics} disabled={lyricsStatus==="loading"}>{lyricsStatus==="loading"?"LOADING LYRICS...":lyricsStatus==="ready"?"REFRESH LYRICS":"SHOW LYRICS"}</button><a href={lyricsSearchUrl} target="_blank" rel="noreferrer">LYRICS SEARCH</a></div>
           {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b><a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a></div><pre>{lyrics}</pre></section>}
