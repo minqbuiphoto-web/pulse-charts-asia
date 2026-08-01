@@ -1,0 +1,11 @@
+import { readFile, writeFile } from "node:fs/promises";
+const outputUrl=new URL("../public/charts.json",import.meta.url);
+const storefronts=[{code:"kr",market:"KR",label:"Apple Music Hàn Quốc",shortLabel:"KR TOP"},{code:"jp",market:"JP",label:"Apple Music Nhật Bản",shortLabel:"JP TOP"},{code:"cn",market:"CN",label:"Apple Music Trung Quốc",shortLabel:"CN TOP"}];
+async function requestJson(url,attempts=3){let lastError;for(let attempt=1;attempt<=attempts;attempt+=1){try{const response=await fetch(url,{headers:{"user-agent":"PulseCharts/1.0"}});if(!response.ok)throw new Error(`HTTP ${response.status}`);return await response.json()}catch(error){lastError=error;if(attempt<attempts)await new Promise((resolve)=>setTimeout(resolve,attempt*750))}}throw lastError}
+function artwork(url){return url.replace("/100x100bb.","/600x600bb.")}
+function primaryGenre(genres=[]){const generic=/^(Music|음악|ミュージック|音乐)$/i;return genres.find((genre)=>!generic.test(genre.name))?.name??genres[0]?.name??"Music"}
+let previous={charts:[]};try{previous=JSON.parse(await readFile(outputUrl,"utf8"))}catch{}
+const settled=await Promise.allSettled(storefronts.map(async(storefront)=>{const endpoint=`https://rss.marketingtools.apple.com/api/v2/${storefront.code}/music/most-played/10/songs.json`;const data=await requestJson(endpoint);return{id:`${storefront.code}-apple-music`,label:storefront.label,shortLabel:storefront.shortLabel,market:storefront.market,source:"Apple Music",sourceUrl:endpoint,updatedAt:data.feed.updated,songs:data.feed.results.map((song,index)=>({rank:index+1,id:song.id,title:song.name,artist:song.artistName,releaseDate:song.releaseDate,genre:primaryGenre(song.genres),artworkUrl:artwork(song.artworkUrl100),url:song.url,artistUrl:song.artistUrl}))}}));
+const charts=settled.map((result,index)=>{if(result.status==="fulfilled")return result.value;const fallback=previous.charts?.find((chart)=>chart.market===storefronts[index].market);if(fallback)return{...fallback,syncWarning:"Nguồn tạm thời không phản hồi; đang dùng lần đồng bộ gần nhất."};throw result.reason});
+await writeFile(outputUrl,`${JSON.stringify({generatedAt:new Date().toISOString(),charts},null,2)}\n`,`utf8`);
+console.log(`Synced ${charts.length} charts / ${charts.reduce((sum,chart)=>sum+chart.songs.length,0)} songs.`);

@@ -1,6 +1,6 @@
-# Pulse Charts
+# Pulse Charts — Live V1
 
-Pulse Charts là MVP dashboard bảng xếp hạng âm nhạc châu Á, được xây độc lập từ đầu. Ứng dụng có 7 bảng xếp hạng, tìm kiếm tức thì, lọc theo thị trường/loại bảng, chi tiết bài hát và liên kết hoặc trình phát YouTube.
+Pulse Charts theo dõi Top 10 bài hát được nghe nhiều trên Apple Music tại Hàn Quốc, Nhật Bản và Trung Quốc. Dữ liệu đến từ RSS công khai của Apple, không dùng API key và không cần máy chủ hoặc cơ sở dữ liệu.
 
 ## Chạy trên máy
 
@@ -8,32 +8,27 @@ Yêu cầu Node.js 22.13 trở lên.
 
 ```bash
 npm install
+npm run sync
 npm run dev
 ```
 
-Mở địa chỉ được hiển thị trong cửa sổ chạy lệnh. Dữ liệu nằm trong `public/charts.json`; chỉ cần sửa tệp này để đổi bảng xếp hạng, thứ hạng, nghệ sĩ, nhạc phim và YouTube ID.
+`npm run sync` lấy dữ liệu mới nhất và tạo `public/charts.json`. Nếu một thị trường tạm thời không phản hồi, hệ thống giữ dữ liệu của lần đồng bộ thành công gần nhất.
 
-## Kiểm tra bản phát hành
+## Kiểm tra và phát hành
 
 ```bash
-npm run build
+npm test
 npm run build:pages
 ```
 
-`npm run build` tạo bản dành cho Sites/Cloudflare. `npm run build:pages` tạo website tĩnh trong thư mục `out`.
+Workflow GitHub Pages trong `.github/workflows/deploy-pages.yml` tự đồng bộ và phát hành lại mỗi 6 giờ. Để bật, đẩy dự án lên GitHub rồi chọn **Settings → Pages → GitHub Actions**.
 
-## Đưa lên GitHub Pages
+## Phạm vi v1
 
-1. Tạo repository GitHub và đẩy toàn bộ thư mục này lên nhánh `main`.
-2. Vào **Settings → Pages → Source** và chọn **GitHub Actions**.
-3. Workflow có sẵn trong `.github/workflows/deploy-pages.yml` sẽ tự xây và phát hành website.
+- Ba bảng Top 10 thật: Hàn Quốc, Nhật Bản, Trung Quốc.
+- Tìm kiếm theo bài hát, nghệ sĩ và thể loại.
+- Ảnh bìa, ngày phát hành, liên kết nghệ sĩ và nghe trên Apple Music.
+- Liên kết tìm kiếm YouTube, trạng thái đồng bộ và nguồn dữ liệu rõ ràng.
+- Không hiển thị OST, lyric, biến động thứ hạng hoặc số tuần khi nguồn không cung cấp các trường đó.
 
-Sau lần phát hành đầu, website thường có địa chỉ `https://TEN-TAI-KHOAN.github.io/TEN-REPOSITORY/`.
-
-## Vận hành hằng tuần
-
-1. Cập nhật `public/charts.json`.
-2. Kiểm tra JSON hợp lệ và chạy `npm run build:pages`.
-3. Commit và push; GitHub Pages tự cập nhật.
-
-Không cần máy chủ, cơ sở dữ liệu, tài khoản quản trị hay API key. Nếu sau này cần tự động thu thập dữ liệu, nên để workflow riêng tạo `charts.json`; không đặt khóa bí mật trong mã chạy ở trình duyệt.
+Nguồn: Apple RSS Feed Generator / Apple Music Marketing Tools. Dữ liệu và ảnh bìa thuộc quyền của Apple và các chủ sở hữu nội dung tương ứng.
