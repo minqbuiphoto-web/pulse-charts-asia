@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
+import videoLinks from "./video-links.json";
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
@@ -25,9 +26,7 @@ type LookupStatus="idle"|"loading"|"ready"|"missing"|"error";
 type LyricsResult={ plainLyrics?:string|null; syncedLyrics?:string|null; trackName?:string; artistName?:string };
 const pipedInstances=["https://pipedapi.kavin.rocks","https://pipedapi.adminforge.de","https://pipedapi.reallyaweso.me"];
 const invidiousInstances=["https://inv.nadeko.net","https://invidious.nerdvpn.de"];
-const youtubeTracks:Record<string,string>={
-  "love attack::rescene":"9XttLI0oH0I",
-};
+const youtubeTracks=videoLinks as Record<string,string>;
 
 function trackKey(song:Pick<Song,"title"|"artist">){
   return `${song.title}::${song.artist}`.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g," ").trim();
@@ -88,6 +87,14 @@ export default function Home(){
     if(cached)return cached;
     setVideoStatus("loading");
     const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
+    try{
+      const response=await fetch(`/api/youtube-search?q=${query}`,{signal:AbortSignal.timeout(10000)});
+      if(response.ok){
+        const payload=await response.json();
+        const id=videoIdFromResult(payload);
+        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
+      }
+    }catch{}
     for(const instance of pipedInstances){
       try{
         const response=await fetch(`${instance}/search?q=${query}&filter=videos`,{signal:AbortSignal.timeout(7000)});
