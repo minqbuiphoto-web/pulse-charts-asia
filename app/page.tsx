@@ -65,20 +65,24 @@ export default function Home(){
   const [videoLink,setVideoLink]=useState("");
   const [videoStatus,setVideoStatus]=useState<LookupStatus>("idle");
   const [lyrics,setLyrics]=useState("");
+  const [lyricsSource,setLyricsSource]=useState("");
+  const [customLyrics,setCustomLyrics]=useState<Record<string,string>>({});
+  const [lyricsDraft,setLyricsDraft]=useState("");
   const [lyricsStatus,setLyricsStatus]=useState<LookupStatus>("idle");
 
-  useEffect(()=>{ try{setCustomVideos(JSON.parse(localStorage.getItem("pulse-custom-videos")??"{}"));}catch{} },[]);
+  useEffect(()=>{ try{setCustomVideos(JSON.parse(localStorage.getItem("pulse-custom-videos")??"{}"));setCustomLyrics(JSON.parse(localStorage.getItem("pulse-custom-lyrics")??"{}"));}catch{} },[]);
   const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
   useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
   const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
   const songs=useMemo(()=>{ const needle=query.trim().toLocaleLowerCase("en"); if(!active) return []; if(!needle) return active.songs; return active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle)); },[active,query]);
-  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setVideoLink("");setLyrics("");setLyricsStatus("idle"); };
+  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setVideoLink("");setLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
   const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
   const displaySong=selected??active?.songs[0]??null;
   const currentTrackKey=displaySong?trackKey(displaySong):"";
   const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
   const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official music video`)}`:"#";
   const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
+  const musixmatchSearchUrl=displaySong?`https://www.musixmatch.com/search/${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const selectSong=(song:Song)=>{ setSelected(song); resetTrackTools(); };
 
   const resolveVideo=async(song:Song)=>{
@@ -137,16 +141,27 @@ export default function Home(){
 
   const loadLyrics=async()=>{
     if(!displaySong)return;
-    setLyricsStatus("loading");setLyrics("");
+    const key=trackKey(displaySong);
+    const saved=customLyrics[key];
+    if(saved){setLyrics(saved);setLyricsSource("CUSTOM");setLyricsStatus("ready");return;}
+    setLyricsStatus("loading");setLyrics("");setLyricsSource("");
     try{
-      const params=new URLSearchParams({track_name:displaySong.title,artist_name:displaySong.artist});
-      const response=await fetch(`https://lrclib.net/api/search?${params}`,{signal:AbortSignal.timeout(9000)});
-      if(!response.ok)throw new Error("Lyrics lookup failed");
-      const results=await response.json() as LyricsResult[];
-      const match=results.find((item)=>item.plainLyrics||item.syncedLyrics);
-      const lyricText=match?.plainLyrics?.trim()||(match?.syncedLyrics?cleanSyncedLyrics(match.syncedLyrics):"");
-      if(lyricText){setLyrics(lyricText);setLyricsStatus("ready");}else setLyricsStatus("missing");
+      const params=new URLSearchParams({title:displaySong.title,artist:displaySong.artist});
+      const response=await fetch(`/api/lyrics-search?${params}`,{signal:AbortSignal.timeout(10000)});
+      if(!response.ok){setLyricsStatus("missing");return;}
+      const payload=await response.json();
+      if(payload.lyrics){setLyrics(payload.lyrics);setLyricsSource(payload.source??"LRCLIB");setLyricsStatus("ready");}
+      else setLyricsStatus("missing");
     }catch{setLyricsStatus("error");}
+  };
+
+  const saveCustomLyrics=()=>{
+    if(!displaySong||!lyricsDraft.trim())return;
+    const key=trackKey(displaySong);
+    const value=lyricsDraft.trim();
+    const next={...customLyrics,[key]:value};
+    setCustomLyrics(next);localStorage.setItem("pulse-custom-lyrics",JSON.stringify(next));
+    setLyrics(value);setLyricsSource("CUSTOM");setLyricsStatus("ready");setLyricsDraft("");
   };
 
   const moveTrack=(step:number)=>{ if(!active||!displaySong)return; const index=active.songs.findIndex((song)=>song.id===displaySong.id); const next=active.songs[index+step]; if(next)selectSong(next); };
@@ -215,9 +230,10 @@ export default function Home(){
           {videoStatus==="error"&&<p className="media-note">That link is not a valid YouTube video URL or 11-character video ID.</p>}
           <details className="video-link-editor"><summary>UPDATE YOUTUBE LINK</summary><div><input value={videoLink} onChange={(event)=>setVideoLink(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")saveVideoLink();}} placeholder="Paste YouTube URL or video ID"/><button onClick={saveVideoLink} disabled={!videoLink.trim()}>USE VIDEO</button></div><small>Saved free on this browser for the same track and artist.</small></details>
           <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"SEARCH YOUTUBE"}</a></div>
-          <div className="lyrics-tools"><button onClick={loadLyrics} disabled={lyricsStatus==="loading"}>{lyricsStatus==="loading"?"LOADING LYRICS...":lyricsStatus==="ready"?"REFRESH LYRICS":"SHOW LYRICS"}</button><a href={lyricsSearchUrl} target="_blank" rel="noreferrer">LYRICS SEARCH</a></div>
-          {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b><a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a></div><pre>{lyrics}</pre></section>}
-          {(lyricsStatus==="missing"||lyricsStatus==="error")&&<p className="media-note">Lyrics are not available from the free library for this track. Try Lyrics Search.</p>}
+          <div className="lyrics-tools"><button onClick={loadLyrics} disabled={lyricsStatus==="loading"}>{lyricsStatus==="loading"?"LOADING LYRICS...":lyricsStatus==="ready"?"REFRESH LYRICS":"SHOW LYRICS"}</button><a href={lyricsSearchUrl} target="_blank" rel="noreferrer">GENIUS</a><a href={musixmatchSearchUrl} target="_blank" rel="noreferrer">MUSIXMATCH</a></div>
+          <details className="lyrics-editor"><summary>ADD OR REPLACE LYRICS</summary><textarea value={lyricsDraft} onChange={(event)=>setLyricsDraft(event.target.value)} placeholder="Paste lyrics for this track"/><button onClick={saveCustomLyrics} disabled={!lyricsDraft.trim()}>SAVE LYRICS</button><small>Saved free on this browser for the same track and artist.</small></details>
+          {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b>{lyricsSource==="LRCLIB"?<a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a>:<span>{lyricsSource}</span>}</div><pre>{lyrics}</pre></section>}
+          {(lyricsStatus==="missing"||lyricsStatus==="error")&&<p className="media-note">No lyrics were found in the free library. Open Genius or Musixmatch, or paste lyrics above.</p>}
           <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>{active?.id.includes("trending")?"RELEASED":"MARKET CODE"}</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>

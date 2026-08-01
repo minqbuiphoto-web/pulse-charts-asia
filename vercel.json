@@ -1,1 +1,1 @@
-{"buildCommand":"npm run build:pages","outputDirectory":"out","framework":null,"installCommand":"npm install","functions":{"api/youtube-search.js":{"maxDuration":10}}}
+{"buildCommand":"npm run build:pages","outputDirectory":"out","framework":null,"installCommand":"npm install","functions":{"api/youtube-search.js":{"maxDuration":10},"api/lyrics-search.js":{"maxDuration":10}}}
