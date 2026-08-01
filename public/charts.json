@@ -3,7 +3,7 @@
   "charts": [
     {
       "id": "kr-apple-music",
-      "label": "Apple Music Hàn Quốc",
+      "label": "Apple Music South Korea",
       "shortLabel": "KR TOP",
       "market": "KR",
       "source": "Apple Music",
@@ -124,7 +124,7 @@
     },
     {
       "id": "jp-apple-music",
-      "label": "Apple Music Nhật Bản",
+      "label": "Apple Music Japan",
       "shortLabel": "JP TOP",
       "market": "JP",
       "source": "Apple Music",
@@ -245,7 +245,7 @@
     },
     {
       "id": "cn-apple-music",
-      "label": "Apple Music Trung Quốc",
+      "label": "Apple Music China",
       "shortLabel": "CN TOP",
       "market": "CN",
       "source": "Apple Music",
