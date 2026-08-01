@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import chartSnapshot from "../public/charts.json";
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
+const initialData=chartSnapshot as ChartData;
 
 const marketLabels:{ id:Market|"ALL"; label:string; code:string }[]=[
   { id:"ALL",label:"All markets",code:"ALL" },{ id:"KR",label:"South Korea",code:"KR" },
@@ -19,12 +21,12 @@ function formatDate(value:string,includeTime=false) {
 }
 
 export default function Home(){
-  const [data,setData]=useState<ChartData|null>(null);
-  const [status,setStatus]=useState<"loading"|"ready"|"error">("loading");
-  const [activeId,setActiveId]=useState("");
+  const [data]=useState<ChartData>(initialData);
+  const status:"ready"="ready";
+  const [activeId,setActiveId]=useState(initialData.charts[0]?.id??"");
   const [market,setMarket]=useState<Market|"ALL">("ALL");
   const [query,setQuery]=useState("");
-  const [selected,setSelected]=useState<Song|null>(null);
+  const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
 
   useEffect(()=>{ fetch(`charts.json?v=${Date.now()}`).then((response)=>{ if(!response.ok) throw new Error(); return response.json(); })
     .then((next:ChartData)=>{ setData(next); setActiveId(next.charts[0]?.id??""); setSelected(next.charts[0]?.songs[0]??null); setStatus("ready"); })
