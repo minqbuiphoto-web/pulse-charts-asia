@@ -25,7 +25,7 @@ Workflow GitHub Pages trong `.github/workflows/deploy-pages.yml` tự đồng b�
 
 ## Phạm vi v1
 
-- Ba bảng Top 10 thật: Hàn Quốc, Nhật Bản, Trung Quốc.
+- Bảy bảng dữ liệu thật: Korea Top, Korea Pop, Japan Top, Japan Pop, China Top, China Local và Asia Cross-Market Pulse.
 - Tìm kiếm theo bài hát, nghệ sĩ và thể loại.
 - Ảnh bìa, ngày phát hành, liên kết nghệ sĩ và nghe trên Apple Music.
 - Liên kết tìm kiếm YouTube, trạng thái đồng bộ và nguồn dữ liệu rõ ràng.
