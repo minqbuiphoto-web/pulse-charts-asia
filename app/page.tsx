@@ -10,6 +10,17 @@ type Chart={ id:string; label:string; shortLabel:string; market:Market; source:s
 type ChartData={ generatedAt:string; charts:Chart[] };
 const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts] } as ChartData;
 
+const youtubeVideos:Record<string,string>={
+  "kr-pop-1":"phuiiNCxRMg","kr-pop-2":"Q3K0TOvTOno","kr-pop-3":"Vk5-c_v4gMU","kr-pop-4":"xfqBQ2XhBCgy",
+  "kr-pop-6":"nFYwcndNuOY","kr-pop-7":"ft70sAYrFyY","kr-pop-8":"hVAc1Vf2ITU","kr-pop-9":"07EzMbVH3QE","kr-pop-10":"rTKqSmX9XhQ",
+  "kr-ballad-1":"5_n6t9G2TUQ","kr-ballad-2":"JleoAppaxi0","kr-ballad-6":"EIz09kLzN9k","kr-ballad-7":"hLvWy2b857I",
+  "kr-ballad-9":"QU9c0053UAU","kr-ballad-10":"eQNHDV7lKgE","jp-billboard-1":"mLW35YMzELE","jp-billboard-2":"ZRtdQ81jPUQ",
+  "jp-billboard-4":"5yb2N3pnztU","jp-billboard-7":"oZpYEEcvu5I","jp-billboard-8":"kzZ6KXDM1RI","jp-billboard-9":"UM9XNpgrqVk",
+  "jp-billboard-10":"hN5MBlGv2Ac","kr-ost-6":"pcKR0LPwoYs","kr-ost-7":"lj8TV9q59P4","jp-ost-2":"a2GujJZfXpg",
+  "jp-ost-3":"n89SKAymNfA","jp-ost-5":"4DxL6IKmXx4","jp-ost-6":"O1bhZgkC4Gw","jp-ost-7":"Xs0Lxif1u9E",
+  "jp-ost-9":"zuoVd2QNxJo","cn-qq-2":"XKuL5xaKZHM","cn-ost-1":"pb-kc6DWIDI","cn-ost-8":"Hlp8XD0R5qo","cn-ost-10":"-aMdBA00Ijc",
+};
+
 const marketLabels:{ id:Market|"ALL"; label:string; code:string }[]=[
   { id:"ALL",label:"All markets",code:"ALL" },{ id:"KR",label:"South Korea",code:"KR" },
   { id:"JP",label:"Japan",code:"JP" },{ id:"CN",label:"Mainland China",code:"CN" },
@@ -27,14 +38,18 @@ export default function Home(){
   const [market,setMarket]=useState<Market|"ALL">("ALL");
   const [query,setQuery]=useState("");
   const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
+  const [playingId,setPlayingId]=useState("");
 
   const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
   useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
   const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
   const songs=useMemo(()=>{ const needle=query.trim().toLocaleLowerCase("en"); if(!active) return []; if(!needle) return active.songs; return active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle)); },[active,query]);
-  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); };
+  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); setPlayingId(""); };
   const displaySong=selected??active?.songs[0]??null;
-  const youtubeUrl=displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
+  const videoId=displaySong?youtubeVideos[displaySong.id]:undefined;
+  const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official`)}`:"#";
+  const selectSong=(song:Song)=>{ setSelected(song); setPlayingId(youtubeVideos[song.id]?song.id:""); };
+  const moveTrack=(step:number)=>{ if(!active||!displaySong)return; const index=active.songs.findIndex((song)=>song.id===displaySong.id); const next=active.songs[index+step]; if(next)selectSong(next); };
   const heroCovers=active?.songs.slice(0,3)??[];
 
   return <main>
@@ -82,7 +97,7 @@ export default function Home(){
         <div className="column-head"><span>#</span><span>TRACK</span><span>SCORE</span><span>MARKET</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
         {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
-        <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>setSelected(song)}>
+        <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>selectSong(song)}>
           <span className="rank">{String(song.rank).padStart(2,"0")}</span>
           <span className="track"><span className="art cover-art"><b>{String(song.rank).padStart(2,"0")}</b><i>▶</i></span><span className="song-main"><b>{song.title}</b><small>{song.artist}</small></span></span>
           <span className="genre">{song.genre}</span><span className="released">{song.releaseDate}</span><span className="row-action">•••</span>
@@ -91,8 +106,8 @@ export default function Home(){
 
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
         {displaySong?<><div className="player-glow token-glow"/>
-          <div className="player-head"><span>NOW CHARTING</span><span>#{displaySong.rank}</span></div>
-          <div className="player-cover cover-art player-token"><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>PULSE CHARTS</em><span className="playing-badge"><i/><i/><i/><i/></span></div>
+          <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
+          {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoId?"PLAY HERE / YOUTUBE":"VIDEO LINK PENDING"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span></div>
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
           <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer"><span>▶</span> OPEN CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">YOUTUBE ↗</a></div>
