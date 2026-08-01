@@ -8,8 +8,8 @@
     "scripts":  {
                     "sync":  "node scripts/sync-charts.mjs",
                     "dev":  "vinext dev",
-                    "build":  "next build",
-                    "build:pages":  "next build",
+                    "build":  "next build \u0026\u0026 node -e \"require(\u0027node:fs\u0027).cpSync(\u0027out\u0027,\u0027dist\u0027,{recursive:true})\"",
+                    "build:pages":  "next build \u0026\u0026 node -e \"require(\u0027node:fs\u0027).cpSync(\u0027out\u0027,\u0027dist\u0027,{recursive:true})\"",
                     "start":  "vinext start",
                     "test":  "npm run sync \u0026\u0026 npm run build:vinext \u0026\u0026 node --test tests/rendered-html.test.mjs",
                     "lint":  "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern out",
