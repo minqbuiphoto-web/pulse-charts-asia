@@ -94,7 +94,7 @@ export default function Home(){
           <div><p className="kicker"><span>02</span> CURRENT TOP 10</p><h2>{active?.label??"Loading chart"}</h2></div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
-        <div className="column-head"><span>#</span><span>TRACK</span><span>SCORE</span><span>MARKET</span><span/></div>
+        <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")?"RELEASED":"MARKET"}</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
         {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
         <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>selectSong(song)}>
@@ -112,12 +112,12 @@ export default function Home(){
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
           <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}>PLAY</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
           <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"FIND ON YOUTUBE"}</a></div>
-          <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>MARKET CODE</dt><dd>{displaySong.releaseDate}</dd></div></dl>
+          <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>{active?.id.includes("trending")?"RELEASED":"MARKET CODE"}</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official rankings + transparent trending lists.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official rankings + 3–6 month trending windows.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 
