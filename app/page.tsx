@@ -21,6 +21,21 @@ const youtubeVideos:Record<string,string>={
   "jp-ost-9":"zuoVd2QNxJo","cn-qq-2":"XKuL5xaKZHM","cn-ost-1":"pb-kc6DWIDI","cn-ost-8":"Hlp8XD0R5qo","cn-ost-10":"-aMdBA00Ijc",
 };
 
+type LookupStatus="idle"|"loading"|"ready"|"missing"|"error";
+type LyricsResult={ plainLyrics?:string|null; syncedLyrics?:string|null; trackName?:string; artistName?:string };
+const pipedInstances=["https://pipedapi.kavin.rocks","https://pipedapi.adminforge.de","https://pipedapi.reallyaweso.me"];
+const invidiousInstances=["https://inv.nadeko.net","https://invidious.nerdvpn.de"];
+
+function cleanSyncedLyrics(value:string){
+  return value.replace(/^\[[0-9:.]+\]\s*/gm,"").replace(/\n{3,}/g,"\n\n").trim();
+}
+
+function videoIdFromResult(item:any){
+  const candidate=String(item?.id??item?.url??item?.videoId??"");
+  const match=candidate.match(/(?:v=|youtu\.be\/|embed\/)?([\w-]{11})(?:\b|$)/);
+  return match?.[1]??"";
+};
+
 const marketLabels:{ id:Market|"ALL"; label:string; code:string }[]=[
   { id:"ALL",label:"All markets",code:"ALL" },{ id:"KR",label:"South Korea",code:"KR" },
   { id:"JP",label:"Japan",code:"JP" },{ id:"CN",label:"Mainland China",code:"CN" },
@@ -39,16 +54,71 @@ export default function Home(){
   const [query,setQuery]=useState("");
   const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
   const [playingId,setPlayingId]=useState("");
+  const [resolvedVideos,setResolvedVideos]=useState<Record<string,string>>({});
+  const [videoStatus,setVideoStatus]=useState<LookupStatus>("idle");
+  const [lyrics,setLyrics]=useState("");
+  const [lyricsStatus,setLyricsStatus]=useState<LookupStatus>("idle");
 
   const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
   useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
   const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
   const songs=useMemo(()=>{ const needle=query.trim().toLocaleLowerCase("en"); if(!active) return []; if(!needle) return active.songs; return active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle)); },[active,query]);
-  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); setPlayingId(""); };
+  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setLyrics("");setLyricsStatus("idle"); };
+  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
   const displaySong=selected??active?.songs[0]??null;
-  const videoId=displaySong?youtubeVideos[displaySong.id]:undefined;
-  const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official`)}`:"#";
-  const selectSong=(song:Song)=>{ setSelected(song); setPlayingId(youtubeVideos[song.id]?song.id:""); };
+  const videoId=displaySong?(youtubeVideos[displaySong.id]??resolvedVideos[displaySong.id]):undefined;
+  const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official music video`)}`:"#";
+  const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
+  const selectSong=(song:Song)=>{ setSelected(song); resetTrackTools(); };
+
+  const resolveVideo=async(song:Song)=>{
+    const cached=youtubeVideos[song.id]??resolvedVideos[song.id];
+    if(cached)return cached;
+    setVideoStatus("loading");
+    const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
+    for(const instance of pipedInstances){
+      try{
+        const response=await fetch(`${instance}/search?q=${query}&filter=videos`,{signal:AbortSignal.timeout(7000)});
+        if(!response.ok)continue;
+        const payload=await response.json();
+        const items=Array.isArray(payload)?payload:(payload?.items??[]);
+        const id=items.map(videoIdFromResult).find(Boolean);
+        if(id){setResolvedVideos((current)=>({...current,[song.id]:id}));setVideoStatus("ready");return id;}
+      }catch{}
+    }
+    for(const instance of invidiousInstances){
+      try{
+        const response=await fetch(`${instance}/api/v1/search?q=${query}&type=video`,{signal:AbortSignal.timeout(7000)});
+        if(!response.ok)continue;
+        const items=await response.json();
+        const id=Array.isArray(items)?items.map(videoIdFromResult).find(Boolean):"";
+        if(id){setResolvedVideos((current)=>({...current,[song.id]:id}));setVideoStatus("ready");return id;}
+      }catch{}
+    }
+    setVideoStatus("missing");
+    return "";
+  };
+
+  const playTrack=async()=>{
+    if(!displaySong)return;
+    const id=videoId??await resolveVideo(displaySong);
+    if(id)setPlayingId(displaySong.id);
+  };
+
+  const loadLyrics=async()=>{
+    if(!displaySong)return;
+    setLyricsStatus("loading");setLyrics("");
+    try{
+      const params=new URLSearchParams({track_name:displaySong.title,artist_name:displaySong.artist});
+      const response=await fetch(`https://lrclib.net/api/search?${params}`,{signal:AbortSignal.timeout(9000)});
+      if(!response.ok)throw new Error("Lyrics lookup failed");
+      const results=await response.json() as LyricsResult[];
+      const match=results.find((item)=>item.plainLyrics||item.syncedLyrics);
+      const lyricText=match?.plainLyrics?.trim()||(match?.syncedLyrics?cleanSyncedLyrics(match.syncedLyrics):"");
+      if(lyricText){setLyrics(lyricText);setLyricsStatus("ready");}else setLyricsStatus("missing");
+    }catch{setLyricsStatus("error");}
+  };
+
   const moveTrack=(step:number)=>{ if(!active||!displaySong)return; const index=active.songs.findIndex((song)=>song.id===displaySong.id); const next=active.songs[index+step]; if(next)selectSong(next); };
   const heroCovers=active?.songs.slice(0,3)??[];
 
@@ -107,11 +177,15 @@ export default function Home(){
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
         {displaySong?<><div className="player-glow token-glow"/>
           <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
-          {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoId?"PLAY HERE / YOUTUBE":"VIDEO LINK PENDING"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
+          {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span></div>
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
-          <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={()=>videoId&&setPlayingId(displaySong.id)} disabled={!videoId}>PLAY</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
-          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"FIND ON YOUTUBE"}</a></div>
+          <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
+          {videoStatus==="missing"&&<p className="media-note">No embeddable result was found automatically. Use YouTube search and choose the official upload.</p>}
+          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"SEARCH YOUTUBE"}</a></div>
+          <div className="lyrics-tools"><button onClick={loadLyrics} disabled={lyricsStatus==="loading"}>{lyricsStatus==="loading"?"LOADING LYRICS...":lyricsStatus==="ready"?"REFRESH LYRICS":"SHOW LYRICS"}</button><a href={lyricsSearchUrl} target="_blank" rel="noreferrer">LYRICS SEARCH</a></div>
+          {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b><a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a></div><pre>{lyrics}</pre></section>}
+          {(lyricsStatus==="missing"||lyricsStatus==="error")&&<p className="media-note">Lyrics are not available from the free library for this track. Try Lyrics Search.</p>}
           <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>{active?.id.includes("trending")?"RELEASED":"MARKET CODE"}</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>
