@@ -42,21 +42,21 @@ export default function Home(){
     <header className="topbar">
       <a className="brand" href="#top" aria-label="Pulse Charts — back to top"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></a>
       <nav><a href="#charts">Charts</a><a href="#about">About</a></nav>
-      <div className="live-pill"><span/> VERIFIED · DOMESTIC SOURCES</div>
+      <div className="live-pill"><span/> 7 CHARTS · 3 MARKETS</div>
     </header>
 
     <section className="hero" id="top">
       <div className="hero-copy">
         <p className="kicker"><span>01</span> THE SOUND OF RIGHT NOW</p>
         <h1>Turn up<br/><em>what’s next.</em></h1>
-        <p>Three domestic charts across South Korea, Japan and Mainland China — sourced directly from Circle Chart, Billboard Japan and Tencent Music.</p>
-        <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE OFFICIAL CHARTS</a>
+        <p>Seven charts across South Korea, Japan and Mainland China — national rankings, genre views and curated OST discovery in one place.</p>
+        <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE ALL 7 CHARTS</a>
       </div>
       <div className="hero-art" aria-hidden="true">
         <div className="orb"/>
         <div className="vinyl"><i/><b>PULSE<br/>CHARTS</b></div>
         <div className="cover-stack">
-          {heroCovers.map((song,index)=><img key={song.id} src={song.artworkUrl} alt="" style={{"--i":index} as React.CSSProperties}/>)}
+          {heroCovers.map((song,index)=><span className="cover-card" key={song.id} style={{"--i":index} as React.CSSProperties}><b>{String(song.rank).padStart(2,"0")}</b><i>{song.title.slice(0,2)}</i></span>)}
           {!heroCovers.length&&<div className="cover-placeholder">LIVE<br/>TOP 10</div>}
         </div>
         <div className="waveform">{Array.from({length:18},(_,index)=><i key={index}/>)}</div>
@@ -70,40 +70,40 @@ export default function Home(){
     </section>
 
     <section className="chart-tabs" aria-label="Choose a chart">
-      <p>OFFICIAL DOMESTIC CHARTS</p>
+      <p>ALL 7 MUSIC CHARTS</p>
       <div>{charts.map((chart)=><button key={chart.id} className={active?.id===chart.id?"active":""} onClick={()=>chooseChart(chart)}><span>{chart.shortLabel}</span>{chart.label}</button>)}</div>
     </section>
 
     <section className="workspace">
       <div className="chart-panel">
         <div className="panel-heading">
-          <div><p className="kicker"><span>02</span> OFFICIAL TOP 10</p><h2>{active?.label??"Loading chart"}</h2></div>
+          <div><p className="kicker"><span>02</span> CURRENT TOP 10</p><h2>{active?.label??"Loading chart"}</h2></div>
           {data&&<div className="sync-time"><span className="status-dot"/>UPDATED<br/><b>{formatDate(data.generatedAt,true)}</b></div>}
         </div>
         <div className="column-head"><span>#</span><span>TRACK</span><span>SCORE</span><span>MARKET</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
-        {status==="loading"&&<div className="empty-state">Loading official chart snapshots…</div>}
+        {status==="loading"&&<div className="empty-state">Loading chart snapshots…</div>}
         {status==="error"&&<div className="empty-state error">We could not load the data. Please try again later.</div>}
         {status==="ready"&&songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
         <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>setSelected(song)}>
           <span className="rank">{String(song.rank).padStart(2,"0")}</span>
-          <span className="track"><span className="art"><img src={song.artworkUrl} alt="" loading="lazy"/><i>▶</i></span><span className="song-main"><b>{song.title}</b><small>{song.artist}</small></span></span>
+          <span className="track"><span className="art cover-art"><b>{String(song.rank).padStart(2,"0")}</b><i>▶</i></span><span className="song-main"><b>{song.title}</b><small>{song.artist}</small></span></span>
           <span className="genre">{song.genre}</span><span className="released">{song.releaseDate}</span><span className="row-action">•••</span>
         </button>)}</div>
       </div>
 
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
-        {displaySong?<><div className="player-glow" style={{backgroundImage:`url("${displaySong.artworkUrl}")`}}/>
+        {displaySong?<><div className="player-glow token-glow"/>
           <div className="player-head"><span>NOW CHARTING</span><span>#{displaySong.rank}</span></div>
-          <div className="player-cover"><img src={displaySong.artworkUrl} alt={`${displaySong.title} artwork`}/><span className="playing-badge"><i/><i/><i/><i/></span></div>
-          <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><a href={displaySong.artistUrl} target="_blank" rel="noreferrer">{displaySong.artist} ↗</a></div>
+          <div className="player-cover cover-art player-token"><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>PULSE CHARTS</em><span className="playing-badge"><i/><i/><i/><i/></span></div>
+          <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span></div>
           <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
-          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer"><span>▶</span> OPEN OFFICIAL CHART</a><a href={youtubeUrl} target="_blank" rel="noreferrer">YOUTUBE ↗</a></div>
+          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer"><span>▶</span> OPEN CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">YOUTUBE ↗</a></div>
           <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>MARKET CODE</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Domestic charts. Transparent sources.<br/>Built for music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>UPDATED {formatDate(active.updatedAt,true)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Seven charts. Transparent sources.<br/>Built for music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>UPDATED {formatDate(active.updatedAt,true)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }

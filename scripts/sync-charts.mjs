@@ -2,18 +2,14 @@ import { readFile } from "node:fs/promises";
 
 const outputUrl = new URL("../public/charts.json", import.meta.url);
 const data = JSON.parse(await readFile(outputUrl, "utf8"));
-const expected = new Map([
-  ["KR", "Circle Chart"],
-  ["JP", "Billboard Japan"],
-  ["CN", "Tencent Music"],
-]);
+const expectedIds = new Set(["kr-pop", "kr-ballad", "jp-billboard", "cn-qq", "kr-ost", "jp-ost", "cn-ost"]);
 
-if (!Array.isArray(data.charts) || data.charts.length !== expected.size) {
-  throw new Error("Pulse Charts requires exactly three domestic charts.");
+if (!Array.isArray(data.charts) || data.charts.length !== expectedIds.size) {
+  throw new Error("Pulse Charts requires exactly seven charts.");
 }
 for (const chart of data.charts) {
-  if (chart.source !== expected.get(chart.market)) {
-    throw new Error(`Unexpected source for ${chart.market}: ${chart.source}`);
+  if (!expectedIds.has(chart.id)) {
+    throw new Error(`Unexpected chart: ${chart.id}`);
   }
   if (!Array.isArray(chart.songs) || chart.songs.length !== 10) {
     throw new Error(`${chart.label} must contain a verified Top 10 snapshot.`);
@@ -24,4 +20,4 @@ for (const chart of data.charts) {
     }
   });
 }
-console.log("Verified 3 domestic charts / 30 ranked tracks.");
+console.log("Verified 7 charts / 70 ranked tracks.");

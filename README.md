@@ -1,41 +1,29 @@
-# Pulse Charts — Domestic Charts V2
+# Pulse Charts
 
-Pulse Charts presents Top 10 snapshots from three domestic Asian music charts:
+Pulse Charts is an independent English-language music discovery site with seven Top 10 views:
 
-- South Korea: Circle Digital Chart
-- Japan: Billboard Japan Hot 100
-- Mainland China: Tencent Music Uni Chart
+- Korea Pop
+- Korea Ballad
+- Japan Billboard
+- China QQ Music
+- Korea OST
+- Japan OST
+- China OST
 
-The main rankings no longer use or derive data from Apple Music. Every chart displays its source, market, period and scoring context.
+It includes market filters, track and artist search, chart switching, source links, and a focused track panel. The visual covers use CSS instead of external image files, preventing broken artwork icons.
+
+## Data transparency
+
+The Japan Billboard and China QQ Music views link to their named sources. Korea Pop, Korea Ballad, and the OST views are restored discovery snapshots from the original seven-chart system. Curated views are labelled as snapshots and are not presented as official national rankings.
 
 ## Run locally
 
-Requires Node.js 22.13 or newer.
+Install Node.js, run npm install, then run npm run dev.
 
-```bash
-npm install
-npm run sync
-npm run dev
-```
+## Verify and build
 
-`npm run sync` validates the committed domestic-chart snapshot. It does not scrape or relabel platform feeds.
+Run npm test. It validates seven charts and 70 ranked tracks, creates the production build, and runs rendering checks.
 
-## Validate and publish
+## Deploy
 
-```bash
-npm test
-npm run build
-```
-
-The project can be deployed to Vercel without a database, paid API or environment variables.
-
-## Current scope
-
-- Three official domestic Top 10 snapshots
-- Market filters for Korea, Japan and Mainland China
-- Search by song, artist or score
-- Source, publication period and methodology shown in the interface
-- Direct links to the official chart and YouTube search
-- Responsive English interface
-
-Chart data belongs to its respective publishers and rights holders. Pulse Charts is an independent discovery interface and clearly attributes every source.
+Import this folder into Vercel or run vercel --prod. The site is static-first and needs no database or paid API.

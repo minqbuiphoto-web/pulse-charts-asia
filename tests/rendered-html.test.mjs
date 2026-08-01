@@ -13,22 +13,21 @@ async function render() {
   );
 }
 
-test("renders the domestic Pulse Charts shell", async () => {
+test("renders the seven-chart Pulse Charts shell", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /THE SOUND OF RIGHT NOW/);
-  assert.match(html, /VERIFIED · DOMESTIC SOURCES/);
+  assert.match(html, /7 CHARTS/);
   assert.match(html, /Search tracks, artists, chart entries/);
   assert.doesNotMatch(html, /APPLE MUSIC DATA|PLAY ON APPLE MUSIC/i);
 });
 
-test("ships three verified domestic chart snapshots", async () => {
+test("ships all seven chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
-  assert.equal(data.charts.length, 3);
+  assert.equal(data.charts.length, 7);
   assert.deepEqual(new Set(data.charts.map((chart) => chart.market)), new Set(["KR", "JP", "CN"]));
-  assert.deepEqual(new Set(data.charts.map((chart) => chart.source)), new Set(["Circle Chart", "Billboard Japan", "Tencent Music"]));
   assert.ok(data.charts.every((chart) => chart.songs.length === 10));
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
-  assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==")));
+  assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "")));
 });
