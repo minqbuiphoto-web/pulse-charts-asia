@@ -22,7 +22,7 @@ async function requestJson(url,attempts=3){
   throw lastError;
 }
 
-function artwork(url){return url.replace(//d+xd+bb./,"/600x600bb.")}
+function artwork(url){return url.replace(/\/[0-9]+x[0-9]+bb\./,"/600x600bb.")}
 function primaryGenre(genres=[]){
   const generic=/^(Music|음악|ミュージック|音乐)$/i;
   return genres.find((genre)=>!generic.test(genre.name))?.name??genres[0]?.name??"Music";
