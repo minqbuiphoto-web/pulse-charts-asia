@@ -1,10 +1,16 @@
-# Pulse Charts — Live V1
+# Pulse Charts — Domestic Charts V2
 
-Pulse Charts theo dõi Top 10 bài hát được nghe nhiều trên Apple Music tại Hàn Quốc, Nhật Bản và Trung Quốc. Dữ liệu đến từ RSS công khai của Apple, không dùng API key và không cần máy chủ hoặc cơ sở dữ liệu.
+Pulse Charts presents Top 10 snapshots from three domestic Asian music charts:
 
-## Chạy trên máy
+- South Korea: Circle Digital Chart
+- Japan: Billboard Japan Hot 100
+- Mainland China: Tencent Music Uni Chart
 
-Yêu cầu Node.js 22.13 trở lên.
+The main rankings no longer use or derive data from Apple Music. Every chart displays its source, market, period and scoring context.
+
+## Run locally
+
+Requires Node.js 22.13 or newer.
 
 ```bash
 npm install
@@ -12,23 +18,24 @@ npm run sync
 npm run dev
 ```
 
-`npm run sync` lấy dữ liệu mới nhất và tạo `public/charts.json`. Nếu một thị trường tạm thời không phản hồi, hệ thống giữ dữ liệu của lần đồng bộ thành công gần nhất.
+`npm run sync` validates the committed domestic-chart snapshot. It does not scrape or relabel platform feeds.
 
-## Kiểm tra và phát hành
+## Validate and publish
 
 ```bash
 npm test
-npm run build:pages
+npm run build
 ```
 
-Workflow GitHub Pages trong `.github/workflows/deploy-pages.yml` tự đồng bộ và phát hành lại mỗi 6 giờ. Để bật, đẩy dự án lên GitHub rồi chọn **Settings → Pages → GitHub Actions**.
+The project can be deployed to Vercel without a database, paid API or environment variables.
 
-## Phạm vi v1
+## Current scope
 
-- Bảy bảng dữ liệu thật: Korea Top, Korea Pop, Japan Top, Japan Pop, China Top, China Local và Asia Cross-Market Pulse.
-- Tìm kiếm theo bài hát, nghệ sĩ và thể loại.
-- Ảnh bìa, ngày phát hành, liên kết nghệ sĩ và nghe trên Apple Music.
-- Liên kết tìm kiếm YouTube, trạng thái đồng bộ và nguồn dữ liệu rõ ràng.
-- Không hiển thị OST, lyric, biến động thứ hạng hoặc số tuần khi nguồn không cung cấp các trường đó.
+- Three official domestic Top 10 snapshots
+- Market filters for Korea, Japan and Mainland China
+- Search by song, artist or score
+- Source, publication period and methodology shown in the interface
+- Direct links to the official chart and YouTube search
+- Responsive English interface
 
-Nguồn: Apple RSS Feed Generator / Apple Music Marketing Tools. Dữ liệu và ảnh bìa thuộc quyền của Apple và các chủ sở hữu nội dung tương ứng.
+Chart data belongs to its respective publishers and rights holders. Pulse Charts is an independent discovery interface and clearly attributes every source.

@@ -1,368 +1,371 @@
 {
-  "generatedAt": "2026-08-01T14:15:50.172Z",
-  "charts": [
-    {
-      "id": "kr-apple-music",
-      "label": "Apple Music South Korea",
-      "shortLabel": "KR TOP",
-      "market": "KR",
-      "source": "Apple Music",
-      "sourceUrl": "https://rss.marketingtools.apple.com/api/v2/kr/music/most-played/10/songs.json",
-      "updatedAt": "Sat, 1 Aug 2026 14:15:51 +0000",
-      "songs": [
-        {
-          "rank": 1,
-          "id": "6792226270",
-          "title": "Less than a Lover",
-          "artist": "제니",
-          "releaseDate": "2026-07-24",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/a0/8a/84/a08a8464-c3d8-04aa-84a0-9498a52985dd/196874620281.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/less-than-a-lover/6792226269?i=6792226270",
-          "artistUrl": "https://music.apple.com/kr/artist/%EC%A0%9C%EB%8B%88/913944"
-        },
-        {
-          "rank": 2,
-          "id": "1887671067",
-          "title": "REDRED",
-          "artist": "코르티스",
-          "releaseDate": "2026-04-20",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/9b/5f/47/9b5f4711-dc78-2dea-6721-d06709ea5121/198704992810_Cover.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/redred/1887671065?i=1887671067",
-          "artistUrl": "https://music.apple.com/kr/artist/%EC%BD%94%EB%A5%B4%ED%8B%B0%EC%8A%A4/1831651635"
-        },
-        {
-          "rank": 3,
-          "id": "1764485170",
-          "title": "LOVE ATTACK",
-          "artist": "리센느",
-          "releaseDate": "2024-08-27",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/43/0b/4c/430b4c8e-3cb8-da27-648f-435ec3b391a6/8804775334160.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/love-attack/1764485168?i=1764485170",
-          "artistUrl": "https://music.apple.com/kr/artist/%EB%A6%AC%EC%84%BC%EB%8A%90/1732658659"
-        },
-        {
-          "rank": 4,
-          "id": "6779521286",
-          "title": "Lemon Tang",
-          "artist": "Hearts2Hearts",
-          "releaseDate": "2026-06-22",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/00/a4/c1/00a4c1fb-c2c9-83c9-af2e-44cb5da80bc4/888735956140.png/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/lemon-tang/6779521284?i=6779521286",
-          "artistUrl": "https://music.apple.com/kr/artist/hearts2hearts/1793698498"
-        },
-        {
-          "rank": 5,
-          "id": "1893599773",
-          "title": "LEMONADE",
-          "artist": "aespa",
-          "releaseDate": "2026-05-28",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/00/1d/e6/001de64e-c2f1-fd4b-3604-3d2e16641968/888735955211.png/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/lemonade/1893599771?i=1893599773",
-          "artistUrl": "https://music.apple.com/kr/artist/aespa/1540251304"
-        },
-        {
-          "rank": 6,
-          "id": "6786111946",
-          "title": "Pretty Girl",
-          "artist": "리센느",
-          "releaseDate": "2026-07-08",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/44/70/65/44706599-2480-efab-7cfe-564b5e254b25/888272184075_Cover.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/pretty-girl/6786111944?i=6786111946",
-          "artistUrl": "https://music.apple.com/kr/artist/%EB%A6%AC%EC%84%BC%EB%8A%90/1732658659"
-        },
-        {
-          "rank": 7,
-          "id": "1887194026",
-          "title": "It's Me",
-          "artist": "아일릿",
-          "releaseDate": "2026-04-30",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/db/56/04/db5604ab-c7f4-b982-8c76-98ee766ac294/823375069195_Cover.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/its-me/1887194024?i=1887194026",
-          "artistUrl": "https://music.apple.com/kr/artist/%EC%95%84%EC%9D%BC%EB%A6%BF/1734551937"
-        },
-        {
-          "rank": 8,
-          "id": "1822439986",
-          "title": "Deja Vu",
-          "artist": "리센느",
-          "releaseDate": "2025-07-02",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/e3/4e/e4/e34ee4d9-47a3-8b51-b6cc-4d991508f0b5/cover_KM0023041_1.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/deja-vu/1822439985?i=1822439986",
-          "artistUrl": "https://music.apple.com/kr/artist/%EB%A6%AC%EC%84%BC%EB%8A%90/1732658659"
-        },
-        {
-          "rank": 9,
-          "id": "6770401926",
-          "title": "BAD",
-          "artist": "에이티즈",
-          "releaseDate": "2026-06-26",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/15/5e/a0/155ea070-3f0d-84ae-7883-128ecd9ed5bf/196874257944.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/bad/6770401924?i=6770401926",
-          "artistUrl": "https://music.apple.com/kr/artist/%EC%97%90%EC%9D%B4%ED%8B%B0%EC%A6%88/1439301205"
-        },
-        {
-          "rank": 10,
-          "id": "1875146815",
-          "title": "RUDE!",
-          "artist": "Hearts2Hearts",
-          "releaseDate": "2026-02-20",
-          "genre": "K-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/78/b9/fb/78b9fb30-169a-eab0-38e9-8df725f8f2d6/888735954603.png/600x600bb.jpg",
-          "url": "https://music.apple.com/kr/album/rude/1875146814?i=1875146815",
-          "artistUrl": "https://music.apple.com/kr/artist/hearts2hearts/1793698498"
-        }
-      ]
-    },
-    {
-      "id": "jp-apple-music",
-      "label": "Apple Music Japan",
-      "shortLabel": "JP TOP",
-      "market": "JP",
-      "source": "Apple Music",
-      "sourceUrl": "https://rss.marketingtools.apple.com/api/v2/jp/music/most-played/10/songs.json",
-      "updatedAt": "Sat, 1 Aug 2026 14:15:51 +0000",
-      "songs": [
-        {
-          "rank": 1,
-          "id": "6788211810",
-          "title": "Brand New",
-          "artist": "Mrs. GREEN APPLE",
-          "releaseDate": "2026-07-13",
-          "genre": "ロック",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/41/a0/b6/41a0b6b9-a720-25e5-fc69-7e9c3ca1296e/26UMGIM73217.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/brand-new/6788211807?i=6788211810",
-          "artistUrl": "https://music.apple.com/jp/artist/mrs-green-apple/962221033"
-        },
-        {
-          "rank": 2,
-          "id": "1739088799",
-          "title": "ライラック",
-          "artist": "Mrs. GREEN APPLE",
-          "releaseDate": "2024-04-12",
-          "genre": "ロック",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/4c/3b/b2/4c3bb247-3be8-0c57-aa9a-7f1775a7b7a8/24UMGIM32931.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E3%83%A9%E3%82%A4%E3%83%A9%E3%83%83%E3%82%AF/1739088465?i=1739088799",
-          "artistUrl": "https://music.apple.com/jp/artist/mrs-green-apple/962221033"
-        },
-        {
-          "rank": 3,
-          "id": "1846753946",
-          "title": "好きすぎて滅!",
-          "artist": "M!LK",
-          "releaseDate": "2025-10-27",
-          "genre": "J-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/d4/f9/1b/d4f91bfd-6176-4733-113f-b72f6095d5df/VEATP-44481.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E5%A5%BD%E3%81%8D%E3%81%99%E3%81%8E%E3%81%A6%E6%BB%85/1846753945?i=1846753946",
-          "artistUrl": "https://music.apple.com/jp/artist/m-lk/1356706755"
-        },
-        {
-          "rank": 4,
-          "id": "1408505264",
-          "title": "青と夏",
-          "artist": "Mrs. GREEN APPLE",
-          "releaseDate": "2018-07-12",
-          "genre": "ロック",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/34/27/08/3427087f-2d39-4847-9b19-052dd3589014/18UMGIM36633.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E9%9D%92%E3%81%A8%E5%A4%8F/1408505088?i=1408505264",
-          "artistUrl": "https://music.apple.com/jp/artist/mrs-green-apple/962221033"
-        },
-        {
-          "rank": 5,
-          "id": "1869537742",
-          "title": "爆裂愛してる",
-          "artist": "M!LK",
-          "releaseDate": "2026-02-18",
-          "genre": "J-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/45/b1/53/45b153d5-e943-6cd9-620e-0a4c66b7525b/VEATP-45199.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E7%88%86%E8%A3%82%E6%84%9B%E3%81%97%E3%81%A6%E3%82%8B/1869537741?i=1869537742",
-          "artistUrl": "https://music.apple.com/jp/artist/m-lk/1356706755"
-        },
-        {
-          "rank": 6,
-          "id": "1837658529",
-          "title": "IRIS OUT",
-          "artist": "米津玄師",
-          "releaseDate": "2025-09-15",
-          "genre": "J-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/e0/f9/f1/e0f9f1f3-a088-b28d-6760-a28accabc705/4547366775181.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/iris-out/1837658528?i=1837658529",
-          "artistUrl": "https://music.apple.com/jp/artist/%E7%B1%B3%E6%B4%A5%E7%8E%84%E5%B8%AB/530814268"
-        },
-        {
-          "rank": 7,
-          "id": "1894837345",
-          "title": "It's Me",
-          "artist": "ILLIT",
-          "releaseDate": "2026-04-30",
-          "genre": "ポップ",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/cc/76/26/cc76262a-dc2e-0746-ed85-070a56d23d40/26UMGIM46377.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/its-me/1894837142?i=1894837345",
-          "artistUrl": "https://music.apple.com/jp/artist/illit/1734551937"
-        },
-        {
-          "rank": 8,
-          "id": "604748203",
-          "title": "夜の踊り子",
-          "artist": "サカナクション",
-          "releaseDate": "2013-03-13",
-          "genre": "ロック",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music124/v4/60/9b/bb/609bbb5d-96eb-ae16-f08a-81a3223deb24/VICL-63999.jpg/100x99bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E5%A4%9C%E3%81%AE%E8%B8%8A%E3%82%8A%E5%AD%90/604748196?i=604748203",
-          "artistUrl": "https://music.apple.com/jp/artist/%E3%82%B5%E3%82%AB%E3%83%8A%E3%82%AF%E3%82%B7%E3%83%A7%E3%83%B3/252312257"
-        },
-        {
-          "rank": 9,
-          "id": "6774039202",
-          "title": "烏 - Raven",
-          "artist": "米津玄師",
-          "releaseDate": "2026-06-15",
-          "genre": "J-Pop",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/66/89/10/668910f4-2f09-12c7-200a-104eee77cb48/4547366827767.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/%E7%83%8F-raven/6774039193?i=6774039202",
-          "artistUrl": "https://music.apple.com/jp/artist/%E7%B1%B3%E6%B4%A5%E7%8E%84%E5%B8%AB/530814268"
-        },
-        {
-          "rank": 10,
-          "id": "6794271993",
-          "title": "GO GHOST",
-          "artist": "King Gnu",
-          "releaseDate": "2026-07-29",
-          "genre": "オルタナティブ",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music221/v4/47/f3/49/47f3490b-4395-28ba-e6a9-88c9dd7be8fa/4547366841732.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/jp/album/go-ghost/6794271990?i=6794271993",
-          "artistUrl": "https://music.apple.com/jp/artist/king-gnu/1258439196"
-        }
-      ]
-    },
-    {
-      "id": "cn-apple-music",
-      "label": "Apple Music China",
-      "shortLabel": "CN TOP",
-      "market": "CN",
-      "source": "Apple Music",
-      "sourceUrl": "https://rss.marketingtools.apple.com/api/v2/cn/music/most-played/10/songs.json",
-      "updatedAt": "Sat, 1 Aug 2026 14:15:51 +0000",
-      "songs": [
-        {
-          "rank": 1,
-          "id": "6763656876",
-          "title": "hate that i made you love me",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-05-28",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/7e/e6/82/7ee682bd-1b17-6adc-be63-b5af1bdff369/26UMGIM51126.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/hate-that-i-made-you-love-me/1895420989?i=6763656876",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 2,
-          "id": "6763656726",
-          "title": "petal",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/petal/1895420874?i=6763656726",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 3,
-          "id": "6763656723",
-          "title": "kiss me",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/kiss-me/1895420874?i=6763656723",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 4,
-          "id": "6763656729",
-          "title": "oh well",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/oh-well/1895420874?i=6763656729",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 5,
-          "id": "6763656728",
-          "title": "stay",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/stay/1895420874?i=6763656728",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 6,
-          "id": "535824738",
-          "title": "晴天",
-          "artist": "周杰伦",
-          "releaseDate": "2003-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/45/8a/e4/458ae484-dc8b-5683-ce04-8d2948346462/JAY.jpg/100x109bb.jpg",
-          "url": "https://music.apple.com/cn/album/%E6%99%B4%E5%A4%A9/535824731?i=535824738",
-          "artistUrl": "https://music.apple.com/cn/artist/%E5%91%A8%E6%9D%B0%E4%BC%A6/300117743"
-        },
-        {
-          "rank": 7,
-          "id": "6763656731",
-          "title": "freak",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/freak/1895420874?i=6763656731",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        },
-        {
-          "rank": 8,
-          "id": "536115195",
-          "title": "七里香",
-          "artist": "周杰伦",
-          "releaseDate": "2004-08-03",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/29/c1/2d/29c12de6-54b4-f549-9d9f-07d8a04221ea/JAY.jpg/100x111bb.jpg",
-          "url": "https://music.apple.com/cn/album/%E4%B8%83%E9%87%8C%E9%A6%99/536114662?i=536115195",
-          "artistUrl": "https://music.apple.com/cn/artist/%E5%91%A8%E6%9D%B0%E4%BC%A6/300117743"
-        },
-        {
-          "rank": 9,
-          "id": "536115199",
-          "title": "搁浅",
-          "artist": "周杰伦",
-          "releaseDate": "2004-08-03",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/29/c1/2d/29c12de6-54b4-f549-9d9f-07d8a04221ea/JAY.jpg/100x111bb.jpg",
-          "url": "https://music.apple.com/cn/album/%E6%90%81%E6%B5%85/536114662?i=536115199",
-          "artistUrl": "https://music.apple.com/cn/artist/%E5%91%A8%E6%9D%B0%E4%BC%A6/300117743"
-        },
-        {
-          "rank": 10,
-          "id": "6763656730",
-          "title": "big feelings",
-          "artist": "Ariana Grande",
-          "releaseDate": "2026-07-31",
-          "genre": "国际流行",
-          "artworkUrl": "https://is1-ssl.mzstatic.com/image/thumb/Music211/v4/56/f4/96/56f49612-02dd-83f4-44fe-d2118cc70707/26UMGIM51129.rgb.jpg/600x600bb.jpg",
-          "url": "https://music.apple.com/cn/album/big-feelings/1895420874?i=6763656730",
-          "artistUrl": "https://music.apple.com/cn/artist/ariana-grande/412778295"
-        }
-      ]
-    }
-  ]
+    "generatedAt":  "2026-08-01T22:45:00+07:00",
+    "charts":  [
+                   {
+                       "id":  "kr-circle-digital",
+                       "label":  "Circle Digital Chart",
+                       "shortLabel":  "KR · WEEK 30",
+                       "market":  "KR",
+                       "source":  "Circle Chart",
+                       "sourceUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                       "updatedAt":  "2026-07-25T23:59:00+09:00",
+                       "syncWarning":  "Official South Korean weekly Digital Chart · 19–25 Jul 2026 · weighted streaming, downloads, BGM and V Coloring sales.",
+                       "songs":  [
+                                     {
+                                         "rank":  1,
+                                         "id":  "kr-1-love-attack",
+                                         "title":  "LOVE ATTACK",
+                                         "artist":  "RESCENE (리센느)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "16,629,446 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  2,
+                                         "id":  "kr-2-redred",
+                                         "title":  "REDRED",
+                                         "artist":  "CORTIS (코르티스)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "15,627,109 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  3,
+                                         "id":  "kr-3-track-3",
+                                         "title":  "갑자기",
+                                         "artist":  "아이오아이 (I.O.I)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "14,487,621 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  4,
+                                         "id":  "kr-4-lemonade",
+                                         "title":  "LEMONADE",
+                                         "artist":  "aespa",
+                                         "releaseDate":  "KR",
+                                         "genre":  "13,093,093 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  5,
+                                         "id":  "kr-5-it-s-me",
+                                         "title":  "It\u0027s Me",
+                                         "artist":  "ILLIT (아일릿)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "12,614,046 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  6,
+                                         "id":  "kr-6-pretty-girl",
+                                         "title":  "Pretty Girl",
+                                         "artist":  "RESCENE (리센느)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "11,935,829 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  7,
+                                         "id":  "kr-7-vitamin-me",
+                                         "title":  "Vitamin ME",
+                                         "artist":  "fromis_9 (프로미스나인)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "10,136,472 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  8,
+                                         "id":  "kr-8-track-8",
+                                         "title":  "사랑하게 될 거야",
+                                         "artist":  "HANRORO (한로로)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "9,379,819 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  9,
+                                         "id":  "kr-9-rude",
+                                         "title":  "RUDE!",
+                                         "artist":  "Hearts2Hearts (하츠투하츠)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "9,058,965 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     },
+                                     {
+                                         "rank":  10,
+                                         "id":  "kr-10-lemon-tang",
+                                         "title":  "Lemon Tang",
+                                         "artist":  "Hearts2Hearts (하츠투하츠)",
+                                         "releaseDate":  "KR",
+                                         "genre":  "9,012,170 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week",
+                                         "artistUrl":  "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL\u0026termGbn=week"
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "jp-billboard-hot100",
+                       "label":  "Billboard Japan Hot 100",
+                       "shortLabel":  "JP · HOT 100",
+                       "market":  "JP",
+                       "source":  "Billboard Japan",
+                       "sourceUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                       "updatedAt":  "2026-07-22T12:00:00+09:00",
+                       "syncWarning":  "Official Japan Hot 100 · published 22 Jul 2026 · composite national sales, streaming and audience activity.",
+                       "songs":  [
+                                     {
+                                         "rank":  1,
+                                         "id":  "jp-1-bugs-life",
+                                         "title":  "BUGS LIFE",
+                                         "artist":  "Number_i",
+                                         "releaseDate":  "JP",
+                                         "genre":  "14,148 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  2,
+                                         "id":  "jp-2-brand-new",
+                                         "title":  "Brand New",
+                                         "artist":  "Mrs. GREEN APPLE",
+                                         "releaseDate":  "JP",
+                                         "genre":  "11,409 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  3,
+                                         "id":  "jp-3-yo-i-don",
+                                         "title":  "YO-I-DON!",
+                                         "artist":  "NCT WISH",
+                                         "releaseDate":  "JP",
+                                         "genre":  "9,688 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  4,
+                                         "id":  "jp-4-track-4",
+                                         "title":  "ぱわーおぶらぶ",
+                                         "artist":  "FRUITS ZIPPER",
+                                         "releaseDate":  "JP",
+                                         "genre":  "8,842 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  5,
+                                         "id":  "jp-5-track-5",
+                                         "title":  "夜鷹",
+                                         "artist":  "Kenshi Yonezu (米津玄師)",
+                                         "releaseDate":  "JP",
+                                         "genre":  "7,432 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  6,
+                                         "id":  "jp-6-call-me-asap",
+                                         "title":  "Call Me Asap",
+                                         "artist":  "SUPER★DRAGON",
+                                         "releaseDate":  "JP",
+                                         "genre":  "6,114 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  7,
+                                         "id":  "jp-7-zero",
+                                         "title":  "ZERO",
+                                         "artist":  "TAGRIGHT",
+                                         "releaseDate":  "JP",
+                                         "genre":  "5,337 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  8,
+                                         "id":  "jp-8-hot-limit",
+                                         "title":  "HOT LIMIT",
+                                         "artist":  "T.M.Revolution",
+                                         "releaseDate":  "JP",
+                                         "genre":  "5,214 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  9,
+                                         "id":  "jp-9-track-9",
+                                         "title":  "好きすぎて滅!",
+                                         "artist":  "M!LK",
+                                         "releaseDate":  "JP",
+                                         "genre":  "5,141 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     },
+                                     {
+                                         "rank":  10,
+                                         "id":  "jp-10-track-10",
+                                         "title":  "マイオンリー",
+                                         "artist":  "SixTONES",
+                                         "releaseDate":  "JP",
+                                         "genre":  "4,711 pts",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en",
+                                         "artistUrl":  "https://www.billboard-japan.com/charts/detail/?a=hot100\u0026lang=en"
+                                     }
+                                 ]
+                   },
+                   {
+                       "id":  "cn-tme-uni",
+                       "label":  "Tencent Music Uni Chart",
+                       "shortLabel":  "CN · ISSUE 30",
+                       "market":  "CN",
+                       "source":  "Tencent Music",
+                       "sourceUrl":  "https://chart.tencentmusic.com/uni-chart",
+                       "updatedAt":  "2026-08-01T22:45:00+08:00",
+                       "syncWarning":  "Official Mainland China Uni Chart · 2026 Issue 30 · aggregated listening, sales and recommendation signals across seven domestic platforms.",
+                       "songs":  [
+                                     {
+                                         "rank":  1,
+                                         "id":  "cn-1-track-1",
+                                         "title":  "唯我论者的独白",
+                                         "artist":  "马嘉祺",
+                                         "releaseDate":  "CN",
+                                         "genre":  "99.36 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  2,
+                                         "id":  "cn-2-track-2",
+                                         "title":  "如约",
+                                         "artist":  "周深",
+                                         "releaseDate":  "CN",
+                                         "genre":  "96.91 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  3,
+                                         "id":  "cn-3-track-3",
+                                         "title":  "失重色",
+                                         "artist":  "世勋",
+                                         "releaseDate":  "CN",
+                                         "genre":  "96.82 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  4,
+                                         "id":  "cn-4-track-4",
+                                         "title":  "宇宙游乐场",
+                                         "artist":  "梓渝",
+                                         "releaseDate":  "CN",
+                                         "genre":  "96.22 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  5,
+                                         "id":  "cn-5-track-5",
+                                         "title":  "我想",
+                                         "artist":  "刘宇宁",
+                                         "releaseDate":  "CN",
+                                         "genre":  "95.86 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  6,
+                                         "id":  "cn-6-track-6",
+                                         "title":  "不渝",
+                                         "artist":  "梓渝",
+                                         "releaseDate":  "CN",
+                                         "genre":  "95.59 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  7,
+                                         "id":  "cn-7-track-7",
+                                         "title":  "甲乙丙丁 (你我怎么两清)",
+                                         "artist":  "李佳薇",
+                                         "releaseDate":  "CN",
+                                         "genre":  "95.46 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  8,
+                                         "id":  "cn-8-track-8",
+                                         "title":  "见山河",
+                                         "artist":  "刘宇宁",
+                                         "releaseDate":  "CN",
+                                         "genre":  "95.36 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  9,
+                                         "id":  "cn-9-cold-blooded--moon-version",
+                                         "title":  "Cold Blooded (Moon Version)",
+                                         "artist":  "严浩翔",
+                                         "releaseDate":  "CN",
+                                         "genre":  "95.18 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     },
+                                     {
+                                         "rank":  10,
+                                         "id":  "cn-10-steal-the-moon",
+                                         "title":  "Steal The Moon",
+                                         "artist":  "王俊凯",
+                                         "releaseDate":  "CN",
+                                         "genre":  "94.54 score",
+                                         "artworkUrl":  "data:image/gif;base64,R0lGODlhAQABAAAAACw=",
+                                         "url":  "https://chart.tencentmusic.com/uni-chart",
+                                         "artistUrl":  "https://chart.tencentmusic.com/uni-chart"
+                                     }
+                                 ]
+                   }
+               ]
 }
