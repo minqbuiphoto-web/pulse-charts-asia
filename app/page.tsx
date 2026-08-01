@@ -2,14 +2,14 @@
 
 import { useEffect, useMemo, useState } from "react";
 
-type Market="KR"|"JP"|"CN";
+type Market="KR"|"JP"|"CN"|"ASIA";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
 
 const marketLabels:{ id:Market|"ALL"; label:string; code:string }[]=[
   { id:"ALL",label:"All markets",code:"ALL" },{ id:"KR",label:"South Korea",code:"KR" },
-  { id:"JP",label:"Japan",code:"JP" },{ id:"CN",label:"China",code:"CN" },
+  { id:"JP",label:"Japan",code:"JP" },{ id:"CN",label:"China",code:"CN" },{ id:"ASIA",label:"Asia Pulse",code:"ASIA" },
 ];
 
 function formatDate(value:string,includeTime=false) {
@@ -49,7 +49,7 @@ export default function Home(){
       <div className="hero-copy">
         <p className="kicker"><span>01</span> THE SOUND OF RIGHT NOW</p>
         <h1>Turn up<br/><em>what’s next.</em></h1>
-        <p>One place for the tracks moving South Korea, Japan and China. Real Apple Music charts, refreshed without the noise.</p>
+        <p>Seven live views across South Korea, Japan, China and Asia — from national Top 10s to local pop and cross-market momentum.</p>
         <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE THE CHARTS</a>
       </div>
       <div className="hero-art" aria-hidden="true">
