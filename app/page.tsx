@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import chartSnapshot from "../public/charts.json";
+import chartSnapshot from "./charts.json";
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };

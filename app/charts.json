@@ -1,0 +1,859 @@
+{
+  "generatedAt": "2026-08-01T23:30:00+07:00",
+  "charts": [
+    {
+      "id": "kr-pop",
+      "label": "Korea Pop",
+      "shortLabel": "KR ? POP",
+      "market": "KR",
+      "source": "Original chart snapshot",
+      "sourceUrl": "https://minqbuiphoto-web.github.io/my-music-charts/",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Top 10 snapshot restored from the original seven-chart system.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "kr-pop-1",
+          "title": "Supernova",
+          "artist": "aespa",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 2,
+          "id": "kr-pop-2",
+          "title": "How Sweet",
+          "artist": "NewJeans",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 3,
+          "id": "kr-pop-3",
+          "title": "Magnetic",
+          "artist": "ILLIT",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 4,
+          "id": "kr-pop-4",
+          "title": "Spot!",
+          "artist": "ZICO",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 5,
+          "id": "kr-pop-5",
+          "title": "Fate",
+          "artist": "(G)I-DLE",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 6,
+          "id": "kr-pop-6",
+          "title": "Armageddon",
+          "artist": "aespa",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 7,
+          "id": "kr-pop-7",
+          "title": "Bubble Gum",
+          "artist": "NewJeans",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 8,
+          "id": "kr-pop-8",
+          "title": "Plot Twist",
+          "artist": "TWS",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 9,
+          "id": "kr-pop-9",
+          "title": "HEYA",
+          "artist": "IVE",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 10,
+          "id": "kr-pop-10",
+          "title": "Klaxon",
+          "artist": "(G)I-DLE",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        }
+      ]
+    },
+    {
+      "id": "kr-ballad",
+      "label": "Korea Ballad",
+      "shortLabel": "KR ? BALLAD",
+      "market": "KR",
+      "source": "Original chart snapshot",
+      "sourceUrl": "https://minqbuiphoto-web.github.io/my-music-charts/",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Ballad discovery chart restored from the original system; not an official national ranking.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "kr-ballad-1",
+          "title": "To. X",
+          "artist": "Taeyeon",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 2,
+          "id": "kr-ballad-2",
+          "title": "Love wins all",
+          "artist": "IU",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 3,
+          "id": "kr-ballad-3",
+          "title": "Episode",
+          "artist": "Lee Mujin",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 4,
+          "id": "kr-ballad-4",
+          "title": "I Don?t Think That I Like Her",
+          "artist": "Charlie Puth",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 5,
+          "id": "kr-ballad-5",
+          "title": "Let?s Say Goodbye",
+          "artist": "Park Jae Jung",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 6,
+          "id": "kr-ballad-6",
+          "title": "Love Lee",
+          "artist": "AKMU",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 7,
+          "id": "kr-ballad-7",
+          "title": "Perfect Night",
+          "artist": "LE SSERAFIM",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 8,
+          "id": "kr-ballad-8",
+          "title": "Drowning",
+          "artist": "WOODZ",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 9,
+          "id": "kr-ballad-9",
+          "title": "Seven",
+          "artist": "Jungkook",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 10,
+          "id": "kr-ballad-10",
+          "title": "You & Me",
+          "artist": "JENNIE",
+          "releaseDate": "KR",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        }
+      ]
+    },
+    {
+      "id": "jp-billboard",
+      "label": "Japan Billboard",
+      "shortLabel": "JP ? BILLBOARD",
+      "market": "JP",
+      "source": "Billboard Japan snapshot",
+      "sourceUrl": "https://www.billboard-japan.com/charts/detail?a=hot100",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Japan Hot 100 snapshot restored from the original seven-chart system.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "jp-billboard-1",
+          "title": "Bling-Bang-Bang-Born",
+          "artist": "Creepy Nuts",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 2,
+          "id": "jp-billboard-2",
+          "title": "Idol",
+          "artist": "YOASOBI",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 3,
+          "id": "jp-billboard-3",
+          "title": "Ganso",
+          "artist": "Vaundy",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 4,
+          "id": "jp-billboard-4",
+          "title": "Specialz",
+          "artist": "King Gnu",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 5,
+          "id": "jp-billboard-5",
+          "title": "Kura Kura",
+          "artist": "Ado",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 6,
+          "id": "jp-billboard-6",
+          "title": "Hanatoba",
+          "artist": "back number",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 7,
+          "id": "jp-billboard-7",
+          "title": "Bansanka",
+          "artist": "tuki.",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 8,
+          "id": "jp-billboard-8",
+          "title": "Dry Flower",
+          "artist": "Yuuri",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 9,
+          "id": "jp-billboard-9",
+          "title": "Kaiju no Uta",
+          "artist": "Vaundy",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        },
+        {
+          "rank": 10,
+          "id": "jp-billboard-10",
+          "title": "Subtitle",
+          "artist": "Official HIGE DANDISM",
+          "releaseDate": "JP",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
+          "artistUrl": "https://www.billboard-japan.com/charts/detail?a=hot100"
+        }
+      ]
+    },
+    {
+      "id": "cn-qq",
+      "label": "China QQ Music",
+      "shortLabel": "CN ? QQ MUSIC",
+      "market": "CN",
+      "source": "QQ Music snapshot",
+      "sourceUrl": "https://y.qq.com/n/ryqq/toplist/4",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "QQ Music discovery snapshot restored from the original seven-chart system.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-qq-1",
+          "title": "?????",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 2,
+          "id": "cn-qq-2",
+          "title": "??",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 3,
+          "id": "cn-qq-3",
+          "title": "????",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 4,
+          "id": "cn-qq-4",
+          "title": "??",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 5,
+          "id": "cn-qq-5",
+          "title": "???",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 6,
+          "id": "cn-qq-6",
+          "title": "??",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 7,
+          "id": "cn-qq-7",
+          "title": "???",
+          "artist": "Kirsty???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 8,
+          "id": "cn-qq-8",
+          "title": "???",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 9,
+          "id": "cn-qq-9",
+          "title": "???",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        },
+        {
+          "rank": 10,
+          "id": "cn-qq-10",
+          "title": "???",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Chart entry",
+          "artworkUrl": "",
+          "url": "https://y.qq.com/n/ryqq/toplist/4",
+          "artistUrl": "https://y.qq.com/n/ryqq/toplist/4"
+        }
+      ]
+    },
+    {
+      "id": "kr-ost",
+      "label": "Korea OST",
+      "shortLabel": "KR ? OST",
+      "market": "KR",
+      "source": "Curated OST snapshot",
+      "sourceUrl": "https://minqbuiphoto-web.github.io/my-music-charts/",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Korean soundtrack discovery chart restored from the original system.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "kr-ost-1",
+          "title": "Sudden Shower",
+          "artist": "ECLIPSE",
+          "releaseDate": "KR",
+          "genre": "Lovely Runner",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 2,
+          "id": "kr-ost-2",
+          "title": "I Don?t Know",
+          "artist": "Seventeen BSS",
+          "releaseDate": "KR",
+          "genre": "Queen of Tears",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 3,
+          "id": "kr-ost-3",
+          "title": "Love You With All My Heart",
+          "artist": "Crush",
+          "releaseDate": "KR",
+          "genre": "Queen of Tears",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 4,
+          "id": "kr-ost-4",
+          "title": "Run Run",
+          "artist": "ECLIPSE",
+          "releaseDate": "KR",
+          "genre": "Lovely Runner",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 5,
+          "id": "kr-ost-5",
+          "title": "Like a Dream",
+          "artist": "Minnie",
+          "releaseDate": "KR",
+          "genre": "Lovely Runner",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 6,
+          "id": "kr-ost-6",
+          "title": "Stay With Me",
+          "artist": "Chanyeol & Punch",
+          "releaseDate": "KR",
+          "genre": "Goblin",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 7,
+          "id": "kr-ost-7",
+          "title": "Christmas Tree",
+          "artist": "V (BTS)",
+          "releaseDate": "KR",
+          "genre": "Our Beloved Summer",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 8,
+          "id": "kr-ost-8",
+          "title": "Sunset",
+          "artist": "Davichi",
+          "releaseDate": "KR",
+          "genre": "Crash Landing on You",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 9,
+          "id": "kr-ost-9",
+          "title": "A Little Girl",
+          "artist": "Oh Hyuk",
+          "releaseDate": "KR",
+          "genre": "Reply 1988",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 10,
+          "id": "kr-ost-10",
+          "title": "All With You",
+          "artist": "Taeyeon",
+          "releaseDate": "KR",
+          "genre": "Moon Lovers",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        }
+      ]
+    },
+    {
+      "id": "jp-ost",
+      "label": "Japan OST",
+      "shortLabel": "JP ? OST",
+      "market": "JP",
+      "source": "Curated OST snapshot",
+      "sourceUrl": "https://minqbuiphoto-web.github.io/my-music-charts/",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Japanese soundtrack discovery chart restored from the original system.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "jp-ost-1",
+          "title": "Rain",
+          "artist": "Motohiro Hata",
+          "releaseDate": "JP",
+          "genre": "The Garden of Words",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 2,
+          "id": "jp-ost-2",
+          "title": "Sparkle",
+          "artist": "RADWIMPS",
+          "releaseDate": "JP",
+          "genre": "Your Name",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 3,
+          "id": "jp-ost-3",
+          "title": "Nandemonaiya",
+          "artist": "RADWIMPS",
+          "releaseDate": "JP",
+          "genre": "Your Name",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 4,
+          "id": "jp-ost-4",
+          "title": "Kamado Tanjirou no Uta",
+          "artist": "Go Shiina",
+          "releaseDate": "JP",
+          "genre": "Demon Slayer",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 5,
+          "id": "jp-ost-5",
+          "title": "Homura",
+          "artist": "LiSA",
+          "releaseDate": "JP",
+          "genre": "Demon Slayer",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 6,
+          "id": "jp-ost-6",
+          "title": "Cry Baby",
+          "artist": "Official HIGE DANDISM",
+          "releaseDate": "JP",
+          "genre": "Tokyo Revengers",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 7,
+          "id": "jp-ost-7",
+          "title": "Suzume",
+          "artist": "RADWIMPS",
+          "releaseDate": "JP",
+          "genre": "Suzume",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 8,
+          "id": "jp-ost-8",
+          "title": "Utsukushii Hire",
+          "artist": "Spitz",
+          "releaseDate": "JP",
+          "genre": "Detective Conan",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 9,
+          "id": "jp-ost-9",
+          "title": "Ao no Sumika",
+          "artist": "Tatsuya Kitani",
+          "releaseDate": "JP",
+          "genre": "Jujutsu Kaisen S2",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 10,
+          "id": "jp-ost-10",
+          "title": "Leo",
+          "artist": "Tacica",
+          "releaseDate": "JP",
+          "genre": "Haikyuu!!",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        }
+      ]
+    },
+    {
+      "id": "cn-ost",
+      "label": "China OST",
+      "shortLabel": "CN ? OST",
+      "market": "CN",
+      "source": "Curated OST snapshot",
+      "sourceUrl": "https://minqbuiphoto-web.github.io/my-music-charts/",
+      "updatedAt": "2026-08-01T23:30:00+07:00",
+      "syncWarning": "Chinese soundtrack discovery chart; eight original entries plus two curated additions.",
+      "songs": [
+        {
+          "rank": 1,
+          "id": "cn-ost-1",
+          "title": "??",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Eternal Love",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 2,
+          "id": "cn-ost-2",
+          "title": "????",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Ashes of Love",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 3,
+          "id": "cn-ost-3",
+          "title": "??",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Ashes of Love",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 4,
+          "id": "cn-ost-4",
+          "title": "??",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "The Untamed",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 5,
+          "id": "cn-ost-5",
+          "title": "?????",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Wrong Carriage, Right Groom",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 6,
+          "id": "cn-ost-6",
+          "title": "????",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "The Story of Ming Lan",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 7,
+          "id": "cn-ost-7",
+          "title": "????",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Love and Redemption",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 8,
+          "id": "cn-ost-8",
+          "title": "???",
+          "artist": "???",
+          "releaseDate": "CN",
+          "genre": "Arcane",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 9,
+          "id": "cn-ost-9",
+          "title": "????",
+          "artist": "??, ???",
+          "releaseDate": "CN",
+          "genre": "Dying to Survive",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        },
+        {
+          "rank": 10,
+          "id": "cn-ost-10",
+          "title": "??",
+          "artist": "??",
+          "releaseDate": "CN",
+          "genre": "Big Fish & Begonia",
+          "artworkUrl": "",
+          "url": "https://minqbuiphoto-web.github.io/my-music-charts/",
+          "artistUrl": "https://minqbuiphoto-web.github.io/my-music-charts/"
+        }
+      ]
+    }
+  ]
+}
