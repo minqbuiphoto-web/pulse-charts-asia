@@ -253,7 +253,7 @@ export default function LyricStudio(){
     if(!song)return "";
     const lines=timeline.map((line,index)=>{
       const translated=translations[index]?.trim();
-      return (index+1)+". LỜI GỐC: "+line.text+(translated?"\n   BẢN DỊCH NHÁP: "+translated:"");
+      return line.text+(translated?"\nBẢN DỊCH NHÁP: "+translated:"");
     }).join("\n");
     const focus=currentLineIndex>=0?timeline[currentLineIndex]?.text:"";
     return [
