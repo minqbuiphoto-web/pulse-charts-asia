@@ -69,7 +69,11 @@ test("ships all nineteen chart snapshots", async () => {
   const rnbCharts = data.charts.filter((chart) => chart.id.includes("rnb"));
   assert.equal(rnbCharts.length, 4);
   assert.ok(rnbCharts.every((chart) => chart.songs.length === 50));
-  assert.ok(rnbCharts.every((chart) => chart.songs.every((song) => /R&B/i.test(song.genre) && !/\brap\b/i.test(song.genre))));
+  assert.ok(rnbCharts.every((chart) => chart.songs.every((song) => /R&B/i.test(song.genre) && !/\brap\b/i.test(song.genre) && song.style === "Vocal R&B / Soul" && song.genreBasis === "song-level" && song.genreReviewed === true)));
+  assert.ok(rnbCharts.every((chart) => chart.syncWarning.includes("SONG-LEVEL GENRE RULE")));
+  assert.ok(!rnbCharts.some((chart) => chart.songs.some((song) => song.title === "Beautiful" && song.artist === "Crush")));
+  const recentKoreanBallad = data.charts.find((chart) => chart.id === "kr-ballad-evergreen-2016-2026");
+  assert.ok(recentKoreanBallad.songs.some((song) => song.title === "Beautiful" && song.artist === "Crush"));
   assert.ok(rnbCharts.every((chart) => chart.syncWarning.includes("NO RAP RULE")));
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
   assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "")));

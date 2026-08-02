@@ -31,7 +31,7 @@ for (const chart of data.charts) {
   if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE") && !chart.syncWarning?.includes("BALLAD-ONLY RULE")) throw new Error(`Missing curation policy: ${chart.label}`);
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
-  if (chart.id.includes("rnb") && (!chart.syncWarning?.includes("NO RAP RULE") || chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("r&b") || /\brap\b/i.test(song.genre)))) throw new Error(`Non-vocal-R&B row in ${chart.label}.`);
+  if (chart.id.includes("rnb") && (!chart.syncWarning?.includes("SONG-LEVEL GENRE RULE") || !chart.syncWarning?.includes("NO RAP RULE") || chart.songs.some((song) => song.style !== "Vocal R&B / Soul" || song.genreBasis !== "song-level" || song.genreReviewed !== true || /\brap\b/i.test(song.genre)))) throw new Error(`Unreviewed or non-vocal-R&B row in ${chart.label}.`);
   if (chart.id === "kr-ballad-trending") {
     const cutoff = new Date(data.generatedAt);
     cutoff.setUTCMonth(cutoff.getUTCMonth() - 6);
@@ -45,6 +45,9 @@ for (const chart of data.charts) {
     if (song.rank !== index + 1 || !song.title || !song.artist) throw new Error(`Invalid ranking row in ${chart.label}.`);
   });
 }
+const rnbRows = data.charts.filter((chart) => chart.id.includes("rnb")).flatMap((chart) => chart.songs);
+if (rnbRows.some((song) => song.title === "Beautiful" && song.artist === "Crush")) throw new Error("Beautiful by Crush is a ballad/OST recording, not an R&B chart entry.");
+
 const publicDir = new URL("../public/", import.meta.url);
 await mkdir(publicDir, { recursive: true });
 await writeFile(new URL("charts.json", publicDir), JSON.stringify(data, null, 2) + "\n", "utf8");
