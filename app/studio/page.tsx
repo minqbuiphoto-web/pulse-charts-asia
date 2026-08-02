@@ -90,7 +90,7 @@ export default function LyricStudio(){
   const [question,setQuestion]=useState("");
   const [replyDraft,setReplyDraft]=useState("");
   const [chatMessages,setChatMessages]=useState<ChatMessage[]>([
-    {role:"assistant",text:"Tôi có thể giúp bạn trao đổi về ý nghĩa, hình ảnh, bối cảnh văn hóa và cách diễn đạt tiếng Việt. Hãy viết câu hỏi rồi chọn Hỏi ChatGPT miễn phí."}
+    {role:"assistant",text:"Chọn Hỏi tại một câu để tạo yêu cầu dịch sát nghĩa, hoặc sao chép yêu cầu dịch toàn bài ở nút phía dưới."}
   ]);
   const [copied,setCopied]=useState(false);
   const playerMountRef=useRef<HTMLDivElement|null>(null);
@@ -249,28 +249,16 @@ export default function LyricStudio(){
     window.setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
 
-  const translationContext=()=>{
-    if(!song)return "";
-    const lines=timeline.map((line,index)=>{
-      const translated=translations[index]?.trim();
-      return line.text+(translated?"\nBẢN DỊCH NHÁP: "+translated:"");
-    }).join("\n");
-    const focus=currentLineIndex>=0?timeline[currentLineIndex]?.text:"";
-    return [
-      "Bạn đang hỗ trợ tôi dịch lời bài hát sang tiếng Việt tự nhiên và đúng nghĩa.",
-      "Bài hát: "+song.title+" — "+song.artist,
-      focus?"Câu đang xem xét: "+focus:"",
-      "Hãy giải thích ý nghĩa, hình ảnh, đại từ, sắc thái và bối cảnh văn hóa. Không tự bịa thêm ngữ cảnh còn thiếu.",
-      "",
-      lines
-    ].filter(Boolean).join("\n");
+  const fullSongTranslationRequest=()=>{
+    if(!song||!timeline.length)return "";
+    return "Dịch sát nghĩa lời bài hát \""+song.title+"\" của "+song.artist+":\n\n"+timeline.map((line)=>line.text).join("\n");
   };
 
   const askChatGPT=async()=>{
     if(!song||!question.trim())return;
-    const prompt=translationContext()+"\n\nCÂU HỎI CỦA TÔI:\n"+question.trim();
+    const prompt=question.trim();
     await copyText(prompt);
-    setChatMessages((current)=>[...current,{role:"user",text:question.trim()},{role:"assistant",text:"Đã sao chép toàn bộ ngữ cảnh. ChatGPT Free đang mở ở tab mới — hãy dán nội dung vào đó; sau đó bạn có thể mang câu trả lời hữu ích về lưu cạnh bản dịch."}]);
+    setChatMessages((current)=>[...current,{role:"user",text:question.trim()},{role:"assistant",text:"Đã sao chép yêu cầu ngắn gọn. ChatGPT Free đang mở ở tab mới — hãy dán yêu cầu vào đó."}]);
     setQuestion("");setCopied(true);
     window.setTimeout(()=>setCopied(false),2500);
     window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
@@ -333,18 +321,18 @@ export default function LyricStudio(){
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
             <div><p>{line.text}</p><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric dịch tiếng Việt cho câu này…"/></div>
-            <button onClick={()=>{setQuestion("Hãy giải thích chính xác ý nghĩa và sắc thái của câu: “"+line.text+"”");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
+            <button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}
         </div>}
       </div>
 
       <aside className="chat-column">
         <div className="chat-head"><div className="chat-orb">✦</div><div><small>TRỢ LÝ MIỄN PHÍ</small><h2>Trao đổi với ChatGPT</h2><p>Ý nghĩa · sắc thái · cách diễn đạt tiếng Việt</p></div></div>
-        <div className="free-explainer"><b>VÌ SAO PHẢI SAO CHÉP VÀ MỞ TAB?</b><p>ChatGPT không cho phép nhúng miễn phí vào website bên ngoài. Khung này sẽ chuẩn bị toàn bộ lyric, bản dịch nháp và câu hỏi, sau đó mở ChatGPT Free để bạn trao đổi mà không phát sinh phí API.</p></div>
+        <div className="free-explainer"><b>VÌ SAO PHẢI SAO CHÉP VÀ MỞ TAB?</b><p>ChatGPT không cho phép nhúng miễn phí vào website bên ngoài. Khung này chỉ chuẩn bị một yêu cầu dịch sát nghĩa ngắn gọn, sau đó mở ChatGPT Free để bạn dán yêu cầu mà không phát sinh phí API.</p></div>
         <div className="chat-log">{chatMessages.map((message,index)=><div className={"chat-message "+message.role} key={index}><span>{message.role==="user"?"BẠN":"GPT"}</span><p>{message.text}</p></div>)}</div>
-        <div className="chat-compose"><label>CÂU HỎI CỦA BẠN</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder="Câu này dùng đại từ nào? Hình ảnh này hàm ý gì? Bản dịch của tôi có tự nhiên không?"/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"ĐÃ SAO CHÉP — ĐANG MỞ CHATGPT…":"HỎI CHATGPT MIỄN PHÍ ↗"}</button><small>Câu hiện tại, lyric gốc và các bản dịch tiếng Việt sẽ tự động được đính kèm.</small></div>
+        <div className="chat-compose"><label>CÂU HỎI CỦA BẠN</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder='Ví dụ: Dịch sát nghĩa câu "..."'/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"ĐÃ SAO CHÉP — ĐANG MỞ CHATGPT…":"HỎI CHATGPT MIỄN PHÍ ↗"}</button><small>Yêu cầu bạn viết sẽ được sao chép nguyên văn, không chèn thêm ngữ cảnh dài.</small></div>
         <details className="reply-note"><summary>DÁN CÂU TRẢ LỜI HỮU ÍCH TỪ CHATGPT VÀO ĐÂY</summary><textarea value={replyDraft} onChange={(event)=>setReplyDraft(event.target.value)} placeholder="Dán phần giải thích bạn muốn lưu cạnh bản dịch…"/><button onClick={addReplyNote} disabled={!replyDraft.trim()}>THÊM VÀO GHI CHÚ TRAO ĐỔI</button></details>
-        <button className="copy-context" onClick={async()=>{await copyText(translationContext());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}}>SAO CHÉP TOÀN BỘ NGỮ CẢNH BẢN DỊCH</button>
+        <button className="copy-context" onClick={async()=>{await copyText(fullSongTranslationRequest());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!timeline.length}>SAO CHÉP YÊU CẦU DỊCH SÁT NGHĨA TOÀN BÀI</button>
       </aside>
     </section>}
 
