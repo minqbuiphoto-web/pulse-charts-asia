@@ -184,6 +184,13 @@ export default function LyricStudio(){
     }
     return active;
   },[currentTime,timeline]);
+  const currentVietnameseDraft=useMemo(()=>timeline
+    .map((_,index)=>(translations[index]??"").trim())
+    .filter(Boolean)
+    .join("\n"),[timeline,translations]);
+  const completedVietnameseLines=useMemo(()=>timeline
+    .filter((_,index)=>(translations[index]??"").trim())
+    .length,[timeline,translations]);
 
   useEffect(()=>{
     if(currentLineIndex>=0&&followPlayback&&editingLine===null)lineRefs.current[currentLineIndex]?.scrollIntoView({behavior:"smooth",block:"center"});
@@ -335,6 +342,12 @@ export default function LyricStudio(){
     setReplyDraft("");
   };
 
+  const useDraftInChat=()=>{
+    if(!song||!currentVietnameseDraft)return;
+    setQuestion("Góp ý bản lời Việt hiện tại của bài \""+song.title+"\" - "+song.artist+":\n\n"+currentVietnameseDraft);
+    window.setTimeout(()=>document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus(),0);
+  };
+
   return <main className="studio-shell">
     <header className="studio-header">
       <Link className="studio-brand" href="/">PULSE <b>STUDIO DỊCH LỜI</b></Link>
@@ -402,6 +415,12 @@ export default function LyricStudio(){
         <div className="chat-head"><div className="chat-orb">✦</div><div><small>TRỢ LÝ MIỄN PHÍ</small><h2>Trao đổi với ChatGPT</h2><p>Ý nghĩa · sắc thái · cách diễn đạt tiếng Việt</p></div></div>
         <div className="free-explainer"><b>VÌ SAO PHẢI SAO CHÉP VÀ MỞ TAB?</b><p>ChatGPT không cho phép nhúng miễn phí vào website bên ngoài. Khung này chỉ chuẩn bị một yêu cầu dịch sát nghĩa ngắn gọn, sau đó mở ChatGPT Free để bạn dán yêu cầu mà không phát sinh phí API.</p></div>
         <div className="chat-log">{chatMessages.map((message,index)=><div className={"chat-message "+message.role} key={index}><span>{message.role==="user"?"BẠN":"GPT"}</span><p>{message.text}</p></div>)}</div>
+        <section className="current-vietnamese-draft">
+          <div className="current-draft-head"><div><small>BẢN NHÁP TRỰC TIẾP</small><h3>Lời Việt hiện tại</h3></div><span>{completedVietnameseLines}/{timeline.length} CÂU</span></div>
+          <textarea readOnly value={currentVietnameseDraft} placeholder="Các câu lời Việt bạn vừa viết sẽ tự xuất hiện tại đây theo đúng thứ tự…" aria-label="Bản lời Việt hiện tại"/>
+          <div className="current-draft-actions"><button onClick={async()=>{await copyText(currentVietnameseDraft);setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!currentVietnameseDraft}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP BẢN NHÁP"}</button><button onClick={useDraftInChat} disabled={!currentVietnameseDraft}>ĐƯA VÀO Ô HỎI CHATGPT</button></div>
+          <p>Ô này cập nhật ngay khi bạn sửa lời Việt; chỉ lấy những câu đã viết và không kèm lời gốc hay nhãn.</p>
+        </section>
         <div className="chat-compose"><label>CÂU HỎI CỦA BẠN</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder='Ví dụ: Dịch sát nghĩa câu "..."'/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"ĐÃ SAO CHÉP — ĐANG MỞ CHATGPT…":"HỎI CHATGPT MIỄN PHÍ ↗"}</button><small>Yêu cầu bạn viết sẽ được sao chép nguyên văn, không chèn thêm ngữ cảnh dài.</small></div>
         <details className="reply-note"><summary>DÁN CÂU TRẢ LỜI HỮU ÍCH TỪ CHATGPT VÀO ĐÂY</summary><textarea value={replyDraft} onChange={(event)=>setReplyDraft(event.target.value)} placeholder="Dán phần giải thích bạn muốn lưu cạnh bản dịch…"/><button onClick={addReplyNote} disabled={!replyDraft.trim()}>THÊM VÀO GHI CHÚ TRAO ĐỔI</button></details>
         <button className="copy-context" onClick={async()=>{await copyText(fullSongTranslationRequest());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!timeline.length}>SAO CHÉP YÊU CẦU DỊCH SÁT NGHĨA TOÀN BÀI</button>
