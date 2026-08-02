@@ -6,6 +6,17 @@ function normalize(value){
   return String(value??"").normalize("NFKC").toLocaleLowerCase("en").replace(/[^\p{L}\p{N}]+/gu," ").trim();
 }
 
+function uniqueTerms(values){
+  return [...new Set(values.map((value)=>String(value??"").replace(/\s+/g," ").trim()).filter(Boolean))];
+}
+
+function searchTerms(value){
+  const original=String(value??"").normalize("NFKC").trim();
+  const cjk=original.replace(/[^\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}\s·&]/gu," ").replace(/\s+/g," ").trim();
+  const latin=original.replace(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu," ").replace(/[·|/()[\]{}]+/g," ").replace(/\s+/g," ").trim();
+  return uniqueTerms([original,cjk,latin]);
+}
+
 function scoreResult(item,title,artist){
   const wantedTitle=normalize(title);
   const wantedArtist=normalize(artist);
@@ -23,9 +34,17 @@ export default async function handler(request,response){
   const artist=String(Array.isArray(request.query?.artist)?request.query.artist[0]:request.query?.artist??"").trim().slice(0,140);
   if(!title)return response.status(400).json({error:"Missing title"});
   console.log("[lyrics-search] lookup",{title,artist});
-  const exact=new URLSearchParams({track_name:title,artist_name:artist});
-  const broad=new URLSearchParams({q:(title+" "+artist).trim()});
-  const attempts=["https://lrclib.net/api/search?"+exact,"https://lrclib.net/api/search?"+broad];
+  const titleTerms=searchTerms(title);
+  const artistTerms=searchTerms(artist);
+  const pairs=[
+    [titleTerms[0],artistTerms[0]],
+    [titleTerms[1],artistTerms[1]??artistTerms[0]],
+    [titleTerms[1],artistTerms[0]],
+    [titleTerms[0],artistTerms[1]],
+  ].filter(([track])=>track);
+  const exactAttempts=pairs.map(([track,performer])=>"https://lrclib.net/api/search?"+new URLSearchParams({track_name:track,artist_name:performer??""}));
+  const broadAttempts=titleTerms.slice(0,2).map((track,index)=>"https://lrclib.net/api/search?"+new URLSearchParams({q:(track+" "+(artistTerms[index]??artistTerms[0]??"")).trim()}));
+  const attempts=[...new Set([...exactAttempts,...broadAttempts])].slice(0,6);
   const batches=await Promise.all(attempts.map(async(url)=>{
     try{
       const upstream=await fetch(url,{headers:{"user-agent":"PulseCharts/1.0 (https://pulse-charts-asia.vercel.app)"},signal:AbortSignal.timeout(6500)});
@@ -45,5 +64,5 @@ export default async function handler(request,response){
   if(!lyrics)return response.status(404).json({error:"Lyrics not found"});
   response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
   console.log("[lyrics-search] success",{title,artist,id:best.id});
-  return response.status(200).json({lyrics,source:"LRCLIB",matchedTrack:best.trackName,matchedArtist:best.artistName});
+  return response.status(200).json({lyrics,syncedLyrics:String(best.syncedLyrics??"").trim(),source:"LRCLIB",matchedTrack:best.trackName,matchedArtist:best.artistName});
 }
