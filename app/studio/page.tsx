@@ -480,7 +480,7 @@ export default function LyricStudio(){
   return <main className="studio-shell">
     <header className="studio-header">
       <Link className="studio-brand" href="/">PULSE <b>STUDIO DỊCH LỜI</b></Link>
-      <nav><Link href="/">BẢNG XẾP HẠNG</Link><span>KHÔNG GIAN MIỄN PHÍ</span></nav>
+      <nav><Link href="/">BẢNG XẾP HẠNG</Link><Link href="/mv-studio/">MV STUDIO</Link><span>KHÔNG GIAN MIỄN PHÍ</span></nav>
     </header>
 
     <section className="studio-hero">

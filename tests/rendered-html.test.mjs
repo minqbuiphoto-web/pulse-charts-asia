@@ -33,6 +33,15 @@ test("renders the separate lyric translation studio", async () => {
   assert.match(html, /KHÔNG GIAN MIỄN PHÍ/);
 });
 
+test("renders the free MV and karaoke studio", async () => {
+  const response = await render("/mv-studio/");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /MV CA NHẠC/);
+  assert.match(html, /MV KARAOKE/);
+  assert.match(html, /XUẤT MV \.WEBM/);
+});
+
 test("supports sentence-by-sentence literal meanings before lyric adaptation", async () => {
   const source = await readFile(new URL("../app/studio/page.tsx", import.meta.url), "utf8");
   assert.match(source, /literalMeanings/);
