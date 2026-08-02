@@ -27,10 +27,10 @@ test("renders the separate lyric translation studio", async () => {
   const response = await render("/studio/");
   assert.equal(response.status, 200);
   const html = await response.text();
-  assert.match(html, /Hear the line/);
-  assert.match(html, /SEARCH SONG/);
-  assert.match(html, /DISCUSS WITH CHATGPT/i);
-  assert.match(html, /FREE WORKSPACE/);
+  assert.match(html, /Nghe từng câu/);
+  assert.match(html, /TÌM BÀI HÁT/);
+  assert.match(html, /TRAO ĐỔI VỚI CHATGPT/i);
+  assert.match(html, /KHÔNG GIAN MIỄN PHÍ/);
 });
 
 test("ships all nineteen chart snapshots", async () => {

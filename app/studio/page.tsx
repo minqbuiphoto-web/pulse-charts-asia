@@ -76,7 +76,7 @@ async function copyText(value:string){
 export default function LyricStudio(){
   const [query,setQuery]=useState("");
   const [lookupState,setLookupState]=useState<LookupState>("idle");
-  const [lookupNote,setLookupNote]=useState("Search by song title, with or without the artist.");
+  const [lookupNote,setLookupNote]=useState("Tìm bằng tên bài hát, có thể kèm hoặc không kèm tên ca sĩ.");
   const [result,setResult]=useState<SearchResult|null>(null);
   const [song,setSong]=useState<StudioSong|null>(null);
   const [manualLyrics,setManualLyrics]=useState("");
@@ -90,7 +90,7 @@ export default function LyricStudio(){
   const [question,setQuestion]=useState("");
   const [replyDraft,setReplyDraft]=useState("");
   const [chatMessages,setChatMessages]=useState<ChatMessage[]>([
-    {role:"assistant",text:"I can help you discuss meaning, imagery, cultural context and Vietnamese wording. Write a question, then use Ask ChatGPT Free."}
+    {role:"assistant",text:"Tôi có thể giúp bạn trao đổi về ý nghĩa, hình ảnh, bối cảnh văn hóa và cách diễn đạt tiếng Việt. Hãy viết câu hỏi rồi chọn Hỏi ChatGPT miễn phí."}
   ]);
   const [copied,setCopied]=useState(false);
   const playerMountRef=useRef<HTMLDivElement|null>(null);
@@ -169,16 +169,16 @@ export default function LyricStudio(){
   const searchSong=async()=>{
     const term=query.trim();
     if(!term)return;
-    setLookupState("searching");setLookupNote("Searching YouTube and the free lyrics library…");setResult(null);
+    setLookupState("searching");setLookupNote("Đang tìm trên YouTube và thư viện lyric miễn phí…");setResult(null);
     try{
       const encoded=encodeURIComponent(term);
       const [videoResponse,lyricsResponse]=await Promise.all([
         fetch("/api/youtube-search?q="+encoded+"%20official%20music%20video",{signal:AbortSignal.timeout(12000)}),
         fetch("/api/lyrics-search?title="+encoded+"&artist=",{signal:AbortSignal.timeout(12000)})
       ]);
-      if(!videoResponse.ok)throw new Error("No playable YouTube result was found.");
+      if(!videoResponse.ok)throw new Error("Không tìm thấy video YouTube có thể phát.");
       const video=await videoResponse.json() as {videoId?:string};
-      if(!video.videoId)throw new Error("The video result was incomplete.");
+      if(!video.videoId)throw new Error("Kết quả video chưa đầy đủ.");
       let lyricsPayload:LyricsPayload={};
       if(lyricsResponse.ok)lyricsPayload=await lyricsResponse.json() as LyricsPayload;
       const nextResult:SearchResult={
@@ -189,9 +189,9 @@ export default function LyricStudio(){
         syncedLyrics:String(lyricsPayload.syncedLyrics??"").trim()
       };
       setResult(nextResult);setLookupState("ready");
-      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?"Synced lyrics found — ready for line highlighting.":"Plain lyrics found — studio will create approximate line timing."):"Video found, but lyrics are missing. You can paste the original lyrics after applying.");
+      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?"Đã tìm thấy lyric đồng bộ — sẵn sàng chạy sáng từng câu.":"Đã tìm thấy lyric thường — hệ thống sẽ tự canh thời gian gần đúng."):"Đã tìm thấy video nhưng chưa có lyric. Bạn có thể dán lyric gốc sau khi đưa bài vào studio.");
     }catch(error){
-      setLookupState("error");setLookupNote(error instanceof Error?error.message:"Search failed. Try a more specific title and artist.");
+      setLookupState("error");setLookupNote(error instanceof Error?error.message:"Tìm kiếm thất bại. Hãy nhập rõ hơn tên bài hát và ca sĩ.");
     }
   };
 
@@ -253,14 +253,14 @@ export default function LyricStudio(){
     if(!song)return "";
     const lines=timeline.map((line,index)=>{
       const translated=translations[index]?.trim();
-      return (index+1)+". ORIGINAL: "+line.text+(translated?"\n   VIETNAMESE DRAFT: "+translated:"");
+      return (index+1)+". LỜI GỐC: "+line.text+(translated?"\n   BẢN DỊCH NHÁP: "+translated:"");
     }).join("\n");
     const focus=currentLineIndex>=0?timeline[currentLineIndex]?.text:"";
     return [
-      "You are helping me translate song lyrics into natural Vietnamese.",
-      "Song: "+song.title+" — "+song.artist,
-      focus?"Current line being reviewed: "+focus:"",
-      "Please explain meaning, imagery, pronouns, tone and cultural nuance. Do not invent missing context.",
+      "Bạn đang hỗ trợ tôi dịch lời bài hát sang tiếng Việt tự nhiên và đúng nghĩa.",
+      "Bài hát: "+song.title+" — "+song.artist,
+      focus?"Câu đang xem xét: "+focus:"",
+      "Hãy giải thích ý nghĩa, hình ảnh, đại từ, sắc thái và bối cảnh văn hóa. Không tự bịa thêm ngữ cảnh còn thiếu.",
       "",
       lines
     ].filter(Boolean).join("\n");
@@ -268,9 +268,9 @@ export default function LyricStudio(){
 
   const askChatGPT=async()=>{
     if(!song||!question.trim())return;
-    const prompt=translationContext()+"\n\nMY QUESTION:\n"+question.trim();
+    const prompt=translationContext()+"\n\nCÂU HỎI CỦA TÔI:\n"+question.trim();
     await copyText(prompt);
-    setChatMessages((current)=>[...current,{role:"user",text:question.trim()},{role:"assistant",text:"Context copied. ChatGPT Free is opening in a new tab — paste the prompt there, then bring any useful answer back as a note if you want it beside the translation."}]);
+    setChatMessages((current)=>[...current,{role:"user",text:question.trim()},{role:"assistant",text:"Đã sao chép toàn bộ ngữ cảnh. ChatGPT Free đang mở ở tab mới — hãy dán nội dung vào đó; sau đó bạn có thể mang câu trả lời hữu ích về lưu cạnh bản dịch."}]);
     setQuestion("");setCopied(true);
     window.setTimeout(()=>setCopied(false),2500);
     window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
@@ -284,70 +284,70 @@ export default function LyricStudio(){
 
   return <main className="studio-shell">
     <header className="studio-header">
-      <Link className="studio-brand" href="/">PULSE <b>LYRIC STUDIO</b></Link>
-      <nav><Link href="/">MUSIC CHARTS</Link><span>FREE WORKSPACE</span></nav>
+      <Link className="studio-brand" href="/">PULSE <b>STUDIO DỊCH LỜI</b></Link>
+      <nav><Link href="/">BẢNG XẾP HẠNG</Link><span>KHÔNG GIAN MIỄN PHÍ</span></nav>
     </header>
 
     <section className="studio-hero">
-      <div><p>LYRIC TRANSLATION WORKSPACE</p><h1>Hear the line.<br/><em>Write the meaning.</em></h1><span>Search, sync, translate and discuss one lyric line at a time.</span></div>
-      <div className="studio-stats"><b>01</b><span>SEARCH & APPLY</span><b>02</b><span>LISTEN & TRANSLATE</span><b>03</b><span>DISCUSS WITH CHATGPT</span></div>
+      <div><p>KHÔNG GIAN DỊCH LỜI BÀI HÁT</p><h1>Nghe từng câu.<br/><em>Viết đúng nghĩa.</em></h1><span>Tìm bài, đồng bộ, dịch và trao đổi từng câu lyric.</span></div>
+      <div className="studio-stats"><b>01</b><span>TÌM & ĐƯA BÀI VÀO</span><b>02</b><span>NGHE & VIẾT BẢN DỊCH</span><b>03</b><span>TRAO ĐỔI VỚI CHATGPT</span></div>
     </section>
 
     <section className="studio-search">
-      <label><span>SONG TITLE / ARTIST</span><div><input value={query} onChange={(event)=>setQuery(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")void searchSong();}} placeholder="e.g. 光年之外 G.E.M. or Through the Night IU"/><button onClick={searchSong} disabled={lookupState==="searching"||!query.trim()}>{lookupState==="searching"?"SEARCHING…":"SEARCH SONG"}</button></div></label>
+      <label><span>TÊN BÀI HÁT / CA SĨ</span><div><input value={query} onChange={(event)=>setQuery(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")void searchSong();}} placeholder="Ví dụ: 光年之外 G.E.M. hoặc Through the Night IU"/><button onClick={searchSong} disabled={lookupState==="searching"||!query.trim()}>{lookupState==="searching"?"ĐANG TÌM…":"TÌM BÀI HÁT"}</button></div></label>
       <p className={"lookup-note "+lookupState}>{lookupNote}</p>
       {result&&<article className="search-result">
         <div className="result-disc"><i/><b>BEST<br/>MATCH</b></div>
-        <div><small>TRACK FOUND</small><h2>{result.title}</h2><p>{result.artist}</p><span>{result.syncedLyrics?"SYNCED LYRICS":result.lyrics?"PLAIN LYRICS · AUTO TIMING":"VIDEO ONLY · ADD LYRICS MANUALLY"}</span></div>
-        <a href={"https://www.youtube.com/watch?v="+result.videoId} target="_blank" rel="noreferrer">VERIFY ↗</a>
-        <button onClick={applySong}>APPLY TO STUDIO</button>
+        <div><small>ĐÃ TÌM THẤY BÀI</small><h2>{result.title}</h2><p>{result.artist}</p><span>{result.syncedLyrics?"LYRIC ĐỒNG BỘ":result.lyrics?"LYRIC THƯỜNG · TỰ CANH GIỜ":"CHỈ CÓ VIDEO · TỰ DÁN LYRIC"}</span></div>
+        <a href={"https://www.youtube.com/watch?v="+result.videoId} target="_blank" rel="noreferrer">KIỂM TRA ↗</a>
+        <button onClick={applySong}>ĐƯA VÀO STUDIO</button>
       </article>}
     </section>
 
-    {!song?<section className="studio-empty"><div>♪</div><h2>Your translation desk is ready.</h2><p>Search for a song above, verify the result, then apply it to begin.</p></section>:
+    {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
     <section className="studio-workspace">
       <div className="translation-column">
-        <div className="workspace-title"><div><small>NOW TRANSLATING</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC SYNC":"AUTO LINE TIMING"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>EXPORT BILINGUAL .TXT</button></div></div>
+        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button></div></div>
 
         <div className="player-card">
           <div ref={playerMountRef} className="youtube-mount"/>
-          <div className="player-meta"><span className={playerState==="PLAYING"?"live":""}>{playerState}</span><b>{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")} / {Math.floor(duration/60)}:{String(Math.floor(duration%60)).padStart(2,"0")}</b><p>{currentLineIndex>=0?"LINE "+String(currentLineIndex+1).padStart(2,"0")+" OF "+String(timeline.length).padStart(2,"0"):"PRESS PLAY TO FOLLOW THE LYRIC"}</p></div>
+          <div className="player-meta"><span className={playerState==="PLAYING"?"live":""}>{playerState==="PLAYING"?"ĐANG PHÁT":playerState==="PAUSED"?"TẠM DỪNG":playerState==="ENDED"?"ĐÃ PHÁT XONG":playerState==="READY"?"SẴN SÀNG":"ĐANG TẢI"}</span><b>{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")} / {Math.floor(duration/60)}:{String(Math.floor(duration%60)).padStart(2,"0")}</b><p>{currentLineIndex>=0?"CÂU "+String(currentLineIndex+1).padStart(2,"0")+" / "+String(timeline.length).padStart(2,"0"):"NHẤN PHÁT ĐỂ CHẠY THEO LYRIC"}</p></div>
         </div>
 
         <div className="sticky-player">
-          <div className="sticky-track"><span className={playerState==="PLAYING"?"pulse":""}>♪</span><div><b>{song.title}</b><small>{currentLineIndex>=0?(timeline[currentLineIndex]?.text??""):"Ready to follow the lyric"}</small></div></div>
+          <div className="sticky-track"><span className={playerState==="PLAYING"?"pulse":""}>♪</span><div><b>{song.title}</b><small>{currentLineIndex>=0?(timeline[currentLineIndex]?.text??""):"Sẵn sàng chạy theo lyric"}</small></div></div>
           <div className="sticky-progress"><i style={{width:(duration>0?Math.min(100,currentTime/duration*100):0)+"%"}}/></div>
           <div className="sticky-time">{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")}</div>
           <div className="sticky-controls">
             <button onClick={()=>seekBy(-5)}>−5s</button>
-            <button className="main-control" onClick={togglePlayback}>{playerState==="PLAYING"?"PAUSE":"PLAY"}</button>
-            <button onClick={replayWorkingLine} disabled={currentLineIndex<0&&editingLine===null}>REPLAY LINE</button>
-            <button className={followPlayback?"follow-on":""} onClick={()=>setFollowPlayback((value)=>!value)}>{followPlayback?"FOLLOW ON":"FOLLOW OFF"}</button>
+            <button className="main-control" onClick={togglePlayback}>{playerState==="PLAYING"?"TẠM DỪNG":"PHÁT"}</button>
+            <button onClick={replayWorkingLine} disabled={currentLineIndex<0&&editingLine===null}>PHÁT LẠI CÂU</button>
+            <button className={followPlayback?"follow-on":""} onClick={()=>setFollowPlayback((value)=>!value)}>{followPlayback?"ĐANG BÁM THEO":"ĐANG KHÓA VỊ TRÍ"}</button>
           </div>
         </div>
 
-        {!timeline.length&&<div className="manual-lyrics"><h3>Original lyrics were not found</h3><p>Paste the original lyrics below. Each non-empty line becomes one translation row with approximate timing.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Paste one lyric sentence per line…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>USE THESE LYRICS</button></div>}
+        {!timeline.length&&<div className="manual-lyrics"><h3>Không tìm thấy lyric gốc</h3><p>Dán lyric gốc vào dưới đây. Mỗi dòng không trống sẽ trở thành một câu dịch và được canh giờ gần đúng.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Dán mỗi câu lyric trên một dòng…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>DÙNG LYRIC NÀY</button></div>}
 
         {timeline.length>0&&<div className="line-editor">
-          <div className="line-editor-head"><span>#</span><span>ORIGINAL LYRIC + YOUR VIETNAMESE TRANSLATION</span><span>{song.syncedLyrics?"SYNCED":"APPROX."}</span></div>
+          <div className="line-editor-head"><span>#</span><span>LYRIC GỐC + BẢN DỊCH TIẾNG VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
             <div><p>{line.text}</p><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric dịch tiếng Việt cho câu này…"/></div>
-            <button onClick={()=>{setQuestion("Hãy giải thích chính xác ý nghĩa và sắc thái của câu: “"+line.text+"”");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>ASK</button>
+            <button onClick={()=>{setQuestion("Hãy giải thích chính xác ý nghĩa và sắc thái của câu: “"+line.text+"”");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}
         </div>}
       </div>
 
       <aside className="chat-column">
-        <div className="chat-head"><div className="chat-orb">✦</div><div><small>FREE COMPANION</small><h2>Discuss with ChatGPT</h2><p>Meaning · nuance · natural Vietnamese</p></div></div>
-        <div className="free-explainer"><b>WHY COPY & OPEN?</b><p>ChatGPT cannot be embedded free inside an external website. This panel prepares the full song context, your draft and your question, then opens ChatGPT Free.</p></div>
-        <div className="chat-log">{chatMessages.map((message,index)=><div className={"chat-message "+message.role} key={index}><span>{message.role==="user"?"YOU":"GPT"}</span><p>{message.text}</p></div>)}</div>
-        <div className="chat-compose"><label>YOUR QUESTION</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder="Câu này dùng đại từ nào? Hình ảnh này hàm ý gì? Bản dịch của tôi có tự nhiên không?"/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"COPIED — OPENING CHATGPT…":"ASK CHATGPT FREE ↗"}</button><small>Your current line, original lyric and Vietnamese drafts are included automatically.</small></div>
-        <details className="reply-note"><summary>PASTE A USEFUL CHATGPT REPLY HERE</summary><textarea value={replyDraft} onChange={(event)=>setReplyDraft(event.target.value)} placeholder="Paste the explanation you want to keep beside your translation…"/><button onClick={addReplyNote} disabled={!replyDraft.trim()}>ADD TO DISCUSSION NOTES</button></details>
-        <button className="copy-context" onClick={async()=>{await copyText(translationContext());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}}>COPY FULL TRANSLATION CONTEXT</button>
+        <div className="chat-head"><div className="chat-orb">✦</div><div><small>TRỢ LÝ MIỄN PHÍ</small><h2>Trao đổi với ChatGPT</h2><p>Ý nghĩa · sắc thái · cách diễn đạt tiếng Việt</p></div></div>
+        <div className="free-explainer"><b>VÌ SAO PHẢI SAO CHÉP VÀ MỞ TAB?</b><p>ChatGPT không cho phép nhúng miễn phí vào website bên ngoài. Khung này sẽ chuẩn bị toàn bộ lyric, bản dịch nháp và câu hỏi, sau đó mở ChatGPT Free để bạn trao đổi mà không phát sinh phí API.</p></div>
+        <div className="chat-log">{chatMessages.map((message,index)=><div className={"chat-message "+message.role} key={index}><span>{message.role==="user"?"BẠN":"GPT"}</span><p>{message.text}</p></div>)}</div>
+        <div className="chat-compose"><label>CÂU HỎI CỦA BẠN</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder="Câu này dùng đại từ nào? Hình ảnh này hàm ý gì? Bản dịch của tôi có tự nhiên không?"/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"ĐÃ SAO CHÉP — ĐANG MỞ CHATGPT…":"HỎI CHATGPT MIỄN PHÍ ↗"}</button><small>Câu hiện tại, lyric gốc và các bản dịch tiếng Việt sẽ tự động được đính kèm.</small></div>
+        <details className="reply-note"><summary>DÁN CÂU TRẢ LỜI HỮU ÍCH TỪ CHATGPT VÀO ĐÂY</summary><textarea value={replyDraft} onChange={(event)=>setReplyDraft(event.target.value)} placeholder="Dán phần giải thích bạn muốn lưu cạnh bản dịch…"/><button onClick={addReplyNote} disabled={!replyDraft.trim()}>THÊM VÀO GHI CHÚ TRAO ĐỔI</button></details>
+        <button className="copy-context" onClick={async()=>{await copyText(translationContext());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}}>SAO CHÉP TOÀN BỘ NGỮ CẢNH BẢN DỊCH</button>
       </aside>
     </section>}
 
-    <footer className="studio-footer"><span>PULSE LYRIC STUDIO</span><p>Translations are saved locally on this browser. YouTube playback and LRCLIB lookup remain free.</p><Link href="/">BACK TO MUSIC CHARTS →</Link></footer>
+    <footer className="studio-footer"><span>PULSE STUDIO DỊCH LỜI</span><p>Bản dịch được tự lưu trên trình duyệt này. Phát YouTube và tìm lyric qua LRCLIB vẫn hoàn toàn miễn phí.</p><Link href="/">VỀ BẢNG XẾP HẠNG →</Link></footer>
   </main>;
 }
