@@ -213,7 +213,7 @@ export default function Home(){
     <section className="workspace">
       <div className="chart-panel">
         <div className="panel-heading">
-          <div><p className="kicker"><span>02</span> {active?.id.includes("evergreen")?"EVERGREEN TOP 20":"CURRENT TOP 20"}</p><h2>{active?.label??"Loading chart"}</h2></div>
+          <div><p className="kicker"><span>02</span> {active?.id.includes("evergreen")?"EVERGREEN TOP 50":"CURRENT TOP 20"}</p><h2>{active?.label??"Loading chart"}</h2></div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
         <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET"}</span><span/></div>
@@ -246,7 +246,7 @@ export default function Home(){
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 current rankings, 3–6 month trending windows and 10/20-year evergreen ballad charts.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 current rankings, 3–6 month trending windows and Top 50 evergreen ballad charts across 0–10, 10–20 and 20–30 year eras.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 
