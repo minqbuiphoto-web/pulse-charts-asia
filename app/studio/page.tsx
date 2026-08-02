@@ -15,6 +15,9 @@ type YTPlayer={
   destroy:()=>void;
   getCurrentTime:()=>number;
   getDuration:()=>number;
+  playVideo:()=>void;
+  pauseVideo:()=>void;
+  seekTo:(seconds:number,allowSeekAhead:boolean)=>void;
 };
 type YTPlayerOptions={
   videoId:string;
@@ -82,6 +85,8 @@ export default function LyricStudio(){
   const [currentTime,setCurrentTime]=useState(0);
   const [duration,setDuration]=useState(0);
   const [playerState,setPlayerState]=useState("WAITING");
+  const [followPlayback,setFollowPlayback]=useState(true);
+  const [editingLine,setEditingLine]=useState<number|null>(null);
   const [question,setQuestion]=useState("");
   const [replyDraft,setReplyDraft]=useState("");
   const [chatMessages,setChatMessages]=useState<ChatMessage[]>([
@@ -158,8 +163,8 @@ export default function LyricStudio(){
   },[currentTime,timeline]);
 
   useEffect(()=>{
-    if(currentLineIndex>=0)lineRefs.current[currentLineIndex]?.scrollIntoView({behavior:"smooth",block:"center"});
-  },[currentLineIndex]);
+    if(currentLineIndex>=0&&followPlayback&&editingLine===null)lineRefs.current[currentLineIndex]?.scrollIntoView({behavior:"smooth",block:"center"});
+  },[currentLineIndex,followPlayback,editingLine]);
 
   const searchSong=async()=>{
     const term=query.trim();
@@ -192,7 +197,7 @@ export default function LyricStudio(){
 
   const applySong=()=>{
     if(!result)return;
-    setSong(result);setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setManualLyrics("");
+    setSong(result);setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setManualLyrics("");setFollowPlayback(true);setEditingLine(null);
     try{
       const saved=JSON.parse(localStorage.getItem(storageKey(result))??"{}") as Record<number,string>;
       setTranslations(saved);
@@ -211,6 +216,26 @@ export default function LyricStudio(){
       if(song)try{localStorage.setItem(storageKey(song),JSON.stringify(next));}catch{}
       return next;
     });
+  };
+
+  const togglePlayback=()=>{
+    const player=playerRef.current;
+    if(!player)return;
+    if(playerState==="PLAYING")player.pauseVideo();else player.playVideo();
+  };
+
+  const seekBy=(seconds:number)=>{
+    const player=playerRef.current;
+    if(!player)return;
+    player.seekTo(Math.max(0,Math.min(duration||Infinity,currentTime+seconds)),true);
+  };
+
+  const replayWorkingLine=()=>{
+    const index=editingLine??currentLineIndex;
+    const player=playerRef.current;
+    if(!player||index<0||!timeline[index])return;
+    player.seekTo(timeline[index].time,true);
+    player.playVideo();
   };
 
   const downloadTranslation=()=>{
@@ -289,13 +314,25 @@ export default function LyricStudio(){
           <div className="player-meta"><span className={playerState==="PLAYING"?"live":""}>{playerState}</span><b>{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")} / {Math.floor(duration/60)}:{String(Math.floor(duration%60)).padStart(2,"0")}</b><p>{currentLineIndex>=0?"LINE "+String(currentLineIndex+1).padStart(2,"0")+" OF "+String(timeline.length).padStart(2,"0"):"PRESS PLAY TO FOLLOW THE LYRIC"}</p></div>
         </div>
 
+        <div className="sticky-player">
+          <div className="sticky-track"><span className={playerState==="PLAYING"?"pulse":""}>♪</span><div><b>{song.title}</b><small>{currentLineIndex>=0?(timeline[currentLineIndex]?.text??""):"Ready to follow the lyric"}</small></div></div>
+          <div className="sticky-progress"><i style={{width:(duration>0?Math.min(100,currentTime/duration*100):0)+"%"}}/></div>
+          <div className="sticky-time">{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")}</div>
+          <div className="sticky-controls">
+            <button onClick={()=>seekBy(-5)}>−5s</button>
+            <button className="main-control" onClick={togglePlayback}>{playerState==="PLAYING"?"PAUSE":"PLAY"}</button>
+            <button onClick={replayWorkingLine} disabled={currentLineIndex<0&&editingLine===null}>REPLAY LINE</button>
+            <button className={followPlayback?"follow-on":""} onClick={()=>setFollowPlayback((value)=>!value)}>{followPlayback?"FOLLOW ON":"FOLLOW OFF"}</button>
+          </div>
+        </div>
+
         {!timeline.length&&<div className="manual-lyrics"><h3>Original lyrics were not found</h3><p>Paste the original lyrics below. Each non-empty line becomes one translation row with approximate timing.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Paste one lyric sentence per line…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>USE THESE LYRICS</button></div>}
 
         {timeline.length>0&&<div className="line-editor">
           <div className="line-editor-head"><span>#</span><span>ORIGINAL LYRIC + YOUR VIETNAMESE TRANSLATION</span><span>{song.syncedLyrics?"SYNCED":"APPROX."}</span></div>
-          {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active":"")} key={index}>
+          {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
-            <div><p>{line.text}</p><textarea value={translations[index]??""} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric dịch tiếng Việt cho câu này…"/></div>
+            <div><p>{line.text}</p><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric dịch tiếng Việt cho câu này…"/></div>
             <button onClick={()=>{setQuestion("Hãy giải thích chính xác ý nghĩa và sắc thái của câu: “"+line.text+"”");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>ASK</button>
           </div>)}
         </div>}
