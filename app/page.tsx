@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
+import classicsSnapshot from "./charts-classics.json";
 import videoLinks from "./video-links.json";
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
-const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts] } as ChartData;
+const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts] } as ChartData;
 
 const youtubeVideos:Record<string,string>={
   "kr-pop-1":"phuiiNCxRMg","kr-pop-2":"Q3K0TOvTOno","kr-pop-3":"Vk5-c_v4gMU","kr-pop-4":"xfqBQ2XhBCgy",
@@ -184,7 +185,7 @@ export default function Home(){
       <div className="hero-copy">
         <p className="kicker"><span>01</span> THE SOUND OF RIGHT NOW</p>
         <h1>Turn up<br/><em>what’s next.</em></h1>
-        <p>Official national rankings plus current OST and ballad discovery across South Korea, Japan and Mainland China.</p>
+        <p>Official national rankings, current OST and ballad discovery, plus evergreen ballad listening charts across South Korea, Japan and Mainland China.</p>
         <a href="#charts" className="hero-cta"><span>▶</span> EXPLORE ALL {data.charts.length} CHARTS</a>
       </div>
       <div className="hero-art" aria-hidden="true">
@@ -212,10 +213,10 @@ export default function Home(){
     <section className="workspace">
       <div className="chart-panel">
         <div className="panel-heading">
-          <div><p className="kicker"><span>02</span> CURRENT TOP 20</p><h2>{active?.label??"Loading chart"}</h2></div>
+          <div><p className="kicker"><span>02</span> {active?.id.includes("evergreen")?"EVERGREEN TOP 20":"CURRENT TOP 20"}</p><h2>{active?.label??"Loading chart"}</h2></div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
-        <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")?"RELEASED":"MARKET"}</span><span/></div>
+        <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET"}</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
         {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
         <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>selectSong(song)}>
@@ -240,12 +241,12 @@ export default function Home(){
           <details className="lyrics-editor"><summary>ADD OR REPLACE LYRICS</summary><textarea value={lyricsDraft} onChange={(event)=>setLyricsDraft(event.target.value)} placeholder="Paste lyrics for this track"/><button onClick={saveCustomLyrics} disabled={!lyricsDraft.trim()}>SAVE LYRICS</button><small>Saved free on this browser for the same track and artist.</small></details>
           {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b>{lyricsSource==="LRCLIB"?<a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a>:<span>{lyricsSource}</span>}</div><pre>{lyrics}</pre></section>}
           {(lyricsStatus==="missing"||lyricsStatus==="error")&&<p className="media-note">No lyrics were found in the free library. Open Genius or Musixmatch, or paste lyrics above.</p>}
-          <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>{active?.id.includes("trending")?"RELEASED":"MARKET CODE"}</dt><dd>{displaySong.releaseDate}</dd></div></dl>
+          <dl><div><dt>MARKET</dt><dd>{active?.label}</dd></div><div><dt>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET CODE"}</dt><dd>{displaySong.releaseDate}</dd></div></dl>
         </>:<div className="player-empty"><div className="vinyl mini"><i/></div><p>SELECT A TRACK</p></div>}
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 rankings, transparent discovery extensions and 3–6 month trending windows.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 current rankings, 3–6 month trending windows and 10/20-year evergreen ballad charts.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 
