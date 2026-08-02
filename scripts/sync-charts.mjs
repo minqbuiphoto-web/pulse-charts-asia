@@ -17,6 +17,13 @@ for (const chart of data.charts) {
   if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE") && !chart.syncWarning?.includes("BALLAD-ONLY RULE")) throw new Error(`Missing curation policy: ${chart.label}`);
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
+  if (chart.id === "kr-ballad-trending") {
+    const cutoff = new Date(data.generatedAt);
+    cutoff.setUTCMonth(cutoff.getUTCMonth() - 6);
+    if (chart.songs.some((song) => !/^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate) || new Date(`${song.releaseDate}T00:00:00Z`) < cutoff)) {
+      throw new Error(`${chart.label} contains a release older than six months.`);
+    }
+  }
   chart.songs.forEach((song, index) => {
     if (song.rank !== index + 1 || !song.title || !song.artist) throw new Error(`Invalid ranking row in ${chart.label}.`);
   });

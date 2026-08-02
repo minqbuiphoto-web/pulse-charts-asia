@@ -34,6 +34,12 @@ test("ships all nine chart snapshots", async () => {
   const balladCharts = data.charts.filter((chart) => chart.id.includes("ballad"));
   assert.ok(balladCharts.every((chart) => chart.songs.every((song) => /ballad/i.test(song.genre))));
   assert.doesNotMatch(JSON.stringify(balladCharts), /RESCENE|aespa|ILLIT|fromis_9|Hearts2Hearts/i);
+  const koreanBallad = data.charts.find((chart) => chart.id === "kr-ballad-trending");
+  const sixMonthCutoff = new Date(data.generatedAt);
+  sixMonthCutoff.setUTCMonth(sixMonthCutoff.getUTCMonth() - 6);
+  assert.ok(koreanBallad.songs.every((song) => /^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate)));
+  assert.ok(koreanBallad.songs.every((song) => new Date(`${song.releaseDate}T00:00:00Z`) >= sixMonthCutoff));
+  assert.doesNotMatch(JSON.stringify(koreanBallad), /Drowning|벌써 일년|예뻤어|사랑하게 될 거야/i);
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
   assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "")));
 });
