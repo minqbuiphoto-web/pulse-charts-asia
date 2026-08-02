@@ -6,7 +6,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pulse-charts-asia.v
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Pulse Charts — Asian Music Discovery",
-  description: "Asian music charts plus a free line-by-line lyric translation workspace with YouTube playback and lyrics lookup.",
+  description: "Asian music charts including vocal R&B and ballad classics, plus a free line-by-line lyric translation workspace with YouTube playback and lyrics lookup.",
   openGraph: {
     title: "Pulse Charts — Hear Each Market Move",
     description: "Music discovery across Asia with a dedicated lyric translation studio.",

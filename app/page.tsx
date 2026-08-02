@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
 import classicsSnapshot from "./charts-classics.json";
+import rnbSnapshot from "./charts-rnb.json";
 import videoLinks from "./video-links.json";
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
-const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts] } as ChartData;
+const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts,...rnbSnapshot.charts] } as ChartData;
 
 const youtubeVideos:Record<string,string>={
   "kr-pop-1":"phuiiNCxRMg","kr-pop-2":"Q3K0TOvTOno","kr-pop-3":"Vk5-c_v4gMU","kr-pop-4":"xfqBQ2XhBCgy",
@@ -262,7 +263,7 @@ export default function Home(){
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 current rankings, 3–6 month trending windows and Top 50 evergreen ballad charts across 0–10, 10–20 and 20–30 year eras.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 current rankings, 3–6 month trending windows and Top 50 evergreen ballad and vocal R&B charts across 0–10, 10–20 and 20–30 year eras.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 
