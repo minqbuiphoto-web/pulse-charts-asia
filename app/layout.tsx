@@ -10,10 +10,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Pulse Charts — Hear Each Market Move",
     description: "Nine Top 20 charts spanning official rankings, ballad and OST discovery across Asia.",
-    images: [{ url: "/og.png", width: 1536, height: 1024, alt: "Pulse Charts — Asian Music Discovery" }],
     type: "website",
   },
-  twitter: { card: "summary_large_image", images: ["/og.png"] },
+  twitter: { card: "summary" },
 };
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return <html lang="en"><body>{children}</body></html>;
