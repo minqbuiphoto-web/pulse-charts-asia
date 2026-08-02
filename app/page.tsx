@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
@@ -192,7 +193,7 @@ export default function Home(){
   return <main>
     <header className="topbar">
       <a className="brand" href="#top" aria-label="Pulse Charts — back to top"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></a>
-      <nav><a href="#charts">Charts</a><a href="#about">About</a></nav>
+      <nav><a href="#charts">Charts</a><Link href="/studio/">Lyric Studio</Link><a href="#about">About</a></nav>
       <div className="live-pill"><span/> {data.charts.length} CHARTS · 3 MARKETS</div>
     </header>
 
