@@ -33,6 +33,13 @@ test("renders the separate lyric translation studio", async () => {
   assert.match(html, /KHÔNG GIAN MIỄN PHÍ/);
 });
 
+test("exports Vietnamese lyrics as a continuous Word document", async () => {
+  const source = await readFile(new URL("../app/studio/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /XUẤT LỜI VIỆT \.DOC/);
+  assert.match(source, /application\/msword/);
+  assert.match(source, /vietnameseLines/);
+});
+
 test("ships all nineteen chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 19);

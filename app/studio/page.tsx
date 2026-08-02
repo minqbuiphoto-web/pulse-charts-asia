@@ -62,6 +62,9 @@ function storageKey(song:Pick<StudioSong,"title"|"artist">){
 function safeFileName(value:string){
   return value.normalize("NFKC").replace(/[\\/:*?"<>|]+/g,"-").trim().slice(0,120)||"lyric-translation";
 }
+function escapeWordHtml(value:string){
+  return value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+}
 
 async function copyText(value:string){
   try{
@@ -249,6 +252,22 @@ export default function LyricStudio(){
     window.setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
 
+  const downloadVietnameseWord=()=>{
+    if(!song)return;
+    const vietnameseLines=timeline.map((_,index)=>(translations[index]??"").trim()).filter(Boolean);
+    if(!vietnameseLines.length)return;
+    const title=escapeWordHtml(song.title);
+    const artist=escapeWordHtml(song.artist);
+    const body=vietnameseLines.map((line)=>"<p>"+escapeWordHtml(line)+"</p>").join("");
+    const documentHtml='<!doctype html><html><head><meta charset="utf-8"><style>@page{margin:2.2cm}body{font-family:Arial,\"Times New Roman\",sans-serif;color:#111;line-height:1.55}h1{font-size:20pt;margin:0 0 6pt}h2{font-size:11pt;font-weight:normal;color:#555;margin:0 0 24pt}.lyrics p{font-size:12pt;margin:0 0 5pt}</style></head><body><h1>'+title+'</h1><h2>'+artist+'</h2><div class="lyrics">'+body+'</div></body></html>';
+    const blob=new Blob(["\ufeff",documentHtml],{type:"application/msword;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const anchor=document.createElement("a");
+    anchor.href=url;anchor.download=safeFileName(song.artist+" - "+song.title+" - Lời Việt")+".doc";
+    document.body.appendChild(anchor);anchor.click();anchor.remove();
+    window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
   const fullSongTranslationRequest=()=>{
     if(!song||!timeline.length)return "";
     return "Dịch sát nghĩa lời bài hát \""+song.title+"\" của "+song.artist+":\n\n"+timeline.map((line)=>line.text).join("\n");
@@ -295,7 +314,7 @@ export default function LyricStudio(){
     {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
     <section className="studio-workspace">
       <div className="translation-column">
-        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button></div></div>
+        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button></div></div>
 
         <div className="player-card">
           <div ref={playerMountRef} className="youtube-mount"/>
