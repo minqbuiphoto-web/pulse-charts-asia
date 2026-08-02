@@ -43,6 +43,10 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /currentVietnameseDraft/);
   assert.match(source, /Lời Việt hiện tại/);
   assert.match(source, /ĐƯA VÀO Ô HỎI CHATGPT/);
+  assert.match(source, /restartSong/);
+  assert.match(source, /VỀ ĐẦU/);
+  assert.match(source, /playLine/);
+  assert.match(source, /BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY/);
 });
 
 test("exports Vietnamese lyrics as a continuous Word document", async () => {

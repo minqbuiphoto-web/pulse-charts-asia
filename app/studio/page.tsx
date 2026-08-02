@@ -286,12 +286,28 @@ export default function LyricStudio(){
     player.seekTo(Math.max(0,Math.min(duration||Infinity,currentTime+seconds)),true);
   };
 
+  const playLine=(index:number)=>{
+    const player=playerRef.current;
+    const line=timeline[index];
+    if(!player||!line)return;
+    player.seekTo(line.time,true);
+    setCurrentTime(line.time);
+    setFollowPlayback(true);
+    player.playVideo();
+  };
+
+  const restartSong=()=>{
+    const player=playerRef.current;
+    if(!player)return;
+    player.seekTo(0,true);
+    setCurrentTime(0);
+    setFollowPlayback(true);
+    player.playVideo();
+  };
+
   const replayWorkingLine=()=>{
     const index=editingLine??currentLineIndex;
-    const player=playerRef.current;
-    if(!player||index<0||!timeline[index])return;
-    player.seekTo(timeline[index].time,true);
-    player.playVideo();
+    if(index>=0)playLine(index);
   };
 
   const downloadTranslation=()=>{
@@ -385,6 +401,7 @@ export default function LyricStudio(){
           <div className="sticky-progress"><i style={{width:(duration>0?Math.min(100,currentTime/duration*100):0)+"%"}}/></div>
           <div className="sticky-time">{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")}</div>
           <div className="sticky-controls">
+            <button onClick={restartSong}>VỀ ĐẦU</button>
             <button onClick={()=>seekBy(-5)}>−5s</button>
             <button className="main-control" onClick={togglePlayback}>{playerState==="PLAYING"?"TẠM DỪNG":"PHÁT"}</button>
             <button onClick={replayWorkingLine} disabled={currentLineIndex<0&&editingLine===null}>PHÁT LẠI CÂU</button>
@@ -405,7 +422,7 @@ export default function LyricStudio(){
           <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
-            <div className="lyric-writing"><p>{line.text}</p><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
+            <div className="lyric-writing"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}
         </div>}
