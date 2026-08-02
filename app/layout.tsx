@@ -6,10 +6,10 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://pulse-charts-asia.v
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "Pulse Charts — Asian Music Discovery",
-  description: "Nine current music charts across Korea, Japan and China, including OST and ballad trending lists.",
+  description: "Nine current Top 20 music charts across Korea, Japan and China, with free YouTube playback and lyrics lookup.",
   openGraph: {
     title: "Pulse Charts — Hear Each Market Move",
-    description: "Nine music charts spanning official rankings, ballad and OST discovery across Asia.",
+    description: "Nine Top 20 charts spanning official rankings, ballad and OST discovery across Asia.",
     images: [{ url: "/og.png", width: 1536, height: 1024, alt: "Pulse Charts — Asian Music Discovery" }],
     type: "website",
   },

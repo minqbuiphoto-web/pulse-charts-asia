@@ -27,3 +27,15 @@ footer{min-height:190px;padding:45px clamp(22px,4vw,72px);display:grid;grid-temp
 
 
 .lyrics-editor{margin:10px 0 14px;padding:12px 14px;border:1px solid #35313f;border-radius:12px;background:#0d0c11}.lyrics-editor summary{color:#8e8999;font:700 8px "Space Grotesk";letter-spacing:1.2px;cursor:pointer;list-style:none}.lyrics-editor summary::-webkit-details-marker{display:none}.lyrics-editor summary:after{content:"+";float:right;color:var(--lime);font-size:13px}.lyrics-editor[open] summary:after{content:"-"}.lyrics-editor textarea{box-sizing:border-box;width:100%;min-height:150px;margin-top:11px;padding:12px;border:1px solid #35313f;border-radius:10px;resize:vertical;background:#08080b;color:#ddd9e3;font:500 11px/1.6 "Space Grotesk";outline:none}.lyrics-editor textarea:focus{border-color:#c8ff3d66}.lyrics-editor button{width:100%;height:39px;margin-top:8px;border:0;border-radius:9px;background:var(--lime);color:#09090b;font:800 8px "Space Grotesk";letter-spacing:.8px;cursor:pointer}.lyrics-editor button:disabled{opacity:.35;cursor:not-allowed}.lyrics-editor small{display:block;margin-top:8px;color:#5f5b69;font-size:8px;line-height:1.4}.lyrics-panel>div>span{color:#777382;font-size:8px}
+
+/* Product-completion pass: keep the player visible on desktop and useful before a 20-row list on mobile. */
+@media(min-width:821px){
+  .player-panel{position:sticky;top:14px;align-self:start;max-height:calc(100vh - 28px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:#4c4658 transparent}
+}
+.song-row{content-visibility:auto;contain-intrinsic-size:82px}
+button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--lime);outline-offset:3px}
+@media(max-width:820px){
+  .workspace{display:flex;flex-direction:column}
+  .player-panel{order:-1;border-top:0;border-bottom:1px solid var(--line)}
+  .chart-panel{order:2}
+}

@@ -1,16 +1,8 @@
 # Pulse Charts
 
-Pulse Charts is an independent English-language music discovery site with nine Top 20 views:
+Pulse Charts is an independent English-language Asian music discovery product with nine Top 20 charts across Korea, Japan and Mainland China.
 
-- Korea Pop
-- Korea Ballad
-- Japan Billboard
-- China QQ Music
-- Korea OST
-- Japan OST
-- China OST
-
-It includes market filters, track and artist search, chart switching, source links, and a focused track panel. The visual covers use CSS instead of external image files, preventing broken artwork icons.
+It includes market filters, chart-specific search, source transparency, embedded YouTube playback, automatic lyrics lookup through LRCLIB, browser-saved media overrides, mobile-first playback, and a focused track panel. The visual covers use CSS instead of external image files, preventing broken artwork icons.
 
 ## Data transparency
 
@@ -22,7 +14,7 @@ Install Node.js, run npm install, then run npm run dev.
 
 ## Verify and build
 
-Run npm test. It validates seven charts and 70 ranked tracks, creates the production build, and runs rendering checks.
+Run npm test. It validates nine charts and 180 ranked tracks, creates the production build, and runs rendering checks.
 
 ## Deploy
 

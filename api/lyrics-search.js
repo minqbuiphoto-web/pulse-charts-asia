@@ -26,15 +26,18 @@ export default async function handler(request,response){
   const exact=new URLSearchParams({track_name:title,artist_name:artist});
   const broad=new URLSearchParams({q:(title+" "+artist).trim()});
   const attempts=["https://lrclib.net/api/search?"+exact,"https://lrclib.net/api/search?"+broad];
-  const results=[];
-  for(const url of attempts){
+  const batches=await Promise.all(attempts.map(async(url)=>{
     try{
-      const upstream=await fetch(url,{headers:{"user-agent":"PulseCharts/1.0 (https://pulse-charts-asia.vercel.app)"},signal:AbortSignal.timeout(7000)});
-      if(!upstream.ok)continue;
+      const upstream=await fetch(url,{headers:{"user-agent":"PulseCharts/1.0 (https://pulse-charts-asia.vercel.app)"},signal:AbortSignal.timeout(6500)});
+      if(!upstream.ok)return [];
       const payload=await upstream.json();
-      if(Array.isArray(payload))results.push(...payload);
-    }catch(error){console.warn("[lyrics-search] attempt-failed",{title,error:String(error)});}
-  }
+      return Array.isArray(payload)?payload:[];
+    }catch(error){
+      console.warn("[lyrics-search] attempt-failed",{title,error:String(error)});
+      return [];
+    }
+  }));
+  const results=batches.flat();
   const unique=[...new Map(results.map((item)=>[item.id??(item.trackName+"::"+item.artistName),item])).values()];
   const best=unique.filter((item)=>item.plainLyrics||item.syncedLyrics).sort((a,b)=>scoreResult(b,title,artist)-scoreResult(a,title,artist))[0];
   if(!best||scoreResult(best,title,artist)<3){console.warn("[lyrics-search] no-result",{title,artist});return response.status(404).json({error:"Lyrics not found"});}

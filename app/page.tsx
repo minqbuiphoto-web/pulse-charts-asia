@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
 import videoLinks from "./video-links.json";
@@ -23,21 +23,15 @@ const youtubeVideos:Record<string,string>={
 };
 
 type LookupStatus="idle"|"loading"|"ready"|"missing"|"error";
-type LyricsResult={ plainLyrics?:string|null; syncedLyrics?:string|null; trackName?:string; artistName?:string };
-const pipedInstances=["https://pipedapi.kavin.rocks","https://pipedapi.adminforge.de","https://pipedapi.reallyaweso.me"];
-const invidiousInstances=["https://inv.nadeko.net","https://invidious.nerdvpn.de"];
 const youtubeTracks=videoLinks as Record<string,string>;
 
 function trackKey(song:Pick<Song,"title"|"artist">){
   return `${song.title}::${song.artist}`.normalize("NFKC").toLocaleLowerCase("en").replace(/\s+/g," ").trim();
 }
 
-function cleanSyncedLyrics(value:string){
-  return value.replace(/^\[[0-9:.]+\]\s*/gm,"").replace(/\n{3,}/g,"\n\n").trim();
-}
-
-function videoIdFromResult(item:any){
-  const candidate=String(item?.id??item?.url??item?.videoId??"");
+function videoIdFromResult(item:unknown){
+  const result=item as { id?:unknown; url?:unknown; videoId?:unknown }|null;
+  const candidate=String(result?.id??result?.url??result?.videoId??"");
   const match=candidate.match(/(?:v=|youtu\.be\/|embed\/)?([\w-]{11})(?:\b|$)/);
   return match?.[1]??"";
 };
@@ -54,7 +48,7 @@ function formatDate(value:string,includeTime=false) {
 }
 
 export default function Home(){
-  const [data]=useState<ChartData>(initialData);
+  const data=initialData;
   const [activeId,setActiveId]=useState(initialData.charts[0]?.id??"");
   const [market,setMarket]=useState<Market|"ALL">("ALL");
   const [query,setQuery]=useState("");
@@ -67,16 +61,32 @@ export default function Home(){
   const [lyrics,setLyrics]=useState("");
   const [lyricsSource,setLyricsSource]=useState("");
   const [customLyrics,setCustomLyrics]=useState<Record<string,string>>({});
+  const [lyricsCache,setLyricsCache]=useState<Record<string,{lyrics:string;source:string}>>({});
   const [lyricsDraft,setLyricsDraft]=useState("");
   const [lyricsStatus,setLyricsStatus]=useState<LookupStatus>("idle");
 
-  useEffect(()=>{ try{setCustomVideos(JSON.parse(localStorage.getItem("pulse-custom-videos")??"{}"));setCustomLyrics(JSON.parse(localStorage.getItem("pulse-custom-lyrics")??"{}"));}catch{} },[]);
-  const charts=useMemo(()=>data?.charts.filter((chart)=>market==="ALL"||chart.market===market)??[],[data,market]);
-  useEffect(()=>{ if(!charts.some((chart)=>chart.id===activeId)){ const next=charts[0];setActiveId(next?.id??"");setSelected(next?.songs[0]??null); } },[charts,activeId]);
-  const active=data?.charts.find((chart)=>chart.id===activeId)??charts[0];
-  const songs=useMemo(()=>{ const needle=query.trim().toLocaleLowerCase("en"); if(!active) return []; if(!needle) return active.songs; return active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle)); },[active,query]);
+  useEffect(()=>{
+    const timer=window.setTimeout(()=>{
+      try{
+        setCustomVideos(JSON.parse(localStorage.getItem("pulse-custom-videos")??"{}"));
+        setResolvedVideos(JSON.parse(localStorage.getItem("pulse-resolved-videos")??"{}"));
+        setCustomLyrics(JSON.parse(localStorage.getItem("pulse-custom-lyrics")??"{}"));
+        setLyricsCache(JSON.parse(localStorage.getItem("pulse-lyrics-cache")??"{}"));
+      }catch{}
+    },0);
+    return()=>window.clearTimeout(timer);
+  },[]);
+  const charts=data.charts.filter((chart)=>market==="ALL"||chart.market===market);
+  const active=charts.find((chart)=>chart.id===activeId)??charts[0];
+  const needle=query.trim().toLocaleLowerCase("en");
+  const songs=!active?[]:!needle?active.songs:active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre}`.toLocaleLowerCase("en").includes(needle));
   const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setVideoLink("");setLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
   const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
+  const chooseMarket=(nextMarket:Market|"ALL")=>{
+    setMarket(nextMarket);
+    const visible=data.charts.filter((chart)=>nextMarket==="ALL"||chart.market===nextMarket);
+    if(!visible.some((chart)=>chart.id===activeId)&&visible[0])chooseChart(visible[0]);
+  };
   const displaySong=selected??active?.songs[0]??null;
   const currentTrackKey=displaySong?trackKey(displaySong):"";
   const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
@@ -84,6 +94,14 @@ export default function Home(){
   const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const musixmatchSearchUrl=displaySong?`https://www.musixmatch.com/search/${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const selectSong=(song:Song)=>{ setSelected(song); resetTrackTools(); };
+
+  const cacheResolvedVideo=(key:string,id:string)=>{
+    setResolvedVideos((current)=>{
+      const next={...current,[key]:id};
+      try{localStorage.setItem("pulse-resolved-videos",JSON.stringify(next));}catch{}
+      return next;
+    });
+  };
 
   const resolveVideo=async(song:Song)=>{
     const key=trackKey(song);
@@ -96,34 +114,16 @@ export default function Home(){
       if(response.ok){
         const payload=await response.json();
         const id=videoIdFromResult(payload);
-        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
+        if(id){cacheResolvedVideo(key,id);setVideoStatus("ready");return id;}
       }
     }catch{}
-    for(const instance of pipedInstances){
-      try{
-        const response=await fetch(`${instance}/search?q=${query}&filter=videos`,{signal:AbortSignal.timeout(7000)});
-        if(!response.ok)continue;
-        const payload=await response.json();
-        const items=Array.isArray(payload)?payload:(payload?.items??[]);
-        const id=items.map(videoIdFromResult).find(Boolean);
-        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
-      }catch{}
-    }
-    for(const instance of invidiousInstances){
-      try{
-        const response=await fetch(`${instance}/api/v1/search?q=${query}&type=video`,{signal:AbortSignal.timeout(7000)});
-        if(!response.ok)continue;
-        const items=await response.json();
-        const id=Array.isArray(items)?items.map(videoIdFromResult).find(Boolean):"";
-        if(id){setResolvedVideos((current)=>({...current,[key]:id}));setVideoStatus("ready");return id;}
-      }catch{}
-    }
     setVideoStatus("missing");
     return "";
   };
 
   const playTrack=async()=>{
     if(!displaySong)return;
+    if(lyricsStatus==="idle")void loadLyrics();
     const id=videoId??await resolveVideo(displaySong);
     if(id)setPlayingId(displaySong.id);
   };
@@ -144,13 +144,19 @@ export default function Home(){
     const key=trackKey(displaySong);
     const saved=customLyrics[key];
     if(saved){setLyrics(saved);setLyricsSource("CUSTOM");setLyricsStatus("ready");return;}
+    const cached=lyricsCache[key];
+    if(cached){setLyrics(cached.lyrics);setLyricsSource(cached.source);setLyricsStatus("ready");return;}
     setLyricsStatus("loading");setLyrics("");setLyricsSource("");
     try{
       const params=new URLSearchParams({title:displaySong.title,artist:displaySong.artist});
       const response=await fetch(`/api/lyrics-search?${params}`,{signal:AbortSignal.timeout(10000)});
       if(!response.ok){setLyricsStatus("missing");return;}
       const payload=await response.json();
-      if(payload.lyrics){setLyrics(payload.lyrics);setLyricsSource(payload.source??"LRCLIB");setLyricsStatus("ready");}
+      if(payload.lyrics){
+        const source=payload.source??"LRCLIB";
+        setLyrics(payload.lyrics);setLyricsSource(source);setLyricsStatus("ready");
+        setLyricsCache((current)=>{const next={...current,[key]:{lyrics:payload.lyrics,source}};try{localStorage.setItem("pulse-lyrics-cache",JSON.stringify(next));}catch{}return next;});
+      }
       else setLyricsStatus("missing");
     }catch{setLyricsStatus("error");}
   };
@@ -194,13 +200,13 @@ export default function Home(){
     </section>
 
     <section className="chart-bar" id="charts">
-      <div className="market-filters" aria-label="Filter by market">{marketLabels.map((item)=><button key={item.id} className={market===item.id?"active":""} onClick={()=>setMarket(item.id)}><small>{item.code}</small>{item.label}</button>)}</div>
-      <label className="search-box"><span>⌕</span><input value={query} onChange={(event)=>setQuery(event.target.value)} placeholder="Search tracks, artists, chart entries"/>{query&&<button onClick={()=>setQuery("")} aria-label="Clear search">×</button>}</label>
+      <div className="market-filters" aria-label="Filter by market">{marketLabels.map((item)=><button type="button" key={item.id} className={market===item.id?"active":""} aria-pressed={market===item.id} onClick={()=>chooseMarket(item.id)}><small>{item.code}</small>{item.label}</button>)}</div>
+      <label className="search-box"><span>⌕</span><input aria-label="Search this chart" value={query} onChange={(event)=>setQuery(event.target.value)} placeholder="Search tracks, artists, chart entries"/>{query&&<button onClick={()=>setQuery("")} aria-label="Clear search">×</button>}</label>
     </section>
 
     <section className="chart-tabs" aria-label="Choose a chart">
       <p>ALL {data.charts.length} MUSIC CHARTS</p>
-      <div>{charts.map((chart)=><button key={chart.id} className={active?.id===chart.id?"active":""} onClick={()=>chooseChart(chart)}><span>{chart.shortLabel}</span>{chart.label}</button>)}</div>
+      <div>{charts.map((chart)=><button type="button" key={chart.id} className={active?.id===chart.id?"active":""} aria-pressed={active?.id===chart.id} onClick={()=>chooseChart(chart)}><span>{chart.shortLabel}</span>{chart.label}</button>)}</div>
     </section>
 
     <section className="workspace">
@@ -239,7 +245,7 @@ export default function Home(){
       </aside>
     </section>
 
-    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Official rankings + 3–6 month trending windows.<br/>Built for current music discovery across Asia.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
+    <footer id="about"><div className="brand footer-brand"><span className="brand-mark"><i/><i/><i/><i/></span><span>PULSE<b>CHARTS</b></span></div><p>Top 20 rankings, transparent discovery extensions and 3–6 month trending windows.<br/>Free YouTube playback and lyrics lookup — no account required.</p><div>{active?<><a href={active.sourceUrl} target="_blank" rel="noreferrer">SOURCE: {active.source} ↗</a><span>PERIOD {formatDate(active.updatedAt)}</span></>:"CONNECTING TO DATA"}</div></footer>
   </main>;
 }
 
