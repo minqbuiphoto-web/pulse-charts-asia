@@ -31,6 +31,9 @@ test("ships all nine chart snapshots", async () => {
   assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 180);
   assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
   assert.ok(data.charts.some((chart) => chart.id === "cn-ballad-trending"));
+  const balladCharts = data.charts.filter((chart) => chart.id.includes("ballad"));
+  assert.ok(balladCharts.every((chart) => chart.songs.every((song) => /ballad/i.test(song.genre))));
+  assert.doesNotMatch(JSON.stringify(balladCharts), /RESCENE|aespa|ILLIT|fromis_9|Hearts2Hearts/i);
   assert.doesNotMatch(JSON.stringify(data), /Apple Music/i);
   assert.ok(data.charts.every((chart) => chart.songs.every((song) => song.artworkUrl === "")));
 });

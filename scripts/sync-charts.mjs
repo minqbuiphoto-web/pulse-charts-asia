@@ -14,8 +14,9 @@ for (const chart of data.charts) {
   if (!expectedIds.has(chart.id)) throw new Error(`Unexpected chart: ${chart.id}`);
   if (!chart.sourceUrl || !chart.updatedAt) throw new Error(`Missing source metadata: ${chart.label}`);
   if (!Array.isArray(chart.songs) || chart.songs.length !== 20) throw new Error(`${chart.label} must contain 20 rows.`);
-  if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE")) throw new Error(`Missing recency policy: ${chart.label}`);
+  if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE") && !chart.syncWarning?.includes("BALLAD-ONLY RULE")) throw new Error(`Missing curation policy: ${chart.label}`);
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
+  if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
   chart.songs.forEach((song, index) => {
     if (song.rank !== index + 1 || !song.title || !song.artist) throw new Error(`Invalid ranking row in ${chart.label}.`);
   });
