@@ -60,6 +60,9 @@ test("ships all nineteen chart snapshots", async () => {
   const evergreenCharts = data.charts.filter((chart) => chart.id.includes("evergreen"));
   assert.equal(evergreenCharts.length, 10);
   assert.ok(evergreenCharts.every((chart) => chart.songs.length === 50));
+  assert.ok(evergreenCharts.every((chart) => chart.songs.every((song) => Number.isFinite(song.viewCount) && song.viewCount >= 0 && /^[A-Za-z0-9_-]{11}$/.test(song.videoId))));
+  assert.ok(evergreenCharts.every((chart) => chart.songs.every((song, index) => index === 0 || chart.songs[index - 1].viewCount >= song.viewCount)));
+  assert.ok(evergreenCharts.every((chart) => new Set(chart.songs.map((song) => song.videoId)).size === 50));
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("2016-2026")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 2016 && Number(song.releaseDate) <= 2026)));
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("2006-2015")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 2006 && Number(song.releaseDate) <= 2015)));
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("1996-2005")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 1996 && Number(song.releaseDate) <= 2005)));

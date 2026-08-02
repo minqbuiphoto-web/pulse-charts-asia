@@ -9,7 +9,7 @@ import rnbSnapshot from "./charts-rnb.json";
 import videoLinks from "./video-links.json";
 
 type Market="KR"|"JP"|"CN";
-type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string };
+type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string; videoId?:string; viewCount?:number };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
 const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts,...rnbSnapshot.charts] } as ChartData;
@@ -48,6 +48,10 @@ function formatDate(value:string,includeTime=false) {
   const date=new Date(value);
   if(Number.isNaN(date.getTime())) return value;
   return new Intl.DateTimeFormat("en-US",{ day:"2-digit",month:"short",year:"numeric",...(includeTime?{hour:"2-digit",minute:"2-digit"}:{}) }).format(date);
+}
+
+function formatViewCount(value:number){
+  return new Intl.NumberFormat("en-US",{notation:"compact",maximumFractionDigits:1}).format(value)+" views";
 }
 
 export default function Home(){
@@ -93,7 +97,7 @@ export default function Home(){
   };
   const displaySong=selected??active?.songs[0]??null;
   const currentTrackKey=displaySong?trackKey(displaySong):"";
-  const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
+  const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??displaySong.videoId??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
   const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official music video`)}`:"#";
   const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const musixmatchSearchUrl=displaySong?`https://www.musixmatch.com/search/${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
@@ -109,7 +113,7 @@ export default function Home(){
 
   const resolveVideo=async(song:Song)=>{
     const key=trackKey(song);
-    const cached=youtubeTracks[key]??customVideos[key]??youtubeVideos[song.id]??resolvedVideos[key];
+    const cached=youtubeTracks[key]??customVideos[key]??song.videoId??youtubeVideos[song.id]??resolvedVideos[key];
     if(cached)return cached;
     setVideoStatus("loading");
     const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
@@ -233,13 +237,13 @@ export default function Home(){
           <div><p className="kicker"><span>02</span> {active?.id.includes("evergreen")?"EVERGREEN TOP 50":"CURRENT TOP 20"}</p><h2>{active?.label??"Loading chart"}</h2></div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
-        <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET"}</span><span/></div>
+        <div className="column-head"><span>#</span><span>TRACK</span><span>{active?.id.includes("evergreen")?"YOUTUBE VIEWS":active?.id.includes("trending")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET"}</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
         {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}
         <div className="song-list" aria-live="polite">{songs.map((song)=><button key={song.id} className={`song-row ${displaySong?.id===song.id?"selected":""}`} onClick={()=>selectSong(song)}>
           <span className="rank">{String(song.rank).padStart(2,"0")}</span>
           <span className="track"><span className="art cover-art"><b>{String(song.rank).padStart(2,"0")}</b><i>▶</i></span><span className="song-main"><b>{song.title}</b><small>{song.artist}</small></span></span>
-          <span className="genre">{song.genre}</span><span className="released">{song.releaseDate}</span><span className="row-action">•••</span>
+          <span className="genre">{active?.id.includes("evergreen")&&song.viewCount!==undefined?formatViewCount(song.viewCount):song.genre}</span><span className="released">{song.releaseDate}</span><span className="row-action">•••</span>
         </button>)}</div>
       </div>
 
@@ -248,7 +252,7 @@ export default function Home(){
           <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
           {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span></div>
-          <div className="progress"><span/><i>CHART SCORE</i><b>{displaySong.genre}</b></div>
+          <div className="progress"><span/><i>{active?.id.includes("evergreen")?"MEASURED VIEWS":"CHART SCORE"}</i><b>{active?.id.includes("evergreen")&&displaySong.viewCount!==undefined?displaySong.viewCount.toLocaleString("en-US")+" VIEWS":displaySong.genre}</b></div>
           <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={displaySong.rank===1}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={displaySong.rank===active?.songs.length}>NEXT</button></div>
           {videoStatus==="missing"&&<p className="media-note">No embeddable result was found automatically. Use YouTube search and choose the official upload.</p>}
           {videoStatus==="error"&&<p className="media-note">That link is not a valid YouTube video URL or 11-character video ID.</p>}

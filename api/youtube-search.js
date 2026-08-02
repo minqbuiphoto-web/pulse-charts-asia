@@ -16,9 +16,18 @@ export default async function handler(request,response){
     const ids=[...html.matchAll(/"videoId":"([A-Za-z0-9_-]{11})"/g)].map((match)=>match[1]);
     const videoId=ids.find((id,index)=>VIDEO_ID_PATTERN.test(id)&&ids.indexOf(id)===index);
     if(!videoId){console.warn("[youtube-search] no-result",{query});return response.status(404).json({error:"No video found"});}
+    let viewCount=null;
+    try{
+      const statsResponse=await fetch("https://returnyoutubedislikeapi.com/votes?videoId="+encodeURIComponent(videoId),{headers:{accept:"application/json"},signal:AbortSignal.timeout(5000)});
+      if(statsResponse.ok){
+        const stats=await statsResponse.json();
+        const numericViews=Number(stats?.viewCount);
+        if(Number.isFinite(numericViews)&&numericViews>=0)viewCount=numericViews;
+      }
+    }catch(error){console.warn("[youtube-search] stats-unavailable",{videoId,error:String(error)});}
     response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
-    console.log("[youtube-search] success",{query,videoId});
-    return response.status(200).json({videoId});
+    console.log("[youtube-search] success",{query,videoId,viewCount});
+    return response.status(200).json({videoId,viewCount});
   }catch(error){
     console.error("[youtube-search] failed",{query,error:String(error)});
     return response.status(502).json({error:"Video lookup failed"});

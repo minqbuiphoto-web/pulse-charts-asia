@@ -22,6 +22,12 @@ for (const chart of data.charts) {
   if (!chart.sourceUrl || !chart.updatedAt) throw new Error(`Missing source metadata: ${chart.label}`);
   const expectedRows = chart.id.includes("evergreen") ? 50 : 20;
   if (!Array.isArray(chart.songs) || chart.songs.length !== expectedRows) throw new Error(`${chart.label} must contain ${expectedRows} rows.`);
+  if (chart.id.includes("evergreen")) {
+    if (chart.songs.some((song) => !song.videoId || !Number.isFinite(song.viewCount) || song.viewCount < 0)) throw new Error(`Missing measured views in ${chart.label}.`);
+    if (chart.songs.some((song, index) => index > 0 && chart.songs[index - 1].viewCount < song.viewCount)) throw new Error(`Evergreen chart is not sorted by views: ${chart.label}.`);
+    if (new Set(chart.songs.map((song) => song.videoId)).size !== chart.songs.length) throw new Error(`Duplicate measured video in ${chart.label}.`);
+    if (!chart.syncWarning?.includes("strictly")) throw new Error(`Missing strict-ranking policy: ${chart.label}.`);
+  }
   if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE") && !chart.syncWarning?.includes("BALLAD-ONLY RULE")) throw new Error(`Missing curation policy: ${chart.label}`);
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
