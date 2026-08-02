@@ -10,6 +10,15 @@ type SearchResult={videoId:string;title:string;artist:string;lyrics:string;synce
 type StudioSong=SearchResult;
 type TimedLine={time:number;text:string};
 type ChatMessage={role:"assistant"|"user";text:string};
+type SavedProject={
+  version:1;
+  key:string;
+  song:StudioSong;
+  translations:Record<number,string>;
+  literalMeanings:Record<number,string>;
+  tonePatterns:Record<number,string>;
+  updatedAt:string;
+};
 
 type YTPlayer={
   destroy:()=>void;
@@ -54,6 +63,8 @@ function parseTimedLyrics(value:string){
 function plainLines(value:string){
   return value.split(/\r?\n+/).map((line)=>line.trim()).filter(Boolean);
 }
+
+const PROJECT_LIBRARY_KEY="pulse-studio::project-library-v1";
 
 function storageKey(song:Pick<StudioSong,"title"|"artist">){
   return "pulse-studio::"+(song.title+"::"+song.artist).normalize("NFKC").toLocaleLowerCase("en");
@@ -122,6 +133,8 @@ export default function LyricStudio(){
   const [translations,setTranslations]=useState<Record<number,string>>({});
   const [literalMeanings,setLiteralMeanings]=useState<Record<number,string>>({});
   const [tonePatterns,setTonePatterns]=useState<Record<number,string>>({});
+  const [savedProjects,setSavedProjects]=useState<SavedProject[]>([]);
+  const [saveNote,setSaveNote]=useState("Chưa có thay đổi để lưu.");
   const [literalDraft,setLiteralDraft]=useState("");
   const [literalNote,setLiteralNote]=useState("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
   const [ytReady,setYtReady]=useState(()=>typeof window!=="undefined"&&Boolean(window.YT?.Player));
@@ -140,6 +153,16 @@ export default function LyricStudio(){
   const playerRef=useRef<YTPlayer|null>(null);
   const timerRef=useRef<number|undefined>(undefined);
   const lineRefs=useRef<Array<HTMLDivElement|null>>([]);
+
+  useEffect(()=>{
+    const timer=window.setTimeout(()=>{
+      try{
+        const saved=JSON.parse(localStorage.getItem(PROJECT_LIBRARY_KEY)??"[]") as SavedProject[];
+        setSavedProjects(Array.isArray(saved)?saved.filter((project)=>project?.version===1&&project.song?.videoId):[]);
+      }catch{setSavedProjects([]);}
+    },0);
+    return()=>window.clearTimeout(timer);
+  },[]);
 
   useEffect(()=>{
     if(window.YT?.Player){window.setTimeout(()=>setYtReady(true),0);return;}
@@ -189,6 +212,20 @@ export default function LyricStudio(){
       player.destroy();
     };
   },[song,ytReady]);
+
+  useEffect(()=>{
+    if(!song)return;
+    const timer=window.setTimeout(()=>{
+      const project:SavedProject={version:1,key:storageKey(song),song,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()};
+      setSavedProjects((current)=>{
+        const next=[project,...current.filter((item)=>item.key!==project.key)].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)).slice(0,20);
+        try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
+        return next;
+      });
+      setSaveNote("Đã tự lưu lúc "+new Date().toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}));
+    },350);
+    return()=>window.clearTimeout(timer);
+  },[song,translations,literalMeanings,tonePatterns]);
 
   const syncedTimeline=useMemo(()=>parseTimedLyrics(song?.syncedLyrics??""),[song?.syncedLyrics]);
   const timeline=useMemo(()=>{
@@ -262,6 +299,43 @@ export default function LyricStudio(){
     }catch{setTonePatterns({});}
     setLiteralDraft("");
     setLiteralNote("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
+  };
+
+  const resumeProject=(project:SavedProject)=>{
+    setSong(project.song);
+    setTranslations(project.translations??{});
+    setLiteralMeanings(project.literalMeanings??{});
+    setTonePatterns(project.tonePatterns??{});
+    setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setFollowPlayback(true);setEditingLine(null);
+    setSaveNote("Đã mở bản lưu gần nhất.");
+    window.setTimeout(()=>document.querySelector(".studio-workspace")?.scrollIntoView({behavior:"smooth",block:"start"}),50);
+  };
+
+  const exportProject=(project?:SavedProject)=>{
+    const selected=project??(song?{version:1 as const,key:storageKey(song),song,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()}:null);
+    if(!selected)return;
+    const blob=new Blob([JSON.stringify(selected,null,2)],{type:"application/json;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const anchor=document.createElement("a");
+    anchor.href=url;anchor.download=safeFileName(selected.song.artist+" - "+selected.song.title+" - Pulse Studio")+".json";
+    document.body.appendChild(anchor);anchor.click();anchor.remove();
+    window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
+  const importProject=async(file:File|null)=>{
+    if(!file)return;
+    try{
+      const candidate=JSON.parse(await file.text()) as SavedProject;
+      if(candidate.version!==1||!candidate.song?.videoId||!candidate.song?.title||!candidate.song?.artist)throw new Error("invalid");
+      const project:SavedProject={...candidate,key:storageKey(candidate.song),translations:candidate.translations??{},literalMeanings:candidate.literalMeanings??{},tonePatterns:candidate.tonePatterns??{},updatedAt:new Date().toISOString()};
+      setSavedProjects((current)=>{
+        const next=[project,...current.filter((item)=>item.key!==project.key)].slice(0,20);
+        try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
+        return next;
+      });
+      resumeProject(project);
+      setSaveNote("Đã nhập và khôi phục bản dự phòng.");
+    }catch{setSaveNote("File dự phòng không hợp lệ hoặc đã bị hỏng.");}
   };
 
   const applyManualLyrics=()=>{
@@ -425,10 +499,15 @@ export default function LyricStudio(){
       </article>}
     </section>
 
+    <section className="project-library">
+      <div className="project-library-head"><div><small>LƯU CÔNG VIỆC MIỄN PHÍ</small><h2>Bản đang làm</h2><p>Tự lưu trên thiết bị này · xuất file dự phòng để chuyển máy hoặc khôi phục.</p></div><label className="import-project">NHẬP FILE DỰ PHÒNG<input type="file" accept="application/json,.json" onChange={(event)=>{void importProject(event.target.files?.[0]??null);event.currentTarget.value="";}}/></label></div>
+      {savedProjects.length?<div className="project-list">{savedProjects.slice(0,8).map((project)=><article key={project.key}><div><b>{project.song.title}</b><span>{project.song.artist}</span><small>{new Date(project.updatedAt).toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}</small></div><div><button onClick={()=>resumeProject(project)}>MỞ LẠI</button><button onClick={()=>exportProject(project)}>TẢI BACKUP</button></div></article>)}</div>:<p className="project-empty">Chưa có bản lưu. Khi bạn đưa một bài vào Studio và bắt đầu viết, hệ thống sẽ tự tạo bản lưu đầu tiên.</p>}
+    </section>
+
     {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
     <section className="studio-workspace">
       <div className="translation-column">
-        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button></div></div>
+        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
 
         <div className="player-card">
           <div ref={playerMountRef} className="youtube-mount"/>

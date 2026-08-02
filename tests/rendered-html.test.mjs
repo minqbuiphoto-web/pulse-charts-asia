@@ -56,6 +56,11 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /toneSlotValues/);
   assert.match(source, /maxLength={1}/);
   assert.match(source, /replace\(\/\[\?!！？\]\//);
+  assert.match(source, /PROJECT_LIBRARY_KEY/);
+  assert.match(source, /SavedProject/);
+  assert.match(source, /Bản đang làm/);
+  assert.match(source, /NHẬP FILE DỰ PHÒNG/);
+  assert.match(source, /TẢI DỰ PHÒNG \.JSON/);
 });
 
 test("exports Vietnamese lyrics as a continuous Word document", async () => {
