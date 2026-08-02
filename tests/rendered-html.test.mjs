@@ -33,6 +33,15 @@ test("renders the separate lyric translation studio", async () => {
   assert.match(html, /KHÔNG GIAN MIỄN PHÍ/);
 });
 
+test("supports sentence-by-sentence literal meanings before lyric adaptation", async () => {
+  const source = await readFile(new URL("../app/studio/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /literalMeanings/);
+  assert.match(source, /literalStorageKey/);
+  assert.match(source, /ÁP VÀO TỪNG CÂU/);
+  assert.match(source, /NGHĨA SÁT/);
+  assert.match(source, /LỜI VIỆT/);
+});
+
 test("exports Vietnamese lyrics as a continuous Word document", async () => {
   const source = await readFile(new URL("../app/studio/page.tsx", import.meta.url), "utf8");
   assert.match(source, /XUẤT LỜI VIỆT \.DOC/);

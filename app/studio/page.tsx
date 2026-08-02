@@ -59,6 +59,23 @@ function storageKey(song:Pick<StudioSong,"title"|"artist">){
   return "pulse-studio::"+(song.title+"::"+song.artist).normalize("NFKC").toLocaleLowerCase("en");
 }
 
+function literalStorageKey(song:Pick<StudioSong,"title"|"artist">){
+  return storageKey(song)+"::literal-meaning";
+}
+
+function normalizedLine(value:string){
+  return value.normalize("NFKC").toLocaleLowerCase("en").replace(/^\s*(?:[-–—•*]|\d+[.)])\s*/,"").replace(/\s+/g," ").trim();
+}
+
+function literalLines(value:string,originals:string[]){
+  const originalSet=new Set(originals.map(normalizedLine));
+  return value.split(/\r?\n/)
+    .map((line)=>line.replace(/^\s*(?:[-–—•*]|\d+[.)])\s*/,"").trim())
+    .filter(Boolean)
+    .filter((line)=>!originalSet.has(normalizedLine(line)))
+    .filter((line)=>!/^(?:bản dịch|dịch sát nghĩa|nghĩa tiếng việt)\s*:?$/i.test(line));
+}
+
 function safeFileName(value:string){
   return value.normalize("NFKC").replace(/[\\/:*?"<>|]+/g,"-").trim().slice(0,120)||"lyric-translation";
 }
@@ -84,6 +101,9 @@ export default function LyricStudio(){
   const [song,setSong]=useState<StudioSong|null>(null);
   const [manualLyrics,setManualLyrics]=useState("");
   const [translations,setTranslations]=useState<Record<number,string>>({});
+  const [literalMeanings,setLiteralMeanings]=useState<Record<number,string>>({});
+  const [literalDraft,setLiteralDraft]=useState("");
+  const [literalNote,setLiteralNote]=useState("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
   const [ytReady,setYtReady]=useState(()=>typeof window!=="undefined"&&Boolean(window.YT?.Player));
   const [currentTime,setCurrentTime]=useState(0);
   const [duration,setDuration]=useState(0);
@@ -205,12 +225,38 @@ export default function LyricStudio(){
       const saved=JSON.parse(localStorage.getItem(storageKey(result))??"{}") as Record<number,string>;
       setTranslations(saved);
     }catch{setTranslations({});}
+    try{
+      const savedLiteral=JSON.parse(localStorage.getItem(literalStorageKey(result))??"{}") as Record<number,string>;
+      setLiteralMeanings(savedLiteral);
+    }catch{setLiteralMeanings({});}
+    setLiteralDraft("");
+    setLiteralNote("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
   };
 
   const applyManualLyrics=()=>{
     if(!song||!manualLyrics.trim())return;
     const next={...song,lyrics:manualLyrics.trim(),syncedLyrics:""};
     setSong(next);setManualLyrics("");
+  };
+
+  const applyLiteralDraft=()=>{
+    if(!song||!timeline.length||!literalDraft.trim())return;
+    const parsed=literalLines(literalDraft,timeline.map((line)=>line.text));
+    const next:Record<number,string>={...literalMeanings};
+    parsed.slice(0,timeline.length).forEach((line,index)=>{next[index]=line;});
+    setLiteralMeanings(next);
+    try{localStorage.setItem(literalStorageKey(song),JSON.stringify(next));}catch{}
+    setLiteralNote(parsed.length===timeline.length
+      ?"Đã ghép đủ "+parsed.length+" câu dịch sát nghĩa với lời gốc."
+      :"Đã ghép "+Math.min(parsed.length,timeline.length)+"/"+timeline.length+" câu. Bạn có thể sửa trực tiếp từng dòng còn thiếu.");
+  };
+
+  const updateLiteralMeaning=(index:number,value:string)=>{
+    setLiteralMeanings((current)=>{
+      const next={...current,[index]:value};
+      if(song)try{localStorage.setItem(literalStorageKey(song),JSON.stringify(next));}catch{}
+      return next;
+    });
   };
 
   const updateTranslation=(index:number,value:string)=>{
@@ -243,7 +289,7 @@ export default function LyricStudio(){
 
   const downloadTranslation=()=>{
     if(!song||!timeline.length)return;
-    const content=timeline.map((line,index)=>line.text+"\n"+(translations[index]??"")).join("\n\n");
+    const content=timeline.map((line,index)=>[line.text,literalMeanings[index]??"",translations[index]??""].filter(Boolean).join("\n")).join("\n\n");
     const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
     const url=URL.createObjectURL(blob);
     const anchor=document.createElement("a");
@@ -335,11 +381,18 @@ export default function LyricStudio(){
 
         {!timeline.length&&<div className="manual-lyrics"><h3>Không tìm thấy lyric gốc</h3><p>Dán lyric gốc vào dưới đây. Mỗi dòng không trống sẽ trở thành một câu dịch và được canh giờ gần đúng.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Dán mỗi câu lyric trên một dòng…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>DÙNG LYRIC NÀY</button></div>}
 
+        {timeline.length>0&&<section className="literal-import">
+          <div className="literal-import-head"><div><small>BƯỚC ĐỆM · DỊCH SÁT NGHĨA</small><h3>Áp nghĩa tiếng Việt theo từng câu</h3><p>Bản dịch này dùng để hiểu đúng nội dung; ô “Lời Việt” bên dưới vẫn dành cho câu hát bạn sáng tác.</p></div><span>{Object.values(literalMeanings).filter((value)=>value.trim()).length}/{timeline.length} CÂU</span></div>
+          <textarea value={literalDraft} onChange={(event)=>setLiteralDraft(event.target.value)} placeholder={"Dán toàn bộ bản dịch sát nghĩa vào đây. Có thể dán dạng:\nLời gốc câu 1\nNghĩa tiếng Việt câu 1\nLời gốc câu 2\nNghĩa tiếng Việt câu 2"} />
+          <div className="literal-import-actions"><button onClick={applyLiteralDraft} disabled={!literalDraft.trim()}>ÁP VÀO TỪNG CÂU</button><button onClick={async()=>{await copyText(fullSongTranslationRequest());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP YÊU CẦU DỊCH TOÀN BÀI"}</button></div>
+          <p className="literal-note">{literalNote}</p>
+        </section>}
+
         {timeline.length>0&&<div className="line-editor">
-          <div className="line-editor-head"><span>#</span><span>LYRIC GỐC + BẢN DỊCH TIẾNG VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
+          <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
-            <div><p>{line.text}</p><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric dịch tiếng Việt cho câu này…"/></div>
+            <div className="lyric-writing"><p>{line.text}</p><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}
         </div>}
