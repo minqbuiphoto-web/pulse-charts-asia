@@ -68,7 +68,18 @@ function toneStorageKey(song:Pick<StudioSong,"title"|"artist">){
 }
 
 function cleanTonePattern(value:string){
-  return value.toLocaleUpperCase("en").replace(/[^NHS\s,.-]/g,"").replace(/\s+/g," ").trimStart();
+  return value.toLocaleUpperCase("en").replace(/[^NHS\s,]/g,"").replace(/\s+/g," ").trimStart();
+}
+
+function lyricToneUnits(value:string){
+  const clean=value.replace(/[?!！？]/g," ");
+  const mixed=clean.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]|[\p{L}\p{N}]+/gu)??[];
+  return mixed.filter((unit)=>/[\p{L}\p{N}]/u.test(unit));
+}
+
+function toneSlotValues(value:string,count:number){
+  const raw=value.includes(",")?value.split(","):value.trim().split(/\s+/);
+  return Array.from({length:count},(_,index)=>/^[NHS]$/.test(raw[index]??"")?raw[index]:"");
 }
 
 function normalizedLine(value:string){
@@ -287,9 +298,11 @@ export default function LyricStudio(){
     });
   };
 
-  const appendTone=(index:number,tone:"N"|"H"|"S")=>{
-    const current=(tonePatterns[index]??"").trim();
-    updateTonePattern(index,current?current+" "+tone:tone);
+  const updateToneSlot=(lineIndex:number,slotIndex:number,value:string)=>{
+    const count=lyricToneUnits(timeline[lineIndex]?.text??"").length;
+    const slots=toneSlotValues(tonePatterns[lineIndex]??"",count);
+    slots[slotIndex]=value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);
+    updateTonePattern(lineIndex,slots.join(","));
   };
 
   const updateTranslation=(index:number,value:string)=>{
@@ -448,7 +461,7 @@ export default function LyricStudio(){
           <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
-            <div className="lyric-writing"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label><div className="tone-field"><div className="tone-field-head"><span>THANH ÂM</span><small>N · NGANG &nbsp; H · HUYỀN &nbsp; S · SẮC</small></div><div className="tone-compose"><input value={tonePatterns[index]??""} onChange={(event)=>updateTonePattern(index,event.target.value)} placeholder="Ví dụ: N H S N…" aria-label={"Thanh âm cho câu "+(index+1)}/><div className="tone-buttons"><button type="button" onClick={()=>appendTone(index,"N")}>N</button><button type="button" onClick={()=>appendTone(index,"H")}>H</button><button type="button" onClick={()=>appendTone(index,"S")}>S</button><button type="button" className="tone-clear" onClick={()=>updateTonePattern(index,"")} disabled={!tonePatterns[index]}>XÓA</button></div></div></div></div>
+            <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}
         </div>}

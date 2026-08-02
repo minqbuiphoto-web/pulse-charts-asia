@@ -49,9 +49,13 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY/);
   assert.match(source, /tonePatterns/);
   assert.match(source, /toneStorageKey/);
-  assert.match(source, /N · NGANG/);
-  assert.match(source, /H · HUYỀN/);
-  assert.match(source, /S · SẮC/);
+  assert.match(source, /N NGANG/);
+  assert.match(source, /H HUYỀN/);
+  assert.match(source, /S SẮC/);
+  assert.match(source, /lyricToneUnits/);
+  assert.match(source, /toneSlotValues/);
+  assert.match(source, /maxLength={1}/);
+  assert.match(source, /replace\(\/\[\?!！？\]\//);
 });
 
 test("exports Vietnamese lyrics as a continuous Word document", async () => {
