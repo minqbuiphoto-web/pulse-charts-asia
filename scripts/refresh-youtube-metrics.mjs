@@ -1,8 +1,5 @@
 import { readFile, writeFile } from "node:fs/promises";
 
-const apiKey = process.env.YOUTUBE_API_KEY;
-if (!apiKey) throw new Error("YOUTUBE_API_KEY is required for the weekly refresh.");
-
 const files = ["charts-main.json", "charts-ost.json", "charts-classics.json", "charts-rnb.json"];
 const appDir = new URL("../app/", import.meta.url);
 const documents = await Promise.all(files.map(async (file) => ({
@@ -14,21 +11,38 @@ const documents = await Promise.all(files.map(async (file) => ({
 const songs = documents.flatMap(({ data }) => data.charts.flatMap((chart) => chart.songs));
 const videoIds = [...new Set(songs.map((song) => song.videoId).filter(Boolean))];
 const viewCounts = new Map();
+let cursor = 0;
 
-for (let index = 0; index < videoIds.length; index += 50) {
-  const ids = videoIds.slice(index, index + 50);
-  const endpoint = new URL("https://www.googleapis.com/youtube/v3/videos");
-  endpoint.searchParams.set("part", "statistics");
-  endpoint.searchParams.set("id", ids.join(","));
-  endpoint.searchParams.set("key", apiKey);
-  const response = await fetch(endpoint, { headers: { accept: "application/json" } });
-  if (!response.ok) throw new Error(`YouTube API returned ${response.status}: ${await response.text()}`);
-  const payload = await response.json();
-  for (const item of payload.items ?? []) {
-    const count = Number(item.statistics?.viewCount);
-    if (Number.isSafeInteger(count) && count >= 0) viewCounts.set(item.id, count);
+async function fetchPublicViews(videoId) {
+  for (let attempt = 0; attempt < 3; attempt += 1) {
+    try {
+      const endpoint = new URL("https://returnyoutubedislikeapi.com/votes");
+      endpoint.searchParams.set("videoId", videoId);
+      const response = await fetch(endpoint, {
+        headers: { accept: "application/json", "user-agent": "Pulse-Charts-Weekly-Refresh/1.0" },
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (response.ok) {
+        const count = Number((await response.json()).viewCount);
+        if (Number.isSafeInteger(count) && count >= 0) return count;
+      }
+    } catch {
+      // Retry transient network and timeout failures.
+    }
+    await new Promise((resolve) => setTimeout(resolve, 750 * (attempt + 1)));
+  }
+  return null;
+}
+
+async function worker() {
+  while (cursor < videoIds.length) {
+    const videoId = videoIds[cursor++];
+    const count = await fetchPublicViews(videoId);
+    if (count !== null) viewCounts.set(videoId, count);
   }
 }
+
+await Promise.all(Array.from({ length: 12 }, () => worker()));
 
 if (viewCounts.size < Math.max(1, Math.floor(videoIds.length * 0.8))) {
   throw new Error(`YouTube returned only ${viewCounts.size}/${videoIds.length} video statistics; keeping the previous dataset.`);

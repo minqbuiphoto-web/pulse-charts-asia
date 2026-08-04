@@ -24,7 +24,7 @@ The workflow in `.github/workflows/weekly-refresh.yml` runs every Monday at 09:0
 5. builds the production site;
 6. commits verified data changes to GitHub, which triggers Vercel's Git deployment.
 
-Add a GitHub Actions repository secret named `YOUTUBE_API_KEY`. YouTube Data API v3's normal free quota is sufficient for the weekly statistics lookup.
+The refresh uses the public Return YouTube Dislike statistics endpoint, so no API key or paid service is required.
 
 ## Deploy with Vercel
 
