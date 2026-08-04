@@ -1,21 +1,31 @@
 # Pulse Charts
 
-Pulse Charts is an independent English-language Asian music discovery product with nine Top 20 charts across Korea, Japan and Mainland China.
-
-It includes market filters, chart-specific search, source transparency, embedded YouTube playback, automatic lyrics lookup through LRCLIB, browser-saved media overrides, mobile-first playback, and a focused track panel. The visual covers use CSS instead of external image files, preventing broken artwork icons.
-
-## Data transparency
-
-The Japan Billboard and China QQ Music views link to their named sources. Korea Pop, Korea Ballad, and the OST views are restored discovery snapshots from the original seven-chart system. Curated views are labelled as snapshots and are not presented as official national rankings.
+Pulse Charts is an independent Asian music discovery and lyric-production web app. It currently ships 19 charts with 50 ranked rows each, embedded YouTube playback, lyrics tools, a lyric-writing studio, cover studio, and MV studio.
 
 ## Run locally
 
-Install Node.js, run npm install, then run npm run dev.
+1. Install Node.js 22 or newer.
+2. Run `npm install`.
+3. Run `npm run dev`.
 
 ## Verify and build
 
-Run npm test. It validates nine charts and 180 ranked tracks, creates the production build, and runs rendering checks.
+Run `npm run sync` to validate and export all 19 charts / 950 ranked rows.
+Run `npm run build:pages` to create the static production build.
 
-## Deploy
+## Free weekly automation
 
-Import this folder into Vercel or run vercel --prod. The site is static-first and needs no database or paid API.
+The workflow in `.github/workflows/weekly-refresh.yml` runs every Monday at 09:00 Bangkok time. It:
+
+1. retrieves current YouTube view counts for the videos already used by the charts;
+2. re-sorts every evergreen chart by measured views;
+3. keeps unavailable videos unchanged and aborts if too many results are missing;
+4. validates all chart, recency, OST grouping, ballad, R&B and video rules;
+5. builds the production site;
+6. commits verified data changes to GitHub, which triggers Vercel's Git deployment.
+
+Add a GitHub Actions repository secret named `YOUTUBE_API_KEY`. YouTube Data API v3's normal free quota is sufficient for the weekly statistics lookup.
+
+## Deploy with Vercel
+
+Import the GitHub repository into Vercel once. Keep the included `vercel.json`; Vercel will deploy every verified commit automatically. No database or paid server is required.

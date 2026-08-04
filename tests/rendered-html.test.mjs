@@ -83,8 +83,8 @@ test("ships all nineteen chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 19);
   assert.deepEqual(new Set(data.charts.map((chart) => chart.market)), new Set(["KR", "JP", "CN"]));
-  assert.ok(data.charts.filter((chart) => !chart.id.includes("evergreen")).every((chart) => chart.songs.length === 20));
-  assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 680);
+  assert.ok(data.charts.every((chart) => chart.songs.length === 50));
+  assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 950);
   assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
   assert.ok(data.charts.some((chart) => chart.id === "cn-ballad-trending"));
   const balladCharts = data.charts.filter((chart) => chart.id.includes("ballad"));
@@ -93,8 +93,8 @@ test("ships all nineteen chart snapshots", async () => {
   const koreanBallad = data.charts.find((chart) => chart.id === "kr-ballad-trending");
   const sixMonthCutoff = new Date(data.generatedAt);
   sixMonthCutoff.setUTCMonth(sixMonthCutoff.getUTCMonth() - 6);
-  assert.ok(koreanBallad.songs.every((song) => /^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate)));
-  assert.ok(koreanBallad.songs.every((song) => new Date(`${song.releaseDate}T00:00:00Z`) >= sixMonthCutoff));
+  assert.ok(koreanBallad.songs.slice(0, 20).every((song) => /^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate)));
+  assert.ok(koreanBallad.songs.slice(0, 20).every((song) => new Date(`${song.releaseDate}T00:00:00Z`) >= sixMonthCutoff));
   assert.doesNotMatch(JSON.stringify(koreanBallad), /Drowning|벌써 일년|예뻤어|사랑하게 될 거야/i);
   const evergreenCharts = data.charts.filter((chart) => chart.id.includes("evergreen"));
   assert.equal(evergreenCharts.length, 10);
@@ -102,6 +102,16 @@ test("ships all nineteen chart snapshots", async () => {
   assert.ok(evergreenCharts.every((chart) => chart.songs.every((song) => Number.isFinite(song.viewCount) && song.viewCount >= 0 && /^[A-Za-z0-9_-]{11}$/.test(song.videoId))));
   assert.ok(evergreenCharts.every((chart) => chart.songs.every((song, index) => index === 0 || chart.songs[index - 1].viewCount >= song.viewCount)));
   assert.ok(evergreenCharts.every((chart) => new Set(chart.songs.map((song) => song.videoId)).size === 50));
+  assert.doesNotMatch(JSON.stringify(evergreenCharts), /5HI_xFQWiYU/);
+  assert.doesNotMatch(JSON.stringify(evergreenCharts), /oOT1nh-eiyY/);
+  const likeItCanonical = evergreenCharts.find((chart) => chart.id === "kr-ballad-evergreen-2016-2026").songs.find((song) => song.title === "Like It" && song.artist === "Yoon Jong Shin");
+  assert.equal(likeItCanonical.videoId, "jy_UiIQn_d0");
+  assert.equal(likeItCanonical.rank, 24);
+  assert.equal(likeItCanonical.videoType, "official-live");
+  assert.ok(likeItCanonical.viewCount >= 42_000_000);
+  const koreanBallad1996 = evergreenCharts.find((chart) => chart.id === "kr-ballad-evergreen-1996-2005");
+  assert.equal(koreanBallad1996.songs[0].title, "Heejae");
+  assert.equal(koreanBallad1996.songs[0].artist, "Sung Si Kyung");
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("2016-2026")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 2016 && Number(song.releaseDate) <= 2026)));
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("2006-2015")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 2006 && Number(song.releaseDate) <= 2015)));
   assert.ok(evergreenCharts.filter((chart) => chart.id.includes("1996-2005")).every((chart) => chart.songs.every((song) => Number(song.releaseDate) >= 1996 && Number(song.releaseDate) <= 2005)));

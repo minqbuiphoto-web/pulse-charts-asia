@@ -1,41 +1,42 @@
 {
-    "name":  "pulse-charts",
-    "version":  "1.1.0",
-    "private":  true,
-    "engines":  {
-                    "node":  "\u003e=22.13.0"
-                },
-    "scripts":  {
-                    "sync":  "node scripts/sync-charts.mjs",
-                    "dev":  "vinext dev",
-                    "build":  "next build \u0026\u0026 node -e \"require(\u0027node:fs\u0027).cpSync(\u0027out\u0027,\u0027dist\u0027,{recursive:true})\"",
-                    "build:pages":  "next build \u0026\u0026 node -e \"require(\u0027node:fs\u0027).cpSync(\u0027out\u0027,\u0027dist\u0027,{recursive:true})\"",
-                    "start":  "vinext start",
-                    "test":  "npm run sync \u0026\u0026 npm run build:vinext \u0026\u0026 node --test tests/rendered-html.test.mjs",
-                    "lint":  "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern out",
-                    "build:vinext":  "vinext build"
-                },
-    "dependencies":  {
-                         "next":  "16.2.6",
-                         "react":  "19.2.6",
-                         "react-dom":  "19.2.6"
-                     },
-    "devDependencies":  {
-                            "@cloudflare/vite-plugin":  "1.37.1",
-                            "@tailwindcss/postcss":  "4.2.1",
-                            "@types/node":  "22.19.19",
-                            "@types/react":  "19.2.14",
-                            "@types/react-dom":  "19.2.3",
-                            "@vitejs/plugin-react":  "6.0.2",
-                            "@vitejs/plugin-rsc":  "0.5.26",
-                            "eslint":  "9.39.4",
-                            "eslint-config-next":  "16.2.6",
-                            "react-server-dom-webpack":  "19.2.6",
-                            "tailwindcss":  "4.2.1",
-                            "typescript":  "5.9.3",
-                            "vinext":  "0.0.50",
-                            "vite":  "8.0.13",
-                            "wrangler":  "4.92.0"
-                        },
-    "type":  "module"
+  "name": "pulse-charts",
+  "version": "1.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.13.0"
+  },
+  "scripts": {
+    "sync": "node scripts/sync-charts.mjs",
+    "dev": "vinext dev",
+    "build": "next build && node -e \"require('node:fs').cpSync('out','dist',{recursive:true})\"",
+    "build:pages": "next build && node -e \"require('node:fs').cpSync('out','dist',{recursive:true})\"",
+    "start": "vinext start",
+    "test": "npm run sync && npm run build:vinext && node --test tests/rendered-html.test.mjs",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern out",
+    "build:vinext": "vinext build",
+    "refresh:weekly": "node scripts/refresh-youtube-metrics.mjs && npm run sync"
+  },
+  "dependencies": {
+    "next": "16.2.6",
+    "react": "19.2.6",
+    "react-dom": "19.2.6"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.37.1",
+    "@tailwindcss/postcss": "4.2.1",
+    "@types/node": "22.19.19",
+    "@types/react": "19.2.14",
+    "@types/react-dom": "19.2.3",
+    "@vitejs/plugin-react": "6.0.2",
+    "@vitejs/plugin-rsc": "0.5.26",
+    "eslint": "9.39.4",
+    "eslint-config-next": "16.2.6",
+    "react-server-dom-webpack": "19.2.6",
+    "tailwindcss": "4.2.1",
+    "typescript": "5.9.3",
+    "vinext": "0.0.50",
+    "vite": "8.0.13",
+    "wrangler": "4.92.0"
+  },
+  "type": "module"
 }
