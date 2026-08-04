@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-04T17:36:09.262Z",
+  "generatedAt": "2026-08-04T17:43:25.830Z",
   "charts": [
     {
       "id": "kr-ballad-evergreen-2016-2026",
@@ -8,7 +8,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -578,12 +578,12 @@
           "title": "Flower Way",
           "artist": "Kim Sejeong",
           "releaseDate": "2016",
-          "genre": "Ballad · 9,694,461 YouTube views",
+          "genre": "Ballad · 9,694,542 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=OnnzqzlcCaY",
           "artistUrl": "https://www.youtube.com/watch?v=OnnzqzlcCaY",
           "videoId": "OnnzqzlcCaY",
-          "viewCount": 9694461,
+          "viewCount": 9694542,
           "videoType": "official-live",
           "videoChannel": "Dingo Music",
           "reviewed": true
@@ -649,12 +649,12 @@
           "title": "My Love",
           "artist": "BAEKHYUN",
           "releaseDate": "2020",
-          "genre": "Ballad · 3,421,268 YouTube views",
+          "genre": "Ballad · 3,421,771 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=PSQo6wh6ZHw",
           "artistUrl": "https://www.youtube.com/watch?v=PSQo6wh6ZHw",
           "videoId": "PSQo6wh6ZHw",
-          "viewCount": 3421268
+          "viewCount": 3421771
         },
         {
           "rank": 46,
@@ -733,7 +733,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -1033,12 +1033,12 @@
           "title": "You and I",
           "artist": "Park Bom",
           "releaseDate": "2009",
-          "genre": "Ballad · 35,380,831 YouTube views",
+          "genre": "Ballad · 35,387,446 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=64VZUNTmGQM",
           "artistUrl": "https://www.youtube.com/watch?v=64VZUNTmGQM",
           "videoId": "64VZUNTmGQM",
-          "viewCount": 35380831
+          "viewCount": 35387446
         },
         {
           "rank": 23,
@@ -1446,7 +1446,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
@@ -1854,12 +1854,12 @@
           "title": "平行世界 Parallel",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2021",
-          "genre": "Ballad ? 16,143,735 YouTube views",
+          "genre": "Ballad ? 16,145,005 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=JW52KtyGMBI",
           "artistUrl": "https://www.youtube.com/watch?v=JW52KtyGMBI",
           "videoId": "JW52KtyGMBI",
-          "viewCount": 16143735
+          "viewCount": 16145005
         },
         {
           "rank": 31,
@@ -2007,12 +2007,12 @@
           "title": "无问",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 3,845,123 YouTube views",
+          "genre": "Ballad ? 3,847,335 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ZCYqEeIW4WY",
           "artistUrl": "https://www.youtube.com/watch?v=ZCYqEeIW4WY",
           "videoId": "ZCYqEeIW4WY",
-          "viewCount": 3845123
+          "viewCount": 3847335
         },
         {
           "rank": 42,
@@ -2089,12 +2089,12 @@
           "title": "借 Borrow",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 1,412,638 YouTube views",
+          "genre": "Ballad ? 1,414,662 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=QIPJBAYLbYg",
           "artistUrl": "https://www.youtube.com/watch?v=QIPJBAYLbYg",
           "videoId": "QIPJBAYLbYg",
-          "viewCount": 1412638
+          "viewCount": 1414662
         },
         {
           "rank": 48,
@@ -2144,7 +2144,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
@@ -2428,12 +2428,12 @@
           "title": "因为爱情 Because of Love",
           "artist": "Faye Wong & Eason Chan",
           "releaseDate": "2011",
-          "genre": "Ballad ? 38,417,051 YouTube views",
+          "genre": "Ballad ? 38,420,391 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=VdwAkhNdZi8",
           "artistUrl": "https://www.youtube.com/watch?v=VdwAkhNdZi8",
           "videoId": "VdwAkhNdZi8",
-          "viewCount": 38417051
+          "viewCount": 38420391
         },
         {
           "rank": 23,
@@ -2822,7 +2822,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -3104,12 +3104,12 @@
           "title": "Drunken Truth",
           "artist": "Exhibition",
           "releaseDate": "1996",
-          "genre": "Ballad · 8,520,163 YouTube views",
+          "genre": "Ballad · 8,520,813 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=m7sXgHXPGN0",
           "artistUrl": "https://www.youtube.com/watch?v=m7sXgHXPGN0",
           "videoId": "m7sXgHXPGN0",
-          "viewCount": 8520163
+          "viewCount": 8520813
         },
         {
           "rank": 20,
@@ -3574,7 +3574,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-08-04T17:36:09.262Z",
+      "updatedAt": "2026-08-04T17:43:25.830Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
