@@ -86,6 +86,17 @@ test("ships all nineteen chart snapshots", async () => {
   assert.ok(data.charts.every((chart) => chart.songs.length === 50));
   assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 950);
   assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
+  const ostCharts = data.charts.filter((chart) => chart.id.includes("ost-trending"));
+  for (const chart of ostCharts) {
+    const groups = new Map();
+    for (const song of chart.songs) { const key = song.album ?? song.filmTitle; groups.set(key, [...(groups.get(key) ?? []), song]); }
+    for (const group of groups.values()) {
+      const tracks = [...group, ...(group[0].albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
+      const uniqueCount = new Set(tracks.map((song) => song.videoId)).size;
+      assert.ok(uniqueCount >= 0 && uniqueCount <= 5);
+      assert.doesNotMatch(tracks.map((song) => song.videoTitle ?? song.title).join(" "), /teaser|trailer|shorts?|instrumental|piano|karaoke|fancam/i);
+    }
+  }
   assert.ok(data.charts.some((chart) => chart.id === "cn-ballad-trending"));
   const balladCharts = data.charts.filter((chart) => chart.id.includes("ballad"));
   assert.ok(balladCharts.every((chart) => chart.songs.every((song) => /ballad/i.test(song.genre))));

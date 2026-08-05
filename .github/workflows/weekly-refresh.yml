@@ -26,7 +26,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci
-      - name: Refresh measured YouTube views and verify every chart
+      - name: Refresh five-track OST albums, measured YouTube views, and verify every chart
         run: npm run refresh:weekly
       - name: Build the production site
         run: npm run build:pages

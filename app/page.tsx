@@ -9,9 +9,10 @@ import ostSnapshot from "./charts-ost.json";
 import classicsSnapshot from "./charts-classics.json";
 import rnbSnapshot from "./charts-rnb.json";
 import videoLinks from "./video-links.json";
+import ValidatedYouTubePlayer from "./validated-youtube-player";
 
 type Market="KR"|"JP"|"CN";
-type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string; videoId?:string; viewCount?:number; filmTitle?:string; album?:string; albumTrackCount?:number; albumTracks?:Song[] };
+type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string; videoId?:string; viewCount?:number; durationSeconds?:number; filmTitle?:string; album?:string; albumTrackCount?:number; albumTracks?:Song[] };
 type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
 const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts,...rnbSnapshot.charts] } as ChartData;
@@ -68,6 +69,8 @@ export default function Home(){
   const [ostView,setOstView]=useState<"albums"|"tracks">("albums");
   const [selected,setSelected]=useState<Song|null>(initialData.charts[0]?.songs[0]??null);
   const [playingId,setPlayingId]=useState("");
+  const [rejectedVideos,setRejectedVideos]=useState<string[]>([]);
+  const [videoIssue,setVideoIssue]=useState("");
   const [resolvedVideos,setResolvedVideos]=useState<Record<string,string>>({});
   const [customVideos,setCustomVideos]=useState<Record<string,string>>({});
   const [videoLink,setVideoLink]=useState("");
@@ -97,9 +100,10 @@ export default function Home(){
   const isOstChart=Boolean(active?.id.includes("ost-trending"));
   const filteredTracks=!active?[]:!needle?active.songs:active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre} ${song.filmTitle??""} ${song.album??""} ${(song.albumTracks??[]).map((track)=>`${track.title} ${track.artist}`).join(" ")}`.toLocaleLowerCase("en").includes(needle));
   const albumGroups=filteredTracks.reduce<Map<string,Song[]>>((groups,song)=>{const key=albumKey(song);groups.set(key,[...(groups.get(key)??[]),song]);return groups;},new Map());
-  const songs=isOstChart&&ostView==="albums"?[...albumGroups.values()].map((tracks)=>({...tracks[0],albumTrackCount:tracks.length+(tracks[0].albumTracks?.length??0)})):filteredTracks;
-  const ostTrackTotal=isOstChart&&active?active.songs.reduce((total,song)=>total+1+(song.albumTracks?.length??0),0):0;
-  const resetTrackTools=()=>{ setPlayingId("");setVideoStatus("idle");setVideoLink("");setLyrics("");setSyncedLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
+  const playableAlbumCount=(tracks:Song[])=>new Set([...tracks,...(tracks[0]?.albumTracks??[])].filter((song)=>song.videoId&&Number(song.durationSeconds)>=120&&Number(song.durationSeconds)<=900).map((song)=>song.videoId)).size;
+  const songs=isOstChart&&ostView==="albums"?[...albumGroups.values()].map((tracks)=>({...tracks[0],albumTrackCount:playableAlbumCount(tracks)})):filteredTracks;
+  const ostTrackTotal=isOstChart?[...albumGroups.values()].reduce((total,tracks)=>total+playableAlbumCount(tracks),0):0;
+  const resetTrackTools=()=>{ setPlayingId("");setVideoIssue("");setVideoStatus("idle");setVideoLink("");setLyrics("");setSyncedLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
   const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
   const chooseMarket=(nextMarket:Market|"ALL")=>{
     setMarket(nextMarket);
@@ -107,11 +111,13 @@ export default function Home(){
     if(!visible.some((chart)=>chart.id===activeId)&&visible[0])chooseChart(visible[0]);
   };
   const displaySong=selected??active?.songs[0]??null;
-  const selectedAlbumTracks=isOstChart&&displaySong&&active?[...active.songs.filter((song)=>albumKey(song)===albumKey(displaySong)),...(displaySong.albumTracks??[])]:[];
+  const selectedAlbumRoot=isOstChart&&displaySong&&active?active.songs.find((song)=>albumKey(song)===albumKey(displaySong)):undefined;
+  const selectedAlbumTracks=isOstChart&&displaySong&&active?[...new Map([...active.songs.filter((song)=>albumKey(song)===albumKey(displaySong)),...(selectedAlbumRoot?.albumTracks??[])].map((song)=>[trackKey(song),song])).values()].filter((song)=>song.videoId&&Number(song.durationSeconds)>=120&&Number(song.durationSeconds)<=900).sort((a,b)=>(b.viewCount??0)-(a.viewCount??0)).slice(0,5):[];
   const trackSequence=isOstChart&&ostView==="albums"?songs:(active?.songs??[]);
   const trackPosition=displaySong?trackSequence.findIndex((song)=>song.id===displaySong.id):-1;
   const currentTrackKey=displaySong?trackKey(displaySong):"";
-  const videoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??displaySong.videoId??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
+  const rawVideoId=displaySong?(youtubeTracks[currentTrackKey]??customVideos[currentTrackKey]??displaySong.videoId??youtubeVideos[displaySong.id]??resolvedVideos[currentTrackKey]):undefined;
+  const videoId=rawVideoId&&!rejectedVideos.includes(rawVideoId)?rawVideoId:undefined;
   const youtubeUrl=videoId?`https://www.youtube.com/watch?v=${videoId}`:displaySong?`https://www.youtube.com/results?search_query=${encodeURIComponent(`${displaySong.title} ${displaySong.artist} official music video`)}`:"#";
   const lyricsSearchUrl=displaySong?`https://genius.com/search?q=${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
   const musixmatchSearchUrl=displaySong?`https://www.musixmatch.com/search/${encodeURIComponent(`${displaySong.title} ${displaySong.artist}`)}`:"#";
@@ -129,7 +135,7 @@ export default function Home(){
   const resolveVideo=async(song:Song)=>{
     const key=trackKey(song);
     const cached=youtubeTracks[key]??customVideos[key]??song.videoId??youtubeVideos[song.id]??resolvedVideos[key];
-    if(cached)return cached;
+    if(cached&&!rejectedVideos.includes(cached))return cached;
     setVideoStatus("loading");
     const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
     try{
@@ -149,6 +155,11 @@ export default function Home(){
     if(lyricsStatus==="idle")void loadLyrics();
     const id=videoId??await resolveVideo(displaySong);
     if(id)setPlayingId(displaySong.id);
+  };
+
+  const rejectVideo=(reason:string)=>{
+    if(rawVideoId)setRejectedVideos((current)=>current.includes(rawVideoId)?current:[...current,rawVideoId]);
+    setPlayingId("");setVideoStatus("error");setVideoIssue(reason);
   };
 
   const saveVideoLink=()=>{
@@ -265,14 +276,14 @@ export default function Home(){
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
         {displaySong?<><div className="player-glow token-glow"/>
           <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
-          {videoId&&playingId===displaySong.id?<div className="youtube-player"><iframe src={`https://www.youtube.com/embed/${videoId}?autoplay=1&playsinline=1&rel=0`} title={`${displaySong.title} by ${displaySong.artist}`} allow="autoplay; encrypted-media; picture-in-picture" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/></div>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
+          {videoIssue?<div className="video-quality-warning"><b>VIDEO REJECTED</b><p>{videoIssue}</p><button onClick={()=>{setVideoIssue("");setVideoStatus("idle");}}>CHOOSE A FULL SONG</button></div>:videoId&&playingId===displaySong.id?<ValidatedYouTubePlayer videoId={videoId} title={`${displaySong.title} by ${displaySong.artist}`} onRejected={rejectVideo}/>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{isOstChart?(displaySong.filmTitle??displaySong.album):active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span>{isOstChart&&<small>{displaySong.album}</small>}</div>
           <div className="progress"><span/><i>{active?.id.includes("evergreen")?"MEASURED VIEWS":"CHART SCORE"}</i><b>{active?.id.includes("evergreen")&&displaySong.viewCount!==undefined?displaySong.viewCount.toLocaleString("en-US")+" VIEWS":displaySong.genre}</b></div>
           <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={trackPosition<=0}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={trackPosition<0||trackPosition===trackSequence.length-1}>NEXT</button></div>
           {videoStatus==="missing"&&<p className="media-note">No embeddable result was found automatically. Use YouTube search and choose the official upload.</p>}
           {videoStatus==="error"&&<p className="media-note">That link is not a valid YouTube video URL or 11-character video ID.</p>}
           <details className="video-link-editor"><summary>UPDATE YOUTUBE LINK</summary><div><input value={videoLink} onChange={(event)=>setVideoLink(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")saveVideoLink();}} placeholder="Paste YouTube URL or video ID"/><button onClick={saveVideoLink} disabled={!videoLink.trim()}>USE VIDEO</button></div><small>Saved free on this browser for the same track and artist.</small></details>
-          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"SEARCH YOUTUBE"}</a>{isOstChart&&<a className="ost-album-link" href={fullOstUrl} target="_blank" rel="noreferrer">OPEN FULL OST</a>}</div>{isOstChart&&<section className="ost-album-tracks"><div><b>TRACKS IN THIS OST</b><span>{selectedAlbumTracks.length} INCLUDED</span></div>{selectedAlbumTracks.map((song)=><button key={song.id} className={song.id===displaySong.id?"active":""} onClick={()=>selectSong(song)}><span>{String(song.rank).padStart(2,"0")}</span><b>{song.title}</b><small>{song.artist}</small></button>)}</section>}
+          <div className="player-actions"><a className="primary" href={displaySong.url} target="_blank" rel="noreferrer">CHART SOURCE</a><a href={youtubeUrl} target="_blank" rel="noreferrer">{videoId?"OPEN YOUTUBE":"SEARCH YOUTUBE"}</a>{isOstChart&&<a className="ost-album-link" href={fullOstUrl} target="_blank" rel="noreferrer">OPEN FULL OST</a>}</div>{isOstChart&&<section className="ost-album-tracks"><div><b>UP TO 5 HOT PUBLISHED OST TRACKS</b><span>FULL SONGS ONLY</span></div>{selectedAlbumTracks.length===0?<p className="ost-empty">No published full-length YouTube track has been verified for this film yet.</p>:selectedAlbumTracks.map((song,index)=><button key={song.id} className={song.id===displaySong.id?"active":""} onClick={()=>selectSong(song)}><span>{String(index+1).padStart(2,"0")}</span><b>{song.title}</b><small>{song.artist}{song.durationSeconds?` · ${Math.floor(song.durationSeconds/60)}:${String(song.durationSeconds%60).padStart(2,"0")}`:""}</small></button>)}</section>}
           <div className="lyrics-tools"><button onClick={loadLyrics} disabled={lyricsStatus==="loading"}>{lyricsStatus==="loading"?"LOADING LYRICS...":lyricsStatus==="ready"?"REFRESH LYRICS":"SHOW LYRICS"}</button><button onClick={downloadLyrics} disabled={lyricsStatus!=="ready"||!lyrics}>{syncedLyrics?"DOWNLOAD .LRC":"DOWNLOAD .TXT"}</button><a href={lyricsSearchUrl} target="_blank" rel="noreferrer">GENIUS</a><a href={musixmatchSearchUrl} target="_blank" rel="noreferrer">MUSIXMATCH</a></div>
           <details className="lyrics-editor"><summary>ADD OR REPLACE LYRICS</summary><textarea value={lyricsDraft} onChange={(event)=>setLyricsDraft(event.target.value)} placeholder="Paste lyrics for this track"/><button onClick={saveCustomLyrics} disabled={!lyricsDraft.trim()}>SAVE LYRICS</button><small>Saved free on this browser for the same track and artist.</small></details>
           {lyricsStatus==="ready"&&<section className="lyrics-panel" aria-live="polite"><div><b>LYRICS</b>{lyricsSource==="LRCLIB"?<a href="https://lrclib.net" target="_blank" rel="noreferrer">via LRCLIB</a>:<span>{lyricsSource}</span>}</div><pre>{lyrics}</pre></section>}

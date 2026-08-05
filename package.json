@@ -14,7 +14,8 @@
     "test": "npm run sync && npm run build:vinext && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern out",
     "build:vinext": "vinext build",
-    "refresh:weekly": "node scripts/refresh-youtube-metrics.mjs && npm run sync"
+    "refresh:weekly": "npm run enrich:ost && node scripts/refresh-youtube-metrics.mjs && npm run sync",
+    "enrich:ost": "node scripts/enrich-ost-albums.mjs && node scripts/clean-ost-albums.mjs"
   },
   "dependencies": {
     "next": "16.2.6",

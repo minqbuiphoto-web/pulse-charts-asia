@@ -40,3 +40,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
   .player-panel{order:-1;border-top:0;border-bottom:1px solid var(--line)}
   .chart-panel{order:2}
 }
+
+.video-quality-warning{display:flex;min-height:280px;margin:28px auto 24px;padding:32px;flex-direction:column;align-items:center;justify-content:center;border:1px solid #ffbd3f55;border-radius:14px;background:linear-gradient(145deg,#17120b,#0b0a0d);text-align:center}.video-quality-warning b{color:#ffbd3f;font:700 10px "Space Grotesk";letter-spacing:1.7px}.video-quality-warning p{max-width:430px;margin:12px 0 20px;color:#bbb4a8;font-size:12px}.video-quality-warning button{min-height:38px;padding:0 18px;border:1px solid #c8ff3d66;border-radius:999px;background:#c8ff3d0d;color:var(--lime);font:700 8px "Space Grotesk";letter-spacing:1px;cursor:pointer}
+
+.ost-empty{margin:8px 0 0;padding:18px 10px;border-top:1px solid var(--line);color:#8d8796;font-size:10px;line-height:1.6;text-align:center}

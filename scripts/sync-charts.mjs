@@ -36,7 +36,17 @@ for (const chart of data.charts) {
     if (!chart.syncWarning?.includes("strictly")) throw new Error(`Missing strict-ranking policy: ${chart.label}.`);
   }
   if (chart.id.includes("trending") && !chart.syncWarning?.includes("RECENCY RULE") && !chart.syncWarning?.includes("BALLAD-ONLY RULE")) throw new Error(`Missing curation policy: ${chart.label}`);
-  if (chart.id.includes("ost-trending") && (!chart.syncWarning?.includes("ALBUM GROUPING RULE") || chart.songs.some((song) => !song.filmTitle || !song.album))) throw new Error(`Missing OST album metadata: ${chart.label}`);
+  if (chart.id.includes("ost-trending") && (!chart.syncWarning?.includes("ALBUM GROUPING RULE") || !chart.syncWarning?.includes("FIVE-TRACK OST RULE") || chart.songs.some((song) => !song.filmTitle || !song.album))) throw new Error(`Missing OST album metadata: ${chart.label}`);
+  if (chart.id.includes("ost-trending")) {
+    const groups = new Map();
+    for (const song of chart.songs) { const key = song.album ?? song.filmTitle; groups.set(key, [...(groups.get(key) ?? []), song]); }
+    for (const group of groups.values()) {
+      const root = group[0];
+      const playable = [...group, ...(root.albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
+      const uniqueCount = new Set(playable.map((song) => song.videoId)).size;
+      if (uniqueCount > 5) throw new Error(`${chart.label} allows at most five distinct published full-length videos for ${root.filmTitle}.`);
+    }
+  }
   if (chart.id === "cn-ost-trending" && (chart.songs.some((song) => song.filmTitle.includes("Screen OST")) || new Set(chart.songs.map((song) => song.filmTitle)).size !== 50 || !chart.syncWarning?.includes("TOP 50 FILMS RULE"))) throw new Error("China OST must contain fifty unique verified film albums.");
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
