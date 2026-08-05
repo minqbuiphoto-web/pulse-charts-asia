@@ -79,6 +79,20 @@ test("exports Vietnamese lyrics as a continuous Word document", async () => {
   assert.match(source, /vietnameseLines/);
 });
 
+test("recovers from unavailable YouTube embeds", async () => {
+  const [pageSource, playerSource] = await Promise.all([
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+    readFile(new URL("../app/validated-youtube-player.tsx", import.meta.url), "utf8"),
+  ]);
+  assert.match(playerSource, /origin:window\.location\.origin/);
+  assert.match(playerSource, /code===101\|\|code===150/);
+  assert.match(playerSource, /code===153/);
+  assert.match(playerSource, /onError:\(\{data\}\)/);
+  assert.match(pageSource, /mode=candidates/);
+  assert.match(pageSource, /pulse-rejected-youtube-videos/);
+  assert.match(pageSource, /TRYING ANOTHER VIDEO/);
+});
+
 test("ships all nineteen chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 19);
