@@ -171,6 +171,7 @@ for (const { data } of documents) {
 await runPool(tasks);
 for (const { data } of documents) {
   for (const chart of data.charts.filter((item) => item.id.includes("ost-trending"))) {
+    if (chart.id !== "kr-ost-trending") continue;
     for (const root of chart.songs) {
       const playable = [root, ...(root.albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
       if (new Set(playable.map((song) => song.videoId)).size === 0) missingAlbums.push(root.filmTitle);
