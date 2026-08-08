@@ -103,12 +103,13 @@ export default function Home(){
   const filteredTracks=!active?[]:!needle?active.songs:active.songs.filter((song)=>`${song.title} ${song.artist} ${song.genre} ${song.filmTitle??""} ${song.album??""} ${(song.albumTracks??[]).map((track)=>`${track.title} ${track.artist}`).join(" ")}`.toLocaleLowerCase("en").includes(needle));
   const albumGroups=filteredTracks.reduce<Map<string,Song[]>>((groups,song)=>{const key=albumKey(song);groups.set(key,[...(groups.get(key)??[]),song]);return groups;},new Map());
   const playableAlbumCount=(tracks:Song[])=>new Set([...tracks,...(tracks[0]?.albumTracks??[])].filter((song)=>song.videoId&&Number(song.durationSeconds)>=120&&Number(song.durationSeconds)<=900).map((song)=>song.videoId)).size;
-  const songs=isOstChart&&ostView==="albums"?[...albumGroups.values()].map((tracks)=>({...tracks[0],albumTrackCount:playableAlbumCount(tracks)})):filteredTracks;
-  const ostTrackTotal=isOstChart?[...albumGroups.values()].reduce((total,tracks)=>total+playableAlbumCount(tracks),0):0;
+  const playableAlbumGroups=[...albumGroups.values()].map((tracks)=>({tracks,count:playableAlbumCount(tracks)})).filter((group)=>group.count>0);
+  const songs=isOstChart&&ostView==="albums"?playableAlbumGroups.map(({tracks,count})=>({...tracks[0],albumTrackCount:count})):filteredTracks;
+  const ostTrackTotal=isOstChart?playableAlbumGroups.reduce((total,group)=>total+group.count,0):0;
   const resetTrackTools=()=>{ setPlayingId("");setVideoIssue("");setVideoStatus("idle");setVideoLink("");setLyrics("");setSyncedLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
-  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id); setSelected(chart.songs[0]??null); resetTrackTools(); };
+  const chooseChart=(chart:Chart)=>{ setActiveId(chart.id);setQuery("");setOstView("albums");setSelected(chart.songs[0]??null);resetTrackTools(); };
   const chooseMarket=(nextMarket:Market|"ALL")=>{
-    setMarket(nextMarket);
+    setMarket(nextMarket);setQuery("");
     const visible=data.charts.filter((chart)=>nextMarket==="ALL"||chart.market===nextMarket);
     if(!visible.some((chart)=>chart.id===activeId)&&visible[0])chooseChart(visible[0]);
   };
