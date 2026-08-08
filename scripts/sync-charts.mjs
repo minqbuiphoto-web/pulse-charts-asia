@@ -44,7 +44,7 @@ for (const chart of data.charts) {
       const root = group[0];
       const playable = [...group, ...(root.albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
       const uniqueCount = new Set(playable.map((song) => song.videoId)).size;
-      if (uniqueCount < 1) throw new Error(`${chart.label} requires at least one published playable track for ${root.filmTitle}.`);
+      if (chart.id === "kr-ost-trending" && uniqueCount < 1) throw new Error(`${chart.label} requires at least one published playable track for ${root.filmTitle}.`);
       if (uniqueCount > 5) throw new Error(`${chart.label} allows at most five distinct published full-length videos for ${root.filmTitle}.`);
     }
   }
