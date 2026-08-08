@@ -156,6 +156,7 @@ const tasks = [];
 const missingAlbums = [];
 for (const { data } of documents) {
   for (const chart of data.charts.filter((item) => item.id.includes("ost-trending"))) {
+    if (chart.id !== "kr-ost-trending") continue;
     const groups = new Map();
     for (const song of chart.songs) {
       const key = albumKey(song);
