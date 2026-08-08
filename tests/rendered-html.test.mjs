@@ -93,6 +93,13 @@ test("recovers from unavailable YouTube embeds", async () => {
   assert.match(pageSource, /TRYING ANOTHER VIDEO/);
 });
 
+test("hides empty OST albums and resets stale chart searches", async () => {
+  const source = await readFile(new URL("../app/page.tsx", import.meta.url), "utf8");
+  assert.match(source, /filter\(\(group\)=>group\.count>0\)/);
+  assert.match(source, /const chooseChart=.*setQuery\(""\).*setOstView\("albums"\)/);
+  assert.match(source, /setMarket\(nextMarket\);setQuery\(""\)/);
+});
+
 test("ships all nineteen chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 19);
