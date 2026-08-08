@@ -14,12 +14,12 @@ const films = [
   ["Sold Out On You", "2026"], ["When Life Gives You Tangerines", "2025"],
   ["Resident Playbook", "2025"], ["Our Unwritten Seoul", "2025"],
   ["KPop Demon Hunters", "2025"], ["Head Over Heels", "2025"],
-  ["Bon Appetit, Your Majesty", "2025"], ["Love Scout", "2025"],
-  ["Melo Movie", "2025"], ["My Dearest Nemesis", "2025"],
-  ["Buried Hearts", "2025"], ["The Trauma Code: Heroes on Call", "2025"],
-  ["Good Boy", "2025"], ["When the Phone Rings", "2024"],
+  ["Goblin", "2016"], ["Love Scout", "2025"],
+  ["Start-Up", "2020"], ["It's Okay to Not Be Okay", "2020"],
+  ["Buried Hearts", "2025"], ["Hometown Cha-Cha-Cha", "2021"],
+  ["Alchemy of Souls", "2022"], ["Extraordinary Attorney Woo", "2022"],
   ["Love Next Door", "2024"], ["The Judge from Hell", "2024"],
-  ["Marry My Husband", "2024"], ["Doctor Slump", "2024"],
+  ["Marry My Husband", "2024"], ["Weightlifting Fairy Kim Bok-joo", "2016"],
   ["Captivating the King", "2024"], ["Queen of Tears", "2024"],
   ["Lovely Runner", "2024"], ["My Demon", "2023"],
   ["Twinkling Watermelon", "2023"], ["Welcome to Samdal-ri", "2023"],
@@ -58,10 +58,21 @@ const verifiedFallbacks = new Map([["KPop Demon Hunters", {
   videoQuality: "duration-verified", albumTracks: [],
 }]]);
 
+const trackSeeds = new Map([
+  ["Goblin", ["Stay With Me", "CHANYEOL & Punch"]],
+  ["Start-Up", ["Future", "Red Velvet"]],
+  ["It's Okay to Not Be Okay", ["You're Cold", "Heize"]],
+  ["Hometown Cha-Cha-Cha", ["Romantic Sunday", "Car, the garden"]],
+  ["Alchemy of Souls", ["Scars Leave Beautiful Trace", "Car, the garden"]],
+  ["Extraordinary Attorney Woo", ["Brave", "Kim Jong Wan"]],
+  ["Weightlifting Fairy Kim Bok-joo", ["Dream", "Han Hee Jung"]],
+]);
+
 chart.songs = films.map(([filmTitle, releaseDate], index) => {
   const current = existing.get(filmTitle);
+  const seed = trackSeeds.get(filmTitle);
   const base = current ?? verifiedFallbacks.get(filmTitle) ?? {
-    title: "OST Highlights", artist: "Original Soundtrack",
+    title: seed?.[0] ?? "OST Highlights", artist: seed?.[1] ?? "Original Soundtrack",
     genre: "Published Korean screen OST", artworkUrl: "",
     url: chart.sourceUrl, artistUrl: chart.sourceUrl, albumTracks: [],
   };
