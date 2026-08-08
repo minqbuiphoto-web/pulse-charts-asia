@@ -3,7 +3,7 @@ import { searchPublicYouTube } from "./youtube-public-search.mjs";
 
 const files = ["app/charts-main.json", "app/charts-ost.json"];
 const TARGET_TRACKS = 5;
-const WORKERS = 1;
+const WORKERS = 3;
 const FORCE = process.argv.includes("--force");
 
 function albumKey(song) {
@@ -113,6 +113,13 @@ async function enrichGroup(chart, group) {
     return applyVideo(track, match);
   });
   const activeTracks = enrichedKnown.slice(0, group.length);
+  if (!activeTracks[0]?.videoId && candidates.length > 0) {
+    const promoted = candidates.find((video) => !usedIds.has(video.videoId));
+    if (promoted) {
+      activeTracks[0] = applyVideo(activeTracks[0], promoted);
+      usedIds.add(promoted.videoId);
+    }
+  }
   const extras = enrichedKnown.slice(group.length).filter((track) => track.videoId && Number(track.durationSeconds) >= 120 && Number(track.durationSeconds) <= 900);
   const playableActive = activeTracks.filter((track) => track.videoId && Number(track.durationSeconds) >= 120 && Number(track.durationSeconds) <= 900).length;
   for (const video of candidates) {
@@ -121,8 +128,6 @@ async function enrichGroup(chart, group) {
     usedIds.add(video.videoId);
     extras.push(generatedTrack(parent, video, activeTracks.length + extras.length));
   }
-  // Zero is valid for a newly announced OST that has no verifiable full YouTube release yet.
-
   group.forEach((song, index) => {
     Object.assign(song, activeTracks[index]);
     delete song.albumTracks;
@@ -156,12 +161,19 @@ for (const { data } of documents) {
       groups.set(key, [...(groups.get(key) ?? []), song]);
     }
     for (const group of groups.values()) tasks.push({ chart, group });
-    chart.ostAlbumPolicy = "Each film album contains up to five distinct published full-song videos, filtered to 120–900 seconds and ranked by public YouTube views among relevant results. Newly released films may show fewer than five until more songs are published.";
+    chart.ostAlbumPolicy = "Each film album contains one to five distinct published full-song videos, filtered to 120–900 seconds and ranked by public YouTube views among relevant results. A production with no verified playable song is not eligible for the chart.";
     chart.syncWarning = chart.syncWarning.replace(/ FIVE-TRACK OST RULE:[^.]*\./, "") + " FIVE-TRACK OST RULE: each film exposes up to five distinct published full-length OST videos; unreleased songs, duplicate uploads, teasers, trailers, Shorts and clips under 120 seconds are rejected.";
   }
 }
 
 await runPool(tasks);
+for (const { data } of documents) {
+  for (const chart of data.charts.filter((item) => item.id.includes("ost-trending"))) {
+    for (const root of chart.songs) {
+      const playable = [root, ...(root.albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
+      if (new Set(playable.map((song) => song.videoId)).size === 0) throw new Error(`No verified playable OST found for ${root.filmTitle}. Replace this production before publishing.`);
+    }
+  }
+}
 for (const { file, data } of documents) await writeFile(file, JSON.stringify(data, null, 2) + "\n", "utf8");
 console.log(`Verified ${tasks.length} OST albums with up to ${TARGET_TRACKS} published playable tracks each.`);
-
