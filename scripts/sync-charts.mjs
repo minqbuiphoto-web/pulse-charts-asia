@@ -44,10 +44,11 @@ for (const chart of data.charts) {
       const root = group[0];
       const playable = [...group, ...(root.albumTracks ?? [])].filter((song) => /^[A-Za-z0-9_-]{11}$/.test(song.videoId ?? "") && Number(song.durationSeconds) >= 120 && Number(song.durationSeconds) <= 900);
       const uniqueCount = new Set(playable.map((song) => song.videoId)).size;
+      if (uniqueCount < 1) throw new Error(`${chart.label} requires at least one published playable track for ${root.filmTitle}.`);
       if (uniqueCount > 5) throw new Error(`${chart.label} allows at most five distinct published full-length videos for ${root.filmTitle}.`);
     }
   }
-  if (chart.id === "cn-ost-trending" && (chart.songs.some((song) => song.filmTitle.includes("Screen OST")) || new Set(chart.songs.map((song) => song.filmTitle)).size !== 50 || !chart.syncWarning?.includes("TOP 50 FILMS RULE"))) throw new Error("China OST must contain fifty unique verified film albums.");
+  if (["kr-ost-trending", "cn-ost-trending"].includes(chart.id) && (chart.songs.some((song) => song.filmTitle.includes("Screen OST")) || new Set(chart.songs.map((song) => song.filmTitle)).size !== 50 || !chart.syncWarning?.includes("TOP 50 FILMS RULE"))) throw new Error(`${chart.label} must contain fifty unique verified film albums.`);
   if (chart.id.includes("trending") && chart.songs.some((song) => song.releaseDate === chart.market)) throw new Error(`Missing release window: ${chart.label}`);
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
   if (chart.id.includes("rnb") && (!chart.syncWarning?.includes("SONG-LEVEL GENRE RULE") || !chart.syncWarning?.includes("NO RAP RULE") || chart.songs.some((song) => song.style !== "Vocal R&B / Soul" || song.genreBasis !== "song-level" || song.genreReviewed !== true || /\brap\b/i.test(song.genre)))) throw new Error(`Unreviewed or non-vocal-R&B row in ${chart.label}.`);
