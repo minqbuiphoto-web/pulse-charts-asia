@@ -117,7 +117,8 @@ export default function Home(){
   const selectedAlbumRoot=isOstChart&&displaySong&&active?active.songs.find((song)=>albumKey(song)===albumKey(displaySong)):undefined;
   const selectedAlbumTracks=isOstChart&&displaySong&&active?[...new Map([...active.songs.filter((song)=>albumKey(song)===albumKey(displaySong)),...(selectedAlbumRoot?.albumTracks??[])].map((song)=>[trackKey(song),song])).values()].filter((song)=>song.videoId&&Number(song.durationSeconds)>=120&&Number(song.durationSeconds)<=900).sort((a,b)=>(b.viewCount??0)-(a.viewCount??0)).slice(0,5):[];
   const trackSequence=isOstChart&&ostView==="albums"?songs:(active?.songs??[]);
-  const trackPosition=displaySong?trackSequence.findIndex((song)=>song.id===displaySong.id):-1;
+  const playbackSequence=isOstChart&&ostView==="albums"&&selectedAlbumTracks.length>0?selectedAlbumTracks:trackSequence;
+  const trackPosition=displaySong?playbackSequence.findIndex((song)=>song.id===displaySong.id):-1;
   const currentTrackKey=displaySong?trackKey(displaySong):"";
   const knownVideoIds=displaySong?[customVideos[currentTrackKey],resolvedVideos[currentTrackKey],displaySong.videoId,youtubeTracks[currentTrackKey],youtubeVideos[displaySong.id]].filter((id):id is string=>Boolean(id)):[];
   const rawVideoId=knownVideoIds.find((id)=>!rejectedVideos.includes(id));
@@ -168,6 +169,21 @@ export default function Home(){
     if(lyricsStatus==="idle")void loadLyrics();
     const id=videoId??await resolveVideo(displaySong);
     if(id)setPlayingId(displaySong.id);
+  };
+
+  const playSong=async(song:Song)=>{
+    setSelected(song);
+    resetTrackTools();
+    const id=await resolveVideo(song);
+    if(id)setPlayingId(song.id);
+  };
+
+  const playNextTrack=()=>{
+    if(trackPosition<0)return;
+    const next=playbackSequence[trackPosition+1];
+    if(next){void playSong(next);return;}
+    setPlayingId("");
+    setVideoStatus("idle");
   };
 
   const rejectVideo=async(failure:YouTubeFailure)=>{
@@ -254,7 +270,7 @@ export default function Home(){
     window.setTimeout(()=>URL.revokeObjectURL(objectUrl),1000);
   };
 
-  const moveTrack=(step:number)=>{ if(!displaySong)return; const next=trackSequence[trackPosition+step]; if(next)selectSong(next); };
+  const moveTrack=(step:number)=>{ if(!displaySong)return; const next=playbackSequence[trackPosition+step]; if(next)selectSong(next); };
   const heroCovers=active?.songs.slice(0,3)??[];
 
   return <main>
@@ -312,10 +328,11 @@ export default function Home(){
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
         {displaySong?<><div className="player-glow token-glow"/>
           <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
-          {videoIssue?<div className="video-quality-warning" aria-live="polite"><b>{videoStatus==="loading"?"TRYING ANOTHER VIDEO":"VIDEO UNAVAILABLE"}</b><p>{videoIssue}</p>{videoStatus!=="loading"&&<button onClick={()=>{setVideoIssue("");setVideoStatus("idle");}}>CHOOSE ANOTHER SONG</button>}</div>:videoId&&playingId===displaySong.id?<ValidatedYouTubePlayer videoId={videoId} title={`${displaySong.title} by ${displaySong.artist}`} onRejected={rejectVideo}/>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
+          {videoIssue?<div className="video-quality-warning" aria-live="polite"><b>{videoStatus==="loading"?"TRYING ANOTHER VIDEO":"VIDEO UNAVAILABLE"}</b><p>{videoIssue}</p>{videoStatus!=="loading"&&<button onClick={()=>{setVideoIssue("");setVideoStatus("idle");}}>CHOOSE ANOTHER SONG</button>}</div>:videoId&&playingId===displaySong.id?<ValidatedYouTubePlayer videoId={videoId} title={`${displaySong.title} by ${displaySong.artist}`} onRejected={rejectVideo} onEnded={playNextTrack}/>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{isOstChart?(displaySong.filmTitle??displaySong.album):active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span>{isOstChart&&<small>{displaySong.album}</small>}</div>
           <div className="progress"><span/><i>{active?.id.includes("evergreen")?"MEASURED VIEWS":"CHART SCORE"}</i><b>{active?.id.includes("evergreen")&&displaySong.viewCount!==undefined?displaySong.viewCount.toLocaleString("en-US")+" VIEWS":displaySong.genre}</b></div>
-          <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={trackPosition<=0}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={trackPosition<0||trackPosition===trackSequence.length-1}>NEXT</button></div>
+          <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={trackPosition<=0}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={trackPosition<0||trackPosition===playbackSequence.length-1}>NEXT</button></div>
+          <p className="auto-next-status"><span/>AUTO NEXT ON {trackPosition>=0&&trackPosition<playbackSequence.length-1?`· ${playbackSequence.length-trackPosition-1} TRACKS QUEUED`:"· END OF QUEUE"}</p>
           {videoStatus==="missing"&&<p className="media-note">No embeddable result was found automatically. Use YouTube search and choose the official upload.</p>}
           {videoStatus==="error"&&!videoIssue&&<p className="media-note">That link is not a valid YouTube video URL or 11-character video ID.</p>}
           <details className="video-link-editor"><summary>UPDATE YOUTUBE LINK</summary><div><input value={videoLink} onChange={(event)=>setVideoLink(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")saveVideoLink();}} placeholder="Paste YouTube URL or video ID"/><button onClick={saveVideoLink} disabled={!videoLink.trim()}>USE VIDEO</button></div><small>Saved free on this browser for the same track and artist.</small></details>

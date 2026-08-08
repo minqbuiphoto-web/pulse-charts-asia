@@ -17,12 +17,14 @@ const failureReason=(code:number)=>{
   return "YouTube không tải được video này.";
 };
 
-export default function ValidatedYouTubePlayer({videoId,title,onRejected}:{videoId:string;title:string;onRejected:(failure:YouTubeFailure)=>void}){
+export default function ValidatedYouTubePlayer({videoId,title,onRejected,onEnded}:{videoId:string;title:string;onRejected:(failure:YouTubeFailure)=>void;onEnded:()=>void}){
   const mountRef=useRef<HTMLDivElement|null>(null);
   const rejectedRef=useRef(onRejected);
+  const endedRef=useRef(onEnded);
   const [ready,setReady]=useState(false);
 
   useEffect(()=>{rejectedRef.current=onRejected;},[onRejected]);
+  useEffect(()=>{endedRef.current=onEnded;},[onEnded]);
 
   useEffect(()=>{
     const target=window as unknown as YouTubeWindow;
@@ -69,7 +71,10 @@ export default function ValidatedYouTubePlayer({videoId,title,onRejected}:{video
       playerVars:{autoplay:1,playsinline:1,rel:0,origin:window.location.origin},
       events:{
         onReady:({target:instance})=>{started=true;window.clearTimeout(loadTimer);if(validate(instance))instance.playVideo();},
-        onStateChange:({target:instance,data})=>{if(data===1&&!rejected){started=true;window.clearTimeout(loadTimer);validate(instance);}},
+        onStateChange:({target:instance,data})=>{
+          if(data===1&&!rejected){started=true;window.clearTimeout(loadTimer);validate(instance);}
+          if(data===0&&!rejected)endedRef.current();
+        },
         onError:({data})=>fail({code:data,reason:failureReason(data)}),
         onAutoplayBlocked:()=>{started=true;window.clearTimeout(loadTimer);},
       },
