@@ -86,6 +86,8 @@ function BeatExtractor() {
 function ArrangementBuilder() {
   const [clips, setClips] = useState<ArrangementClip[]>([]);
   const [crossfade, setCrossfade] = useState(.8);
+  const [joinTime, setJoinTime] = useState("");
+  const [seamFade, setSeamFade] = useState(.16);
   const [normalize, setNormalize] = useState(true);
   const [repair, setRepair] = useState(true);
   const [preset, setPreset] = useState<MasterPreset>("balanced");
@@ -129,14 +131,16 @@ function ArrangementBuilder() {
     clearResult(beforeUrl, setBefore);
     setStatus("Đang chạy EQ, compressor, stereo polish và limiter…");
     try {
-      const output = await assembleAudio(clips.map(clip => clip.file), crossfade, normalize, repair, preset, intensity);
+      const joinSeconds=joinTime.trim()?parseTimestamp(joinTime):null;
+      if(joinTime.trim()&&joinSeconds===null)throw new Error("Mốc nối không hợp lệ. Hãy nhập dạng 01:31.33 hoặc số giây.");
+      const output = await assembleAudio(clips.map(clip => clip.file), crossfade, normalize, repair, preset, intensity, joinSeconds, seamFade);
       const url = URL.createObjectURL(output.master);
       const dryUrl = URL.createObjectURL(output.before);
       resultUrl.current = url;
       beforeUrl.current = dryUrl;
       const name = `${baseName(clips[0].file.name)}_remastered.wav`;
       setBefore({ url:dryUrl, name:"", details:`TRƯỚC · RMS ${dbTag(output.beforeMetrics.rmsDb)} DB · PEAK ${dbTag(output.beforeMetrics.peakDb)} DB` });
-      setResult({ url, name, details:`SAU · ${presetLabel(preset)} ${intensity}% · RMS ${dbTag(output.afterMetrics.rmsDb)} DB · PEAK ${dbTag(output.afterMetrics.peakDb)} DB` });
+      setResult({ url, name, details:`SAU · ${presetLabel(preset)} ${intensity}%${joinSeconds!==null?` · NỐI ${timeTag(joinSeconds)} / ${Math.round(seamFade*1000)} MS`:""} · RMS ${dbTag(output.afterMetrics.rmsDb)} DB · PEAK ${dbTag(output.afterMetrics.peakDb)} DB` });
       setStatus("Master đã hoàn thành. Hãy dùng phần A/B bên dưới để nghe sự khác biệt trước và sau.");
     } catch (error) {
       setStatus(error instanceof Error ? friendlyAudioError(error.message) : "Không thể hoàn thiện bản phối này.");
@@ -151,6 +155,8 @@ function ArrangementBuilder() {
       {(["balanced","warm","clear","loud"] as MasterPreset[]).map(value => <button key={value} className={preset===value?"active":""} onClick={() => setPreset(value)}><b>{presetLabel(value)}</b><small>{presetCopy(value)}</small></button>)}
     </div>
     <div className="arrangement-options">
+      <label className="seam-time"><span><b>MỐC NỐI CẦN SỬA</b><small>Để trống nếu các đoạn được tải riêng; nhập dạng 01:31.33 cho file đã nối.</small></span><input type="text" value={joinTime} onChange={event=>setJoinTime(event.target.value)} placeholder="01:31.33"/></label>
+      <label><span><b>CROSSFADE MỐI NỐI</b><small>Chồng hai phía của mốc cắt, phù hợp lỗi lệch màu âm hoặc nhịp.</small></span><output>{Math.round(seamFade*1000)}MS</output><input type="range" min="0.04" max="0.5" step="0.01" value={seamFade} onChange={event=>setSeamFade(Number(event.target.value))}/></label>
       <label><span><b>CƯỜNG ĐỘ MASTER</b><small>Mức tác động của EQ và compression</small></span><output>{intensity}%</output><input type="range" min="25" max="100" step="5" value={intensity} onChange={event => setIntensity(Number(event.target.value))}/></label>
       <label><span><b>CROSSFADE</b><small>0–5 giây giữa các đoạn</small></span><output>{tag(crossfade)}S</output><input type="range" min="0" max="5" step="0.1" value={crossfade} onChange={event => setCrossfade(Number(event.target.value))}/></label>
       <label className="option-check"><input type="checkbox" checked={normalize} onChange={event => setNormalize(event.target.checked)}/><span><b>LOUDNESS + LIMITER −1 DB</b><small>Tăng độ lớn cảm nhận và chặn peak gây vỡ tiếng.</small></span></label>
@@ -195,7 +201,7 @@ async function createQuickBeat(file:File) {
   } finally { await context.close().catch(() => undefined); }
 }
 
-async function assembleAudio(files:File[], crossfade:number, normalize:boolean, repair:boolean, preset:MasterPreset, intensity:number) {
+async function assembleAudio(files:File[], crossfade:number, normalize:boolean, repair:boolean, preset:MasterPreset, intensity:number, joinSeconds:number|null, seamFade:number) {
   const decoder = new AudioContext();
   try {
     const buffers:AudioBuffer[] = [];
@@ -220,6 +226,7 @@ async function assembleAudio(files:File[], crossfade:number, normalize:boolean, 
     const dryChannels=Array.from({length:Math.min(2,rendered.numberOfChannels)},(_,index)=>rendered.getChannelData(index).slice());
     const beforeMetrics=measureAudio(dryChannels);
     let workingChannels=dryChannels.map(channel=>channel.slice());
+    if(joinSeconds!==null)workingChannels=crossfadeAtTime(workingChannels,rendered.sampleRate,joinSeconds,seamFade);
     if(repair){
       workingChannels.forEach(channel=>repairClicks(channel,rendered.sampleRate));
       repairDropouts(workingChannels,rendered.sampleRate);
@@ -314,6 +321,28 @@ function repairDropouts(channels:Float32Array[],sampleRate:number) {
   return channels;
 }
 
+function crossfadeAtTime(channels:Float32Array[],sampleRate:number,seconds:number,duration:number) {
+  const length=channels[0]?.length??0, boundary=Math.round(seconds*sampleRate), fade=Math.round(Math.max(.04,Math.min(.5,duration))*sampleRate);
+  if(boundary<=fade||boundary+fade>=length)throw new Error("Mốc nối nằm quá gần đầu hoặc cuối bản nhạc.");
+  let leftPower=0,rightPower=0;
+  for(const channel of channels)for(let index=0;index<fade;index++){
+    leftPower+=channel[boundary-fade+index]**2; rightPower+=channel[boundary+index]**2;
+  }
+  const match=Math.max(.8,Math.min(1.25,Math.sqrt(leftPower/Math.max(rightPower,1e-9))));
+  return channels.map(channel=>{
+    const output=new Float32Array(length-fade);
+    output.set(channel.subarray(0,boundary-fade));
+    for(let index=0;index<fade;index++){
+      const mix=(index+.5)/fade;
+      output[boundary-fade+index]=channel[boundary-fade+index]*Math.cos(mix*Math.PI/2)+channel[boundary+index]*match*Math.sin(mix*Math.PI/2);
+    }
+    output.set(channel.subarray(boundary+fade),boundary);
+    const ramp=Math.min(sampleRate,output.length-boundary);
+    for(let index=0;index<ramp;index++)output[boundary+index]*=match+(1-match)*index/Math.max(1,ramp-1);
+    return output;
+  });
+}
+
 function normalizeChannels(channels:Float32Array[],target:number){let peak=0;for(const channel of channels)for(let index=0;index<channel.length;index++)peak=Math.max(peak,Math.abs(channel[index]));if(peak<1e-7)return;const gain=Math.min(8,target/peak);for(const channel of channels)for(let index=0;index<channel.length;index++)channel[index]=clamp(channel[index]*gain);}
 function encodeWav(channels:Float32Array[],sampleRate:number){const frames=channels[0].length,count=channels.length,align=count*2,buffer=new ArrayBuffer(44+frames*align),view=new DataView(buffer),write=(offset:number,value:string)=>{for(let i=0;i<value.length;i++)view.setUint8(offset+i,value.charCodeAt(i));};write(0,"RIFF");view.setUint32(4,36+frames*align,true);write(8,"WAVE");write(12,"fmt ");view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,count,true);view.setUint32(24,sampleRate,true);view.setUint32(28,sampleRate*align,true);view.setUint16(32,align,true);view.setUint16(34,16,true);write(36,"data");view.setUint32(40,frames*align,true);let offset=44;for(let frame=0;frame<frames;frame++)for(let channel=0;channel<count;channel++){const sample=clamp(channels[channel][frame]||0);view.setInt16(offset,sample<0?sample*32768:sample*32767,true);offset+=2;}return new Blob([buffer],{type:"audio/wav"});}
 function isAudio(file:File){return file.type.startsWith("audio/")||AUDIO_PATTERN.test(file.name);}
@@ -324,5 +353,7 @@ function formatBytes(value:number){const units=["B","KB","MB","GB"];let unit=0;w
 function presetLabel(value:MasterPreset){return {balanced:"CÂN BẰNG",warm:"ẤM",clear:"RÕ NÉT",loud:"LOUD"}[value];}
 function presetCopy(value:MasterPreset){return {balanced:"Đều, tự nhiên",warm:"Dày bass, mềm treble",clear:"Sáng và rõ giọng",loud:"Nén mạnh, âm lượng lớn"}[value];}
 function dbTag(value:number){return Number.isFinite(value)?value.toFixed(1).replace(".",","):"−∞";}
+function parseTimestamp(value:string){const clean=value.trim().replace(",",".");if(/^\d+(\.\d+)?$/.test(clean))return Number(clean);const match=clean.match(/^(\d+):([0-5]?\d(?:\.\d+)?)$/);if(!match)return null;return Number(match[1])*60+Number(match[2]);}
+function timeTag(value:number){const minutes=Math.floor(value/60),seconds=value-minutes*60;return `${String(minutes).padStart(2,"0")}:${seconds.toFixed(2).padStart(5,"0")}`.replace(".",",");}
 function tag(value:number){return String(Math.round(value*10)/10).replace(".",",");}
 function clamp(value:number){return Math.max(-1,Math.min(1,value));}
