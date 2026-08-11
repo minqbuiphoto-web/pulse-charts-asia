@@ -87,7 +87,7 @@ function ArrangementBuilder() {
   const [normalize, setNormalize] = useState(true);
   const [repair, setRepair] = useState(true);
   const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState("Chọn một file đã ghép hoặc nhiều đoạn nhạc.");
+  const [status, setStatus] = useState("Chọn một bản nhạc hoặc nhiều đoạn cần remaster.");
   const [result, setResult] = useState<AudioResult | null>(null);
   const resultUrl = useRef("");
 
@@ -116,12 +116,12 @@ function ArrangementBuilder() {
     if (!clips.length || busy) return;
     setBusy(true);
     clearResult(resultUrl, setResult);
-    setStatus(clips.length === 1 ? "Đang rà điểm nối, cân âm lượng và chống tiếng tách…" : "Đang giải mã, crossfade và master các đoạn…");
+    setStatus(clips.length === 1 ? "Đang rà điểm nối, cân âm lượng và remaster…" : "Đang giải mã, crossfade và remaster các đoạn…");
     try {
       const blob = await assembleAudio(clips.map(clip => clip.file), crossfade, normalize, repair);
       const url = URL.createObjectURL(blob);
       resultUrl.current = url;
-      const name = `${baseName(clips[0].file.name)}_${clips.length === 1 ? "repaired" : "arrangement_master"}.wav`;
+      const name = `${baseName(clips[0].file.name)}_remastered.wav`;
       setResult({ url, name, details: `${clips.length} ĐOẠN · CROSSFADE ${tag(crossfade)}S · ${normalize ? "NORMALIZED −1 DB" : "GIỮ ÂM LƯỢNG"} · WAV` });
       setStatus("Bản phối đã hoàn thành. Hãy nghe toàn bộ các điểm nối trước khi tải.");
     } catch (error) {
@@ -130,7 +130,7 @@ function ArrangementBuilder() {
   };
 
   return <article className="audio-pro-card arrangement-card">
-    <header><span>04</span><div><small>ARRANGEMENT BUILDER</small><h2>Nối đoạn thành bài hoàn chỉnh</h2><p>Làm mượt điểm nối, cân mức âm và xuất một file master liền mạch.</p></div><b>ON-DEVICE</b></header>
+    <header><span>04</span><div><small>REMASTER STUDIO</small><h2>Remaster bản nhạc hoàn chỉnh</h2><p>Làm mượt mối nối, cân mức âm và hoàn thiện bản master liền mạch.</p></div><b>ON-DEVICE</b></header>
     <label className="pro-upload multi">FILE ĐÃ GHÉP HOẶC CÁC ĐOẠN NHẠC<input type="file" multiple accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm" onChange={(event:ChangeEvent<HTMLInputElement>) => addFiles(event.target.files)}/><b>Thêm một hoặc nhiều đoạn</b><span>Thứ tự có thể chỉnh sau khi chọn</span></label>
     {clips.length ? <div className="clip-list">{clips.map((clip,index) => <div key={clip.id}><i>{String(index+1).padStart(2,"0")}</i><p><b>{clip.file.name}</b><small>{formatBytes(clip.file.size)}</small></p><button disabled={index===0} onClick={() => move(index,-1)} aria-label={`Đưa ${clip.file.name} lên`}>↑</button><button disabled={index===clips.length-1} onClick={() => move(index,1)} aria-label={`Đưa ${clip.file.name} xuống`}>↓</button><button onClick={() => remove(clip.id)} aria-label={`Xóa ${clip.file.name}`}>×</button></div>)}</div> : null}
     <div className="arrangement-options">
@@ -138,9 +138,9 @@ function ArrangementBuilder() {
       <label className="option-check"><input type="checkbox" checked={normalize} onChange={event => setNormalize(event.target.checked)}/><span><b>CÂN ÂM LƯỢNG −1 DB</b><small>Giữ các đoạn đồng đều, tránh vỡ tiếng.</small></span></label>
       <label className="option-check"><input type="checkbox" checked={repair} onChange={event => setRepair(event.target.checked)}/><span><b>LÀM MƯỢT MỐI GHÉP</b><small>Khử click ở file đã ghép và mép đoạn.</small></span></label>
     </div>
-    <button className="pro-run" disabled={!clips.length || busy} onClick={run}>{busy ? "ĐANG HOÀN THIỆN BẢN PHỐI…" : "PHỐI & XUẤT FILE HOÀN CHỈNH"}<span>↗</span></button>
+    <button className="pro-run" disabled={!clips.length || busy} onClick={run}>{busy ? "ĐANG REMASTER…" : "REMASTER & XUẤT FILE HOÀN CHỈNH"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
-    {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI ARRANGEMENT WAV ↓</a></div> : null}
+    {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI BẢN REMASTER WAV ↓</a></div> : null}
   </article>;
 }
 
