@@ -1,0 +1,24 @@
+.lyric-workflow{border-color:#536b2a!important;background:linear-gradient(145deg,#11160d,#0d1116 42%)!important}
+.workflow-intro{font-size:11px!important;line-height:1.55!important;color:#b9c0ca!important}
+.primary-lyrics textarea{min-height:220px!important;border-color:#596b36!important;font-size:17px!important}
+.create-timeline{width:100%;min-height:54px;margin-top:12px;background:linear-gradient(90deg,#b5ee28,#d6ff4b)!important;color:#070908!important;border:0!important;font-size:11px!important;letter-spacing:.5px}
+.create-timeline:disabled{opacity:.35;filter:grayscale(.6);cursor:not-allowed}
+.align-status{min-height:42px;margin:10px 0!important;padding:11px 12px;border:1px solid #343d2d;border-radius:9px;background:#0a100b;color:#c7d4bd!important;font-size:11px!important;line-height:1.55!important}
+.local-engine-help{padding:12px;border:1px solid #303642;border-radius:10px;background:#090b10}
+.local-engine-help>b,.local-engine-help>span{display:block}
+.local-engine-help>b{color:#d6ff4b;font-size:10px;letter-spacing:.8px}
+.local-engine-help>span{margin-top:5px;color:#929aa7;font-size:9px;line-height:1.45}
+.local-engine-help>div{display:flex;gap:7px;margin-top:10px}
+.local-engine-help a{flex:1;padding:10px;border:1px solid #536b2a;border-radius:7px;color:#d6ff4b;text-align:center;text-decoration:none;font-size:8px;font-weight:900}
+.timeline-summary{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-bottom:9px;border-bottom:1px solid #303641}
+.timeline-summary b{color:#fff;font-size:11px}
+.timeline-summary button{padding:9px 11px!important;background:#8e4cf3!important;color:#fff!important;border-color:#8e4cf3!important}
+.generated-timeline{max-height:440px;margin-top:9px;overflow:auto;display:grid;gap:6px}
+.generated-timeline button{display:grid;grid-template-columns:34px 58px minmax(0,1fr);gap:8px;align-items:center;padding:10px!important;text-align:left;background:#0b0d12!important;color:#e9ebef!important;border-color:#303641!important}
+.generated-timeline button.active{border-color:#d6ff4b!important;background:#13190d!important}
+.generated-timeline span{color:#89919e;font-size:8px}
+.generated-timeline time{color:#d6ff4b;font:700 11px Consolas,monospace}
+.generated-timeline b{font-size:13px;line-height:1.4}
+.companion-lyrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
+.companion-lyrics textarea{min-height:210px!important}
+@media(max-width:650px){.companion-lyrics{grid-template-columns:1fr}.local-engine-help>div{flex-direction:column}.generated-timeline button{grid-template-columns:28px 52px minmax(0,1fr)}}
