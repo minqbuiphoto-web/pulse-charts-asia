@@ -2,6 +2,7 @@
 
 import { ChangeEvent, DragEvent, useEffect, useRef, useState } from "react";
 import "./audio-lab.css";
+import AudioProTools from "./audio-pro-tools";
 
 type ProgressState = { percent: number; title: string; detail: string };
 type WorkerReply =
@@ -142,7 +143,8 @@ export default function AudioLabPage() {
       {result ? <section className="audio-result" aria-live="polite"><header><span>✓</span><div><b>AUDIO ĐÃ SẴN SÀNG</b><small>{result.details}</small></div></header><audio controls preload="metadata" src={result.url}/><a href={result.url} download={result.name}>TẢI FILE WAV <span>↓</span></a></section> : null}
     </section>
 
-    <section className="audio-facts"><article><span>01</span><b>NO UPLOAD</b><p>Audio không rời khỏi máy bạn.</p></article><article><span>02</span><b>STEREO SAFE</b><p>Các kênh dùng chung mốc ghép.</p></article><article><span>03</span><b>BACKGROUND DSP</b><p>Web Worker giữ giao diện phản hồi.</p></article><article><span>04</span><b>WAV OUTPUT</b><p>PCM 16-bit, giữ sample rate.</p></article></section>
+    <AudioProTools/>
+    <section className="audio-facts"><article><span>01</span><b>NO UPLOAD</b><p>Audio không rời khỏi máy bạn.</p></article><article><span>02</span><b>STEM + ARRANGE</b><p>Tách beat và hoàn thiện mối ghép.</p></article><article><span>03</span><b>BACKGROUND DSP</b><p>Web Worker giữ giao diện phản hồi.</p></article><article><span>04</span><b>WAV OUTPUT</b><p>PCM 16-bit, giữ sample rate.</p></article></section>
     <footer className="audio-footer"><b>PULSE CHARTS / AUDIO LAB</b><span>WSOLA TIME-STRETCH + CUBIC RESAMPLE</span></footer>
   </main>;
 }
