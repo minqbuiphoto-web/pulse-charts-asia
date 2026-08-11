@@ -3,8 +3,10 @@
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 type BeatMode = "ai" | "quick";
+type MasterPreset = "balanced" | "warm" | "clear" | "loud";
 type AudioResult = { url: string; name: string; details: string };
 type ArrangementClip = { id: string; file: File };
+type AudioMetrics = { peakDb: number; rmsDb: number };
 
 const LOCAL_ENGINE = "http://127.0.0.1:8765";
 const AUDIO_PATTERN = /\.(mp3|wav|m4a|aac|ogg|flac|webm)$/i;
@@ -86,18 +88,26 @@ function ArrangementBuilder() {
   const [crossfade, setCrossfade] = useState(.8);
   const [normalize, setNormalize] = useState(true);
   const [repair, setRepair] = useState(true);
+  const [preset, setPreset] = useState<MasterPreset>("balanced");
+  const [intensity, setIntensity] = useState(80);
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("Chọn một bản nhạc hoặc nhiều đoạn cần remaster.");
   const [result, setResult] = useState<AudioResult | null>(null);
+  const [before, setBefore] = useState<AudioResult | null>(null);
   const resultUrl = useRef("");
+  const beforeUrl = useRef("");
 
-  useEffect(() => () => { if (resultUrl.current) URL.revokeObjectURL(resultUrl.current); }, []);
+  useEffect(() => () => {
+    if (resultUrl.current) URL.revokeObjectURL(resultUrl.current);
+    if (beforeUrl.current) URL.revokeObjectURL(beforeUrl.current);
+  }, []);
 
   const addFiles = (list: FileList | null) => {
     if (!list) return;
     const accepted = [...list].filter(isAudio);
     if (!accepted.length) { setStatus("Không tìm thấy file audio hợp lệ."); return; }
     clearResult(resultUrl, setResult);
+    clearResult(beforeUrl, setBefore);
     setClips(current => [...current, ...accepted.map(file => ({ id: crypto.randomUUID(), file }))]);
     setStatus(`Đã nhận ${accepted.length} đoạn. Bạn có thể đổi thứ tự trước khi phối.`);
   };
@@ -116,14 +126,18 @@ function ArrangementBuilder() {
     if (!clips.length || busy) return;
     setBusy(true);
     clearResult(resultUrl, setResult);
-    setStatus(clips.length === 1 ? "Đang rà điểm nối, cân âm lượng và remaster…" : "Đang giải mã, crossfade và remaster các đoạn…");
+    clearResult(beforeUrl, setBefore);
+    setStatus("Đang chạy EQ, compressor, stereo polish và limiter…");
     try {
-      const blob = await assembleAudio(clips.map(clip => clip.file), crossfade, normalize, repair);
-      const url = URL.createObjectURL(blob);
+      const output = await assembleAudio(clips.map(clip => clip.file), crossfade, normalize, repair, preset, intensity);
+      const url = URL.createObjectURL(output.master);
+      const dryUrl = URL.createObjectURL(output.before);
       resultUrl.current = url;
+      beforeUrl.current = dryUrl;
       const name = `${baseName(clips[0].file.name)}_remastered.wav`;
-      setResult({ url, name, details: `${clips.length} ĐOẠN · CROSSFADE ${tag(crossfade)}S · ${normalize ? "NORMALIZED −1 DB" : "GIỮ ÂM LƯỢNG"} · WAV` });
-      setStatus("Bản phối đã hoàn thành. Hãy nghe toàn bộ các điểm nối trước khi tải.");
+      setBefore({ url:dryUrl, name:"", details:`TRƯỚC · RMS ${dbTag(output.beforeMetrics.rmsDb)} DB · PEAK ${dbTag(output.beforeMetrics.peakDb)} DB` });
+      setResult({ url, name, details:`SAU · ${presetLabel(preset)} ${intensity}% · RMS ${dbTag(output.afterMetrics.rmsDb)} DB · PEAK ${dbTag(output.afterMetrics.peakDb)} DB` });
+      setStatus("Master đã hoàn thành. Hãy dùng phần A/B bên dưới để nghe sự khác biệt trước và sau.");
     } catch (error) {
       setStatus(error instanceof Error ? friendlyAudioError(error.message) : "Không thể hoàn thiện bản phối này.");
     } finally { setBusy(false); }
@@ -133,14 +147,18 @@ function ArrangementBuilder() {
     <header><span>04</span><div><small>REMASTER STUDIO</small><h2>Remaster bản nhạc hoàn chỉnh</h2><p>Làm mượt mối nối, cân mức âm và hoàn thiện bản master liền mạch.</p></div><b>ON-DEVICE</b></header>
     <label className="pro-upload multi">FILE ĐÃ GHÉP HOẶC CÁC ĐOẠN NHẠC<input type="file" multiple accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm" onChange={(event:ChangeEvent<HTMLInputElement>) => addFiles(event.target.files)}/><b>Thêm một hoặc nhiều đoạn</b><span>Thứ tự có thể chỉnh sau khi chọn</span></label>
     {clips.length ? <div className="clip-list">{clips.map((clip,index) => <div key={clip.id}><i>{String(index+1).padStart(2,"0")}</i><p><b>{clip.file.name}</b><small>{formatBytes(clip.file.size)}</small></p><button disabled={index===0} onClick={() => move(index,-1)} aria-label={`Đưa ${clip.file.name} lên`}>↑</button><button disabled={index===clips.length-1} onClick={() => move(index,1)} aria-label={`Đưa ${clip.file.name} xuống`}>↓</button><button onClick={() => remove(clip.id)} aria-label={`Xóa ${clip.file.name}`}>×</button></div>)}</div> : null}
+    <div className="audio-mode-tabs master-presets" role="group" aria-label="Chọn màu âm mastering">
+      {(["balanced","warm","clear","loud"] as MasterPreset[]).map(value => <button key={value} className={preset===value?"active":""} onClick={() => setPreset(value)}><b>{presetLabel(value)}</b><small>{presetCopy(value)}</small></button>)}
+    </div>
     <div className="arrangement-options">
+      <label><span><b>CƯỜNG ĐỘ MASTER</b><small>Mức tác động của EQ và compression</small></span><output>{intensity}%</output><input type="range" min="25" max="100" step="5" value={intensity} onChange={event => setIntensity(Number(event.target.value))}/></label>
       <label><span><b>CROSSFADE</b><small>0–5 giây giữa các đoạn</small></span><output>{tag(crossfade)}S</output><input type="range" min="0" max="5" step="0.1" value={crossfade} onChange={event => setCrossfade(Number(event.target.value))}/></label>
-      <label className="option-check"><input type="checkbox" checked={normalize} onChange={event => setNormalize(event.target.checked)}/><span><b>CÂN ÂM LƯỢNG −1 DB</b><small>Giữ các đoạn đồng đều, tránh vỡ tiếng.</small></span></label>
+      <label className="option-check"><input type="checkbox" checked={normalize} onChange={event => setNormalize(event.target.checked)}/><span><b>LOUDNESS + LIMITER −1 DB</b><small>Tăng độ lớn cảm nhận và chặn peak gây vỡ tiếng.</small></span></label>
       <label className="option-check"><input type="checkbox" checked={repair} onChange={event => setRepair(event.target.checked)}/><span><b>LÀM MƯỢT MỐI GHÉP</b><small>Khử click ở file đã ghép và mép đoạn.</small></span></label>
     </div>
     <button className="pro-run" disabled={!clips.length || busy} onClick={run}>{busy ? "ĐANG REMASTER…" : "REMASTER & XUẤT FILE HOÀN CHỈNH"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
-    {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI BẢN REMASTER WAV ↓</a></div> : null}
+    {result && before ? <div className="pro-result ab-result"><div className="ab-compare"><label><b>A · TRƯỚC MASTER</b><audio controls preload="metadata" src={before.url}/><small>{before.details}</small></label><label><b>B · SAU MASTER</b><audio controls preload="metadata" src={result.url}/><small>{result.details}</small></label></div><a href={result.url} download={result.name}>TẢI BẢN REMASTER WAV ↓</a></div> : null}
   </article>;
 }
 
@@ -177,7 +195,7 @@ async function createQuickBeat(file:File) {
   } finally { await context.close().catch(() => undefined); }
 }
 
-async function assembleAudio(files:File[], crossfade:number, normalize:boolean, repair:boolean) {
+async function assembleAudio(files:File[], crossfade:number, normalize:boolean, repair:boolean, preset:MasterPreset, intensity:number) {
   const decoder = new AudioContext();
   try {
     const buffers:AudioBuffer[] = [];
@@ -187,13 +205,10 @@ async function assembleAudio(files:File[], crossfade:number, normalize:boolean, 
     const totalDuration = buffers.reduce((total,buffer) => total + buffer.duration,0) - safeFade * Math.max(0,buffers.length-1);
     if (totalDuration <= 0 || totalDuration > 4 * 60 * 60) throw new Error("Bản phối phải ngắn hơn 4 giờ.");
     const offline = new OfflineAudioContext(2,Math.ceil(totalDuration*sampleRate),sampleRate);
-    const compressor = offline.createDynamicsCompressor();
-    compressor.threshold.value=-8; compressor.knee.value=6; compressor.ratio.value=2; compressor.attack.value=.004; compressor.release.value=.16;
-    compressor.connect(offline.destination);
     let cursor=0;
     buffers.forEach((buffer,index) => {
       const source=offline.createBufferSource(), gain=offline.createGain();
-      source.buffer=buffer; source.connect(gain).connect(compressor);
+      source.buffer=buffer; source.connect(gain).connect(offline.destination);
       if(index>0&&safeFade>0){gain.gain.setValueAtTime(0,cursor);gain.gain.linearRampToValueAtTime(1,cursor+safeFade);}
       else gain.gain.setValueAtTime(1,cursor);
       const end=cursor+buffer.duration;
@@ -202,11 +217,63 @@ async function assembleAudio(files:File[], crossfade:number, normalize:boolean, 
       cursor += buffer.duration-safeFade;
     });
     const rendered=await offline.startRendering();
-    const channels=Array.from({length:Math.min(2,rendered.numberOfChannels)},(_,index)=>rendered.getChannelData(index).slice());
-    if(repair)channels.forEach(channel=>repairClicks(channel,rendered.sampleRate));
-    if(normalize)normalizeChannels(channels,.891);
-    return encodeWav(channels,rendered.sampleRate);
+    const dryChannels=Array.from({length:Math.min(2,rendered.numberOfChannels)},(_,index)=>rendered.getChannelData(index).slice());
+    if(repair)dryChannels.forEach(channel=>repairClicks(channel,rendered.sampleRate));
+    const beforeMetrics=measureAudio(dryChannels);
+    const mastered=await masterChannels(dryChannels,rendered.sampleRate,preset,intensity,normalize);
+    const afterMetrics=measureAudio(mastered);
+    return { before:encodeWav(dryChannels,rendered.sampleRate), master:encodeWav(mastered,rendered.sampleRate), beforeMetrics, afterMetrics };
   } finally { await decoder.close().catch(()=>undefined); }
+}
+
+async function masterChannels(channels:Float32Array[],sampleRate:number,preset:MasterPreset,intensity:number,finalize:boolean) {
+  const amount=Math.max(.25,Math.min(1,intensity/100));
+  const profile={
+    balanced:{low:.9,mud:-1.5,presence:1.3,air:.9,threshold:-20,ratio:2.2,makeup:2,target:-14},
+    warm:{low:2.2,mud:-1.1,presence:.4,air:-.4,threshold:-22,ratio:2.7,makeup:2.6,target:-14.5},
+    clear:{low:-.5,mud:-2.5,presence:2.2,air:1.8,threshold:-19,ratio:2.1,makeup:2,target:-14},
+    loud:{low:1.2,mud:-2,presence:1.5,air:1,threshold:-25,ratio:3.8,makeup:4,target:-11.5},
+  }[preset];
+  const length=channels[0].length, offline=new OfflineAudioContext(Math.max(1,channels.length),length,sampleRate);
+  const buffer=offline.createBuffer(channels.length,length,sampleRate);
+  channels.forEach((channel,index)=>buffer.getChannelData(index).set(channel));
+  const source=offline.createBufferSource(); source.buffer=buffer;
+  const highpass=offline.createBiquadFilter(); highpass.type="highpass"; highpass.frequency.value=28; highpass.Q.value=.7;
+  const low=offline.createBiquadFilter(); low.type="lowshelf"; low.frequency.value=125; low.gain.value=profile.low*amount;
+  const mud=offline.createBiquadFilter(); mud.type="peaking"; mud.frequency.value=285; mud.Q.value=.8; mud.gain.value=profile.mud*amount;
+  const presence=offline.createBiquadFilter(); presence.type="peaking"; presence.frequency.value=3200; presence.Q.value=.7; presence.gain.value=profile.presence*amount;
+  const air=offline.createBiquadFilter(); air.type="highshelf"; air.frequency.value=9000; air.gain.value=profile.air*amount;
+  const compressor=offline.createDynamicsCompressor(); compressor.threshold.value=profile.threshold*amount; compressor.knee.value=12; compressor.ratio.value=1+(profile.ratio-1)*amount; compressor.attack.value=.018; compressor.release.value=.22;
+  const makeup=offline.createGain(); makeup.gain.value=Math.pow(10,profile.makeup*amount/20);
+  const limiter=offline.createDynamicsCompressor(); limiter.threshold.value=-1.2; limiter.knee.value=0; limiter.ratio.value=20; limiter.attack.value=.0015; limiter.release.value=.075;
+  source.connect(highpass).connect(low).connect(mud).connect(presence).connect(air).connect(compressor).connect(makeup).connect(limiter).connect(offline.destination);
+  source.start();
+  const rendered=await offline.startRendering();
+  const output=Array.from({length:rendered.numberOfChannels},(_,index)=>rendered.getChannelData(index).slice());
+  if(finalize)applyLoudnessAndLimit(output,profile.target,-1);
+  return output;
+}
+
+function applyLoudnessAndLimit(channels:Float32Array[],targetRmsDb:number,targetPeakDb:number) {
+  const metrics=measureAudio(channels), targetRms=Math.pow(10,targetRmsDb/20), targetPeak=Math.pow(10,targetPeakDb/20);
+  const rms=Math.pow(10,metrics.rmsDb/20), peak=Math.pow(10,metrics.peakDb/20);
+  const gain=Math.max(.35,Math.min(4,targetRms/Math.max(rms,1e-7),targetPeak/Math.max(peak,1e-7)*1.35));
+  const drive=1.35;
+  for(const channel of channels)for(let index=0;index<channel.length;index++){
+    const sample=channel[index]*gain;
+    channel[index]=Math.tanh(sample*drive)/Math.tanh(drive);
+  }
+  normalizeChannels(channels,targetPeak);
+}
+
+function measureAudio(channels:Float32Array[]):AudioMetrics {
+  let peak=0,sum=0,count=0;
+  for(const channel of channels)for(let index=0;index<channel.length;index++){
+    const value=channel[index]; peak=Math.max(peak,Math.abs(value));
+    if(Math.abs(value)>1e-4){sum+=value*value;count++;}
+  }
+  const rms=Math.sqrt(sum/Math.max(1,count));
+  return {peakDb:20*Math.log10(Math.max(peak,1e-7)),rmsDb:20*Math.log10(Math.max(rms,1e-7))};
 }
 
 function repairClicks(channel:Float32Array,sampleRate:number) {
@@ -226,5 +293,8 @@ function clearResult(ref:React.MutableRefObject<string>,setResult:React.Dispatch
 function friendlyAudioError(message:string){return /decode|encoding/i.test(message)?"Không giải mã được codec này. Hãy thử WAV hoặc MP3.":message;}
 function baseName(name:string){return name.replace(/\.[^.]+$/,"").replace(/[\\/:*?"<>|]+/g,"-").trim()||"pulse-audio";}
 function formatBytes(value:number){const units=["B","KB","MB","GB"];let unit=0;while(value>=1024&&unit<units.length-1){value/=1024;unit++;}return `${value.toLocaleString("vi-VN",{maximumFractionDigits:2})} ${units[unit]}`;}
+function presetLabel(value:MasterPreset){return {balanced:"CÂN BẰNG",warm:"ẤM",clear:"RÕ NÉT",loud:"LOUD"}[value];}
+function presetCopy(value:MasterPreset){return {balanced:"Đều, tự nhiên",warm:"Dày bass, mềm treble",clear:"Sáng và rõ giọng",loud:"Nén mạnh, âm lượng lớn"}[value];}
+function dbTag(value:number){return Number.isFinite(value)?value.toFixed(1).replace(".",","):"−∞";}
 function tag(value:number){return String(Math.round(value*10)/10).replace(".",",");}
 function clamp(value:number){return Math.max(-1,Math.min(1,value));}
