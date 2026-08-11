@@ -154,7 +154,7 @@ function ArrangementBuilder() {
       <label><span><b>CƯỜNG ĐỘ MASTER</b><small>Mức tác động của EQ và compression</small></span><output>{intensity}%</output><input type="range" min="25" max="100" step="5" value={intensity} onChange={event => setIntensity(Number(event.target.value))}/></label>
       <label><span><b>CROSSFADE</b><small>0–5 giây giữa các đoạn</small></span><output>{tag(crossfade)}S</output><input type="range" min="0" max="5" step="0.1" value={crossfade} onChange={event => setCrossfade(Number(event.target.value))}/></label>
       <label className="option-check"><input type="checkbox" checked={normalize} onChange={event => setNormalize(event.target.checked)}/><span><b>LOUDNESS + LIMITER −1 DB</b><small>Tăng độ lớn cảm nhận và chặn peak gây vỡ tiếng.</small></span></label>
-      <label className="option-check"><input type="checkbox" checked={repair} onChange={event => setRepair(event.target.checked)}/><span><b>LÀM MƯỢT MỐI GHÉP</b><small>Khử click ở file đã ghép và mép đoạn.</small></span></label>
+      <label className="option-check"><input type="checkbox" checked={repair} onChange={event => setRepair(event.target.checked)}/><span><b>SỬA MỐI NỐI & DROPOUT</b><small>Dò khoảng rỗng 8–250 ms, lấp bằng crossfade và khử click.</small></span></label>
     </div>
     <button className="pro-run" disabled={!clips.length || busy} onClick={run}>{busy ? "ĐANG REMASTER…" : "REMASTER & XUẤT FILE HOÀN CHỈNH"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
@@ -218,9 +218,13 @@ async function assembleAudio(files:File[], crossfade:number, normalize:boolean, 
     });
     const rendered=await offline.startRendering();
     const dryChannels=Array.from({length:Math.min(2,rendered.numberOfChannels)},(_,index)=>rendered.getChannelData(index).slice());
-    if(repair)dryChannels.forEach(channel=>repairClicks(channel,rendered.sampleRate));
     const beforeMetrics=measureAudio(dryChannels);
-    const mastered=await masterChannels(dryChannels,rendered.sampleRate,preset,intensity,normalize);
+    let workingChannels=dryChannels.map(channel=>channel.slice());
+    if(repair){
+      workingChannels.forEach(channel=>repairClicks(channel,rendered.sampleRate));
+      repairDropouts(workingChannels,rendered.sampleRate);
+    }
+    const mastered=await masterChannels(workingChannels,rendered.sampleRate,preset,intensity,normalize);
     const afterMetrics=measureAudio(mastered);
     return { before:encodeWav(dryChannels,rendered.sampleRate), master:encodeWav(mastered,rendered.sampleRate), beforeMetrics, afterMetrics };
   } finally { await decoder.close().catch(()=>undefined); }
@@ -284,6 +288,30 @@ function repairClicks(channel:Float32Array,sampleRate:number) {
     for(let point=start+1;point<end;point++)channel[point]=left+(right-left)*(point-start)/(end-start);
     index=end;
   }
+}
+
+function repairDropouts(channels:Float32Array[],sampleRate:number) {
+  const length=channels[0]?.length??0, threshold=4/32768, minRun=Math.round(sampleRate*.008), maxRun=Math.round(sampleRate*.25);
+  const gaps:{start:number;end:number}[]=[];
+  let start=-1;
+  for(let index=0;index<length;index++){
+    let quiet=true;
+    for(const channel of channels)if(Math.abs(channel[index])>threshold){quiet=false;break;}
+    if(quiet&&start<0)start=index;
+    if((!quiet||index===length-1)&&start>=0){
+      const end=quiet&&index===length-1?index+1:index, run=end-start;
+      if(run>=minRun&&run<=maxRun&&start>Math.max(run,sampleRate*2)&&end+Math.max(run,sampleRate*2)<length)gaps.push({start,end});
+      start=-1;
+    }
+  }
+  for(const {start:gapStart,end:gapEnd} of gaps){
+    const run=gapEnd-gapStart;
+    for(const channel of channels)for(let offset=0;offset<run;offset++){
+      const mix=(offset+1)/(run+1), left=channel[gapStart-run+offset], right=channel[gapEnd+offset];
+      channel[gapStart+offset]=left*Math.cos(mix*Math.PI/2)+right*Math.sin(mix*Math.PI/2);
+    }
+  }
+  return channels;
 }
 
 function normalizeChannels(channels:Float32Array[],target:number){let peak=0;for(const channel of channels)for(let index=0;index<channel.length;index++)peak=Math.max(peak,Math.abs(channel[index]));if(peak<1e-7)return;const gain=Math.min(8,target/peak);for(const channel of channels)for(let index=0;index<channel.length;index++)channel[index]=clamp(channel[index]*gain);}
