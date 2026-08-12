@@ -708,3 +708,8 @@
   .vertical-art-grid { grid-template-columns: repeat(4, 1fr); }
   .mv-preview.vertical { width: min(100%, calc(70vh * 9 / 16)); }
 }
+
+.direct-render-note.setup { grid-template-columns: 1fr auto; align-items: center; border-color: #d6ff4b; background: #11150c; }
+.direct-render-note.setup b, .direct-render-note.setup span { grid-column: 1; }
+.direct-render-note.setup > a { grid-column: 2; grid-row: 1 / span 2; min-width: 180px; padding: 13px 18px; }
+@media (max-width: 560px) { .direct-render-note.setup { grid-template-columns: 1fr; } .direct-render-note.setup > a { grid-column: 1; grid-row: auto; min-width: 0; } }
