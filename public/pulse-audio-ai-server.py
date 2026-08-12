@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.8")
+app = FastAPI(title="Pulse Audio AI", version="2.9")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.8", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.9", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True}
 
 
 def ffmpeg_executable() -> str:
@@ -82,22 +82,18 @@ def safe_font(value: str, fallback: str) -> str:
     return verified.get(clean.casefold(), verified.get(str(fallback).casefold(), "Arial"))
 
 
-def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str, width: int, height: int,
+def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions: dict, mode: str, width: int, height: int,
                         clip_start: float, clip_end: float, intro_duration: float):
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
-    original_size = max(12, min(96, round(float(original.get("fontSize", 25)))))
-    literal_size = max(12, min(96, round(float(literal.get("fontSize", 19)))))
-    vietnamese_size = max(12, min(96, round(float(vietnamese.get("fontSize", 36)))))
-    is_vertical = height > width
-    gap = max(18 if is_vertical else 14, round(max(original_size, literal_size) * .45))
-    original_top = 1080 if is_vertical else 62
-    literal_top = original_top + round(original_size * 1.2) + gap
-    vietnamese_margin = 64
-    if is_vertical:
-        vietnamese_top = literal_top + round(literal_size * 1.2) + gap
-        vietnamese_margin = max(220, height - vietnamese_top - round(vietnamese_size * 1.2))
+    defaults = {"original": 48 if height > width else 6, "literal": 60 if height > width else 13, "vietnamese": 72 if height > width else 82}
+    def position_margin(key: str) -> int:
+        try:
+            percent = max(3.0, min(92.0, float(positions.get(key, defaults[key]))))
+        except (TypeError, ValueError):
+            percent = defaults[key]
+        return round(height * percent / 100)
     def style_line(name: str, data: dict, fallback_font: str, fallback_size: int, fallback_color: str,
                    alignment: int, margin_v: int):
         font = safe_font(data.get("fontFamily"), fallback_font)
@@ -120,9 +116,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str,
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         "ScaledBorderAndShadow: yes", "WrapStyle: 2", "", "[V4+ Styles]",
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding",
-        style_line("Original", original, "Arial", 25, "#FFFFFF", 8, original_top),
-        style_line("Literal", literal, "Arial", 19, "#BFE7FF", 8, literal_top),
-        style_line("Vietnamese", vietnamese, "Arial", 36, "#D6FF4B", 2, vietnamese_margin),
+        style_line("Original", original, "Arial", 25, "#FFFFFF", 8, position_margin("original")),
+        style_line("Literal", literal, "Arial", 19, "#BFE7FF", 8, position_margin("literal")),
+        style_line("Vietnamese", vietnamese, "Arial", 36, "#D6FF4B", 8, position_margin("vietnamese")),
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
     events = []
@@ -393,6 +389,7 @@ async def render_mv(
     thumbnail: UploadFile | None = File(None),
     rows_json: str = Form(...),
     styles_json: str = Form("{}"),
+    positions_json: str = Form("{}"),
     mode: str = Form("music"),
     video_format: str = Form("landscape"),
     clip_start: float = Form(0.0),
@@ -405,7 +402,8 @@ async def render_mv(
     try:
         rows = json.loads(rows_json)
         styles = json.loads(styles_json)
-        if not isinstance(rows, list) or not isinstance(styles, dict):
+        positions = json.loads(positions_json)
+        if not isinstance(rows, list) or not isinstance(styles, dict) or not isinstance(positions, dict):
             raise ValueError()
     except (json.JSONDecodeError, ValueError):
         raise HTTPException(400, "Invalid timeline or text style data")
@@ -466,7 +464,7 @@ async def render_mv(
         ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
         subtitle_path = work / "lyrics.ass"
-        write_ass_subtitles(subtitle_path, rows, styles, mode, width, height, clip_start, clip_end, intro_duration)
+        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, intro_duration)
         output = work / "pulse-mv.mp4"
         total_duration = intro_duration + song_duration
         subtitle_filter = str(subtitle_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
