@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.0", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.1", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True}
 
 
 def ffmpeg_executable() -> str:
@@ -210,75 +210,60 @@ def token_similarity(left: str, right: str) -> float:
 
 
 def align_line_times(lines: list[str], heard: list[dict], duration: float) -> list[float]:
-    wanted, line_token_starts = lyric_tokens(lines)
+    line_words = [
+        [normalize_word(raw) for raw in re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE) if normalize_word(raw)]
+        for line in lines
+    ]
     recognized = [(normalize_word(item["word"]), float(item["start"])) for item in heard]
     recognized = [item for item in recognized if item[0]]
-    if not wanted or not recognized:
+    if not any(line_words) or not recognized:
         step = max(duration, len(lines) * 4) / max(len(lines), 1)
         return [round(index * step, 3) for index in range(len(lines))]
 
-    rows, cols = len(wanted), len(recognized)
-    gap = -0.9
-    score = [[0.0] * (cols + 1) for _ in range(rows + 1)]
-    trace = [[0] * (cols + 1) for _ in range(rows + 1)]
-    for i in range(1, rows + 1):
-        score[i][0] = i * gap
-        trace[i][0] = 1
-    for j in range(1, cols + 1):
-        score[0][j] = j * gap
-        trace[0][j] = 2
-    for i in range(1, rows + 1):
-        wanted_word = wanted[i - 1][0]
-        for j in range(1, cols + 1):
-            similarity = token_similarity(wanted_word, recognized[j - 1][0])
-            match = score[i - 1][j - 1] + (3.0 if similarity >= .98 else 1.4 if similarity >= .72 else -1.2)
-            delete = score[i - 1][j] + gap
-            insert = score[i][j - 1] + gap
-            best = max(match, delete, insert)
-            score[i][j] = best
-            trace[i][j] = 0 if best == match else 1 if best == delete else 2
-
-    token_matches = {}
-    i, j = rows, cols
-    while i and j:
-        direction = trace[i][j]
-        if direction == 0:
-            if token_similarity(wanted[i - 1][0], recognized[j - 1][0]) >= .58:
-                token_matches[i - 1] = j - 1
-            i -= 1
-            j -= 1
-        elif direction == 1:
-            i -= 1
-        else:
-            j -= 1
-
-    known = {}
-    for line_index, token_start in enumerate(line_token_starts):
-        next_start = line_token_starts[line_index + 1] if line_index + 1 < len(line_token_starts) else len(wanted)
-        matches = [token_matches[index] for index in range(token_start, next_start) if index in token_matches]
-        if matches:
-            known[line_index] = recognized[min(matches)][1]
-
-    if not known:
-        first = recognized[0][1]
-        usable = max(first, min(duration, recognized[-1][1] + 2))
-        return [round(first + (usable - first) * index / max(len(lines), 1), 3) for index in range(len(lines))]
-
-    times = [0.0] * len(lines)
-    anchors = sorted(known)
-    for line_index in range(len(lines)):
-        if line_index in known:
-            times[line_index] = known[line_index]
-            continue
-        before = next((index for index in reversed(anchors) if index < line_index), None)
-        after = next((index for index in anchors if index > line_index), None)
-        if before is not None and after is not None:
-            ratio = (line_index - before) / (after - before)
-            times[line_index] = known[before] + (known[after] - known[before]) * ratio
-        elif after is not None:
-            times[line_index] = max(0.0, known[after] - (after - line_index) * 3.5)
-        else:
-            times[line_index] = min(duration, known[before] + (line_index - before) * 3.5)
+    total_words = sum(max(len(words), 1) for words in line_words)
+    consumed_words = 0
+    previous_word = -1
+    times = []
+    for words in line_words:
+        expected = round(consumed_words / max(total_words, 1) * (len(recognized) - 1))
+        radius = max(14, round(len(recognized) / max(len(lines), 1) * 2.3))
+        low = max(previous_word + 1, expected - radius)
+        high = min(len(recognized) - 1, expected + radius)
+        best_index = max(low, min(expected, high))
+        best_score = float("-inf")
+        for candidate in range(low, high + 1):
+            window = [item[0] for item in recognized[candidate:candidate + max(len(words) + 3, 6)]]
+            hits = sum(max((token_similarity(word, heard_word) for heard_word in window), default=0.0) for word in words)
+            score = hits / max(len(words), 1) - abs(candidate - expected) / max(radius, 1) * .22
+            lead = max((
+                token_similarity(words[word_index], window[heard_index]) - .10 * heard_index - .04 * word_index
+                for word_index in range(min(3, len(words)))
+                for heard_index in range(min(4, len(window)))
+            ), default=0.0)
+            score += max(0.0, lead) * .48
+            if score > best_score:
+                best_score = score
+                best_index = candidate
+        # The whole-line score can land on a well-recognized word near the end of a
+        # sung phrase. Walk back to the earliest plausible leading word so the lyric
+        # appears when the singer starts the sentence, not several seconds later.
+        leading_candidates = []
+        for candidate in range(max(previous_word + 1, best_index - 6), min(len(recognized), best_index + 4)):
+            leading_score = max((token_similarity(word, recognized[candidate][0]) for word in words[:3]), default=0.0)
+            if leading_score >= .72:
+                leading_candidates.append((leading_score, candidate))
+        if leading_candidates:
+            strongest = max(score for score, _ in leading_candidates)
+            best_index = min(candidate for score, candidate in leading_candidates if score >= strongest - .02)
+        segment_starts = [
+            candidate for candidate in range(max(previous_word + 1, best_index - 4), min(len(heard), best_index + 5))
+            if heard[candidate].get("segment_start")
+        ]
+        if segment_starts:
+            best_index = min(segment_starts, key=lambda candidate: abs(candidate - best_index))
+        times.append(recognized[best_index][1])
+        previous_word = best_index
+        consumed_words += max(len(words), 1)
     for index in range(1, len(times)):
         times[index] = max(times[index], times[index - 1] + .12)
     return [round(min(max(value, 0.0), max(duration - .1, 0.0)), 3) for value in times]
@@ -333,8 +318,8 @@ async def align_lyrics(
         for segment in segments:
             transcript.append(segment.text.strip())
             last_end = max(last_end, float(segment.end))
-            for word in segment.words or []:
-                heard.append({"word": word.word.strip(), "start": float(word.start), "end": float(word.end)})
+            for word_index, word in enumerate(segment.words or []):
+                heard.append({"word": word.word.strip(), "start": float(word.start), "end": float(word.end), "segment_start": word_index == 0})
         duration = float(getattr(info, "duration", 0.0) or last_end)
         times = align_line_times(lines, heard, duration)
         ends = align_line_ends(lines, times, heard, duration)
