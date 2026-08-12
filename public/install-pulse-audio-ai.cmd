@@ -25,9 +25,13 @@ if errorlevel 1 (
   )
 )
 
+echo Dang dong phien ban Pulse Audio AI cu neu dang chay...
+powershell -NoProfile -ExecutionPolicy Bypass -Command "$self=$PID; Get-CimInstance Win32_Process | Where-Object { $_.ProcessId -ne $self -and $_.CommandLine -like '*PulseChartsAudioAI*server.py*' } | ForEach-Object { Stop-Process -Id $_.ProcessId -Force -ErrorAction SilentlyContinue }"
+timeout /t 2 /nobreak >nul
+
 if not exist "%ENGINE_DIR%" mkdir "%ENGINE_DIR%"
 copy /Y "%SERVER_SOURCE%" "%ENGINE_DIR%\server.py" >nul
-python -m venv "%ENGINE_DIR%\venv"
+if not exist "%ENGINE_DIR%\venv\Scripts\python.exe" python -m venv "%ENGINE_DIR%\venv"
 call "%ENGINE_DIR%\venv\Scripts\activate.bat"
 python -m pip install --upgrade pip
 python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg
@@ -35,4 +39,5 @@ python -m pip install demucs faster-whisper fastapi uvicorn python-multipart ima
 echo.
 echo Pulse Audio AI da san sang. Giu cua so nay mo khi tach beat, can lyric hoac xuat MV.
 echo FFmpeg mien phi da duoc cai kem. Model Demucs va Faster-Whisper se tu tai o lan chay dau tien.
+echo Neu thay dong "Uvicorn running on http://127.0.0.1:8765" thi cap nhat da thanh cong.
 python "%ENGINE_DIR%\server.py"
