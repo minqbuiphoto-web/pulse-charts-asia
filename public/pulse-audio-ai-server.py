@@ -164,6 +164,25 @@ def align_line_times(lines: list[str], heard: list[dict], duration: float) -> li
     return [round(min(max(value, 0.0), max(duration - .1, 0.0)), 3) for value in times]
 
 
+def align_line_ends(lines: list[str], times: list[float], heard: list[dict], duration: float) -> list[float]:
+    """Find when each sung line ends so instrumental gaps remain lyric-free."""
+    ends = []
+    for index, start in enumerate(times):
+        next_start = times[index + 1] if index + 1 < len(times) else duration
+        ceiling = max(start + .18, next_start - .12) if index + 1 < len(times) else max(start + .18, duration)
+        word_ends = [
+            float(item["end"])
+            for item in heard
+            if float(item["start"]) >= start - .12 and float(item["start"]) < ceiling
+        ]
+        word_count = max(1, len(lines[index].split()))
+        estimated = start + min(7.5, max(1.2, word_count * .46))
+        detected = max(word_ends) if word_ends else estimated
+        end = min(ceiling, max(start + .18, detected + .08))
+        ends.append(round(end, 3))
+    return ends
+
+
 @app.post("/align-lyrics")
 async def align_lyrics(
     background_tasks: BackgroundTasks,
@@ -198,11 +217,13 @@ async def align_lyrics(
                 heard.append({"word": word.word.strip(), "start": float(word.start), "end": float(word.end)})
         duration = float(getattr(info, "duration", 0.0) or last_end)
         times = align_line_times(lines, heard, duration)
+        ends = align_line_ends(lines, times, heard, duration)
         background_tasks.add_task(shutil.rmtree, work, True)
         return {
             "ok": True,
             "method": "demucs + faster-whisper-small + lyric alignment",
             "times": times,
+            "ends": ends,
             "lineCount": len(lines),
             "recognizedWords": len(heard),
             "transcript": " ".join(part for part in transcript if part),
