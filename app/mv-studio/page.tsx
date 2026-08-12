@@ -104,7 +104,7 @@ export default function MVStudio(){
   const file=audioFileRef.current,lines=split(vietnamese),originalLines=split(original),literalLines=split(literal);
   if(!file){setAiAlignStatus("Hãy nạp bài cover trước.");return}
   if(!lines.length){setAiAlignStatus("Hãy dán lời Việt, mỗi câu một dòng.");return}
-  if(await checkLocalEngine()==="offline"){setAiAlignStatus("Bộ nghe bài trên máy chưa chạy. Hãy mở Pulse Charts Audio AI rồi bấm KIỂM TRA KẾT NỐI.");return}
+  const alignmentEngine=await checkLocalEngine();if(alignmentEngine!=="ready"){setShowEngineSetup(true);setAiAlignStatus(alignmentEngine==="outdated"?"Bộ nghe bài cần cập nhật để bắt đúng đầu từng câu. Hãy bấm CÀI MỘT LẦN rồi tạo lại timeline.":"Bộ nghe bài trên máy chưa chạy. Hãy mở Pulse Charts Audio AI rồi bấm KIỂM TRA KẾT NỐI.");return}
   setAiAligning(true);setAiAlignStatus("Đang tách giọng, nghe toàn bộ bài và đối chiếu từng câu. Lần đầu có thể mất vài phút…");
   try{
    const form=new FormData();form.append("file",file,file.name);form.append("lyrics",lines.join("\n"));
