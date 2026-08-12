@@ -3,7 +3,7 @@
 // OST chart dataset build: 2026-08-04
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import mainSnapshot from "./charts-main.json";
 import ostSnapshot from "./charts-ost.json";
 import classicsSnapshot from "./charts-classics.json";
@@ -82,6 +82,7 @@ export default function Home(){
   const [lyricsCache,setLyricsCache]=useState<Record<string,{lyrics:string;syncedLyrics?:string;source:string}>>({});
   const [lyricsDraft,setLyricsDraft]=useState("");
   const [lyricsStatus,setLyricsStatus]=useState<LookupStatus>("idle");
+  const songRequestRef=useRef(0);
 
   useEffect(()=>{
     const timer=window.setTimeout(()=>{
@@ -106,7 +107,7 @@ export default function Home(){
   const playableAlbumGroups=[...albumGroups.values()].map((tracks)=>({tracks,count:playableAlbumCount(tracks)})).filter((group)=>group.count>0);
   const songs=isOstChart&&ostView==="albums"?playableAlbumGroups.map(({tracks,count})=>({...tracks[0],albumTrackCount:count})):filteredTracks;
   const ostTrackTotal=isOstChart?playableAlbumGroups.reduce((total,group)=>total+group.count,0):0;
-  const resetTrackTools=()=>{ setPlayingId("");setVideoIssue("");setVideoStatus("idle");setVideoLink("");setLyrics("");setSyncedLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
+  const resetTrackTools=()=>{ songRequestRef.current+=1;setPlayingId("");setVideoIssue("");setVideoStatus("idle");setVideoLink("");setLyrics("");setSyncedLyrics("");setLyricsSource("");setLyricsDraft("");setLyricsStatus("idle"); };
   const chooseChart=(chart:Chart)=>{ setActiveId(chart.id);setQuery("");setOstView("albums");setSelected(chart.songs[0]??null);resetTrackTools(); };
   const chooseMarket=(nextMarket:Market|"ALL")=>{
     setMarket(nextMarket);setQuery("");
@@ -145,37 +146,40 @@ export default function Home(){
     });
   };
 
-  const resolveVideo=async(song:Song,excludedIds=rejectedVideos)=>{
+  const resolveVideo=async(song:Song,excludedIds=rejectedVideos,requestId?:number)=>{
+    const isCurrent=()=>requestId===undefined||requestId===songRequestRef.current;
     const key=trackKey(song);
     const known=[customVideos[key],resolvedVideos[key],song.videoId,youtubeTracks[key],youtubeVideos[song.id]].filter((id):id is string=>Boolean(id));
     const cached=known.find((id)=>!excludedIds.includes(id));
     if(cached)return cached;
-    setVideoStatus("loading");
+    if(isCurrent())setVideoStatus("loading");
     const query=encodeURIComponent(`${song.title} ${song.artist} official music video`);
     try{
       const response=await fetch(`/api/youtube-search?q=${query}&mode=candidates`,{signal:AbortSignal.timeout(10000)});
       if(response.ok){
         const payload=await response.json() as {candidates?:unknown[]};
         const id=(payload.candidates??[]).map(videoIdFromResult).find((candidate)=>candidate&&!excludedIds.includes(candidate));
-        if(id){cacheResolvedVideo(key,id);setVideoStatus("ready");return id;}
+        if(id){cacheResolvedVideo(key,id);if(isCurrent())setVideoStatus("ready");return id;}
       }
     }catch{}
-    setVideoStatus("missing");
+    if(isCurrent())setVideoStatus("missing");
     return "";
   };
 
   const playTrack=async()=>{
     if(!displaySong)return;
+    const requestId=++songRequestRef.current,songId=displaySong.id;
     if(lyricsStatus==="idle")void loadLyrics();
-    const id=videoId??await resolveVideo(displaySong);
-    if(id)setPlayingId(displaySong.id);
+    const id=videoId??await resolveVideo(displaySong,rejectedVideos,requestId);
+    if(id&&requestId===songRequestRef.current)setPlayingId(songId);
   };
 
   const playSong=async(song:Song)=>{
     setSelected(song);
     resetTrackTools();
-    const id=await resolveVideo(song);
-    if(id)setPlayingId(song.id);
+    const requestId=++songRequestRef.current;
+    const id=await resolveVideo(song,rejectedVideos,requestId);
+    if(id&&requestId===songRequestRef.current)setPlayingId(song.id);
   };
 
   const playNextTrack=()=>{
@@ -187,6 +191,7 @@ export default function Home(){
   };
 
   const rejectVideo=async(failure:YouTubeFailure)=>{
+    const requestId=++songRequestRef.current;
     const failedVideoId=rawVideoId;
     const failedSong=displaySong;
     if(!failedVideoId||!failedSong){setPlayingId("");setVideoStatus("error");setVideoIssue(failure.reason);return;}
@@ -198,7 +203,8 @@ export default function Home(){
     rememberRejectedVideo(failedVideoId);
     setVideoStatus("loading");
     setVideoIssue(`${failure.reason} Hệ thống đang thử một video khác…`);
-    const alternative=await resolveVideo(failedSong,excluded);
+    const alternative=await resolveVideo(failedSong,excluded,requestId);
+    if(requestId!==songRequestRef.current)return;
     if(alternative){
       setVideoIssue("");setVideoStatus("ready");setPlayingId(failedSong.id);return;
     }
@@ -328,7 +334,7 @@ export default function Home(){
       <aside className={`player-panel ${displaySong?"has-song":""}`}>
         {displaySong?<><div className="player-glow token-glow"/>
           <div className="player-head"><span>YOUTUBE PLAYER / FREE</span><span>#{displaySong.rank}</span></div>
-          {videoIssue?<div className="video-quality-warning" aria-live="polite"><b>{videoStatus==="loading"?"TRYING ANOTHER VIDEO":"VIDEO UNAVAILABLE"}</b><p>{videoIssue}</p>{videoStatus!=="loading"&&<button onClick={()=>{setVideoIssue("");setVideoStatus("idle");}}>CHOOSE ANOTHER SONG</button>}</div>:videoId&&playingId===displaySong.id?<ValidatedYouTubePlayer videoId={videoId} title={`${displaySong.title} by ${displaySong.artist}`} onRejected={rejectVideo} onEnded={playNextTrack}/>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
+          {videoIssue?<div className="video-quality-warning" aria-live="polite"><b>{videoStatus==="loading"?"TRYING ANOTHER VIDEO":"VIDEO UNAVAILABLE"}</b><p>{videoIssue}</p>{videoStatus!=="loading"&&<button onClick={()=>{setVideoIssue("");setVideoStatus("idle");}}>CHOOSE ANOTHER SONG</button>}</div>:videoId&&playingId===displaySong.id?<ValidatedYouTubePlayer key={`${displaySong.id}:${videoId}`} videoId={videoId} title={`${displaySong.title} by ${displaySong.artist}`} onRejected={rejectVideo} onEnded={playNextTrack}/>:<button className="player-cover cover-art player-token" onClick={playTrack} disabled={videoStatus==="loading"}><strong>{String(displaySong.rank).padStart(2,"0")}</strong><em>{videoStatus==="loading"?"FINDING VIDEO...":videoId?"PLAY HERE / YOUTUBE":videoStatus==="missing"?"OPEN SEARCH BELOW":"FIND & PLAY HERE"}</em><span className="playing-badge"><i/><i/><i/><i/></span></button>}
           <div className="player-info"><p>{isOstChart?(displaySong.filmTitle??displaySong.album):active?.source}</p><h3>{displaySong.title}</h3><span>{displaySong.artist}</span>{isOstChart&&<small>{displaySong.album}</small>}</div>
           <div className="progress"><span/><i>{active?.id.includes("evergreen")?"MEASURED VIEWS":"CHART SCORE"}</i><b>{active?.id.includes("evergreen")&&displaySong.viewCount!==undefined?displaySong.viewCount.toLocaleString("en-US")+" VIEWS":displaySong.genre}</b></div>
           <div className="transport"><button onClick={()=>moveTrack(-1)} disabled={trackPosition<=0}>PREV</button><button onClick={playTrack} disabled={videoStatus==="loading"}>{videoStatus==="loading"?"SEARCHING...":"PLAY HERE"}</button><button onClick={()=>moveTrack(1)} disabled={trackPosition<0||trackPosition===playbackSequence.length-1}>NEXT</button></div>
