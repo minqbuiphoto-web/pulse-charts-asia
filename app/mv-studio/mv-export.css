@@ -96,14 +96,25 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  width: 100%;
+  height: auto;
+  padding: 0;
+  border: 0;
   margin-bottom: 13px;
 }
 
-.vertical-assets > header span { display: grid; gap: 4px; }
+.vertical-assets > header span {
+  display: grid;
+  flex: 1 1 auto;
+  min-width: 0;
+  gap: 4px;
+}
 .vertical-assets > header b { color: #fff; font-size: 12px; letter-spacing: .7px; }
 .vertical-assets > header small { color: #9ca58f; font-size: 9px; line-height: 1.45; }
 .vertical-assets > header button {
   flex: 0 0 auto;
+  width: auto;
+  min-width: 150px;
   padding: 9px 12px;
   border: 1px solid #d6ff4b;
   border-radius: 7px;
@@ -111,6 +122,15 @@
   color: #d6ff4b;
   font-size: 9px;
   font-weight: 800;
+}
+
+.render-card .vertical-assets > header button { width: auto; }
+.short-editor > header { height: auto; padding: 0; border: 0; }
+
+@media (max-width: 620px) {
+  .vertical-assets > header { align-items: stretch; flex-direction: column; }
+  .vertical-assets > header button,
+  .render-card .vertical-assets > header button { width: 100%; }
 }
 
 .vertical-assets h3 {
