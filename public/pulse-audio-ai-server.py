@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.5")
+app = FastAPI(title="Pulse Audio AI", version="2.6")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.5", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.6", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True}
 
 
 def ffmpeg_executable() -> str:
@@ -87,6 +87,10 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str,
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
+    original_size = max(12, min(96, round(float(original.get("fontSize", 25)))))
+    literal_size = max(12, min(96, round(float(literal.get("fontSize", 19)))))
+    original_top = 62
+    literal_top = original_top + round(original_size * 1.2) + max(14, round(max(original_size, literal_size) * .45))
     def style_line(name: str, data: dict, fallback_font: str, fallback_size: int, fallback_color: str,
                    alignment: int, margin_v: int):
         font = safe_font(data.get("fontFamily"), fallback_font)
@@ -109,8 +113,8 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str,
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         "ScaledBorderAndShadow: yes", "WrapStyle: 2", "", "[V4+ Styles]",
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding",
-        style_line("Original", original, "Arial", 25, "#FFFFFF", 8, 62),
-        style_line("Literal", literal, "Arial", 19, "#BFE7FF", 8, 112),
+        style_line("Original", original, "Arial", 25, "#FFFFFF", 8, original_top),
+        style_line("Literal", literal, "Arial", 19, "#BFE7FF", 8, literal_top),
         style_line("Vietnamese", vietnamese, "Arial", 36, "#D6FF4B", 2, 64),
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
