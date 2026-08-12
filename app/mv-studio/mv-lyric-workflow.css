@@ -10,6 +10,7 @@
 .local-engine-help>span{margin-top:5px;color:#929aa7;font-size:9px;line-height:1.45}
 .local-engine-help>div{display:flex;gap:7px;margin-top:10px}
 .local-engine-help a{flex:1;padding:10px;border:1px solid #536b2a;border-radius:7px;color:#d6ff4b;text-align:center;text-decoration:none;font-size:8px;font-weight:900}
+.local-engine-help button{flex:1;background:#151a12!important;color:#d6ff4b!important;border-color:#536b2a!important}.local-engine-help.ready{border-color:#536b2a;background:#0b130d}.local-engine-help.ready>b{color:#d6ff4b}.local-engine-help.offline{border-color:#754d2c;background:#160f0a}.local-engine-help.offline>b{color:#ffbd64}
 .timeline-summary{display:flex;justify-content:space-between;align-items:center;margin-top:17px;padding-bottom:9px;border-bottom:1px solid #303641}
 .timeline-summary b{color:#fff;font-size:11px}
 .timeline-summary button{padding:9px 11px!important;background:#8e4cf3!important;color:#fff!important;border-color:#8e4cf3!important}
