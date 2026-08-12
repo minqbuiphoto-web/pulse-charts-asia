@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.0")
+app = FastAPI(title="Pulse Audio AI", version="2.1")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "alignment": True, "mvRender": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.1", "alignment": True, "mvRender": True, "mvIntroSeparate": True}
 
 
 def ffmpeg_executable() -> str:
@@ -431,12 +431,19 @@ async def render_mv(
         write_ass_subtitles(subtitle_path, rows, styles, mode, width, height, clip_start, clip_end, intro_duration)
         output = work / "pulse-mv.mp4"
         total_duration = intro_duration + song_duration
-        delay_ms = round(intro_duration * 1000)
         subtitle_filter = str(subtitle_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
-        audio_filter = (
+        song_filter = (
             f"[1:a]atrim=start={clip_start:.3f}:end={clip_end:.3f},asetpts=PTS-STARTPTS,"
-            f"adelay={delay_ms}:all=1,apad=whole_dur={total_duration:.3f}[a]"
+            "aresample=48000,aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo[song]"
         )
+        if intro_duration > 0:
+            audio_filter = (
+                f"{song_filter};anullsrc=channel_layout=stereo:sample_rate=48000,"
+                f"atrim=duration={intro_duration:.3f},asetpts=PTS-STARTPTS[intro_silence];"
+                f"[intro_silence][song]concat=n=2:v=0:a=1,atrim=duration={total_duration:.3f}[a]"
+            )
+        else:
+            audio_filter = f"{song_filter};[song]apad=whole_dur={total_duration:.3f},atrim=duration={total_duration:.3f}[a]"
         filter_complex = f"[0:v]subtitles='{subtitle_filter}'[v];{audio_filter}"
         subprocess.run([
             ffmpeg, "-y", "-i", str(silent_video), "-i", str(audio_path),
