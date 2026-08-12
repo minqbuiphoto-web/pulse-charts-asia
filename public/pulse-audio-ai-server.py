@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.3")
+app = FastAPI(title="Pulse Audio AI", version="2.4")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.3", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.4", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True}
 
 
 def ffmpeg_executable() -> str:
@@ -48,8 +48,19 @@ def ass_time(seconds: float) -> str:
     return f"{hours}:{minutes:02d}:{remaining:05.2f}"
 
 
+def clean_lyric_text(value: str) -> str:
+    text = re.sub(r"[\u200B-\u200D\u2060\uFEFF]", "", str(value or ""))
+    text = re.sub(r"[\u00A0\u2000-\u200A\u202F\u205F\u3000]", " ", text)
+    text = re.sub(r"\s+([\u0300-\u036f])", r"\1", text)
+    text = unicodedata.normalize("NFC", text)
+    return re.sub(
+        r"([AĂÂEÊIOÔƠUƯYĐaăâeêioôơuưyđÀ-ỹ])\s+(ng|nh|ch|[nmtcp])(?=[,.;:!?…\)\]}\"'’”]|\s|$)",
+        r"\1\2", text, flags=re.IGNORECASE,
+    )
+
+
 def ass_escape(value: str) -> str:
-    return str(value or "").replace("\\", "\\\\").replace("{", "\\{").replace("}", "\\}").replace("\n", "\\N")
+    return clean_lyric_text(value).replace("\\", "\\\\").replace("{", "\\{").replace("}", "\\}").replace("\n", "\\N")
 
 
 def ass_color(value: str, fallback: str) -> str:
