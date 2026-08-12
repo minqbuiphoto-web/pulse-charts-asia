@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.2")
+app = FastAPI(title="Pulse Audio AI", version="2.3")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.2", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.3", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True}
 
 
 def ffmpeg_executable() -> str:
@@ -78,8 +78,14 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str,
         color = ass_color(data.get("color"), fallback_color)
         bold = -1 if int(data.get("fontWeight", 400)) >= 600 else 0
         italic = -1 if data.get("fontStyle") == "italic" else 0
+        spacing_value = str(data.get("letterSpacing", "0") or "0").strip().lower()
+        try:
+            spacing = float(spacing_value[:-2]) * size if spacing_value.endswith("em") else float(spacing_value.removesuffix("px"))
+        except ValueError:
+            spacing = 0
+        spacing = max(-10, min(20, spacing))
         outline = 3 if height >= 1080 else 2
-        return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,0,0,1,{outline},1,{alignment},45,45,{margin_v},1"
+        return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,{spacing:.2f},0,1,{outline},1,{alignment},45,45,{margin_v},1"
     header = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         "ScaledBorderAndShadow: yes", "WrapStyle: 2", "", "[V4+ Styles]",
