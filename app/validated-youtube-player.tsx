@@ -18,6 +18,8 @@ const failureReason=(code:number)=>{
 };
 
 export default function ValidatedYouTubePlayer({videoId,title,onRejected,onEnded}:{videoId:string;title:string;onRejected:(failure:YouTubeFailure)=>void;onEnded:()=>void}){
+  // React owns this stable wrapper. The YouTube API may freely replace/remove only
+  // the child host we create inside it, so switching songs cannot corrupt React's DOM.
   const mountRef=useRef<HTMLDivElement|null>(null);
   const rejectedRef=useRef(onRejected);
   const endedRef=useRef(onEnded);
@@ -46,12 +48,17 @@ export default function ValidatedYouTubePlayer({videoId,title,onRejected,onEnded
   useEffect(()=>{
     const target=window as unknown as YouTubeWindow;
     if(!ready||!target.YT?.Player||!mountRef.current)return;
-    mountRef.current.innerHTML="";
+    const wrapper=mountRef.current;
+    wrapper.replaceChildren();
+    const host=document.createElement("div");
+    host.className="youtube-player-host";
+    wrapper.appendChild(host);
     let rejected=false;
     let started=false;
+    let disposed=false;
     let loadTimer=0;
     const fail=(failure:YouTubeFailure)=>{
-      if(rejected)return;
+      if(disposed||rejected)return;
       rejected=true;
       window.clearTimeout(loadTimer);
       rejectedRef.current(failure);
@@ -66,20 +73,29 @@ export default function ValidatedYouTubePlayer({videoId,title,onRejected,onEnded
       return true;
     };
     loadTimer=window.setTimeout(()=>{if(!started)fail({code:0,reason:"YouTube mất quá nhiều thời gian để tải video."});},15000);
-    const player=new target.YT.Player(mountRef.current,{
+    const player=new target.YT.Player(host,{
       videoId,
       playerVars:{autoplay:1,playsinline:1,rel:0,origin:window.location.origin},
       events:{
-        onReady:({target:instance})=>{started=true;window.clearTimeout(loadTimer);if(validate(instance))instance.playVideo();},
+        onReady:({target:instance})=>{if(disposed)return;started=true;window.clearTimeout(loadTimer);if(validate(instance))instance.playVideo();},
         onStateChange:({target:instance,data})=>{
+          if(disposed)return;
           if(data===1&&!rejected){started=true;window.clearTimeout(loadTimer);validate(instance);}
           if(data===0&&!rejected)endedRef.current();
         },
         onError:({data})=>fail({code:data,reason:failureReason(data)}),
-        onAutoplayBlocked:()=>{started=true;window.clearTimeout(loadTimer);},
+        onAutoplayBlocked:()=>{if(disposed)return;started=true;window.clearTimeout(loadTimer);},
       },
     });
-    return()=>{window.clearTimeout(loadTimer);player.destroy();};
+    return()=>{
+      disposed=true;
+      window.clearTimeout(loadTimer);
+      try{player.pauseVideo();}catch{}
+      try{player.destroy();}catch{}
+      // Only clear the wrapper that belongs to this effect. A newer song may have
+      // already installed its own host before a delayed YouTube callback returns.
+      if(mountRef.current===wrapper)wrapper.replaceChildren();
+    };
   },[ready,videoId]);
 
   return <div ref={mountRef} className="youtube-player" aria-label={`YouTube player: ${title}`}/>;
