@@ -8,7 +8,7 @@ const cleanLyricText=(value:string)=>value.replace(/[\u200B-\u200D\u2060\uFEFF]/
 const split=(v:string)=>cleanLyricText(v).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 const stamp=(value:number)=>`${String(Math.floor(value/60)).padStart(2,"0")}:${String(Math.floor(value%60)).padStart(2,"0")}`;
 const fontStack=(font:string)=>`"${font.replace(/["']/g,"")}",Arial,Tahoma,"Times New Roman",sans-serif`;
-const vietnameseFontStack='Tahoma,Arial,"Times New Roman",sans-serif';
+const vietnameseFontStack='"Times New Roman",Times,"Liberation Serif",serif';
 const parseStamp=(value:string)=>{const clean=value.trim().replace(",","."),parts=clean.split(":");if(parts.length===2){const minutes=Number(parts[0]),seconds=Number(parts[1]);return Number.isFinite(minutes)&&Number.isFinite(seconds)&&minutes>=0&&seconds>=0&&seconds<60?minutes*60+seconds:NaN}const seconds=Number(clean);return Number.isFinite(seconds)&&seconds>=0?seconds:NaN};
 const artStyles=["Anime điện ảnh","Cổ phong Á Đông","Truyện tranh vẽ tay","Màu nước","Minh họa điện ảnh"];
 const fontOptions=["Arial","Tahoma","Georgia","Times New Roman","Trebuchet MS","Verdana","Courier New"];
