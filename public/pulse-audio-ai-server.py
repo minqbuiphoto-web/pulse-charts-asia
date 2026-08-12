@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.1", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.2", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True}
 
 
 def ffmpeg_executable() -> str:
@@ -83,7 +83,7 @@ def safe_font(value: str, fallback: str) -> str:
 
 
 def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions: dict, mode: str, width: int, height: int,
-                        clip_start: float, clip_end: float, intro_duration: float):
+                        clip_start: float, clip_end: float, intro_duration: float, timeline_space: str = "source"):
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
@@ -124,9 +124,14 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         "", "[Events]", "Format: Layer,Start,End,Style,Name,MarginL,MarginR,MarginV,Effect,Text",
     ]
     events = []
-    visible_rows = [row for row in rows if float(row.get("end", 0)) > clip_start and float(row.get("time", 0)) < clip_end]
+    output_timeline = timeline_space == "output"
+    output_end = intro_duration + clip_end - clip_start
+    visible_rows = ([row for row in rows if float(row.get("end", 0)) > 0 and float(row.get("time", 0)) < output_end]
+                    if output_timeline else
+                    [row for row in rows if float(row.get("end", 0)) > clip_start and float(row.get("time", 0)) < clip_end])
     if visible_rows:
-        first_start = max(0.0, float(visible_rows[0].get("time", 0)) - clip_start + intro_duration)
+        first_start = (max(0.0, float(visible_rows[0].get("time", 0))) if output_timeline else
+                       max(0.0, float(visible_rows[0].get("time", 0)) - clip_start + intro_duration))
         label_start = intro_duration
         if first_start > label_start + .15:
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
@@ -134,8 +139,10 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
                 events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Literal,,0,0,0,,Nghĩa dịch sát")
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Vietnamese,,0,0,0,,Lời Việt")
     for row in visible_rows:
-        start = max(0.0, float(row.get("time", 0)) - clip_start + intro_duration)
-        end = min(clip_end - clip_start + intro_duration, float(row.get("end", 0)) - clip_start + intro_duration)
+        start = (max(0.0, float(row.get("time", 0))) if output_timeline else
+                 max(0.0, float(row.get("time", 0)) - clip_start + intro_duration))
+        end = (min(output_end, float(row.get("end", 0))) if output_timeline else
+               min(output_end, float(row.get("end", 0)) - clip_start + intro_duration))
         if end <= start:
             continue
         original_text = ass_escape(row.get("original", ""))
@@ -382,6 +389,7 @@ async def render_mv(
     clip_start: float = Form(0.0),
     clip_end: float = Form(0.0),
     intro_duration: float = Form(0.0),
+    timeline_space: str = Form("source"),
 ):
     """Render a finished MP4 locally. This never records the browser or waits for real-time playback."""
     if not images:
@@ -451,7 +459,7 @@ async def render_mv(
         ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
         subtitle_path = work / "lyrics.ass"
-        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, intro_duration)
+        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, intro_duration, timeline_space)
         output = work / "pulse-mv.mp4"
         total_duration = intro_duration + song_duration
         subtitle_filter = str(subtitle_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
