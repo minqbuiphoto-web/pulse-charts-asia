@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.4")
+app = FastAPI(title="Pulse Audio AI", version="2.5")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.4", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.5", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True}
 
 
 def ffmpeg_executable() -> str:
@@ -71,7 +71,15 @@ def ass_color(value: str, fallback: str) -> str:
 
 def safe_font(value: str, fallback: str) -> str:
     clean = re.sub(r"[^\w .-]+", "", str(value or ""), flags=re.UNICODE).strip()
-    return clean or fallback
+    # Georgia and Trebuchet shipped on this Windows machine omit many Vietnamese
+    # precomposed glyphs, causing libass to switch font for accented characters only.
+    # Map every accepted family to one verified to contain the full Vietnamese set.
+    verified = {
+        "arial": "Arial", "tahoma": "Tahoma", "times new roman": "Times New Roman",
+        "verdana": "Verdana", "courier new": "Courier New",
+        "georgia": "Times New Roman", "trebuchet ms": "Tahoma",
+    }
+    return verified.get(clean.casefold(), verified.get(str(fallback).casefold(), "Arial"))
 
 
 def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str, width: int, height: int,
