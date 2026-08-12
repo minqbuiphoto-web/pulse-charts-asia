@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.1")
+app = FastAPI(title="Pulse Audio AI", version="2.2")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.1", "alignment": True, "mvRender": True, "mvIntroSeparate": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.2", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True}
 
 
 def ffmpeg_executable() -> str:
@@ -68,16 +68,18 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, mode: str,
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
-    scale = height / 720
     def style_line(name: str, data: dict, fallback_font: str, fallback_size: int, fallback_color: str,
                    alignment: int, margin_v: int):
         font = safe_font(data.get("fontFamily"), fallback_font)
-        size = max(12, round(float(data.get("fontSize", fallback_size)) * scale))
+        # ASS PlayRes already matches the output resolution. Fontsize must therefore use the
+        # exact value selected in MV Studio; scaling it again made 1080p text 1.5x larger and
+        # vertical 1920p text 2.67x larger than the preview.
+        size = max(12, min(96, round(float(data.get("fontSize", fallback_size)))))
         color = ass_color(data.get("color"), fallback_color)
         bold = -1 if int(data.get("fontWeight", 400)) >= 600 else 0
         italic = -1 if data.get("fontStyle") == "italic" else 0
-        outline = max(2, round(2.4 * scale))
-        return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,0,0,1,{outline},1,{alignment},45,45,{round(margin_v * scale)},1"
+        outline = 3 if height >= 1080 else 2
+        return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,0,0,1,{outline},1,{alignment},45,45,{margin_v},1"
     header = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         "ScaledBorderAndShadow: yes", "WrapStyle: 2", "", "[V4+ Styles]",
