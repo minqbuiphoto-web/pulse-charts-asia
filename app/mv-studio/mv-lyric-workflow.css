@@ -15,11 +15,14 @@
 .timeline-summary b{color:#fff;font-size:11px}
 .timeline-summary button{padding:9px 11px!important;background:#8e4cf3!important;color:#fff!important;border-color:#8e4cf3!important}
 .generated-timeline{max-height:440px;margin-top:9px;overflow:auto;display:grid;gap:6px}
-.generated-timeline button{display:grid;grid-template-columns:34px 58px minmax(0,1fr);gap:8px;align-items:center;padding:10px!important;text-align:left;background:#0b0d12!important;color:#e9ebef!important;border-color:#303641!important}
-.generated-timeline button.active{border-color:#d6ff4b!important;background:#13190d!important}
+.timeline-row{display:grid;grid-template-columns:34px 66px minmax(0,1fr);gap:8px;align-items:center;padding:8px 10px;border:1px solid #303641;border-radius:9px;background:#0b0d12;color:#e9ebef}
+.timeline-row.active{border-color:#d6ff4b;background:#13190d}
+.timeline-row input{width:64px;padding:7px 5px;border:1px solid #46502e;border-radius:6px;background:#07090b;color:#d6ff4b;font:700 11px Consolas,monospace;text-align:center}
+.timeline-row input:focus{outline:1px solid #d6ff4b;border-color:#d6ff4b}
+.timeline-row button{min-width:0;padding:5px!important;border:0!important;background:transparent!important;color:#e9ebef!important;text-align:left}
 .generated-timeline span{color:#89919e;font-size:8px}
-.generated-timeline time{color:#d6ff4b;font:700 11px Consolas,monospace}
 .generated-timeline b{font-size:13px;line-height:1.4}
 .companion-lyrics{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:15px}
 .companion-lyrics textarea{min-height:210px!important}
-@media(max-width:650px){.companion-lyrics{grid-template-columns:1fr}.local-engine-help>div{flex-direction:column}.generated-timeline button{grid-template-columns:28px 52px minmax(0,1fr)}}
+.lyric-intro-labels{opacity:.82}.lyric-intro-labels b,.lyric-intro-labels span{font-style:italic;letter-spacing:.04em}
+@media(max-width:650px){.companion-lyrics{grid-template-columns:1fr}.local-engine-help>div{flex-direction:column}.timeline-row{grid-template-columns:25px 61px minmax(0,1fr);padding-inline:7px}.timeline-row input{width:59px}}
