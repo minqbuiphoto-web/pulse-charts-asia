@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="2.9")
+app = FastAPI(title="Pulse Audio AI", version="3.0")
 whisper_model = None
 app.add_middleware(
     CORSMiddleware,
@@ -29,7 +29,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "2.9", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.0", "alignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True}
 
 
 def ffmpeg_executable() -> str:
@@ -114,7 +114,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,{spacing:.2f},0,1,{outline},1,{alignment},45,45,{margin_v},1"
     header = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
-        "ScaledBorderAndShadow: yes", "WrapStyle: 2", "", "[V4+ Styles]",
+        # WrapStyle 0 makes libass wrap long lyrics within MarginL/MarginR. WrapStyle 2
+        # disables automatic wrapping and caused vertical lyrics to be clipped off-screen.
+        "ScaledBorderAndShadow: yes", "WrapStyle: 0", "", "[V4+ Styles]",
         "Format: Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding",
         style_line("Original", original, "Arial", 25, "#FFFFFF", 8, position_margin("original")),
         style_line("Literal", literal, "Arial", 19, "#BFE7FF", 8, position_margin("literal")),
