@@ -5,6 +5,7 @@ import tempfile
 import re
 import unicodedata
 import json
+import logging
 from difflib import SequenceMatcher
 from pathlib import Path
 
@@ -12,9 +13,10 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="4.0")
+app = FastAPI(title="Pulse Audio AI", version="4.1")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
+UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -24,13 +26,13 @@ app.add_middleware(
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
-    expose_headers=["Content-Disposition"],
+    expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine"],
 )
 
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "4.0", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.1", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -221,6 +223,64 @@ def isolate_vocals(source: Path, work: Path) -> Path:
     return vocal
 
 
+def uvr_model_directory() -> Path:
+    cache = Path(__file__).resolve().parent / "models"
+    cache.mkdir(parents=True, exist_ok=True)
+    cached_model = cache / UVR_INSTRUMENTAL_MODEL
+    if cached_model.exists():
+        return cache
+    candidates = [
+        Path.home() / "AppData" / "Local" / "Programs" / "Ultimate Vocal Remover" / "models" / "MDX_Net_Models" / UVR_INSTRUMENTAL_MODEL,
+        Path.home() / "Ultimate Vocal Remover" / "models" / "MDX_Net_Models" / UVR_INSTRUMENTAL_MODEL,
+    ]
+    for candidate in candidates:
+        if candidate.exists():
+            return candidate.parent
+    return cache
+
+
+def separate_instrumental(source: Path, work: Path) -> tuple[Path, str]:
+    """Prefer UVR's instrumental model; retain Demucs as an automatic fallback."""
+    output_dir = work / "uvr-separated"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    try:
+        from audio_separator.separator import Separator
+        separator = Separator(
+            log_level=logging.WARNING,
+            model_file_dir=str(uvr_model_directory()),
+            output_dir=str(output_dir),
+            output_format="WAV",
+            output_single_stem="Instrumental",
+            mdx_params={"hop_length": 1024, "segment_size": 256, "overlap": 0.5, "batch_size": 1, "enable_denoise": True},
+        )
+        separator.load_model(model_filename=UVR_INSTRUMENTAL_MODEL)
+        outputs = separator.separate(str(source))
+        for output_name in outputs:
+            candidate = Path(output_name)
+            if not candidate.is_absolute():
+                candidate = output_dir / candidate
+            if candidate.exists() and candidate.suffix.casefold() == ".wav":
+                return candidate, f"Ultimate Vocal Remover · {UVR_INSTRUMENTAL_MODEL}"
+        candidates = sorted(output_dir.glob("*.wav"), key=lambda path: path.stat().st_mtime, reverse=True)
+        if candidates:
+            return candidates[0], f"Ultimate Vocal Remover · {UVR_INSTRUMENTAL_MODEL}"
+        raise RuntimeError("UVR did not create an instrumental WAV")
+    except Exception:
+        logging.getLogger(__name__).warning(
+            "UVR separation failed; using Demucs fallback.", exc_info=True
+        )
+        demucs_dir = work / "demucs-separated"
+        command = [
+            sys.executable, "-m", "demucs.separate", "-n", "htdemucs",
+            "--two-stems", "vocals", "-o", str(demucs_dir), str(source),
+        ]
+        subprocess.run(command, check=True, timeout=60 * 60)
+        beat = demucs_dir / "htdemucs" / source.stem / "no_vocals.wav"
+        if not beat.exists():
+            raise RuntimeError("Neither UVR nor Demucs created an instrumental stem")
+        return beat, "Demucs fallback · htdemucs"
+
+
 def normalize_word(value: str) -> str:
     decomposed = unicodedata.normalize("NFKD", value.casefold())
     without_marks = "".join(char for char in decomposed if not unicodedata.combining(char))
@@ -388,21 +448,18 @@ async def separate(background_tasks: BackgroundTasks, file: UploadFile = File(..
     except HTTPException:
         shutil.rmtree(work, ignore_errors=True)
         raise
-    command = [
-        sys.executable, "-m", "demucs.separate", "-n", "htdemucs",
-        "--two-stems", "vocals", "-o", str(work / "separated"), str(source),
-    ]
     try:
-        subprocess.run(command, check=True, timeout=60 * 60)
-    except (subprocess.CalledProcessError, subprocess.TimeoutExpired) as error:
+        beat, separation_engine = separate_instrumental(source, work)
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, RuntimeError) as error:
         shutil.rmtree(work, ignore_errors=True)
-        raise HTTPException(500, f"Demucs failed: {error}") from error
-    beat = work / "separated" / "htdemucs" / source.stem / "no_vocals.wav"
-    if not beat.exists():
-        shutil.rmtree(work, ignore_errors=True)
-        raise HTTPException(500, "Demucs did not create the instrumental stem")
+        raise HTTPException(500, f"UVR and Demucs separation failed: {error}") from error
     background_tasks.add_task(shutil.rmtree, work, True)
-    return FileResponse(beat, media_type="audio/wav", filename=f"{source.stem}_instrumental.wav")
+    return FileResponse(
+        beat,
+        media_type="audio/wav",
+        filename=f"{source.stem}_instrumental.wav",
+        headers={"X-Pulse-Separation-Engine": separation_engine},
+    )
 
 
 @app.post("/render-mv")
