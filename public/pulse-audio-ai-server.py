@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.8")
+app = FastAPI(title="Pulse Audio AI", version="3.9")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.8", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.9", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -129,6 +129,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     events = []
     output_timeline = timeline_space == "output"
     output_end = intro_duration + clip_end - clip_start
+    # The vertical Windows render path needs a one-second subtitle lead. Landscape
+    # already matches the browser preview, so the same shift made 16:9 lyrics early.
+    export_lyric_lead = MV_EXPORT_LYRIC_LEAD_SECONDS if height > width else 0.0
     visible_rows = ([row for row in rows if float(row.get("end", 0)) > 0 and float(row.get("time", 0)) < output_end]
                     if output_timeline else
                     [row for row in rows if float(row.get("end", 0)) > clip_start and float(row.get("time", 0)) < clip_end])
@@ -137,7 +140,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
                        max(0.0, float(visible_rows[0].get("time", 0)) - clip_start + intro_duration))
         # The opening labels must disappear at the compensated first lyric start,
         # otherwise both the labels and the first lyric overlap for one second.
-        first_start = max(intro_duration, first_start - MV_EXPORT_LYRIC_LEAD_SECONDS)
+        first_start = max(intro_duration, first_start - export_lyric_lead)
         label_start = intro_duration
         if first_start > label_start + .15:
             if mode == "music":
@@ -154,8 +157,8 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         # subtitles appear about one second later than the matching browser preview.
         # Compensate only while writing the MP4 subtitle track; the saved timeline
         # and preview remain unchanged. Never let a lyric overlap the thumbnail intro.
-        start = max(intro_duration, start - MV_EXPORT_LYRIC_LEAD_SECONDS)
-        end = max(start + .05, end - MV_EXPORT_LYRIC_LEAD_SECONDS)
+        start = max(intro_duration, start - export_lyric_lead)
+        end = max(start + .05, end - export_lyric_lead)
         if end <= start:
             continue
         original_text = ass_escape(row.get("original", ""))
