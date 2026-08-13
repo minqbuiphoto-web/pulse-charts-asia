@@ -37,6 +37,38 @@
   opacity: 1;
 }
 
+/* Karaoke is a Vietnamese-only workspace. The preview uses the same sentence
+   duration as the MP4 renderer and sweeps the chosen highlight colour from
+   left to right while the current sentence is being sung. */
+.mv-shell.karaoke .companion-lyrics,
+.mv-shell.karaoke .text-style-card:not(:last-child),
+.mv-shell.karaoke .position-controls > label:not(:last-child),
+.mv-shell.karaoke .mv-preview .lyric-original,
+.mv-shell.karaoke .mv-preview .lyric-literal {
+  display: none !important;
+}
+
+.mv-shell.karaoke .mv-preview .lyric-vietnamese:not(.lyric-intro-labels) {
+  width: max-content;
+  max-width: calc(100% - 90px);
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%);
+  color: transparent !important;
+  background: linear-gradient(
+    90deg,
+    var(--karaoke-highlight, #d6ff4b) 0 var(--karaoke-progress, 0%),
+    #e4e4e4 var(--karaoke-progress, 0%) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.mv-shell.karaoke .mv-preview.vertical .lyric-vietnamese:not(.lyric-intro-labels) {
+  max-width: calc(100% - 50px);
+}
+
 .export-format > b {
   display: block;
   margin-bottom: 9px;
