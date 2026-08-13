@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.3")
+app = FastAPI(title="Pulse Audio AI", version="3.4")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.3", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.4", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -133,6 +133,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     if visible_rows:
         first_start = (max(0.0, float(visible_rows[0].get("time", 0))) if output_timeline else
                        max(0.0, float(visible_rows[0].get("time", 0)) - clip_start + intro_duration))
+        # The opening labels must disappear at the compensated first lyric start,
+        # otherwise both the labels and the first lyric overlap for one second.
+        first_start = max(intro_duration, first_start - MV_EXPORT_LYRIC_LEAD_SECONDS)
         label_start = intro_duration
         if first_start > label_start + .15:
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
