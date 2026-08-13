@@ -49,20 +49,35 @@
 }
 
 .mv-shell.karaoke .mv-preview .lyric-vietnamese:not(.lyric-intro-labels) {
+  position: absolute;
   width: max-content;
   max-width: calc(100% - 90px);
   left: 50% !important;
   right: auto !important;
   transform: translateX(-50%);
-  color: transparent !important;
-  background: linear-gradient(
-    90deg,
-    var(--karaoke-highlight, #d6ff4b) 0 var(--karaoke-progress, 0%),
-    #e4e4e4 var(--karaoke-progress, 0%) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* Always retain a visible base layer. background-clip:text can disappear on
+     Coc Coc/Chromium when the lyric also uses a WebKit text stroke. */
+  color: #f5f7fb !important;
+  -webkit-text-fill-color: #f5f7fb !important;
+}
+
+.mv-shell.karaoke .mv-preview .lyric-vietnamese:not(.lyric-intro-labels)::after {
+  content: attr(data-karaoke-text);
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  color: var(--karaoke-highlight, #35a7ff);
+  -webkit-text-fill-color: var(--karaoke-highlight, #35a7ff);
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  text-align: inherit;
+  white-space: inherit;
+  overflow: hidden;
+  clip-path: inset(0 calc(100% - var(--karaoke-progress, 0%)) 0 0);
+  transition: clip-path 50ms linear;
+  pointer-events: none;
 }
 
 .mv-shell.karaoke .mv-preview.vertical .lyric-vietnamese:not(.lyric-intro-labels) {
