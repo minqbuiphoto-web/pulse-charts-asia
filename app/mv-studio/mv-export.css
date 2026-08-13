@@ -75,7 +75,9 @@
   text-align: inherit;
   white-space: inherit;
   overflow: hidden;
-  clip-path: inset(0 calc(100% - var(--karaoke-progress, 0%)) 0 0);
+  /* Cốc Cốc can ignore calc() inside clip-path and reveal the whole coloured
+     layer. JavaScript supplies the already-computed hidden percentage. */
+  clip-path: inset(0 var(--karaoke-unfilled, 100%) 0 0);
   transition: clip-path 50ms linear;
   pointer-events: none;
 }
