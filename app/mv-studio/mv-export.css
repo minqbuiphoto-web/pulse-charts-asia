@@ -69,6 +69,20 @@
   max-width: calc(100% - 50px);
 }
 
+.karaoke-beat-box {
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid #8b5cf666;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #8b5cf612, #d6ff4b08);
+}
+.karaoke-beat-box > b { color: #d6ff4b; font-size: 10px; letter-spacing: 1px; }
+.karaoke-beat-box > p { margin: 8px 0 11px; line-height: 1.55; }
+.karaoke-beat-box > button { width: 100%; }
+.karaoke-beat-box > small { display: block; margin-top: 9px; color: #9ba482; font-size: 8px; }
+.karaoke-beat-box.busy { border-color: #ffb44d77; }
+.karaoke-beat-box.ready { border-color: #d6ff4b88; box-shadow: 0 0 24px #d6ff4b0b; }
+
 .export-format > b {
   display: block;
   margin-bottom: 9px;
