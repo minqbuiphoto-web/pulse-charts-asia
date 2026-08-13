@@ -144,7 +144,7 @@ export default function AudioLabPage() {
     </section>
 
     <AudioProTools/>
-    <section className="audio-facts"><article><span>01</span><b>NO UPLOAD</b><p>Audio không rời khỏi máy bạn.</p></article><article><span>02</span><b>STEM + REMASTER</b><p>Tách beat và hoàn thiện bản master.</p></article><article><span>03</span><b>BACKGROUND DSP</b><p>Web Worker giữ giao diện phản hồi.</p></article><article><span>04</span><b>WAV OUTPUT</b><p>PCM 16-bit, giữ sample rate.</p></article></section>
+    <section className="audio-facts"><article><span>01</span><b>NO UPLOAD</b><p>Audio không rời khỏi máy bạn.</p></article><article><span>02</span><b>UVR STEM</b><p>Tách giọng và lấy beat chất lượng cao.</p></article><article><span>03</span><b>BACKGROUND DSP</b><p>Web Worker giữ giao diện phản hồi.</p></article><article><span>04</span><b>WAV OUTPUT</b><p>PCM 16-bit, giữ sample rate.</p></article></section>
     <footer className="audio-footer"><b>PULSE CHARTS / AUDIO LAB</b><span>WSOLA TIME-STRETCH + CUBIC RESAMPLE</span></footer>
   </main>;
 }
