@@ -45,10 +45,11 @@ function BeatExtractor() {
       let blob: Blob;
       let source: string;
       if (mode === "ai") {
-        setStatus("Đang kết nối Demucs AI trên máy…");
+        setStatus("Đang chạy Ultimate Vocal Remover · Inst HQ 3 trên máy…");
         try {
-          blob = await separateWithLocalAI(file);
-          source = "DEMUCS AI · 2-STEM VOCALS";
+          const separated = await separateWithLocalAI(file);
+          blob = separated.blob;
+          source = separated.engine.toUpperCase();
         } catch {
           setStatus("AI local chưa chạy — đang tự chuyển sang Beat Draft trên thiết bị…");
           blob = await createQuickBeat(file);
@@ -72,11 +73,11 @@ function BeatExtractor() {
   return <article className="audio-pro-card beat-card">
     <header><span>03</span><div><small>BEAT EXTRACTOR</small><h2>Tách giọng, lấy beat</h2><p>AI stem cho chất lượng cao; Beat Draft là phương án miễn phí chạy ngay trong trình duyệt.</p></div><b>FREE-FIRST</b></header>
     <div className="audio-mode-tabs" role="group" aria-label="Chọn chất lượng tách beat">
-      <button className={mode === "ai" ? "active" : ""} onClick={() => setMode("ai")}><b>AI STUDIO</b><small>Demucs local · tốt nhất</small></button>
+      <button className={mode === "ai" ? "active" : ""} onClick={() => setMode("ai")}><b>AI STUDIO</b><small>UVR Inst HQ 3 · chất lượng cao</small></button>
       <button className={mode === "quick" ? "active" : ""} onClick={() => setMode("quick")}><b>BEAT DRAFT</b><small>Chạy ngay · không cài đặt</small></button>
     </div>
     <label className="pro-upload">NHẠC CÓ GIỌNG HÁT<input type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm" onChange={(event:ChangeEvent<HTMLInputElement>) => choose(event.target.files?.[0])}/><b>{file?.name ?? "Chọn WAV / MP3 / M4A"}</b><span>{file ? formatBytes(file.size) : "Audio không được tải lên máy chủ"}</span></label>
-    {mode === "ai" ? <div className="ai-local-box"><div><i/> <b>AI LOCAL ENGINE</b><span>Nếu chưa kết nối, hệ thống tự dùng Beat Draft.</span></div><details><summary>CÀI DEMUCS MIỄN PHÍ</summary><p>Tải hai file dưới đây vào cùng một thư mục, rồi chạy file cài đặt một lần. Model AI chạy trên máy và không gửi bài hát lên mạng.</p><div><a href="/install-pulse-audio-ai.cmd" download>CÀI AI LOCAL .CMD</a><a href="/pulse-audio-ai-server.py" download>ENGINE .PY</a></div></details></div> : <p className="quality-note">Beat Draft giảm âm thanh nằm giữa stereo và giữ lại bass trung tâm. Vocal có reverb hoặc lệch kênh có thể vẫn còn.</p>}
+    {mode === "ai" ? <div className="ai-local-box"><div><i/> <b>AI LOCAL ENGINE</b><span>Ưu tiên UVR Inst HQ 3; nếu UVR lỗi, hệ thống tự chuyển sang Demucs.</span></div><details><summary>CÀI ULTIMATE VOCAL REMOVER MIỄN PHÍ</summary><p>Tải hai file dưới đây vào cùng một thư mục, rồi chạy file cài đặt một lần. Model AI chạy trên máy và không gửi bài hát lên mạng.</p><div><a href="/install-pulse-audio-ai.cmd" download>CÀI AI LOCAL .CMD</a><a href="/pulse-audio-ai-server.py" download>ENGINE .PY</a></div></details></div> : <p className="quality-note">Beat Draft giảm âm thanh nằm giữa stereo và giữ lại bass trung tâm. Vocal có reverb hoặc lệch kênh có thể vẫn còn.</p>}
     <button className="pro-run" disabled={!file || busy} onClick={run}>{busy ? "ĐANG TÁCH BEAT…" : "TÁCH GIỌNG & XUẤT BEAT"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
     {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI FILE BEAT WAV ↓</a></div> : null}
@@ -176,7 +177,10 @@ async function separateWithLocalAI(file:File) {
     form.append("file", file, file.name);
     const response = await fetch(`${LOCAL_ENGINE}/separate`, { method:"POST", body:form, signal:controller.signal });
     if (!response.ok) throw new Error("AI local chưa sẵn sàng.");
-    return await response.blob();
+    return {
+      blob: await response.blob(),
+      engine: response.headers.get("X-Pulse-Separation-Engine") || "Ultimate Vocal Remover · Inst HQ 3",
+    };
   } finally { window.clearTimeout(timer); }
 }
 
