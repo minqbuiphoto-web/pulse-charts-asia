@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.4")
+app = FastAPI(title="Pulse Audio AI", version="3.5")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.4", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.5", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -139,7 +139,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         label_start = intro_duration
         if first_start > label_start + .15:
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
-            if mode == "music":
+            if any(str(row.get("literal", "")).strip() for row in visible_rows):
                 events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Literal,,0,0,0,,Nghĩa dịch sát")
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Vietnamese,,0,0,0,,Lời Việt")
     for row in visible_rows:
@@ -160,7 +160,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         vietnamese_text = ass_escape(row.get("vietnamese", ""))
         if original_text:
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Original,,0,0,0,,{original_text}")
-        if mode == "music" and literal_text:
+        if literal_text:
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Literal,,0,0,0,,{literal_text}")
         if vietnamese_text:
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Vietnamese,,0,0,0,,{vietnamese_text}")
