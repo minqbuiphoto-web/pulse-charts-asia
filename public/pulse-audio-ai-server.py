@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.5")
+app = FastAPI(title="Pulse Audio AI", version="3.6")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.5", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.6", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -112,7 +112,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
             spacing = 0
         spacing = max(-10, min(20, spacing))
         outline = 3 if height >= 1080 else 2
-        return f"Style: {name},{font},{size},{color},&H000000FF,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,{spacing:.2f},0,1,{outline},1,{alignment},45,45,{margin_v},1"
+        # SecondaryColour is the not-yet-sung karaoke colour. Normal MV text does
+        # not use it, while ASS \kf fills it progressively with PrimaryColour.
+        return f"Style: {name},{font},{size},{color},&H00C8C8C8,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,{spacing:.2f},0,1,{outline},1,{alignment},45,45,{margin_v},1"
     header = [
         "[Script Info]", "ScriptType: v4.00+", f"PlayResX: {width}", f"PlayResY: {height}",
         # WrapStyle 0 makes libass wrap long lyrics within MarginL/MarginR. WrapStyle 2
@@ -138,8 +140,9 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         first_start = max(intro_duration, first_start - MV_EXPORT_LYRIC_LEAD_SECONDS)
         label_start = intro_duration
         if first_start > label_start + .15:
-            events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
-            if any(str(row.get("literal", "")).strip() for row in visible_rows):
+            if mode == "music":
+                events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
+            if mode == "music" and any(str(row.get("literal", "")).strip() for row in visible_rows):
                 events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Literal,,0,0,0,,Nghĩa dịch sát")
             events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Vietnamese,,0,0,0,,Lời Việt")
     for row in visible_rows:
@@ -158,11 +161,14 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         original_text = ass_escape(row.get("original", ""))
         literal_text = ass_escape(row.get("literal", ""))
         vietnamese_text = ass_escape(row.get("vietnamese", ""))
-        if original_text:
+        if mode == "music" and original_text:
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Original,,0,0,0,,{original_text}")
-        if literal_text:
+        if mode == "music" and literal_text:
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Literal,,0,0,0,,{literal_text}")
         if vietnamese_text:
+            if mode == "karaoke":
+                sweep_cs = max(1, round((end - start) * 100))
+                vietnamese_text = f"{{\\kf{sweep_cs}}}{vietnamese_text}"
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Vietnamese,,0,0,0,,{vietnamese_text}")
     target.write_text("\n".join(header + events), encoding="utf-8-sig")
 
