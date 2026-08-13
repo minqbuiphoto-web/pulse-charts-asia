@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.9")
+app = FastAPI(title="Pulse Audio AI", version="4.0")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.9", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "4.0", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -70,6 +70,16 @@ def ass_color(value: str, fallback: str) -> str:
     return f"&H00{rgb[4:6]}{rgb[2:4]}{rgb[0:2]}"
 
 
+def readable_karaoke_color(value: str) -> str:
+    match = re.fullmatch(r"#?([0-9a-fA-F]{6})", str(value or ""))
+    if not match:
+        return "#3B82F6"
+    rgb = match.group(1)
+    red, green, blue = (int(rgb[index:index + 2], 16) for index in (0, 2, 4))
+    # Very dark selected colours become indistinguishable from the subtitle outline.
+    return "#3B82F6" if (red * 299 + green * 587 + blue * 114) / 1000 < 105 else f"#{rgb.upper()}"
+
+
 def safe_font(value: str, fallback: str) -> str:
     clean = re.sub(r"[^\w .-]+", "", str(value or ""), flags=re.UNICODE).strip()
     # Georgia and Trebuchet shipped on this Windows machine omit many Vietnamese
@@ -88,6 +98,8 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
+    if mode == "karaoke":
+        vietnamese = {**vietnamese, "color": readable_karaoke_color(vietnamese.get("color"))}
     defaults = {"original": 48 if height > width else 6, "literal": 60 if height > width else 13, "vietnamese": 72 if height > width else 82}
     def position_margin(key: str) -> int:
         try:
