@@ -12,7 +12,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.6")
+app = FastAPI(title="Pulse Audio AI", version="3.7")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
@@ -30,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.6", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.7", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvAutoKaraokeBeat": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
