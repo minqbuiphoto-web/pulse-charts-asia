@@ -12,8 +12,9 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="3.0")
+app = FastAPI(title="Pulse Audio AI", version="3.3")
 whisper_model = None
+MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -29,7 +30,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.2", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True}
+    return {"ok": True, "engine": "demucs + faster-whisper + ffmpeg", "version": "3.3", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -143,6 +144,12 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
                  max(0.0, float(row.get("time", 0)) - clip_start + intro_duration))
         end = (min(output_end, float(row.get("end", 0))) if output_timeline else
                min(output_end, float(row.get("end", 0)) - clip_start + intro_duration))
+        # On the Windows FFmpeg/libass path used by the local renderer, burned-in
+        # subtitles appear about one second later than the matching browser preview.
+        # Compensate only while writing the MP4 subtitle track; the saved timeline
+        # and preview remain unchanged. Never let a lyric overlap the thumbnail intro.
+        start = max(intro_duration, start - MV_EXPORT_LYRIC_LEAD_SECONDS)
+        end = max(start + .05, end - MV_EXPORT_LYRIC_LEAD_SECONDS)
         if end <= start:
             continue
         original_text = ass_escape(row.get("original", ""))
