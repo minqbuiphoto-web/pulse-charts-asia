@@ -462,26 +462,6 @@
   color: #d6ff4b;
 }
 
-.clip-suggestions {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6px;
-  margin-top: 8px;
-}
-
-.render-card .clip-suggestions button {
-  display: grid;
-  gap: 4px;
-  padding: 9px 5px;
-  border: 1px solid #343b47;
-  border-radius: 8px;
-  background: #12151b;
-  color: #ddd;
-}
-
-.clip-suggestions b { font-size: 8px; }
-.clip-suggestions span { color: #89919d; font: 7px Consolas, monospace; }
-
 .render-card .export-main {
   width: 100%;
   margin-top: 13px;
@@ -538,7 +518,6 @@
 
 @media (max-width: 560px) {
   .export-format > div,
-  .clip-suggestions,
   .vertical-upload-grid,
   .direct-render-note > div { grid-template-columns: 1fr; }
   .direct-render-note.setup { grid-template-columns: 1fr; }
