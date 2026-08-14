@@ -31,6 +31,42 @@
 .image-scale-control > div span { color: #d6ff4b; font-size: 11px; }
 .image-scale-control button { width: 100%; padding: 10px; border: 1px solid #3d4931; border-radius: 7px; background: #10140e; color: #c8d2b7; font-size: 9px; font-weight: 800; cursor: pointer; }
 
+.image-quality-control {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 15px;
+  border: 1px solid #3c6d67;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #0d1817, #0d1015 70%);
+}
+.image-quality-control header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.image-quality-control header span,
+.image-quality-control header b,
+.image-quality-control header small { display: block; }
+.image-quality-control header b { color: #70f5df; font-size: 11px; letter-spacing: .7px; }
+.image-quality-control header small { max-width: 560px; margin-top: 5px; color: #99aaa7; font-size: 9px; line-height: 1.5; }
+.image-quality-control output { color: #fff; font: 800 17px/1 Arial, sans-serif; white-space: nowrap; }
+.image-quality-control > label { display: grid; grid-template-columns: 92px minmax(120px, 1fr) 76px 16px; align-items: center; gap: 9px; }
+.image-quality-control > label > span { color: #c7d9d5; font-size: 9px; font-weight: 800; }
+.image-quality-control input[type="range"] { width: 100%; accent-color: #70f5df; }
+.image-quality-control input[type="number"] { width: 76px; padding: 9px; border: 1px solid #3b4b49; border-radius: 7px; background: #080a0e; color: #fff; font-size: 14px; }
+.image-quality-control > label > i { color: #70f5df; font-size: 10px; font-style: normal; }
+.image-quality-control button { width: 100%; padding: 10px; border: 1px solid #315b56; border-radius: 7px; background: #0e1816; color: #a8eee2; font-size: 9px; font-weight: 800; cursor: pointer; }
+
+/* Keep the browser preview close to the enhanced MP4 instead of covering the
+   artwork with the previous heavy vignette. */
+.mv-scene .scene-shade {
+  background: linear-gradient(180deg, #02030a1f 0%, transparent 42%, #02030a61 100%),
+    radial-gradient(circle at 50% 40%, transparent 35%, #02030a26 100%);
+}
+.mv-shell .scene-video,
+.mv-shell .mv-intro-image {
+  filter: brightness(var(--image-brightness, 110%))
+    contrast(var(--image-contrast, 103%))
+    saturate(var(--image-saturation, 102%));
+}
+
 .export-sync-control {
   display: grid;
   gap: 11px;
@@ -517,6 +553,8 @@
 .rendered-video > small { color: #8f98a6; font-size: 7px; text-align: center; }
 
 @media (max-width: 560px) {
+  .image-quality-control > label { grid-template-columns: 1fr 64px 14px; }
+  .image-quality-control > label > span { grid-column: 1 / -1; }
   .export-format > div,
   .vertical-upload-grid,
   .direct-render-note > div { grid-template-columns: 1fr; }
