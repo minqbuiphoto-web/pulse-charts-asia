@@ -6,6 +6,7 @@ import re
 import unicodedata
 import json
 import logging
+import math
 from difflib import SequenceMatcher
 from pathlib import Path
 
@@ -13,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="4.2")
+app = FastAPI(title="Pulse Audio AI", version="4.3")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -32,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.2", "alignment": True, "lineStartAlignment": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.3", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -519,6 +520,9 @@ async def render_mv(
             await write_upload(thumbnail, thumbnail_path)
 
         width, height = (1080, 1920) if video_format == "vertical" else (1920, 1080)
+        image_scale = max(1.0, min(1.8, float(positions.get("imageScale", 100)) / 100.0))
+        scaled_width = int(math.ceil(width * image_scale / 2.0) * 2)
+        scaled_height = int(math.ceil(height * image_scale / 2.0) * 2)
         fps = 30
         song_duration = clip_end - clip_start
         artwork_duration = song_duration / len(image_paths)
@@ -533,7 +537,7 @@ async def render_mv(
             input_args = ["-stream_loop", "-1", "-i", str(media_path)] if is_video else ["-loop", "1", "-i", str(media_path)]
             command = [
                 ffmpeg, "-y", *input_args, "-t", f"{segment_duration:.3f}",
-                "-vf", f"scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height},setsar=1,format=yuv420p",
+                "-vf", f"scale={scaled_width}:{scaled_height}:force_original_aspect_ratio=increase,crop={width}:{height},setsar=1,format=yuv420p",
                 "-r", str(fps), "-an", "-c:v", "libx264", "-preset", "veryfast", "-crf", "20",
                 "-movflags", "+faststart", str(segment),
             ]
