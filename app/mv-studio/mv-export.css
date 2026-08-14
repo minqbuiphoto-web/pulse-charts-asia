@@ -30,6 +30,28 @@
 .image-scale-control input[type="number"] { width: 76px; padding: 9px; border: 1px solid #3b424d; border-radius: 7px; background: #080a0e; color: #fff; font-size: 14px; }
 .image-scale-control > div span { color: #d6ff4b; font-size: 11px; }
 .image-scale-control button { width: 100%; padding: 10px; border: 1px solid #3d4931; border-radius: 7px; background: #10140e; color: #c8d2b7; font-size: 9px; font-weight: 800; cursor: pointer; }
+
+.export-sync-control {
+  display: grid;
+  gap: 11px;
+  margin-top: 12px;
+  padding: 15px;
+  border: 1px solid #654790;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #171023, #0d1015 68%);
+}
+.export-sync-control header { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.export-sync-control header span,
+.export-sync-control header b,
+.export-sync-control header small { display: block; }
+.export-sync-control header b { color: #d8b7ff; font-size: 11px; letter-spacing: .7px; }
+.export-sync-control header small { max-width: 560px; margin-top: 5px; color: #a69caf; font-size: 9px; line-height: 1.5; }
+.export-sync-control output { color: #fff; font: 800 16px/1 Arial, sans-serif; white-space: nowrap; }
+.export-sync-control > div { display: grid; grid-template-columns: minmax(120px, 1fr) 76px 34px; align-items: center; gap: 9px; }
+.export-sync-control input[type="range"] { width: 100%; accent-color: #a855f7; }
+.export-sync-control input[type="number"] { width: 76px; padding: 9px; border: 1px solid #4b3d5b; border-radius: 7px; background: #080a0e; color: #fff; font-size: 14px; }
+.export-sync-control > div span { color: #d8b7ff; font-size: 9px; }
+.export-sync-control button { width: 100%; padding: 10px; border: 1px solid #503b66; border-radius: 7px; background: #15101b; color: #d8c8e8; font-size: 9px; font-weight: 800; cursor: pointer; }
 .mv-scene .scene-image { inset: 0; transform-origin: center; }
 .mv-intro { isolation: isolate; background: #080a0e; overflow: hidden; }
 .mv-intro-back,
