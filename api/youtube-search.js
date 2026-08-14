@@ -18,6 +18,57 @@ function extractInitialData(html){
 function collectVideos(value,output=[]){if(!value||typeof value!=="object")return output;if(value.videoRenderer)output.push(value.videoRenderer);for(const child of Object.values(value))collectVideos(child,output);return output;}
 const runsText=(runs)=>runs?.map((item)=>item.text).join("")??"";
 const numericViews=(value)=>Number(String(value??"").replaceAll(",","").match(/([0-9]+)/)?.[1]??0);
+const normalize=(value)=>String(value??"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim();
+const LIVE_SOURCE_PATTERN=/(^|\s)(live|concert|fancam|fan cam|stage|festival|showcase|acoustic live|radio live)(\s|$)|ì§ìº |ë¼ì´ë¸Œ|ë¬´ëŒ€|ì½˜ì„œíŠ¸|í˜„ìž¥|çŽ°åœº|ç¾å ´|æ¼”å”±ä¼š|æ¼”å”±æœƒ|èˆžå°|ç›´æ’­|éŸ³æ¨‚ç¯€|éŸ³ä¹èŠ‚/u;
+const WRONG_SOURCE_PATTERN=/(^|\s)(cover|karaoke|reaction|teaser|trailer|shorts?|dance practice)(\s|$)|ì»¤ë²„|ë…¸ëž˜ë°©|ç¿»å”±|ä¼´å¥/u;
+const STUDIO_SOURCE_PATTERN=/(official\s*(music\s*)?video|official\s*mv|official\s*audio|audio\s*only|provided\s*to\s*youtube|studio\s*version|studio\s*audio)/;
+
+function videoCandidate(video){
+  const videoId=video?.videoId;
+  if(!VIDEO_ID_PATTERN.test(videoId))return null;
+  return {
+    videoId,
+    title:runsText(video.title?.runs)||video.title?.simpleText||"",
+    channel:runsText(video.ownerText?.runs)||runsText(video.longBylineText?.runs)||"",
+    viewCount:numericViews(video.viewCountText?.simpleText||runsText(video.viewCountText?.runs))
+  };
+}
+
+function isStudioCandidate(candidate){
+  const label=normalize(`${candidate.title} ${candidate.channel}`);
+  return !LIVE_SOURCE_PATTERN.test(label)&&!WRONG_SOURCE_PATTERN.test(label);
+}
+
+function studioScore(candidate,query){
+  const title=normalize(candidate.title),channel=normalize(candidate.channel);
+  const queryTokens=normalize(query)
+    .split(" ")
+    .filter((token)=>token.length>1&&!['official','music','video','audio','mv'].includes(token));
+  const overlap=[...new Set(queryTokens)].filter((token)=>title.includes(token)||channel.includes(token)).length;
+  let score=overlap*16+Math.log10(Math.max(1,candidate.viewCount))*2;
+  if(STUDIO_SOURCE_PATTERN.test(title))score+=120;
+  if(/official/.test(title))score+=45;
+  if(/(^|\s)(mv|m v)(\s|$)/.test(title))score+=35;
+  if(/(^|\s)audio(\s|$)/.test(title))score+=30;
+  if(/(^|\s)topic(\s|$)/.test(channel))score+=90;
+  if(/official/.test(channel))score+=35;
+  if(/lyrics?|lyric video/.test(title))score+=8;
+  if(/performance|special clip|visualizer/.test(title))score-=25;
+  return score;
+}
+
+function rankedStudioCandidates(initialData,query){
+  const seen=new Set();
+  return collectVideos(initialData)
+    .map(videoCandidate)
+    .filter(Boolean)
+    .filter((candidate)=>{if(seen.has(candidate.videoId))return false;seen.add(candidate.videoId);return true;})
+    .filter(isStudioCandidate)
+    .map((candidate)=>({...candidate,sourceType:STUDIO_SOURCE_PATTERN.test(normalize(candidate.title))||/(^|\s)topic(\s|$)/.test(normalize(candidate.channel))?"studio":"standard",score:studioScore(candidate,query)}))
+    .sort((left,right)=>right.score-left.score);
+}
+
+export {isStudioCandidate,rankedStudioCandidates};
 
 
 export default async function handler(request,response){
@@ -34,16 +85,17 @@ export default async function handler(request,response){
     clearTimeout(timer);
     if(!upstream.ok){console.error("[youtube-search] upstream",{status:upstream.status});return response.status(502).json({error:"YouTube search unavailable"});}
     const html=await upstream.text();
+    const initialData=extractInitialData(html);
+    const rankedCandidates=rankedStudioCandidates(initialData,query);
     if(mode==="candidates"){
-      const initialData=extractInitialData(html); const seen=new Set();
-      const candidates=collectVideos(initialData).flatMap((video)=>{if(!VIDEO_ID_PATTERN.test(video.videoId)||seen.has(video.videoId))return [];seen.add(video.videoId);return [{videoId:video.videoId,title:runsText(video.title?.runs),channel:runsText(video.ownerText?.runs),viewCount:numericViews(video.viewCountText?.simpleText)}];}).slice(0,20);
+      const candidates=rankedCandidates.slice(0,20).map(({score,...candidate})=>candidate);
       response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
-      if(!candidates.length)return response.status(404).json({error:"No video candidates found"});
+      if(!candidates.length)return response.status(404).json({error:"No studio video candidates found"});
       return response.status(200).json({query,candidates});
     }
-    const ids=[...html.matchAll(/"videoId":"([A-Za-z0-9_-]{11})"/g)].map((match)=>match[1]);
-    const videoId=ids.find((id,index)=>VIDEO_ID_PATTERN.test(id)&&ids.indexOf(id)===index);
-    if(!videoId){console.warn("[youtube-search] no-result",{query});return response.status(404).json({error:"No video found"});}
+    const selected=rankedCandidates[0];
+    const videoId=selected?.videoId;
+    if(!videoId){console.warn("[youtube-search] no-studio-result",{query});return response.status(404).json({error:"No studio video found"});}
     let viewCount=null;
     try{
       const statsResponse=await fetch("https://returnyoutubedislikeapi.com/votes?videoId="+encodeURIComponent(videoId),{headers:{accept:"application/json"},signal:AbortSignal.timeout(5000)});
@@ -54,10 +106,11 @@ export default async function handler(request,response){
       }
     }catch(error){console.warn("[youtube-search] stats-unavailable",{videoId,error:String(error)});}
     response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
-    console.log("[youtube-search] success",{query,videoId,viewCount});
-    return response.status(200).json({videoId,viewCount});
+    console.log("[youtube-search] success",{query,videoId,viewCount,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
+    return response.status(200).json({videoId,viewCount,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
   }catch(error){
     console.error("[youtube-search] failed",{query,error:String(error)});
     return response.status(502).json({error:"Video lookup failed"});
   }
 }
+
