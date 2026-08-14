@@ -12,9 +12,9 @@ const cleanLyricText=(value:string)=>value
  .replace(/(\p{Script=Latin})\s+(ng|nh|ch|[nmtcp])(?=[,.;:!?…\)\]}"'’”]|\s|$)/giu,"$1$2");
 const split=(v:string)=>cleanLyricText(v).split(/\r?\n/).map(x=>x.trim()).filter(Boolean);
 const stamp=(value:number)=>`${String(Math.floor(value/60)).padStart(2,"0")}:${String(Math.floor(value%60)).padStart(2,"0")}`;
-const safeFontMap:Record<string,string>={"Arial":"Arial","Tahoma":"Tahoma","Georgia":"Times New Roman","Times New Roman":"Times New Roman","Trebuchet MS":"Tahoma","Verdana":"Verdana","Courier New":"Courier New"};
+const safeFontMap:Record<string,string>={"Arial":"Arial","Tahoma":"Tahoma","Georgia":"Times New Roman","Times New Roman":"Times New Roman","Trebuchet MS":"Tahoma","Verdana":"Verdana","Courier New":"Courier New","Segoe UI":"Segoe UI","Segoe UI Variable Display":"Segoe UI Variable Display","Aptos":"Aptos","Aptos Display":"Aptos Display","Bahnschrift":"Bahnschrift","Calibri":"Calibri","Candara":"Candara","Corbel":"Corbel","Century Gothic":"Century Gothic","Franklin Gothic Medium":"Franklin Gothic Medium","Arial Nova":"Arial Nova","Nirmala UI":"Nirmala UI","Microsoft YaHei UI":"Microsoft YaHei UI","Malgun Gothic":"Malgun Gothic"};
 const safeFont=(font:string)=>safeFontMap[font]||"Arial";
-const fontStack=(font:string)=>`"${safeFont(font)}"`;
+const fontStack=(font:string)=>`"${safeFont(font)}", "Segoe UI", Arial, sans-serif`;
 const readableKaraokeColor=(value:string)=>{const match=/^#?([0-9a-f]{6})$/i.exec(value||"");if(!match)return"#3B82F6";const rgb=match[1],red=parseInt(rgb.slice(0,2),16),green=parseInt(rgb.slice(2,4),16),blue=parseInt(rgb.slice(4,6),16);return(red*299+green*587+blue*114)/1000<105?"#3B82F6":`#${rgb.toUpperCase()}`};
 // At the same PlayRes, libass Fontsize 36 renders like roughly 32 CSS pixels.
 // Apply that measured 8/9 conversion so the scaled preview matches the final MP4.
@@ -32,7 +32,7 @@ const toMvTimeline=(sourceRows:Row[],sourceStart:number,sourceEnd:number,intro:n
  .map(item=>({...item,time:Math.max(intro,item.time-sourceStart+intro),end:Math.min(intro+sourceEnd-sourceStart,item.end-sourceStart+intro)}))
  .filter(item=>item.end>item.time);
 const artStyles=["Anime điện ảnh","Cổ phong Á Đông","Truyện tranh vẽ tay","Màu nước","Minh họa điện ảnh"];
-const fontOptions=["Arial","Tahoma","Times New Roman","Verdana","Courier New"];
+const fontOptions=["Segoe UI","Segoe UI Variable Display","Aptos","Aptos Display","Bahnschrift","Calibri","Candara","Corbel","Century Gothic","Franklin Gothic Medium","Arial Nova","Nirmala UI","Microsoft YaHei UI","Malgun Gothic","Arial","Tahoma","Times New Roman","Verdana","Courier New"];
 const lineLabels:Record<LineKey,string>={original:"LYRIC GỐC",literal:"DỊCH NGHĨA",vietnamese:"LYRIC TIẾNG VIỆT"};
 const autoAtmospheres=["petals","fireflies","leaves","birds","fog","snow","bokeh","rays","embers","stars","dust"] as const;
 const lyricPresets:Record<PresetKey,{label:string;description:string;shadow:string;styles:Record<LineKey,TextStyle>}>= {
@@ -253,7 +253,7 @@ function drawCinematicLight(context:CanvasRenderingContext2D,width:number,height
 }
 
 function drawMotionAtmosphere(context:CanvasRenderingContext2D,width:number,height:number,effect:Exclude<Atmosphere,"auto">,progress:number,seed:number){
- if(effect==="rain"){context.save();context.strokeStyle="rgba(220,239,255,.28)";context.lineWidth=1.4;for(let index=0;index<90;index++){const x=(index*97+seed*41+progress*(width+120))%(width+120)-60,y=(index*61+progress*(height+160)*2)%(height+160)-80;context.beginPath();context.moveTo(x,y);context.lineTo(x-13,y+42);context.stroke()}context.restore()}
+ if(effect==="rain"){context.save();context.globalCompositeOperation="screen";for(let index=0;index<150;index++){const depth=.22+(index%11)/13,speed=.8+depth*2.35,travel=(height+260)*speed,x=(index*97+seed*41+(index%7)*19)% (width+180)-90,y=(index*61+progress*travel)%(height+260)-130,length=10+depth*48,slant=length*.22;context.strokeStyle=`rgba(205,228,244,${.035+depth*.23})`;context.lineWidth=.35+depth*1.15;context.beginPath();context.moveTo(x,y);context.lineTo(x-slant,y+length);context.stroke()}for(let index=0;index<8;index++){const x=(index*211+seed*71)%width,y=height*(.68+(index%4)*.085),pulse=.5+.5*Math.sin(progress*Math.PI*4+index),radius=10+(index%4)*7+pulse*5,drop=context.createRadialGradient(x,y,0,x,y,radius);drop.addColorStop(0,`rgba(210,232,244,${.08+pulse*.07})`);drop.addColorStop(.28,"rgba(210,232,244,.035)");drop.addColorStop(1,"rgba(210,232,244,0)");context.fillStyle=drop;context.fillRect(x-radius,y-radius,radius*2,radius*2)}context.restore()}
  if(effect==="fog"){context.save();for(let index=0;index<3;index++){const phase=progress*Math.PI*2,x=width*(.15+index*.35)+Math.sin(phase+index*2.1+seed)*210,y=height*(.22+index*.27),gradient=context.createRadialGradient(x,y,15,x,y,320);gradient.addColorStop(0,"rgba(225,239,246,.18)");gradient.addColorStop(1,"rgba(225,239,246,0)");context.fillStyle=gradient;context.fillRect(x-340,y-230,680,460)}context.restore()}
  if(effect==="petals"){context.save();for(let index=0;index<26;index++){const cycles=1+index%3,x=(index*83+seed*29+Math.sin(progress*Math.PI*2+index)*55+width)%width,y=(index*137+progress*(height+120)*cycles)%(height+120)-60;context.fillStyle=`rgba(255,${175+index%50},${205+index%35},${.35+(index%5)*.09})`;context.beginPath();context.ellipse(x,y,7+(index%3),3+(index%2),progress*Math.PI*6+index,0,Math.PI*2);context.fill()}context.restore()}
  if(effect==="leaves"){context.save();for(let index=0;index<24;index++){const cycles=1+index%3,x=(index*91+seed*37+Math.sin(progress*Math.PI*2+index)*70+width)%width,y=(index*119+progress*(height+140)*cycles)%(height+140)-70;context.fillStyle=index%3===0?"rgba(214,151,54,.72)":index%3===1?"rgba(142,92,42,.7)":"rgba(112,143,63,.65)";context.beginPath();context.ellipse(x,y,10+(index%4),4+(index%3),progress*Math.PI*8+index,0,Math.PI*2);context.fill()}context.restore()}
