@@ -203,18 +203,30 @@
 }
 
 .mv-shell.karaoke .mv-preview .lyric-vietnamese:not(.lyric-intro-labels) .karaoke-word {
-  color: transparent !important;
-  -webkit-text-fill-color: transparent !important;
-  background: linear-gradient(90deg,
-    var(--karaoke-highlight, #ff5fc8) 0,
-    var(--karaoke-highlight, #ff5fc8) var(--word-fill, 0%),
-    #f5f7fb var(--word-fill, 0%),
-    #f5f7fb 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-box-decoration-break: clone;
-  box-decoration-break: clone;
+  position: relative;
+  display: inline-block;
+  color: #f5f7fb !important;
+  -webkit-text-fill-color: #f5f7fb !important;
   white-space: pre-wrap;
+}
+
+.mv-shell.karaoke .mv-preview .lyric-vietnamese:not(.lyric-intro-labels) .karaoke-word::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  color: var(--karaoke-highlight, #ff5fc8);
+  -webkit-text-fill-color: var(--karaoke-highlight, #ff5fc8);
+  -webkit-text-stroke: inherit;
+  paint-order: stroke fill;
+  text-shadow: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  line-height: inherit;
+  white-space: pre-wrap;
+  clip-path: inset(0 var(--word-unfilled, 100%) 0 0);
+  pointer-events: none;
 }
 
 .karaoke-beat-box {
