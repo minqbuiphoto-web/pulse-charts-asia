@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="4.6")
+app = FastAPI(title="Pulse Audio AI", version="4.7")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.6", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.7", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -543,6 +543,16 @@ async def render_mv(
 
         width, height = (1080, 1920) if video_format == "vertical" else (1920, 1080)
         image_scale = max(0.5, min(1.8, float(positions.get("imageScale", 100)) / 100.0))
+        image_brightness = max(70.0, min(160.0, float(positions.get("imageBrightness", 110))))
+        image_sharpness = max(0.0, min(100.0, float(positions.get("imageSharpness", 25))))
+        ffmpeg_brightness = (image_brightness - 100.0) / 200.0
+        ffmpeg_contrast = 1.0 + image_sharpness / 800.0
+        ffmpeg_saturation = 1.0 + image_sharpness / 1600.0
+        unsharp_amount = image_sharpness / 20.0
+        image_enhance_filter = (
+            f"eq=brightness={ffmpeg_brightness:.4f}:contrast={ffmpeg_contrast:.4f}:"
+            f"saturation={ffmpeg_saturation:.4f},unsharp=5:5:{unsharp_amount:.3f}:5:5:0"
+        )
         scaled_width = int(math.ceil(width * image_scale / 2.0) * 2)
         scaled_height = int(math.ceil(height * image_scale / 2.0) * 2)
         fps = 30
@@ -558,7 +568,7 @@ async def render_mv(
             segment = work / f"segment-{index:03d}.mp4"
             input_args = ["-stream_loop", "-1", "-i", str(media_path)] if is_video else ["-loop", "1", "-i", str(media_path)]
             if image_scale >= 1.0:
-                video_filter = f"scale={scaled_width}:{scaled_height}:force_original_aspect_ratio=increase,crop={width}:{height},setsar=1,format=yuv420p"
+                video_filter = f"scale={scaled_width}:{scaled_height}:force_original_aspect_ratio=increase,crop={width}:{height},{image_enhance_filter},setsar=1,format=yuv420p"
             else:
                 video_filter = (
                     f"split=2[background][foreground];"
@@ -566,7 +576,7 @@ async def render_mv(
                     f"boxblur=20:1,eq=brightness=-0.18[blurred];"
                     f"[foreground]scale={width}:{height}:force_original_aspect_ratio=increase,crop={width}:{height},"
                     f"scale={scaled_width}:{scaled_height}[smaller];"
-                    f"[blurred][smaller]overlay=(W-w)/2:(H-h)/2,setsar=1,format=yuv420p"
+                    f"[blurred][smaller]overlay=(W-w)/2:(H-h)/2,{image_enhance_filter},setsar=1,format=yuv420p"
                 )
             command = [
                 ffmpeg, "-y", *input_args, "-t", f"{segment_duration:.3f}",
