@@ -31,6 +31,36 @@
 .image-scale-control > div span { color: #d6ff4b; font-size: 11px; }
 .image-scale-control button { width: 100%; padding: 10px; border: 1px solid #3d4931; border-radius: 7px; background: #10140e; color: #c8d2b7; font-size: 9px; font-weight: 800; cursor: pointer; }
 .mv-scene .scene-image { inset: 0; transform-origin: center; }
+.mv-intro { isolation: isolate; background: #080a0e; overflow: hidden; }
+.mv-intro-back,
+.mv-intro-image {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+.mv-intro-back {
+  z-index: -2;
+  inset: -8%;
+  background-size: cover;
+  filter: blur(24px) saturate(.82) brightness(.58);
+  transform: scale(1.12);
+}
+.mv-intro-image {
+  z-index: -1;
+  background-size: cover;
+  transform-origin: center;
+}
+.mv-intro::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 58%, #05070ca8 100%);
+  pointer-events: none;
+}
+.mv-intro > span { position: relative; z-index: 1; }
 
 .mv-preview.vertical .top-lyrics {
   top: 8%;
