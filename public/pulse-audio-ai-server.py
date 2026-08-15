@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.0")
+app = FastAPI(title="Pulse Audio AI", version="5.1")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.0", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.1", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrimThumbnail": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -486,6 +486,96 @@ async def separate(background_tasks: BackgroundTasks, file: UploadFile = File(..
         filename=f"{source.stem}_instrumental.wav",
         headers={"X-Pulse-Separation-Engine": separation_engine},
     )
+
+
+def video_dimensions(path: Path) -> tuple[int, int]:
+    """Read the first video stream dimensions without requiring a separate ffprobe install."""
+    probe = subprocess.run(
+        [ffmpeg_executable(), "-hide_banner", "-i", str(path)],
+        check=False, timeout=60, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+    )
+    detail = probe.stderr.decode("utf-8", errors="ignore")
+    match = re.search(r"Video:.*?\b(\d{2,5})x(\d{2,5})\b", detail)
+    if not match:
+        raise RuntimeError("Could not read video dimensions")
+    width, height = int(match.group(1)), int(match.group(2))
+    return max(2, width // 2 * 2), max(2, height // 2 * 2)
+
+
+@app.post("/trim-video")
+async def trim_video(
+    background_tasks: BackgroundTasks,
+    video: UploadFile = File(...),
+    start: float = Form(...),
+    end: float = Form(...),
+    thumbnail: UploadFile | None = File(None),
+    thumbnail_duration: float = Form(3.0),
+):
+    """Frame-accurately cut a completed MP4 and optionally prepend a still thumbnail."""
+    start = max(0.0, float(start))
+    end = float(end)
+    if not math.isfinite(start) or not math.isfinite(end) or end <= start:
+        raise HTTPException(400, "The end time must be after the start time")
+    if end - start > 60 * 60 * 8:
+        raise HTTPException(400, "The selected video segment is too long")
+    thumbnail_duration = max(0.5, min(15.0, float(thumbnail_duration))) if thumbnail else 0.0
+    work = Path(tempfile.mkdtemp(prefix="pulse-mv-trim-"))
+    try:
+        source_suffix = Path(video.filename or "video.mp4").suffix or ".mp4"
+        source = work / f"source{source_suffix}"
+        await write_upload(video, source)
+        width, height = video_dimensions(source)
+        ffmpeg = ffmpeg_executable()
+        selected_duration = end - start
+        cut = work / "cut.mp4"
+        # Seek after opening the input and re-encode both streams. This is slower than
+        # stream-copy, but begins on the exact requested frame instead of a keyframe.
+        subprocess.run([
+            ffmpeg, "-y", "-i", str(source), "-ss", f"{start:.3f}", "-t", f"{selected_duration:.3f}",
+            "-map", "0:v:0", "-map", "0:a:0", "-vf", f"scale={width}:{height},setsar=1,format=yuv420p",
+            "-af", "aresample=48000,asetpts=N/SR/TB", "-r", "30", "-c:v", "libx264",
+            "-preset", "veryfast", "-crf", "18", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
+            "-ac", "2", "-movflags", "+faststart", str(cut),
+        ], check=True, timeout=60 * 60, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        output = cut
+        if thumbnail:
+            thumb_suffix = Path(thumbnail.filename or "thumbnail.jpg").suffix or ".jpg"
+            thumb = work / f"thumbnail{thumb_suffix}"
+            await write_upload(thumbnail, thumb)
+            intro = work / "intro.mp4"
+            intro_filter = (
+                f"scale={width}:{height}:force_original_aspect_ratio=increase,"
+                f"crop={width}:{height},setsar=1,format=yuv420p"
+            )
+            subprocess.run([
+                ffmpeg, "-y", "-loop", "1", "-i", str(thumb),
+                "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-t", f"{thumbnail_duration:.3f}",
+                "-vf", intro_filter, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+                "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-ac", "2", "-shortest",
+                "-movflags", "+faststart", str(intro),
+            ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+            concat_list = work / "concat.txt"
+            concat_list.write_text(f"file '{intro.as_posix()}'\nfile '{cut.as_posix()}'\n", encoding="utf-8")
+            output = work / "trimmed-with-thumbnail.mp4"
+            subprocess.run([
+                ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
+                "-c", "copy", "-movflags", "+faststart", str(output),
+            ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+        if not output.exists() or output.stat().st_size < 1024:
+            raise RuntimeError("FFmpeg did not create a valid trimmed video")
+        base = re.sub(r"[^a-zA-Z0-9._-]+", "-", Path(video.filename or "video").stem).strip("-") or "video"
+        background_tasks.add_task(shutil.rmtree, work, True)
+        return FileResponse(output, media_type="video/mp4", filename=f"{base}-cut.mp4")
+    except HTTPException:
+        shutil.rmtree(work, ignore_errors=True)
+        raise
+    except subprocess.CalledProcessError as error:
+        detail = error.stderr.decode("utf-8", errors="ignore")[-1200:] if error.stderr else str(error)
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(500, f"FFmpeg video cut failed: {detail}") from error
+    except Exception as error:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(500, f"Video cut failed: {error}") from error
 
 
 @app.post("/render-mv")

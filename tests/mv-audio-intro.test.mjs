@@ -4,7 +4,7 @@ import test from "node:test";
 
 test("delays the intact song instead of concatenating synthetic intro audio",async()=>{
   const source=await readFile(new URL("../public/pulse-audio-ai-server.py",import.meta.url),"utf8");
-  assert.match(source,/version="5\.0"/);
+  assert.match(source,/version="5\.1"/);
   assert.match(source,/mvExactAudioIntro/);
   assert.match(source,/mvAudioHeadPreserved/);
   assert.match(source,/mvAudioPtsReset/);
@@ -53,4 +53,20 @@ test("requires one fresh original upload for legacy saved MV projects",async()=>
   assert.match(page,/pulse-mv-source-verified-/);
   assert.match(page,/Đã thay bằng WAV gốc đầy đủ và giữ nguyên timeline hiện tại/);
   assert.match(page,/audioFile=mode==="music"\?\(sourceAudioFileRef\.current\|\|audioFileRef\.current\)/);
+});
+
+test("cuts a finished video accurately and can prepend a thumbnail",async()=>{
+  const [page,server]=await Promise.all([
+    readFile(new URL("../app/mv-studio/page.tsx",import.meta.url),"utf8"),
+    readFile(new URL("../public/pulse-audio-ai-server.py",import.meta.url),"utf8"),
+  ]);
+  assert.match(server,/@app\.post\("\/trim-video"\)/);
+  assert.match(server,/"-i", str\(source\), "-ss", f"\{start:\.3f\}"/);
+  assert.match(server,/thumbnail_duration/);
+  assert.match(server,/mvVideoTrim/);
+  assert.match(server,/mvTrimThumbnail/);
+  assert.match(page,/CẮT VIDEO ĐÃ DỰNG/);
+  assert.match(page,/CẮT \+ GẮN THUMBNAIL \+ TẢI MP4/);
+  assert.match(page,/form\.append\("start",String\(trimStart\)\)/);
+  assert.match(page,/form\.append\("end",String\(trimEnd\)\)/);
 });
