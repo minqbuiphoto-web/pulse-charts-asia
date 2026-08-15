@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="4.9")
+app = FastAPI(title="Pulse Audio AI", version="5.0")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.9", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.0", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -103,7 +103,8 @@ def safe_font(value: str, fallback: str) -> str:
 
 
 def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions: dict, mode: str, width: int, height: int,
-                        clip_start: float, clip_end: float, intro_duration: float, timeline_space: str = "source"):
+                        clip_start: float, clip_end: float, intro_duration: float, timeline_space: str = "source",
+                        exact_timeline: bool = False):
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
@@ -149,14 +150,15 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     ]
     events = []
     output_timeline = timeline_space == "output"
-    output_end = intro_duration + clip_end - clip_start
+    audio_head_padding = max(0.0, min(3.0, float(positions.get("audioHeadPadding", 0.0))))
+    output_end = intro_duration + audio_head_padding + clip_end - clip_start
     # FFmpeg/ASS rendering can start subtitles slightly later than the browser preview.
     # Keep a separately saved, user-adjustable offset for each output format.
     try:
         export_lyric_lead = float(positions.get("exportLyricLead", MV_EXPORT_LYRIC_LEAD_SECONDS))
     except (TypeError, ValueError):
         export_lyric_lead = MV_EXPORT_LYRIC_LEAD_SECONDS
-    export_lyric_lead = max(-2.0, min(2.0, export_lyric_lead))
+    export_lyric_lead = 0.0 if exact_timeline else max(-2.0, min(2.0, export_lyric_lead))
     visible_rows = ([row for row in rows if float(row.get("end", 0)) > 0 and float(row.get("time", 0)) < output_end]
                     if output_timeline else
                     [row for row in rows if float(row.get("end", 0)) > clip_start and float(row.get("time", 0)) < clip_end])
@@ -502,6 +504,7 @@ async def render_mv(
     clip_end: float = Form(0.0),
     intro_duration: float = Form(0.0),
     timeline_space: str = Form("source"),
+    exact_timeline: bool = Form(False),
 ):
     """Render a finished MP4 locally. This never records the browser or waits for real-time playback."""
     if not images:
@@ -524,7 +527,7 @@ async def render_mv(
         raise HTTPException(400, "The end time must be after the start time")
     intro_duration = max(0.0, min(15.0, float(intro_duration if thumbnail else 0.0)))
     audio_head_padding = max(0.0, min(3.0, float(positions.get("audioHeadPadding", 0.0))))
-    if audio_head_padding > 0 and timeline_space == "output":
+    if audio_head_padding > 0 and timeline_space == "output" and not exact_timeline:
         rows = [
             {
                 **row,
@@ -610,18 +613,26 @@ async def render_mv(
 
         subtitle_path = work / "lyrics.ass"
         subtitle_intro = intro_duration if timeline_space == "output" else intro_duration + audio_head_padding
-        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, subtitle_intro, timeline_space)
+        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, subtitle_intro, timeline_space, exact_timeline)
         output = work / "pulse-mv.mp4"
         total_duration = intro_duration + audio_head_padding + song_duration
         subtitle_filter = str(subtitle_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
+        # Some uploaded WAV files expose no usable STARTPTS after atrim. Using
+        # PTS-STARTPTS then yields NOPTS and makes FFmpeg discard the thumbnail
+        # delay. Rebuild timestamps from decoded sample count so every cut starts
+        # at zero before the real silence/thumbnail delay is inserted.
         song_filter = (
-            f"[1:a]atrim=start={clip_start:.3f}:end={clip_end:.3f},asetpts=PTS-STARTPTS,"
+            f"[1:a]atrim=start={clip_start:.3f}:end={clip_end:.3f},asetpts=N/SR/TB,"
             "aresample=48000,aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo[song]"
         )
         if intro_duration > 0 or audio_head_padding > 0:
-            intro_delay_ms = max(0, int(round((intro_duration + audio_head_padding) * 1000.0)))
+            intro_delay_seconds = max(0.0, intro_duration + audio_head_padding)
             audio_filter = (
-                f"{song_filter};[song]adelay={intro_delay_ms}:all=1,"
+                # A timestamp-only delay can be dropped by MP4/AAC edit lists.
+                # Concatenate real silent samples so every player keeps the song
+                # behind the thumbnail and the cut lyric timeline stays exact.
+                f"{song_filter};anullsrc=r=48000:cl=stereo:d={intro_delay_seconds:.3f}[lead];"
+                "[lead][song]concat=n=2:v=0:a=1,"
                 f"apad=whole_dur={total_duration:.3f},atrim=duration={total_duration:.3f},"
                 "asetpts=N/SR/TB[a]"
             )
