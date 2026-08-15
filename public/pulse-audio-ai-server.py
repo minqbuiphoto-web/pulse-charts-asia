@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.8", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.8", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvLandscapeAudioZeroStart": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -515,6 +515,10 @@ async def render_mv(
     except (json.JSONDecodeError, ValueError):
         raise HTTPException(400, "Invalid timeline or text style data")
     clip_start = max(0.0, float(clip_start))
+    # A landscape MV always uses the complete song. Ignore any stale short-video
+    # start value that a restored browser project may accidentally submit.
+    if video_format != "vertical":
+        clip_start = 0.0
     clip_end = float(clip_end)
     if clip_end <= clip_start:
         raise HTTPException(400, "The end time must be after the start time")
