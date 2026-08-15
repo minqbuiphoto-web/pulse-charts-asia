@@ -564,7 +564,52 @@
 .rendered-video a { padding: 13px; border-radius: 8px; background: #d6ff4b; color: #080a0d; font-size: 10px; font-weight: 900; text-align: center; text-decoration: none; }
 .rendered-video > small { color: #8f98a6; font-size: 7px; text-align: center; }
 
+.full-mv-transport,
+.audio-head-control {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 13px;
+  border: 1px solid #3b4350;
+  border-radius: 10px;
+  background: #0b0e13;
+}
+
+.full-mv-transport header,
+.audio-head-control header {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.full-mv-transport header span,
+.audio-head-control header span { display: grid; gap: 4px; }
+.full-mv-transport b,
+.audio-head-control b { color: #fff; font-size: 9px; }
+.full-mv-transport small,
+.audio-head-control small { max-width: 680px; color: #98a1ae; font-size: 8px; line-height: 1.5; }
+.full-mv-transport output,
+.audio-head-control output { color: #d6ff4b; font: 800 10px Consolas, monospace; white-space: nowrap; }
+.full-mv-transport > input,
+.audio-head-control input[type="range"] { width: 100%; accent-color: #d6ff4b; }
+
+.preview-zones { display: flex; gap: 3px; min-height: 19px; }
+.preview-zones span { display: grid; min-width: 38px; flex: 1; place-items: center; border-radius: 4px; background: #222834; color: #c4cad3; font-size: 6px; font-weight: 800; }
+.preview-zones span:first-child { flex: none; background: #3c2752; color: #e8c7ff; }
+.preview-zones .audio-guard { flex: none; background: #465516; color: #d6ff4b; }
+
+.audio-head-control { border-color: #688025; background: #101509; }
+.audio-head-control > div { display: grid; grid-template-columns: 1fr 78px 34px; gap: 8px; align-items: center; }
+.audio-head-control input[type="number"] { width: 100%; padding: 9px; border: 1px solid #56652e; border-radius: 7px; background: #050709; color: #d6ff4b; font: 800 11px Consolas, monospace; text-align: center; }
+.audio-head-control > div > span { color: #89946d; font-size: 7px; font-weight: 800; }
+.audio-head-control > section { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.audio-head-control button { padding: 10px; border: 1px solid #56652e; border-radius: 7px; background: #11151c; color: #d6ff4b; font-size: 8px; font-weight: 800; }
+
 @media (max-width: 560px) {
+  .full-mv-transport header,
+  .audio-head-control header { align-items: flex-start; flex-direction: column; gap: 7px; }
+  .audio-head-control > div { grid-template-columns: 1fr 66px 30px; }
   .image-quality-control > label { grid-template-columns: 1fr 64px 14px; }
   .image-quality-control > label > span { grid-column: 1 / -1; }
   .export-format > div,

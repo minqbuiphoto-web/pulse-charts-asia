@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="4.8")
+app = FastAPI(title="Pulse Audio AI", version="4.9")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -33,7 +33,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.8", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvLandscapeAudioZeroStart": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "4.9", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": MV_EXPORT_LYRIC_LEAD_SECONDS}
 
 
 def ffmpeg_executable() -> str:
@@ -523,6 +523,16 @@ async def render_mv(
     if clip_end <= clip_start:
         raise HTTPException(400, "The end time must be after the start time")
     intro_duration = max(0.0, min(15.0, float(intro_duration if thumbnail else 0.0)))
+    audio_head_padding = max(0.0, min(3.0, float(positions.get("audioHeadPadding", 0.0))))
+    if audio_head_padding > 0 and timeline_space == "output":
+        rows = [
+            {
+                **row,
+                "time": float(row.get("time", 0.0)) + audio_head_padding,
+                "end": float(row.get("end", row.get("time", 0.0))) + audio_head_padding,
+            }
+            for row in rows
+        ]
     work = Path(tempfile.mkdtemp(prefix="pulse-mv-render-"))
     try:
         audio_path = work / f"audio{Path(audio.filename or 'song.wav').suffix or '.wav'}"
@@ -561,7 +571,7 @@ async def render_mv(
         scaled_height = int(math.ceil(height * image_scale / 2.0) * 2)
         fps = 30
         song_duration = clip_end - clip_start
-        artwork_duration = song_duration / len(image_paths)
+        artwork_duration = (song_duration + audio_head_padding) / len(image_paths)
         ffmpeg = ffmpeg_executable()
         segment_paths = []
         source_segments: list[tuple[Path, float, bool]] = []
@@ -599,16 +609,17 @@ async def render_mv(
         ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
 
         subtitle_path = work / "lyrics.ass"
-        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, intro_duration, timeline_space)
+        subtitle_intro = intro_duration if timeline_space == "output" else intro_duration + audio_head_padding
+        write_ass_subtitles(subtitle_path, rows, styles, positions, mode, width, height, clip_start, clip_end, subtitle_intro, timeline_space)
         output = work / "pulse-mv.mp4"
-        total_duration = intro_duration + song_duration
+        total_duration = intro_duration + audio_head_padding + song_duration
         subtitle_filter = str(subtitle_path).replace("\\", "/").replace(":", "\\:").replace("'", "\\'")
         song_filter = (
             f"[1:a]atrim=start={clip_start:.3f}:end={clip_end:.3f},asetpts=PTS-STARTPTS,"
             "aresample=48000,aformat=sample_fmts=fltp:sample_rates=48000:channel_layouts=stereo[song]"
         )
-        if intro_duration > 0:
-            intro_delay_ms = max(0, int(round(intro_duration * 1000.0)))
+        if intro_duration > 0 or audio_head_padding > 0:
+            intro_delay_ms = max(0, int(round((intro_duration + audio_head_padding) * 1000.0)))
             audio_filter = (
                 f"{song_filter};[song]adelay={intro_delay_ms}:all=1,"
                 f"apad=whole_dur={total_duration:.3f},atrim=duration={total_duration:.3f},"
