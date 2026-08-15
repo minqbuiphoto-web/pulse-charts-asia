@@ -171,7 +171,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
             if mode == "music":
                 events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Original,,0,0,0,,Lời gốc")
             if mode == "music" and any(str(row.get("literal", "")).strip() for row in visible_rows):
-                events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Literal,,0,0,0,,Nghĩa dịch sát")
+                events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Literal,,0,0,0,,Nghĩa dịch sát ý")
             if mode == "music":
                 events.append(f"Dialogue: 0,{ass_time(label_start)},{ass_time(first_start)},Vietnamese,,0,0,0,,Lời Việt")
     for row in visible_rows:
