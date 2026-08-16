@@ -503,6 +503,20 @@
   font-weight: 800;
 }
 
+.platform-safe-badge {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 10px 12px;
+  border: 1px solid #61752d;
+  border-radius: 8px;
+  background: #101608;
+}
+.platform-safe-badge b { color: #d6ff4b; font-size: 8px; white-space: nowrap; }
+.platform-safe-badge span { color: #9eaa89; font-size: 7px; line-height: 1.4; text-align: right; }
+
 .render-card .preview-short {
   margin-top: 8px;
   border-color: #d6ff4b;
@@ -674,4 +688,6 @@
   .trim-range > label { grid-template-columns: 1fr; }
   .trim-range-actions { grid-template-columns: 1fr; }
   .trim-range-actions button:last-child { grid-column: auto; }
+  .platform-safe-badge { align-items: flex-start; flex-direction: column; }
+  .platform-safe-badge span { text-align: left; }
 }

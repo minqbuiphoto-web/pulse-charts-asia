@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.1")
+app = FastAPI(title="Pulse Audio AI", version="5.2")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -27,13 +27,13 @@ app.add_middleware(
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
-    expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine"],
+    expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine", "X-Pulse-Platform-Safe"],
 )
 
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.1", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrimThumbnail": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.2", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -502,6 +502,45 @@ def video_dimensions(path: Path) -> tuple[int, int]:
     return max(2, width // 2 * 2), max(2, height // 2 * 2)
 
 
+def validate_platform_safe_mp4(path: Path) -> None:
+    """Reject files that YouTube/TikTok can reinterpret with shifted A/V timestamps."""
+    probe = subprocess.run(
+        [ffmpeg_executable(), "-loglevel", "trace", "-i", str(path), "-t", "0", "-f", "null", "NUL"],
+        check=False, timeout=120, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE,
+    )
+    detail = probe.stderr.decode("utf-8", errors="ignore")
+    if "type:'elst'" in detail:
+        raise RuntimeError("Platform safety check found an MP4 edit list")
+    streams = {
+        int(index): (float(start), float(duration))
+        for index, start, duration in re.findall(
+            r"stream (\d+): start_time: ([\-0-9.]+) duration: ([0-9.]+)", detail
+        )
+    }
+    if 0 not in streams or 1 not in streams:
+        raise RuntimeError("Platform safety check could not read both video and audio tracks")
+    video_start, video_duration = streams[0]
+    audio_start, audio_duration = streams[1]
+    if abs(video_start) > 0.001 or abs(audio_start) > 0.001:
+        raise RuntimeError(f"Platform safety check found non-zero track starts: {video_start}, {audio_start}")
+    if abs(video_duration - audio_duration) > 0.025:
+        raise RuntimeError(
+            f"Platform safety check found mismatched track durations: {video_duration}, {audio_duration}"
+        )
+
+
+def platform_safe_video_args() -> list[str]:
+    # B-frame reordering normally creates negative DTS and forces FFmpeg to write
+    # an edit list. YouTube explicitly warns against edit lists. Disabling B-frames
+    # keeps both streams at timestamp zero through every re-encode.
+    return [
+        "-r", "30", "-fps_mode", "cfr", "-profile:v", "high", "-level", "4.1",
+        "-g", "15", "-keyint_min", "15", "-sc_threshold", "0", "-bf", "0",
+        "-video_track_timescale", "90000", "-avoid_negative_ts", "make_zero",
+        "-use_editlist", "0", "-movflags", "+faststart",
+    ]
+
+
 @app.post("/trim-video")
 async def trim_video(
     background_tasks: BackgroundTasks,
@@ -532,10 +571,13 @@ async def trim_video(
         # stream-copy, but begins on the exact requested frame instead of a keyframe.
         subprocess.run([
             ffmpeg, "-y", "-i", str(source), "-ss", f"{start:.3f}", "-t", f"{selected_duration:.3f}",
-            "-map", "0:v:0", "-map", "0:a:0", "-vf", f"scale={width}:{height},setsar=1,format=yuv420p",
-            "-af", "aresample=48000,asetpts=N/SR/TB", "-r", "30", "-c:v", "libx264",
-            "-preset", "veryfast", "-crf", "18", "-c:a", "aac", "-b:a", "256k", "-ar", "48000",
-            "-ac", "2", "-movflags", "+faststart", str(cut),
+            "-map", "0:v:0", "-map", "0:a:0",
+            "-vf", f"scale={width}:{height},setpts=PTS-STARTPTS,setsar=1,format=yuv420p",
+            "-af", f"aresample=48000:async=1:first_pts=0,asetpts=N/SR/TB,"
+                   f"apad=whole_dur={selected_duration:.3f},atrim=duration={selected_duration:.3f}",
+            "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
+            "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-ac", "2",
+            *platform_safe_video_args(), "-t", f"{selected_duration:.3f}", str(cut),
         ], check=True, timeout=60 * 60, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         output = cut
         if thumbnail:
@@ -551,21 +593,26 @@ async def trim_video(
                 ffmpeg, "-y", "-loop", "1", "-i", str(thumb),
                 "-f", "lavfi", "-i", "anullsrc=r=48000:cl=stereo", "-t", f"{thumbnail_duration:.3f}",
                 "-vf", intro_filter, "-r", "30", "-c:v", "libx264", "-preset", "veryfast", "-crf", "18",
-                "-c:a", "aac", "-b:a", "256k", "-ar", "48000", "-ac", "2", "-shortest",
-                "-movflags", "+faststart", str(intro),
+                "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-ac", "2", "-shortest",
+                *platform_safe_video_args(), str(intro),
             ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
             concat_list = work / "concat.txt"
             concat_list.write_text(f"file '{intro.as_posix()}'\nfile '{cut.as_posix()}'\n", encoding="utf-8")
             output = work / "trimmed-with-thumbnail.mp4"
             subprocess.run([
                 ffmpeg, "-y", "-f", "concat", "-safe", "0", "-i", str(concat_list),
-                "-c", "copy", "-movflags", "+faststart", str(output),
+                "-c", "copy", "-avoid_negative_ts", "make_zero", "-use_editlist", "0",
+                "-movflags", "+faststart", str(output),
             ], check=True, timeout=60 * 20, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         if not output.exists() or output.stat().st_size < 1024:
             raise RuntimeError("FFmpeg did not create a valid trimmed video")
+        validate_platform_safe_mp4(output)
         base = re.sub(r"[^a-zA-Z0-9._-]+", "-", Path(video.filename or "video").stem).strip("-") or "video"
         background_tasks.add_task(shutil.rmtree, work, True)
-        return FileResponse(output, media_type="video/mp4", filename=f"{base}-cut.mp4")
+        return FileResponse(
+            output, media_type="video/mp4", filename=f"{base}-cut.mp4",
+            headers={"X-Pulse-Platform-Safe": "youtube-tiktok"},
+        )
     except HTTPException:
         shutil.rmtree(work, ignore_errors=True)
         raise
@@ -736,14 +783,19 @@ async def render_mv(
             ffmpeg, "-y", "-i", str(silent_video), "-i", str(audio_path),
             "-filter_complex", filter_complex, "-map", "[v]", "-map", "[a]", "-t", f"{total_duration:.3f}",
             "-c:v", "libx264", "-preset", "veryfast", "-crf", "20", "-pix_fmt", "yuv420p",
-            "-c:a", "aac", "-b:a", "256k", "-movflags", "+faststart", str(output),
+            "-c:a", "aac", "-b:a", "320k", "-ar", "48000", "-ac", "2",
+            *platform_safe_video_args(), str(output),
         ], check=True, timeout=60 * 60, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
         if not output.exists() or output.stat().st_size < 1024:
             raise RuntimeError("FFmpeg did not create a valid video")
+        validate_platform_safe_mp4(output)
         safe_name = re.sub(r"[^a-zA-Z0-9._-]+", "-", Path(audio.filename or "pulse-mv").stem).strip("-") or "pulse-mv"
         suffix = "-vertical" if video_format == "vertical" else ""
         background_tasks.add_task(shutil.rmtree, work, True)
-        return FileResponse(output, media_type="video/mp4", filename=f"{safe_name}{suffix}.mp4")
+        return FileResponse(
+            output, media_type="video/mp4", filename=f"{safe_name}{suffix}.mp4",
+            headers={"X-Pulse-Platform-Safe": "youtube-tiktok"},
+        )
     except HTTPException:
         shutil.rmtree(work, ignore_errors=True)
         raise
