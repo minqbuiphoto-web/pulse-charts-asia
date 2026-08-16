@@ -34,6 +34,7 @@
 
 /* Larger writing view (production refresh): the lyric workspace is used for long editing sessions,
    so the source, literal meaning and Vietnamese adaptation must stay readable. */
+.copy-tone-slots{flex:0 0 auto;min-height:26px;padding:0 10px;border:1px solid #78549a;border-radius:6px;background:#1b1025;color:#ddb8ff;font:700 8px DM Mono;letter-spacing:.7px;cursor:pointer}.copy-tone-slots:hover,.copy-tone-slots:focus-visible{border-color:#c992ff;background:#2b163b;color:#fff;outline:none}
 .line-editor-head{font-size:10px;line-height:1.4}
 .lyric-row{padding-top:23px;padding-bottom:23px}
 .line-number{font-size:15px}
