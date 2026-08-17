@@ -14,7 +14,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.2")
+app = FastAPI(title="Pulse Audio AI", version="5.3")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -27,13 +27,13 @@ app.add_middleware(
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
-    expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine", "X-Pulse-Platform-Safe"],
+    expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine", "X-Pulse-Mix-Engine", "X-Pulse-Platform-Safe"],
 )
 
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.2", "alignment": True, "lineStartAlignment": True, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.3", "alignment": True, "lineStartAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -485,6 +485,158 @@ async def separate(background_tasks: BackgroundTasks, file: UploadFile = File(..
         media_type="audio/wav",
         filename=f"{source.stem}_instrumental.wav",
         headers={"X-Pulse-Separation-Engine": separation_engine},
+    )
+
+
+def clamp_mix_value(value: float, minimum: float, maximum: float) -> float:
+    try:
+        return max(minimum, min(maximum, float(value)))
+    except (TypeError, ValueError):
+        return minimum
+
+
+def run_mix_render(command: list[str], work: Path):
+    try:
+        subprocess.run(command, check=True, timeout=60 * 30, capture_output=True, text=True)
+    except subprocess.TimeoutExpired as error:
+        raise HTTPException(504, "Mix Enhance exceeded the 30 minute local limit") from error
+    except subprocess.CalledProcessError as error:
+        detail = (error.stderr or error.stdout or "FFmpeg mix failed")[-1200:]
+        raise HTTPException(500, detail) from error
+
+
+def render_loudness_master(source: Path, output: Path):
+    """Two-pass EBU R128 normalization keeps streaming loudness and true peak predictable."""
+    analysis = subprocess.run([
+        ffmpeg_executable(), "-hide_banner", "-i", str(source),
+        "-af", "loudnorm=I=-14:TP=-1:LRA=7:print_format=json", "-f", "null", "NUL",
+    ], check=True, timeout=60 * 30, capture_output=True, text=True)
+    matches = re.findall(r"\{\s*\"input_i\".*?\}", analysis.stderr or "", flags=re.DOTALL)
+    if not matches:
+        raise HTTPException(500, "Could not measure mix loudness")
+    measured = json.loads(matches[-1])
+    loudnorm = (
+        "loudnorm=I=-14:TP=-1:LRA=7:"
+        f"measured_I={measured['input_i']}:measured_TP={measured['input_tp']}:"
+        f"measured_LRA={measured['input_lra']}:measured_thresh={measured['input_thresh']}:"
+        f"offset={measured['target_offset']}:linear=true:print_format=summary,"
+        "alimiter=limit=0.891:level=false:attack=5:release=80"
+    )
+    run_mix_render([
+        ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error", "-i", str(source),
+        "-af", loudnorm, "-ar", "48000", "-ac", "2", "-c:a", "pcm_s24le", str(output),
+    ], output.parent)
+
+
+@app.post("/enhance-mix")
+async def enhance_mix(
+    background_tasks: BackgroundTasks,
+    file: UploadFile = File(...),
+    brightness: float = Form(1.3),
+    glue: float = Form(55.0),
+    space: float = Form(2.0),
+):
+    """Conservative enhancement for a finished stereo mix; avoids widening an already wide master."""
+    work = Path(tempfile.mkdtemp(prefix="pulse-mix-enhance-"))
+    source = save_upload(file, work)
+    processed = work / "mix-processed-float.wav"
+    output = work / "mix-enhanced-24bit.wav"
+    try:
+        await write_upload(file, source)
+        bright = clamp_mix_value(brightness, 0.0, 3.0)
+        glue_amount = clamp_mix_value(glue, 0.0, 100.0)
+        space_amount = clamp_mix_value(space, 0.0, 8.0)
+        ratio = 1.2 + glue_amount * 0.008
+        echo_a = space_amount / 100.0
+        echo_b = echo_a * 0.45
+        filters = [
+            "highpass=f=28",
+            "equalizer=f=220:t=q:w=1:g=-1.4",
+            f"equalizer=f=7500:t=q:w=0.8:g={bright:.3f}",
+        ]
+        if space_amount > 0.05:
+            filters.append(f"aecho=0.82:0.72:45|95:{echo_a:.4f}|{echo_b:.4f}")
+        filters.extend([
+            f"acompressor=threshold=0.16:ratio={ratio:.3f}:attack=25:release=140:makeup=1.05:knee=2.5",
+        ])
+        run_mix_render([
+            ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error", "-i", str(source),
+            "-af", ",".join(filters), "-ar", "48000", "-ac", "2", "-c:a", "pcm_f32le", str(processed),
+        ], work)
+        render_loudness_master(processed, output)
+    except HTTPException:
+        shutil.rmtree(work, ignore_errors=True)
+        raise
+    except Exception as error:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(500, f"Mix Enhance failed: {error}") from error
+    background_tasks.add_task(shutil.rmtree, work, True)
+    return FileResponse(
+        output,
+        media_type="audio/wav",
+        filename=f"{source.stem}_mix_enhanced_24bit.wav",
+        headers={"X-Pulse-Mix-Engine": "Finished Mix Enhance · FFmpeg DSP · -14 LUFS · -1 dBTP"},
+    )
+
+
+@app.post("/mix-stems")
+async def mix_stems(
+    background_tasks: BackgroundTasks,
+    beat: UploadFile = File(...),
+    vocal: UploadFile = File(...),
+    vocal_gain: float = Form(0.0),
+    brightness: float = Form(1.5),
+    reverb: float = Form(12.0),
+):
+    """Mix vocal and beat separately so ambience is applied to the vocal rather than muddying the instrumental."""
+    work = Path(tempfile.mkdtemp(prefix="pulse-stem-mix-"))
+    beat_suffix = Path(beat.filename or "beat.wav").suffix or ".wav"
+    vocal_suffix = Path(vocal.filename or "vocal.wav").suffix or ".wav"
+    beat_path = work / f"beat{beat_suffix}"
+    vocal_path = work / f"vocal{vocal_suffix}"
+    processed = work / "stem-mix-processed-float.wav"
+    output = work / "vocal-beat-mix-24bit.wav"
+    try:
+        await write_upload(beat, beat_path)
+        await write_upload(vocal, vocal_path)
+        gain_db = clamp_mix_value(vocal_gain, -6.0, 6.0)
+        bright = clamp_mix_value(brightness, 0.0, 3.0)
+        wet = clamp_mix_value(reverb, 0.0, 25.0) / 100.0
+        vocal_gain_linear = math.pow(10.0, gain_db / 20.0)
+        echo_a = 0.08 + wet * 0.8
+        echo_b = 0.035 + wet * 0.38
+        wet_mix = 0.32 + wet * 1.8
+        graph = (
+            f"[1:a]highpass=f=80,equalizer=f=220:t=q:w=1:g=-1.5,"
+            f"equalizer=f=5500:t=q:w=0.8:g={bright:.3f},"
+            "acompressor=threshold=0.12:ratio=2.2:attack=12:release=120:makeup=1.2:knee=2.5,"
+            "asplit=2[vocaldry][vocalwet];"
+            f"[vocalwet]aecho=0.6:0.65:55|110:{echo_a:.4f}|{echo_b:.4f}[vocalroom];"
+            f"[vocaldry]volume={vocal_gain_linear:.6f}[vocallevel];"
+            f"[vocallevel][vocalroom]amix=inputs=2:weights='1 {wet_mix:.4f}':normalize=0[vocalfx];"
+            "[0:a]volume=0.92[beatlevel];"
+            "[beatlevel][vocalfx]amix=inputs=2:weights='1 1':duration=longest:normalize=0,"
+            "equalizer=f=220:t=q:w=1:g=-1,equalizer=f=7500:t=q:w=0.8:g=1,"
+            "acompressor=threshold=0.18:ratio=1.45:attack=25:release=140:makeup=1.02:knee=2.5[out]"
+        )
+        run_mix_render([
+            ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error",
+            "-i", str(beat_path), "-i", str(vocal_path), "-filter_complex", graph,
+            "-map", "[out]", "-ar", "48000", "-ac", "2", "-c:a", "pcm_f32le", str(processed),
+        ], work)
+        render_loudness_master(processed, output)
+    except HTTPException:
+        shutil.rmtree(work, ignore_errors=True)
+        raise
+    except Exception as error:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(500, f"Stem mix failed: {error}") from error
+    background_tasks.add_task(shutil.rmtree, work, True)
+    return FileResponse(
+        output,
+        media_type="audio/wav",
+        filename=f"{Path(vocal.filename or 'vocal').stem}_with_{Path(beat.filename or 'beat').stem}_mix_24bit.wav",
+        headers={"X-Pulse-Mix-Engine": "Vocal + Beat Mix · vocal ambience · FFmpeg DSP · -14 LUFS · -1 dBTP"},
     )
 
 
