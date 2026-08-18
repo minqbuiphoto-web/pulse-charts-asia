@@ -15,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.7")
+app = FastAPI(title="Pulse Audio AI", version="5.8")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -34,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + multilingual faster-whisper + ffmpeg", "version": "5.7", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + multilingual faster-whisper + ffmpeg", "version": "5.8", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -481,6 +481,61 @@ def align_line_times(lines: list[str], heard: list[dict], duration: float) -> li
     return [round(min(max(value, 0.0), max(duration - .1, 0.0)), 3) for value in times]
 
 
+def acoustic_phrase_times(lines: list[str], heard: list[dict], duration: float,
+                          reference_times: list[float] | None = None) -> list[float]:
+    """Map lyric lines to sung phrase onsets without requiring a correct ASR transcript.
+
+    This is essential for Cantonese and stylised singing: Whisper can locate phrase
+    boundaries reliably while transcribing different Han characters from the supplied lyric.
+    A synced LRCLIB timeline, when available, supplies the song's relative pause/rhythm shape.
+    """
+    phrase_starts = [float(item["start"]) for item in heard if item.get("segment_start")]
+    if len(phrase_starts) < 2 or not lines:
+        return []
+    phrase_starts = sorted(set(round(value, 3) for value in phrase_starts if value >= 0))
+    if len(phrase_starts) < 2:
+        return []
+
+    if reference_times and len(reference_times) == len(lines):
+        ref_first, ref_last = reference_times[0], reference_times[-1]
+        if ref_last > ref_first + .5:
+            targets = [(value - ref_first) / (ref_last - ref_first) for value in reference_times]
+        else:
+            targets = [index / max(len(lines) - 1, 1) for index in range(len(lines))]
+    else:
+        weights = [max(1, len(word_units(line))) for line in lines]
+        total = max(sum(weights), 1)
+        consumed = 0
+        targets = []
+        for weight in weights:
+            targets.append(consumed / total)
+            consumed += weight
+        if len(targets) > 1:
+            targets[-1] = 1.0
+
+    observed_first, observed_last = phrase_starts[0], phrase_starts[-1]
+    observed_span = max(observed_last - observed_first, .1)
+    observed_positions = [(value - observed_first) / observed_span for value in phrase_starts]
+    selected = []
+    previous = -1
+    phrase_count = len(phrase_starts)
+    line_count = len(lines)
+    for line_index, target in enumerate(targets):
+        remaining_lines = line_count - line_index - 1
+        low = previous + 1 if phrase_count >= line_count else max(0, previous)
+        high = phrase_count - remaining_lines - 1 if phrase_count >= line_count else phrase_count - 1
+        if high < low:
+            high = low = min(phrase_count - 1, max(0, previous + 1))
+        best = min(range(low, high + 1), key=lambda index: abs(observed_positions[index] - target))
+        selected.append(phrase_starts[best])
+        previous = best
+
+    ceiling = max(duration - .1, 0.0)
+    for index in range(1, len(selected)):
+        selected[index] = max(selected[index], selected[index - 1] + .12)
+    return [round(min(max(value, 0.0), ceiling), 3) for value in selected]
+
+
 def align_line_ends(lines: list[str], times: list[float], heard: list[dict], duration: float) -> list[float]:
     """Find when each sung line ends so instrumental gaps remain lyric-free."""
     ends = []
@@ -506,6 +561,7 @@ async def align_lyrics(
     file: UploadFile = File(...),
     lyrics: str = Form(...),
     language: str = Form("auto"),
+    reference_times: str = Form(""),
 ):
     lines = [line.strip() for line in lyrics.splitlines() if line.strip()]
     if not lines:
@@ -513,6 +569,14 @@ async def align_lyrics(
     requested_language = language.casefold().strip()
     whisper_language = requested_language if requested_language in {"vi", "zh", "ko", "ja", "en"} else None
     cache_language = whisper_language or "auto"
+    parsed_reference = None
+    if reference_times.strip():
+        try:
+            candidate = [float(value) for value in json.loads(reference_times)]
+            if len(candidate) == len(lines) and all(math.isfinite(value) and value >= 0 for value in candidate) and candidate == sorted(candidate):
+                parsed_reference = candidate
+        except (TypeError, ValueError, json.JSONDecodeError):
+            parsed_reference = None
     work = Path(tempfile.mkdtemp(prefix="pulse-lyric-align-"))
     source = save_upload(file, work)
     try:
@@ -571,17 +635,23 @@ async def align_lyrics(
                 cache.write_text(json.dumps({"heard": heard, "transcript": transcript, "duration": duration, "preparation": preparation}, ensure_ascii=False), encoding="utf-8")
             except OSError as cache_error:
                 alignment_log.warning("Could not save alignment cache: %s", cache_error)
-        times = align_line_times(lines, heard, duration)
+        phrase_times = acoustic_phrase_times(lines, heard, duration, parsed_reference)
+        use_acoustic_phrases = bool(phrase_times) and (parsed_reference is not None or cache_language in {"zh", "ja"})
+        times = phrase_times if use_acoustic_phrases else align_line_times(lines, heard, duration)
+        alignment_strategy = ("synced reference + acoustic phrase onsets" if parsed_reference is not None and use_acoustic_phrases
+                              else "acoustic phrase onsets" if use_acoustic_phrases
+                              else "transcript + lyric alignment")
         ends = align_line_ends(lines, times, heard, duration)
         alignment_log.info("Lyric alignment completed: file=%s lines=%s words=%s method=%s", file.filename, len(lines), len(heard), preparation)
         background_tasks.add_task(shutil.rmtree, work, True)
         return {
             "ok": True,
-            "method": f"{preparation} + faster-whisper-small + lyric alignment",
+            "method": f"{preparation} + faster-whisper-small + {alignment_strategy}",
             "times": times,
             "ends": ends,
             "lineCount": len(lines),
             "recognizedWords": len(heard),
+            "recognizedPhrases": sum(1 for item in heard if item.get("segment_start")),
             "transcript": " ".join(part for part in transcript if part),
         }
     except HTTPException:

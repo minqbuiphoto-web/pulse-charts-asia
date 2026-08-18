@@ -573,7 +573,7 @@ export default function LyricStudio(){
   };
 
   const ensureAlignmentEngine=async()=>{
-    const probe=async()=>{try{const response=await fetch("http://127.0.0.1:8765/health",{signal:AbortSignal.timeout(3500)});if(!response.ok)return false;const health=await response.json() as {alignment?:boolean;safeDenseLineAlignment?:boolean;multilingualLyricAlignment?:boolean};return Boolean(health.alignment&&health.safeDenseLineAlignment&&health.multilingualLyricAlignment)}catch{return false}};
+    const probe=async()=>{try{const response=await fetch("http://127.0.0.1:8765/health",{signal:AbortSignal.timeout(3500)});if(!response.ok)return false;const health=await response.json() as {alignment?:boolean;safeDenseLineAlignment?:boolean;multilingualLyricAlignment?:boolean;acousticPhraseAlignment?:boolean};return Boolean(health.alignment&&health.safeDenseLineAlignment&&health.multilingualLyricAlignment&&health.acousticPhraseAlignment)}catch{return false}};
     if(await probe())return true;
     const launcher=document.createElement("iframe");launcher.hidden=true;launcher.src="pulsecharts-audio://start";document.body.appendChild(launcher);window.setTimeout(()=>launcher.remove(),3500);
     for(let attempt=0;attempt<8;attempt+=1){await new Promise((resolve)=>window.setTimeout(resolve,1200));if(await probe())return true;}
@@ -588,13 +588,14 @@ export default function LyricStudio(){
       setAutoAlignStatus("Bộ nghe đang phân tích giọng hát và gắn toàn bộ câu. Lần đầu có thể mất vài phút…");
       const sourceLines=baseTimeline.map((line)=>line.text);
       const form=new FormData();form.append("file",alignmentFile,alignmentFile.name||"song.wav");form.append("lyrics",sourceLines.join("\n"));form.append("language",lyricLanguage(sourceLines));
+      if(syncedTimeline.length===sourceLines.length)form.append("reference_times",JSON.stringify(syncedTimeline.map((line)=>line.time)));
       const response=await fetch("http://127.0.0.1:8765/align-lyrics",{method:"POST",body:form});
       if(!response.ok){let detail="";try{detail=((await response.json()) as {detail?:string}).detail||""}catch{}throw new Error(detail||`Bộ nghe báo lỗi ${response.status}`);}
-      const payload=await response.json() as {times?:unknown;lineCount?:number;recognizedWords?:number;method?:string};
+      const payload=await response.json() as {times?:unknown;lineCount?:number;recognizedWords?:number;recognizedPhrases?:number;method?:string};
       const times=safeAutoTimes(payload.times);
       if(times.length!==baseTimeline.length)throw new Error(`Bộ nghe trả về ${times.length}/${baseTimeline.length} câu, chưa thể áp dụng an toàn.`);
       setAutoVideoTimes(times);setVideoTimeOffset(0);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
-      setAutoAlignStatus(`Đã tự gắn đủ ${times.length} câu từ file ${alignmentFile.name}. Đã nhận dạng ${payload.recognizedWords??0} từ và tự lưu timeline vào dự án.`);
+      setAutoAlignStatus(`Đã tự gắn đủ ${times.length} câu theo ${payload.recognizedPhrases??0} điểm bắt đầu câu hát. Timeline đã được tự lưu vào dự án.`);
       setDirectVideoNote("Timeline tự động đã sẵn sàng. Hãy phát video để kiểm tra; nếu video có thêm intro, canh một câu bên dưới để bù đúng phần intro.");
     }catch(error){setAutoAlignStatus(error instanceof Error?error.message:"Không tự gắn được lyric.");}
     finally{setAutoAlignBusy(false);}
