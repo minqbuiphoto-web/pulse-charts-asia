@@ -15,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.5")
+app = FastAPI(title="Pulse Audio AI", version="5.7")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -34,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.6", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + multilingual faster-whisper + ffmpeg", "version": "5.7", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -269,8 +269,10 @@ def prepare_alignment_audio(source: Path, work: Path) -> Path:
     return target
 
 
-def alignment_cache_path(source: Path) -> Path:
+def alignment_cache_path(source: Path, language: str = "auto") -> Path:
     digest = hashlib.sha256()
+    digest.update(b"multilingual-v1\0")
+    digest.update(language.encode("utf-8"))
     with source.open("rb") as stream:
         while chunk := stream.read(4 * 1024 * 1024):
             digest.update(chunk)
@@ -353,7 +355,12 @@ def separate_instrumental(source: Path, work: Path) -> tuple[Path, str]:
 def normalize_word(value: str) -> str:
     decomposed = unicodedata.normalize("NFKD", value.casefold())
     without_marks = "".join(char for char in decomposed if not unicodedata.combining(char))
-    return re.sub(r"[^a-z0-9đ]+", "", without_marks)
+    return re.sub(r"[_\W]+", "", without_marks, flags=re.UNICODE)
+
+
+def word_units(value: str) -> list[str]:
+    """Keep Korean/Latin words together and split unspaced Han/Kana into matchable characters."""
+    return re.findall(r"[\u3400-\u9fff\u3040-\u30ff]|[^\W_]+", value, flags=re.UNICODE)
 
 
 def lyric_tokens(lines: list[str]):
@@ -361,7 +368,7 @@ def lyric_tokens(lines: list[str]):
     starts = []
     for line_index, line in enumerate(lines):
         starts.append(len(tokens))
-        for raw in re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE):
+        for raw in word_units(line):
             word = normalize_word(raw)
             if word:
                 tokens.append((word, line_index))
@@ -399,13 +406,17 @@ def proportional_line_times(line_words: list[list[str]], recognized: list[tuple]
 
 def align_line_times(lines: list[str], heard: list[dict], duration: float) -> list[float]:
     line_words = [
-        [normalize_word(raw) for raw in re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE) if normalize_word(raw)]
+        [normalize_word(raw) for raw in word_units(line) if normalize_word(raw)]
         for line in lines
     ]
-    recognized = [
-        (normalize_word(item["word"]), float(item["start"]), bool(item.get("segment_start")))
-        for item in heard
-    ]
+    recognized = []
+    for item in heard:
+        units = [normalize_word(raw) for raw in word_units(str(item["word"]))]
+        units = [unit for unit in units if unit]
+        start, end = float(item["start"]), float(item.get("end", item["start"]))
+        span = max(0.0, end - start)
+        for unit_index, unit in enumerate(units):
+            recognized.append((unit, start + span * unit_index / max(len(units), 1), bool(item.get("segment_start")) and unit_index == 0))
     recognized = [item for item in recognized if item[0]]
     if not any(line_words) or not recognized:
         step = max(duration, len(lines) * 4) / max(len(lines), 1)
@@ -481,7 +492,7 @@ def align_line_ends(lines: list[str], times: list[float], heard: list[dict], dur
             for item in heard
             if float(item["start"]) >= start - .12 and float(item["start"]) < ceiling
         ]
-        word_count = max(1, len(lines[index].split()))
+        word_count = max(1, len(word_units(lines[index])))
         estimated = start + min(7.5, max(1.2, word_count * .46))
         detected = max(word_ends) if word_ends else estimated
         end = min(ceiling, max(start + .18, detected + .08))
@@ -494,17 +505,21 @@ async def align_lyrics(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(...),
     lyrics: str = Form(...),
+    language: str = Form("auto"),
 ):
     lines = [line.strip() for line in lyrics.splitlines() if line.strip()]
     if not lines:
-        raise HTTPException(400, "Vietnamese lyrics are required, one sentence per line")
+        raise HTTPException(400, "Lyrics are required, one sentence per line")
+    requested_language = language.casefold().strip()
+    whisper_language = requested_language if requested_language in {"vi", "zh", "ko", "ja", "en"} else None
+    cache_language = whisper_language or "auto"
     work = Path(tempfile.mkdtemp(prefix="pulse-lyric-align-"))
     source = save_upload(file, work)
     try:
         await write_upload(file, source)
         alignment_log = logging.getLogger("uvicorn.error")
         alignment_log.info("Lyric alignment started: file=%s lines=%s bytes=%s", file.filename, len(lines), source.stat().st_size)
-        cache = alignment_cache_path(source)
+        cache = alignment_cache_path(source, cache_language)
         heard, transcript, duration, preparation = [], [], 0.0, ""
         if cache.exists():
             try:
@@ -519,7 +534,7 @@ async def align_lyrics(
             model = get_whisper_model()
             try:
                 segments, info = model.transcribe(
-                    str(source), language="vi", beam_size=3,
+                    str(source), language=whisper_language, beam_size=3,
                     word_timestamps=True, vad_filter=True,
                     vad_parameters={"min_silence_duration_ms": 250},
                 )
@@ -529,20 +544,20 @@ async def align_lyrics(
                 alignment_log.warning("Direct recognition failed; using voice-focus decode: %s", direct_error)
                 audio_for_alignment = prepare_alignment_audio(source, work)
                 segments, info = model.transcribe(
-                    str(audio_for_alignment), language="vi", beam_size=3,
+                    str(audio_for_alignment), language=whisper_language, beam_size=3,
                     word_timestamps=True, vad_filter=True,
                     vad_parameters={"min_silence_duration_ms": 250},
                 )
                 heard, transcript, duration = collect_transcription(list(segments), info)
                 preparation = "ffmpeg voice-focus fallback"
-            lyric_word_count = sum(len(re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE)) for line in lines)
+            lyric_word_count = sum(len(word_units(line)) for line in lines)
             minimum_words = max(24, round(lyric_word_count * .30))
             if len(heard) < minimum_words:
                 try:
                     alignment_log.info("Recognition is sparse (%s/%s words); isolating vocals once.", len(heard), minimum_words)
                     vocal = isolate_vocals(source, work)
                     segments, info = model.transcribe(
-                        str(vocal), language="vi", beam_size=5,
+                        str(vocal), language=whisper_language, beam_size=5,
                         word_timestamps=True, vad_filter=True,
                         vad_parameters={"min_silence_duration_ms": 250},
                     )
