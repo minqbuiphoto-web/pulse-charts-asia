@@ -380,6 +380,24 @@ export default function LyricStudio(){
     window.setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
 
+  const removeProject=(project:SavedProject)=>{
+    if(!window.confirm(`Xóa bản tạm “${project.song.title}” khỏi thiết bị này?\n\nHành động này sẽ xóa cả lời Việt, nghĩa sát, thanh âm và timeline AI của bài.`))return;
+    setSavedProjects((current)=>{
+      const next=current.filter((item)=>item.key!==project.key);
+      try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
+      return next;
+    });
+    try{
+      localStorage.removeItem(project.key);
+      localStorage.removeItem(literalStorageKey(project.song));
+      localStorage.removeItem(toneStorageKey(project.song));
+    }catch{}
+    if(song&&storageKey(song)===project.key){
+      setSong(null);setTranslations({});setLiteralMeanings({});setTonePatterns({});setAutoVideoTimes([]);setAlignmentFile(null);setVideoTimeOffset(0);setCurrentTime(0);setDuration(0);setPlayerState("WAITING");
+    }
+    setSaveNote(`Đã xóa bản tạm “${project.song.title}”.`);
+  };
+
   const importProject=async(file:File|null)=>{
     if(!file)return;
     try{
@@ -637,8 +655,8 @@ export default function LyricStudio(){
     </section>
 
     <section className="project-library">
-      <div className="project-library-head"><div><small>LƯU CÔNG VIỆC MIỄN PHÍ</small><h2>Bản đang làm</h2><p>Tự lưu trên thiết bị này · xuất file dự phòng để chuyển máy hoặc khôi phục.</p></div><label className="import-project">NHẬP FILE DỰ PHÒNG<input type="file" accept="application/json,.json" onChange={(event)=>{void importProject(event.target.files?.[0]??null);event.currentTarget.value="";}}/></label></div>
-      {savedProjects.length?<div className="project-list">{savedProjects.slice(0,8).map((project)=><article key={project.key}><div><b>{project.song.title}</b><span>{project.song.artist}</span><small>{new Date(project.updatedAt).toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}</small></div><div><button onClick={()=>resumeProject(project)}>MỞ LẠI</button><button onClick={()=>exportProject(project)}>TẢI BACKUP</button></div></article>)}</div>:<p className="project-empty">Chưa có bản lưu. Khi bạn đưa một bài vào Studio và bắt đầu viết, hệ thống sẽ tự tạo bản lưu đầu tiên.</p>}
+      <div className="project-library-head"><div><small>LƯU CÔNG VIỆC MIỄN PHÍ</small><h2>Bản đang làm</h2><p>Không tự xóa · giữ tối đa 20 bản gần nhất · có thể tải backup trước khi xóa.</p></div><label className="import-project">NHẬP FILE DỰ PHÒNG<input type="file" accept="application/json,.json" onChange={(event)=>{void importProject(event.target.files?.[0]??null);event.currentTarget.value="";}}/></label></div>
+      {savedProjects.length?<div className="project-list">{savedProjects.slice(0,20).map((project)=><article key={project.key}><div><b>{project.song.title}</b><span>{project.song.artist}</span><small>{new Date(project.updatedAt).toLocaleString("vi-VN",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"})}</small></div><div><button onClick={()=>resumeProject(project)}>MỞ LẠI</button><button onClick={()=>exportProject(project)}>TẢI BACKUP</button><button className="project-delete" style={{borderColor:"#64303b",background:"#211217",color:"#ff8299"}} onClick={()=>removeProject(project)}>XÓA</button></div></article>)}</div>:<p className="project-empty">Chưa có bản lưu. Khi bạn đưa một bài vào Studio và bắt đầu viết, hệ thống sẽ tự tạo bản lưu đầu tiên.</p>}
     </section>
 
     {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
