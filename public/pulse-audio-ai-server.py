@@ -34,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.5", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.6", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -376,26 +376,59 @@ def token_similarity(left: str, right: str) -> float:
     return SequenceMatcher(None, left, right).ratio()
 
 
+def proportional_line_times(line_words: list[list[str]], recognized: list[tuple], duration: float) -> list[float]:
+    """Create a safe, speech-weighted timeline when word-level matching is too sparse."""
+    if not line_words:
+        return []
+    audible_start = max(0.0, float(recognized[0][1])) if recognized else 0.0
+    audible_end = float(recognized[-1][1]) if recognized else max(duration - .1, audible_start)
+    audible_end = min(max(duration - .1, 0.0), max(audible_end, audible_start))
+    weights = [max(1.0, len(words) ** .72) for words in line_words]
+    total_weight = sum(weights)
+    consumed_weight = 0.0
+    times = []
+    for weight in weights:
+        ratio = consumed_weight / max(total_weight, 1.0)
+        times.append(audible_start + ratio * max(audible_end - audible_start, 0.0))
+        consumed_weight += weight
+    ceiling = max(duration - .1, 0.0)
+    for index in range(1, len(times)):
+        times[index] = min(ceiling, max(times[index], times[index - 1] + .12))
+    return [round(min(max(value, 0.0), ceiling), 3) for value in times]
+
+
 def align_line_times(lines: list[str], heard: list[dict], duration: float) -> list[float]:
     line_words = [
         [normalize_word(raw) for raw in re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE) if normalize_word(raw)]
         for line in lines
     ]
-    recognized = [(normalize_word(item["word"]), float(item["start"])) for item in heard]
+    recognized = [
+        (normalize_word(item["word"]), float(item["start"]), bool(item.get("segment_start")))
+        for item in heard
+    ]
     recognized = [item for item in recognized if item[0]]
     if not any(line_words) or not recognized:
         step = max(duration, len(lines) * 4) / max(len(lines), 1)
         return [round(index * step, 3) for index in range(len(lines))]
+    if len(recognized) < len(line_words):
+        return proportional_line_times(line_words, recognized, duration)
 
     total_words = sum(max(len(words), 1) for words in line_words)
     consumed_words = 0
     previous_word = -1
     times = []
-    for words in line_words:
+    for line_index, words in enumerate(line_words):
         expected = round(consumed_words / max(total_words, 1) * (len(recognized) - 1))
         radius = max(14, round(len(recognized) / max(len(lines), 1) * 2.3))
+        # Reserve at least one recognized word for every remaining lyric line.
+        # Without this guard a strong match near the end can consume the final
+        # word and leave the next line with an impossible (low > high) range.
+        remaining_lines = len(line_words) - line_index - 1
+        max_candidate = len(recognized) - remaining_lines - 1
         low = max(previous_word + 1, expected - radius)
-        high = min(len(recognized) - 1, expected + radius)
+        high = min(max_candidate, expected + radius)
+        if high < low:
+            return proportional_line_times(line_words, recognized, duration)
         best_index = max(low, min(expected, high))
         best_score = float("-inf")
         for candidate in range(low, high + 1):
@@ -415,7 +448,7 @@ def align_line_times(lines: list[str], heard: list[dict], duration: float) -> li
         # sung phrase. Walk back to the earliest plausible leading word so the lyric
         # appears when the singer starts the sentence, not several seconds later.
         leading_candidates = []
-        for candidate in range(max(previous_word + 1, best_index - 6), min(len(recognized), best_index + 4)):
+        for candidate in range(max(previous_word + 1, best_index - 6), min(max_candidate + 1, best_index + 4)):
             leading_score = max((token_similarity(word, recognized[candidate][0]) for word in words[:3]), default=0.0)
             if leading_score >= .72:
                 leading_candidates.append((leading_score, candidate))
@@ -423,11 +456,12 @@ def align_line_times(lines: list[str], heard: list[dict], duration: float) -> li
             strongest = max(score for score, _ in leading_candidates)
             best_index = min(candidate for score, candidate in leading_candidates if score >= strongest - .02)
         segment_starts = [
-            candidate for candidate in range(max(previous_word + 1, best_index - 4), min(len(heard), best_index + 5))
-            if heard[candidate].get("segment_start")
+            candidate for candidate in range(max(previous_word + 1, best_index - 4), min(max_candidate + 1, best_index + 5))
+            if recognized[candidate][2]
         ]
         if segment_starts:
             best_index = min(segment_starts, key=lambda candidate: abs(candidate - best_index))
+        best_index = max(previous_word + 1, min(best_index, max_candidate))
         times.append(recognized[best_index][1])
         previous_word = best_index
         consumed_words += max(len(words), 1)
