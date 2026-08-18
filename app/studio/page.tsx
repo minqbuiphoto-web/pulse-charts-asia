@@ -34,6 +34,7 @@ type YTPlayerOptions={
   events:{
     onReady:(event:{target:YTPlayer})=>void;
     onStateChange:(event:{data:number})=>void;
+    onError?:(event:{data:number})=>void;
   };
 };
 type YTNamespace={Player:new(element:HTMLElement,options:YTPlayerOptions)=>YTPlayer};
@@ -115,6 +116,25 @@ function literalLines(value:string,originals:string[]){
 function safeFileName(value:string){
   return value.normalize("NFKC").replace(/[\\/:*?"<>|]+/g,"-").trim().slice(0,120)||"lyric-translation";
 }
+function youtubeVideoId(value:string){
+  const raw=value.trim();
+  if(/^[A-Za-z0-9_-]{11}$/.test(raw))return raw;
+  try{
+    const candidate=/^https?:\/\//i.test(raw)?raw:"https://"+raw;
+    const url=new URL(candidate);
+    const host=url.hostname.replace(/^www\./,"").toLocaleLowerCase("en");
+    let id="";
+    if(host==="youtu.be")id=url.pathname.split("/").filter(Boolean)[0]??"";
+    else if(host==="youtube.com"||host==="m.youtube.com"||host==="music.youtube.com"){
+      if(url.pathname==="/watch")id=url.searchParams.get("v")??"";
+      else{
+        const parts=url.pathname.split("/").filter(Boolean);
+        if(["shorts","embed","live"].includes(parts[0]??""))id=parts[1]??"";
+      }
+    }
+    return /^[A-Za-z0-9_-]{11}$/.test(id)?id:"";
+  }catch{return"";}
+}
 function escapeWordHtml(value:string){
   return value.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 }
@@ -143,6 +163,8 @@ export default function LyricStudio(){
   const [saveNote,setSaveNote]=useState("Chưa có thay đổi để lưu.");
   const [literalDraft,setLiteralDraft]=useState("");
   const [literalNote,setLiteralNote]=useState("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
+  const [directVideoUrl,setDirectVideoUrl]=useState("");
+  const [directVideoNote,setDirectVideoNote]=useState("Dán link video studio hoặc video chính thức để thay video đang lỗi; lyric và phần đang viết được giữ nguyên.");
   const [ytReady,setYtReady]=useState(()=>typeof window!=="undefined"&&Boolean(window.YT?.Player));
   const [currentTime,setCurrentTime]=useState(0);
   const [duration,setDuration]=useState(0);
@@ -185,7 +207,8 @@ export default function LyricStudio(){
   useEffect(()=>{
     if(!song||!ytReady||!window.YT?.Player||!playerMountRef.current)return;
     if(timerRef.current)window.clearInterval(timerRef.current);
-    playerRef.current?.destroy();
+    try{playerRef.current?.destroy();}catch{}
+    playerRef.current=null;
     playerMountRef.current.innerHTML="";
     const player=new window.YT.Player(playerMountRef.current,{
       videoId:song.videoId,
@@ -210,13 +233,15 @@ export default function LyricStudio(){
           }else if(timerRef.current){
             window.clearInterval(timerRef.current);timerRef.current=undefined;
           }
-        }
+        },
+        onError:()=>{setPlayerState("VIDEO_ERROR");setDirectVideoNote("Video này không cho phát nhúng. Hãy dán một link YouTube khác bên dưới.")}
       }
     });
     return()=>{
       if(timerRef.current)window.clearInterval(timerRef.current);
       timerRef.current=undefined;
-      player.destroy();
+      if(playerRef.current===player)playerRef.current=null;
+      try{player.destroy();}catch{}
     };
   },[song,ytReady]);
 
@@ -488,6 +513,26 @@ export default function LyricStudio(){
     window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
   };
 
+  const applyDirectVideo=()=>{
+    const videoId=youtubeVideoId(directVideoUrl);
+    if(!videoId){setDirectVideoNote("Link chưa hợp lệ. Hãy dán link YouTube dạng watch, youtu.be, Shorts, Live hoặc Embed.");return;}
+    if(song){
+      setSong((current)=>current?{...current,videoId}:current);
+      setCurrentTime(0);setDuration(0);setPlayerState("LOADING");
+      setDirectVideoNote("Đã thay video. Toàn bộ lyric, nghĩa sát, lời Việt và thanh âm vẫn được giữ nguyên.");
+    }else if(result){
+      setResult({...result,videoId});
+      setLookupState("ready");
+      setDirectVideoNote("Đã gắn link vào kết quả. Bấm ĐƯA VÀO STUDIO để bắt đầu.");
+    }else{
+      const title=query.trim()||"Video YouTube";
+      setResult({videoId,title,artist:"Chưa xác định",lyrics:"",syncedLyrics:""});
+      setLookupState("ready");
+      setLookupNote("Đã nhận link trực tiếp. Bạn có thể đưa video vào Studio rồi dán lyric gốc.");
+      setDirectVideoNote("Đã nhận link trực tiếp.");
+    }
+  };
+
   const addReplyNote=()=>{
     if(!replyDraft.trim())return;
     setChatMessages((current)=>[...current,{role:"assistant",text:replyDraft.trim()}]);
@@ -514,6 +559,7 @@ export default function LyricStudio(){
     <section className="studio-search">
       <label><span>TÊN BÀI HÁT / CA SĨ</span><div><input value={query} onChange={(event)=>setQuery(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")void searchSong();}} placeholder="Ví dụ: 光年之外 G.E.M. hoặc Through the Night IU"/><button onClick={searchSong} disabled={lookupState==="searching"||!query.trim()}>{lookupState==="searching"?"ĐANG TÌM…":"TÌM BÀI HÁT"}</button></div></label>
       <p className={"lookup-note "+lookupState}>{lookupNote}</p>
+      {!song&&<div className="direct-video-lookup"><span>HOẶC DÁN LINK YOUTUBE TRỰC TIẾP</span><div><input value={directVideoUrl} onChange={(event)=>setDirectVideoUrl(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")applyDirectVideo();}} placeholder="youtube.com/watch…, youtu.be…, Shorts hoặc Live…"/><button type="button" onClick={applyDirectVideo} disabled={!directVideoUrl.trim()}>NHẬN LINK</button></div><small>{directVideoNote}</small></div>}
       {result&&<article className="search-result">
         <div className="result-disc"><i/><b>BEST<br/>MATCH</b></div>
         <div><small>ĐÃ TÌM THẤY BÀI</small><h2>{result.title}</h2><p>{result.artist}</p><span>{result.syncedLyrics?"LYRIC ĐỒNG BỘ":result.lyrics?"LYRIC THƯỜNG · TỰ CANH GIỜ":"CHỈ CÓ VIDEO · TỰ DÁN LYRIC"}</span></div>
@@ -532,9 +578,15 @@ export default function LyricStudio(){
       <div className="translation-column">
         <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
 
+        <section className={"direct-video-panel "+(playerState==="VIDEO_ERROR"?"has-error":"")}>
+          <div><small>VIDEO YOUTUBE TRỰC TIẾP</small><b>{playerState==="VIDEO_ERROR"?"VIDEO HIỆN TẠI KHÔNG PHÁT ĐƯỢC":"THAY VIDEO MÀ KHÔNG MẤT LYRIC"}</b></div>
+          <div className="direct-video-form"><input value={directVideoUrl} onChange={(event)=>setDirectVideoUrl(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")applyDirectVideo();}} placeholder="Dán link youtube.com/watch…, youtu.be…, Shorts hoặc Live…"/><button type="button" onClick={applyDirectVideo} disabled={!directVideoUrl.trim()}>DÙNG VIDEO NÀY</button></div>
+          <p>{directVideoNote}</p>
+        </section>
+
         <div className="player-card">
           <div ref={playerMountRef} className="youtube-mount"/>
-          <div className="player-meta"><span className={playerState==="PLAYING"?"live":""}>{playerState==="PLAYING"?"ĐANG PHÁT":playerState==="PAUSED"?"TẠM DỪNG":playerState==="ENDED"?"ĐÃ PHÁT XONG":playerState==="READY"?"SẴN SÀNG":"ĐANG TẢI"}</span><b>{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")} / {Math.floor(duration/60)}:{String(Math.floor(duration%60)).padStart(2,"0")}</b><p>{currentLineIndex>=0?"CÂU "+String(currentLineIndex+1).padStart(2,"0")+" / "+String(timeline.length).padStart(2,"0"):"NHẤN PHÁT ĐỂ CHẠY THEO LYRIC"}</p></div>
+          <div className="player-meta"><span className={playerState==="PLAYING"?"live":""}>{playerState==="PLAYING"?"ĐANG PHÁT":playerState==="PAUSED"?"TẠM DỪNG":playerState==="ENDED"?"ĐÃ PHÁT XONG":playerState==="READY"?"SẴN SÀNG":playerState==="VIDEO_ERROR"?"VIDEO LỖI":"ĐANG TẢI"}</span><b>{Math.floor(currentTime/60)}:{String(Math.floor(currentTime%60)).padStart(2,"0")} / {Math.floor(duration/60)}:{String(Math.floor(duration%60)).padStart(2,"0")}</b><p>{playerState==="VIDEO_ERROR"?"DÁN LINK KHÁC Ở Ô PHÍA TRÊN":currentLineIndex>=0?"CÂU "+String(currentLineIndex+1).padStart(2,"0")+" / "+String(timeline.length).padStart(2,"0"):"NHẤN PHÁT ĐỂ CHẠY THEO LYRIC"}</p></div>
         </div>
 
         <div className="sticky-player">
