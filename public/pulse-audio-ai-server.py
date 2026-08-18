@@ -7,6 +7,7 @@ import unicodedata
 import json
 import logging
 import math
+import hashlib
 from difflib import SequenceMatcher
 from pathlib import Path
 
@@ -14,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.4")
+app = FastAPI(title="Pulse Audio AI", version="5.5")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -33,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.4", "alignment": True, "lineStartAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + faster-whisper + ffmpeg", "version": "5.5", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -249,6 +250,48 @@ def isolate_vocals(source: Path, work: Path) -> Path:
     return vocal
 
 
+def prepare_alignment_audio(source: Path, work: Path) -> Path:
+    """Create a speech-focused mono WAV without running a full stem separation.
+
+    Demucs is useful for exporting stems, but running it before every lyric edit
+    adds several minutes and can exhaust memory on 24-bit masters. Whisper only
+    needs a clean, consistently decoded signal; FFmpeg can prepare that quickly.
+    """
+    target = work / "alignment-voice.wav"
+    subprocess.run([
+        ffmpeg_executable(), "-y", "-hide_banner", "-loglevel", "error",
+        "-i", str(source), "-vn", "-ac", "1", "-ar", "16000",
+        "-af", "highpass=f=80,lowpass=f=9000,dynaudnorm=f=150:g=7:p=0.8:m=8",
+        "-c:a", "pcm_s16le", str(target),
+    ], check=True, timeout=60 * 15, stdout=subprocess.DEVNULL, stderr=subprocess.PIPE)
+    if not target.exists() or target.stat().st_size < 1024:
+        raise RuntimeError("Could not prepare audio for lyric alignment")
+    return target
+
+
+def alignment_cache_path(source: Path) -> Path:
+    digest = hashlib.sha256()
+    with source.open("rb") as stream:
+        while chunk := stream.read(4 * 1024 * 1024):
+            digest.update(chunk)
+    directory = Path(__file__).resolve().parent / "alignment-cache"
+    directory.mkdir(parents=True, exist_ok=True)
+    return directory / f"{digest.hexdigest()}.json"
+
+
+def collect_transcription(segments, info) -> tuple[list[dict], list[str], float]:
+    heard = []
+    transcript = []
+    last_end = 0.0
+    for segment in segments:
+        transcript.append(segment.text.strip())
+        last_end = max(last_end, float(segment.end))
+        for word_index, word in enumerate(segment.words or []):
+            heard.append({"word": word.word.strip(), "start": float(word.start), "end": float(word.end), "segment_start": word_index == 0})
+    duration = float(getattr(info, "duration", 0.0) or last_end)
+    return heard, transcript, duration
+
+
 def uvr_model_directory() -> Path:
     cache = Path(__file__).resolve().parent / "models"
     cache.mkdir(parents=True, exist_ok=True)
@@ -425,32 +468,67 @@ async def align_lyrics(
     source = save_upload(file, work)
     try:
         await write_upload(file, source)
-        try:
-            vocal = isolate_vocals(source, work)
-            audio_for_alignment = vocal
-        except (subprocess.CalledProcessError, subprocess.TimeoutExpired, RuntimeError):
-            audio_for_alignment = source
-        model = get_whisper_model()
-        segments, info = model.transcribe(
-            str(audio_for_alignment), language="vi", beam_size=5,
-            word_timestamps=True, vad_filter=True,
-            vad_parameters={"min_silence_duration_ms": 250},
-        )
-        heard = []
-        transcript = []
-        last_end = 0.0
-        for segment in segments:
-            transcript.append(segment.text.strip())
-            last_end = max(last_end, float(segment.end))
-            for word_index, word in enumerate(segment.words or []):
-                heard.append({"word": word.word.strip(), "start": float(word.start), "end": float(word.end), "segment_start": word_index == 0})
-        duration = float(getattr(info, "duration", 0.0) or last_end)
+        alignment_log = logging.getLogger("uvicorn.error")
+        alignment_log.info("Lyric alignment started: file=%s lines=%s bytes=%s", file.filename, len(lines), source.stat().st_size)
+        cache = alignment_cache_path(source)
+        heard, transcript, duration, preparation = [], [], 0.0, ""
+        if cache.exists():
+            try:
+                cached = json.loads(cache.read_text(encoding="utf-8"))
+                heard = cached["heard"]
+                transcript = cached["transcript"]
+                duration = float(cached["duration"])
+                preparation = f"cached {cached.get('preparation', 'recognition')}"
+            except (OSError, ValueError, KeyError, TypeError):
+                heard, transcript, duration = [], [], 0.0
+        if not heard:
+            model = get_whisper_model()
+            try:
+                segments, info = model.transcribe(
+                    str(source), language="vi", beam_size=3,
+                    word_timestamps=True, vad_filter=True,
+                    vad_parameters={"min_silence_duration_ms": 250},
+                )
+                heard, transcript, duration = collect_transcription(list(segments), info)
+                preparation = "fast direct recognition"
+            except Exception as direct_error:
+                alignment_log.warning("Direct recognition failed; using voice-focus decode: %s", direct_error)
+                audio_for_alignment = prepare_alignment_audio(source, work)
+                segments, info = model.transcribe(
+                    str(audio_for_alignment), language="vi", beam_size=3,
+                    word_timestamps=True, vad_filter=True,
+                    vad_parameters={"min_silence_duration_ms": 250},
+                )
+                heard, transcript, duration = collect_transcription(list(segments), info)
+                preparation = "ffmpeg voice-focus fallback"
+            lyric_word_count = sum(len(re.findall(r"[\wÀ-ỹĐđ]+", line, flags=re.UNICODE)) for line in lines)
+            minimum_words = max(24, round(lyric_word_count * .30))
+            if len(heard) < minimum_words:
+                try:
+                    alignment_log.info("Recognition is sparse (%s/%s words); isolating vocals once.", len(heard), minimum_words)
+                    vocal = isolate_vocals(source, work)
+                    segments, info = model.transcribe(
+                        str(vocal), language="vi", beam_size=5,
+                        word_timestamps=True, vad_filter=True,
+                        vad_parameters={"min_silence_duration_ms": 250},
+                    )
+                    vocal_heard, vocal_transcript, vocal_duration = collect_transcription(list(segments), info)
+                    if len(vocal_heard) > len(heard):
+                        heard, transcript, duration = vocal_heard, vocal_transcript, vocal_duration
+                        preparation = "demucs vocal recognition"
+                except Exception as vocal_error:
+                    alignment_log.warning("Vocal isolation failed; retaining direct recognition: %s", vocal_error, exc_info=True)
+            try:
+                cache.write_text(json.dumps({"heard": heard, "transcript": transcript, "duration": duration, "preparation": preparation}, ensure_ascii=False), encoding="utf-8")
+            except OSError as cache_error:
+                alignment_log.warning("Could not save alignment cache: %s", cache_error)
         times = align_line_times(lines, heard, duration)
         ends = align_line_ends(lines, times, heard, duration)
+        alignment_log.info("Lyric alignment completed: file=%s lines=%s words=%s method=%s", file.filename, len(lines), len(heard), preparation)
         background_tasks.add_task(shutil.rmtree, work, True)
         return {
             "ok": True,
-            "method": "demucs + faster-whisper-small + lyric alignment",
+            "method": f"{preparation} + faster-whisper-small + lyric alignment",
             "times": times,
             "ends": ends,
             "lineCount": len(lines),
@@ -461,6 +539,7 @@ async def align_lyrics(
         shutil.rmtree(work, ignore_errors=True)
         raise
     except Exception as error:
+        logging.getLogger("uvicorn.error").exception("Lyric alignment failed for %s", file.filename)
         shutil.rmtree(work, ignore_errors=True)
         raise HTTPException(500, f"Lyric alignment failed: {error}") from error
 
