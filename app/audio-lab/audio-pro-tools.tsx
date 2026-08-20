@@ -93,6 +93,7 @@ function MixEnhancer() {
   const [vocalGain,setVocalGain]=useState(0);
   const [busy,setBusy]=useState(false);
   const [status,setStatus]=useState("Ưu tiên Vocal + Beat để độ vang chỉ tác động lên giọng hát.");
+  const [needsEngineUpdate,setNeedsEngineUpdate]=useState(false);
   const [result,setResult]=useState<AudioResult|null>(null);
   const resultUrl=useRef("");
 
@@ -113,7 +114,7 @@ function MixEnhancer() {
 
   const run=async()=>{
     if(!ready||busy)return;
-    setBusy(true);clearResult(resultUrl,setResult);
+    setBusy(true);setNeedsEngineUpdate(false);clearResult(resultUrl,setResult);
     setStatus(mode==="stems"?"Đang mix vocal với beat, tạo không gian cho riêng giọng hát…":"Đang làm sáng, glue và chuẩn hóa bản mix đã ghép…");
     const controller=new AbortController();
     const timer=window.setTimeout(()=>controller.abort(),30*60*1000);
@@ -135,7 +136,10 @@ function MixEnhancer() {
       setResult({url,name,details:`${engine.toUpperCase()} · ${formatBytes(blob.size)} · WAV 24-BIT`});
       setStatus("Mix mới đã sẵn sàng. Hãy nghe thử trước khi thay file gốc.");
     }catch(error){
-      setStatus(error instanceof Error&&error.name==="AbortError"?"Mix quá 30 phút nên đã dừng.":friendlyAudioError(error instanceof Error?error.message:"Không thể tạo bản mix."));
+      const message=error instanceof Error?error.message:"Không thể tạo bản mix.";
+      const blocked=/failed to fetch|networkerror|load failed/i.test(message);
+      setNeedsEngineUpdate(blocked);
+      setStatus(error instanceof Error&&error.name==="AbortError"?"Mix quá 30 phút nên đã dừng.":blocked?"Engine Mix trên máy đang dùng kết nối cũ. Hãy cập nhật nhanh engine rồi chạy lại file này.":friendlyAudioError(message));
     }finally{window.clearTimeout(timer);setBusy(false);}
   };
 
@@ -158,6 +162,7 @@ function MixEnhancer() {
     <p className="quality-note">Preset cân bằng theo MV mẫu: giảm low-mid, thêm độ sáng, compression nhẹ và true peak −1 dBTP. Không ghi đè file gốc.</p>
     <button className="pro-run" disabled={!ready||busy} onClick={run}>{busy?"ĐANG MIX TRÊN MÁY…":"TẠO BẢN MIX ENHANCED"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
+    {needsEngineUpdate?<div className="mix-engine-repair"><b>ENGINE MIX CẦN CẬP NHẬT</b><span>Bản 6.2 cho phép trang HTTPS gửi file an toàn tới bộ xử lý trên máy. File nhạc không rời khỏi máy.</span><a href="/update-pulse-audio-engine.cmd" download>CẬP NHẬT NHANH ENGINE MIX .CMD ↓</a></div>:null}
     {result?<div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI BẢN MIX WAV 24-BIT ↓</a></div>:null}
   </article>;
 }
