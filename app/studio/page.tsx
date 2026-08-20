@@ -16,6 +16,7 @@ type SavedProject={
   song:StudioSong;
   videoTimeOffset?:number;
   autoVideoTimes?:number[];
+  autoLineConfidences?:number[];
   translations:Record<number,string>;
   literalMeanings:Record<number,string>;
   tonePatterns:Record<number,string>;
@@ -142,6 +143,16 @@ function safeAutoTimes(value:unknown){
   const times=value.map(Number);
   return times.every((time,index)=>Number.isFinite(time)&&time>=0&&(index===0||time>=times[index-1]))?times:[];
 }
+function safeConfidences(value:unknown,count=Infinity){
+  if(!Array.isArray(value))return[] as number[];
+  const scores=value.slice(0,count).map(Number);
+  return scores.every((score)=>Number.isFinite(score)&&score>=0&&score<=1)?scores:[];
+}
+function lrcTime(seconds:number){
+  const value=Math.max(0,seconds);
+  const minutes=Math.floor(value/60);
+  return `[${String(minutes).padStart(2,"0")}:${(value%60).toFixed(2).padStart(5,"0")}]`;
+}
 function lyricLanguage(lines:string[]){
   const joined=lines.join("");
   if(/\p{Script=Hangul}/u.test(joined))return"ko";
@@ -183,6 +194,7 @@ export default function LyricStudio(){
   const [videoTimeOffset,setVideoTimeOffset]=useState(0);
   const [syncAnchorLine,setSyncAnchorLine]=useState(0);
   const [autoVideoTimes,setAutoVideoTimes]=useState<number[]>([]);
+  const [autoLineConfidences,setAutoLineConfidences]=useState<number[]>([]);
   const [alignmentFile,setAlignmentFile]=useState<File|null>(null);
   const [autoAlignBusy,setAutoAlignBusy]=useState(false);
   const [autoAlignStatus,setAutoAlignStatus]=useState("Nạp đúng file âm thanh của video để bộ nghe tự tạo mốc cho toàn bộ lyric.");
@@ -269,7 +281,7 @@ export default function LyricStudio(){
   useEffect(()=>{
     if(!song)return;
     const timer=window.setTimeout(()=>{
-      const project:SavedProject={version:1,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()};
+      const project:SavedProject={version:1,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()};
       setSavedProjects((current)=>{
         const next=[project,...current.filter((item)=>item.key!==project.key)].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)).slice(0,20);
         try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
@@ -278,7 +290,7 @@ export default function LyricStudio(){
       setSaveNote("Đã tự lưu lúc "+new Date().toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}));
     },350);
     return()=>window.clearTimeout(timer);
-  },[song,videoTimeOffset,autoVideoTimes,translations,literalMeanings,tonePatterns]);
+  },[song,videoTimeOffset,autoVideoTimes,autoLineConfidences,translations,literalMeanings,tonePatterns]);
 
   const syncedTimeline=useMemo(()=>parseTimedLyrics(song?.syncedLyrics??""),[song?.syncedLyrics]);
   const baseTimeline=useMemo(()=>{
@@ -288,6 +300,7 @@ export default function LyricStudio(){
     return lines.map((text,index)=>({time:index*(usableDuration/Math.max(lines.length,1)),text}));
   },[song?.lyrics,syncedTimeline,duration]);
   const hasAutoTimeline=baseTimeline.length>0&&autoVideoTimes.length===baseTimeline.length;
+  const hasAlignmentConfidence=hasAutoTimeline&&autoLineConfidences.length===baseTimeline.length;
   const timeline=useMemo(()=>baseTimeline.map((line,index)=>({...line,time:Math.max(0,(hasAutoTimeline?autoVideoTimes[index]:line.time)+videoTimeOffset)})),[baseTimeline,autoVideoTimes,videoTimeOffset,hasAutoTimeline]);
   const currentLineIndex=useMemo(()=>{
     let active=-1;
@@ -343,7 +356,7 @@ export default function LyricStudio(){
 
   const applySong=()=>{
     if(!result)return;
-    setSong(result);setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setManualLyrics("");setFollowPlayback(true);setEditingLine(null);setVideoTimeOffset(0);setAutoVideoTimes([]);setAlignmentFile(null);setSyncAnchorLine(0);
+    setSong(result);setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setManualLyrics("");setFollowPlayback(true);setEditingLine(null);setVideoTimeOffset(0);setAutoVideoTimes([]);setAutoLineConfidences([]);setAlignmentFile(null);setSyncAnchorLine(0);
     try{
       const saved=JSON.parse(localStorage.getItem(storageKey(result))??"{}") as Record<number,string>;
       setTranslations(saved);
@@ -363,7 +376,7 @@ export default function LyricStudio(){
   const resumeProject=(project:SavedProject)=>{
     setSong(project.song);
     setVideoTimeOffset(Number.isFinite(project.videoTimeOffset)?Number(project.videoTimeOffset):0);
-    setAutoVideoTimes(safeAutoTimes(project.autoVideoTimes));setAlignmentFile(null);
+    setAutoVideoTimes(safeAutoTimes(project.autoVideoTimes));setAutoLineConfidences(safeConfidences(project.autoLineConfidences));setAlignmentFile(null);
     setSyncAnchorLine(0);
     setTranslations(project.translations??{});
     setLiteralMeanings(project.literalMeanings??{});
@@ -374,7 +387,7 @@ export default function LyricStudio(){
   };
 
   const exportProject=(project?:SavedProject)=>{
-    const selected=project??(song?{version:1 as const,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()}:null);
+    const selected=project??(song?{version:1 as const,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()}:null);
     if(!selected)return;
     const blob=new Blob([JSON.stringify(selected,null,2)],{type:"application/json;charset=utf-8"});
     const url=URL.createObjectURL(blob);
@@ -397,7 +410,7 @@ export default function LyricStudio(){
       localStorage.removeItem(toneStorageKey(project.song));
     }catch{}
     if(song&&storageKey(song)===project.key){
-      setSong(null);setTranslations({});setLiteralMeanings({});setTonePatterns({});setAutoVideoTimes([]);setAlignmentFile(null);setVideoTimeOffset(0);setCurrentTime(0);setDuration(0);setPlayerState("WAITING");
+      setSong(null);setTranslations({});setLiteralMeanings({});setTonePatterns({});setAutoVideoTimes([]);setAutoLineConfidences([]);setAlignmentFile(null);setVideoTimeOffset(0);setCurrentTime(0);setDuration(0);setPlayerState("WAITING");
     }
     setSaveNote(`Đã xóa bản tạm “${project.song.title}”.`);
   };
@@ -407,7 +420,7 @@ export default function LyricStudio(){
     try{
       const candidate=JSON.parse(await file.text()) as SavedProject;
       if(candidate.version!==1||!candidate.song?.videoId||!candidate.song?.title||!candidate.song?.artist)throw new Error("invalid");
-      const project:SavedProject={...candidate,key:storageKey(candidate.song),videoTimeOffset:Number.isFinite(candidate.videoTimeOffset)?Number(candidate.videoTimeOffset):0,autoVideoTimes:safeAutoTimes(candidate.autoVideoTimes),translations:candidate.translations??{},literalMeanings:candidate.literalMeanings??{},tonePatterns:candidate.tonePatterns??{},updatedAt:new Date().toISOString()};
+      const project:SavedProject={...candidate,key:storageKey(candidate.song),videoTimeOffset:Number.isFinite(candidate.videoTimeOffset)?Number(candidate.videoTimeOffset):0,autoVideoTimes:safeAutoTimes(candidate.autoVideoTimes),autoLineConfidences:safeConfidences(candidate.autoLineConfidences),translations:candidate.translations??{},literalMeanings:candidate.literalMeanings??{},tonePatterns:candidate.tonePatterns??{},updatedAt:new Date().toISOString()};
       setSavedProjects((current)=>{
         const next=[project,...current.filter((item)=>item.key!==project.key)].slice(0,20);
         try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
@@ -531,6 +544,18 @@ export default function LyricStudio(){
     window.setTimeout(()=>URL.revokeObjectURL(url),1000);
   };
 
+  const downloadLrc=()=>{
+    if(!song||!baseTimeline.length)return;
+    const content=song.syncedLyrics.trim()||(hasAutoTimeline?baseTimeline.map((line,index)=>lrcTime(autoVideoTimes[index])+line.text).join("\n"):"");
+    if(!content)return;
+    const blob=new Blob(["\ufeff",content],{type:"text/plain;charset=utf-8"});
+    const url=URL.createObjectURL(blob);
+    const anchor=document.createElement("a");
+    anchor.href=url;anchor.download=safeFileName(song.artist+" - "+song.title)+".lrc";
+    document.body.appendChild(anchor);anchor.click();anchor.remove();
+    window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
   const downloadVietnameseWord=()=>{
     if(!song)return;
     const vietnameseLines=timeline.map((_,index)=>(translations[index]??"").trim()).filter(Boolean);
@@ -567,7 +592,7 @@ export default function LyricStudio(){
     if(!videoId){setDirectVideoNote("Link chưa hợp lệ. Hãy dán link YouTube dạng watch, youtu.be, Shorts, Live hoặc Embed.");return;}
     if(song){
       setSong((current)=>current?{...current,videoId}:current);
-      setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setVideoTimeOffset(0);setAutoVideoTimes([]);setAlignmentFile(null);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
+      setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setVideoTimeOffset(0);setAutoVideoTimes([]);setAutoLineConfidences([]);setAlignmentFile(null);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
       setDirectVideoNote("Đã thay video và giữ nguyên toàn bộ lyric. Hãy nạp đúng file âm thanh của video để hệ thống tự nghe và gắn lại.");
       setAutoAlignStatus("Video đã thay đổi; cần nghe file âm thanh đúng bản một lần để tạo timeline mới.");
     }else if(result){
@@ -595,7 +620,7 @@ export default function LyricStudio(){
   };
 
   const ensureAlignmentEngine=async()=>{
-    const probe=async()=>{try{const response=await fetch("http://127.0.0.1:8765/health",{signal:AbortSignal.timeout(3500)});if(!response.ok)return false;const health=await response.json() as {alignment?:boolean;safeDenseLineAlignment?:boolean;multilingualLyricAlignment?:boolean;acousticPhraseAlignment?:boolean};return Boolean(health.alignment&&health.safeDenseLineAlignment&&health.multilingualLyricAlignment&&health.acousticPhraseAlignment)}catch{return false}};
+    const probe=async()=>{try{const response=await fetch("http://127.0.0.1:8765/health",{signal:AbortSignal.timeout(3500)});if(!response.ok)return false;const health=await response.json() as {alignment?:boolean;forcedAlignmentV2?:boolean;alignmentConfidence?:boolean;lyricPromptRecognition?:boolean;whisperTurbo?:boolean};return Boolean(health.alignment&&health.forcedAlignmentV2&&health.alignmentConfidence&&health.lyricPromptRecognition&&health.whisperTurbo)}catch{return false}};
     if(await probe())return true;
     const launcher=document.createElement("iframe");launcher.hidden=true;launcher.src="pulsecharts-audio://start";document.body.appendChild(launcher);window.setTimeout(()=>launcher.remove(),3500);
     for(let attempt=0;attempt<8;attempt+=1){await new Promise((resolve)=>window.setTimeout(resolve,1200));if(await probe())return true;}
@@ -606,18 +631,20 @@ export default function LyricStudio(){
     if(!alignmentFile||!baseTimeline.length){setAutoAlignStatus("Hãy nạp file âm thanh và bảo đảm bài đã có lyric gốc.");return;}
     setAutoAlignBusy(true);setAutoAlignStatus("Đang mở bộ nghe trên máy…");
     try{
-      if(!await ensureAlignmentEngine())throw new Error("Chưa mở được bộ nghe. Hãy vào MV Studio, chạy bộ cài một lần rồi thử lại.");
-      setAutoAlignStatus("Bộ nghe đang phân tích giọng hát và gắn toàn bộ câu. Lần đầu có thể mất vài phút…");
+      if(!await ensureAlignmentEngine())throw new Error("Bộ nghe cũ chưa hỗ trợ căn chỉnh mới. Hãy chạy CÀI / CẬP NHẬT TỰ ĐỘNG một lần rồi thử lại.");
+      setAutoAlignStatus("Bộ nghe mới đang đối chiếu lyric với giọng hát. Nếu lượt đầu chưa đủ tin cậy, hệ thống sẽ tự tách giọng và nghe lại…");
       const sourceLines=baseTimeline.map((line)=>line.text);
       const form=new FormData();form.append("file",alignmentFile,alignmentFile.name||"song.wav");form.append("lyrics",sourceLines.join("\n"));form.append("language",lyricLanguage(sourceLines));
       if(syncedTimeline.length===sourceLines.length)form.append("reference_times",JSON.stringify(syncedTimeline.map((line)=>line.time)));
       const response=await fetch("http://127.0.0.1:8765/align-lyrics",{method:"POST",body:form});
       if(!response.ok){let detail="";try{detail=((await response.json()) as {detail?:string}).detail||""}catch{}throw new Error(detail||`Bộ nghe báo lỗi ${response.status}`);}
-      const payload=await response.json() as {times?:unknown;lineCount?:number;recognizedWords?:number;recognizedPhrases?:number;method?:string};
+      const payload=await response.json() as {times?:unknown;confidences?:unknown;needsReview?:unknown;quality?:number;lineCount?:number;recognizedWords?:number;recognizedPhrases?:number;method?:string};
       const times=safeAutoTimes(payload.times);
       if(times.length!==baseTimeline.length)throw new Error(`Bộ nghe trả về ${times.length}/${baseTimeline.length} câu, chưa thể áp dụng an toàn.`);
-      setAutoVideoTimes(times);setVideoTimeOffset(0);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
-      setAutoAlignStatus(`Đã tự gắn đủ ${times.length} câu theo ${payload.recognizedPhrases??0} điểm bắt đầu câu hát. Timeline đã được tự lưu vào dự án.`);
+      const confidences=safeConfidences(payload.confidences,times.length);
+      const reviewCount=confidences.filter((score)=>score<.5).length;
+      setAutoVideoTimes(times);setAutoLineConfidences(confidences);setVideoTimeOffset(0);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
+      setAutoAlignStatus(`Đã căn ${times.length} câu · độ tin cậy ${Math.round((Number(payload.quality)||0)*100)}% · ${reviewCount} câu cần kiểm tra. Timeline và độ tin cậy đã được tự lưu.`);
       setDirectVideoNote("Timeline tự động đã sẵn sàng. Hãy phát video để kiểm tra; nếu video có thêm intro, canh một câu bên dưới để bù đúng phần intro.");
     }catch(error){setAutoAlignStatus(error instanceof Error?error.message:"Không tự gắn được lyric.");}
     finally{setAutoAlignBusy(false);}
@@ -666,13 +693,13 @@ export default function LyricStudio(){
     {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
     <section className="studio-workspace">
       <div className="translation-column">
-        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
+        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ TỰ ĐỘNG"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={downloadLrc} disabled={!song.syncedLyrics&&!hasAutoTimeline}>TẢI FILE .LRC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
 
         <section className={"direct-video-panel "+(playerState==="VIDEO_ERROR"?"has-error":"")}>
           <div><small>VIDEO YOUTUBE TRỰC TIẾP</small><b>{playerState==="VIDEO_ERROR"?"VIDEO HIỆN TẠI KHÔNG PHÁT ĐƯỢC":"THAY VIDEO MÀ KHÔNG MẤT LYRIC"}</b></div>
           <div className="direct-video-form"><input value={directVideoUrl} onChange={(event)=>setDirectVideoUrl(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")applyDirectVideo();}} placeholder="Dán link youtube.com/watch…, youtu.be…, Shorts hoặc Live…"/><button type="button" onClick={applyDirectVideo} disabled={!directVideoUrl.trim()}>DÙNG VIDEO NÀY</button></div>
           <p>{directVideoNote}</p>
-          <div className="auto-video-align"><div><small>TỰ ĐỘNG NGHE & GẮN TOÀN BỘ</small><b>{hasAutoTimeline?`ĐÃ CÓ TIMELINE AI · ${autoVideoTimes.length} CÂU`:"NẠP ĐÚNG FILE ÂM THANH CỦA VIDEO"}</b><span>WAV, MP3, M4A hoặc FLAC · xử lý miễn phí ngay trên máy · file không tải lên Internet.</span></div><label className="auto-audio-picker">{alignmentFile?`✓ ${alignmentFile.name}`:"+ CHỌN FILE ÂM THANH"}<input type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.aac,.ogg" onChange={(event)=>{const file=event.target.files?.[0]??null;setAlignmentFile(file);setAutoAlignStatus(file?`Đã nạp ${file.name}. Sẵn sàng để bộ nghe tự gắn ${baseTimeline.length} câu.`:"Chưa nạp file âm thanh.");}}/></label><button type="button" onClick={()=>void autoAlignVideoLyrics()} disabled={autoAlignBusy||!alignmentFile||!baseTimeline.length}>{autoAlignBusy?"ĐANG NGHE & GẮN…":"NGHE FILE & TỰ GẮN TẤT CẢ"}</button>{hasAutoTimeline&&<button type="button" className="clear-auto-timeline" onClick={()=>{setAutoVideoTimes([]);setVideoTimeOffset(0);setAutoAlignStatus("Đã bỏ timeline AI; hệ thống quay về timeline lyric ban đầu.");}}>BỎ MỐC AI</button>}<p>{autoAlignStatus}</p></div>
+          <div className="auto-video-align"><div><small>TỰ ĐỘNG NGHE & TẠO LRC · BỘ CĂN CHỈNH V6.1 TURBO</small><b>{hasAutoTimeline?hasAlignmentConfidence?`ĐÃ CĂN ${autoVideoTimes.length} CÂU · ${autoLineConfidences.filter((score)=>score<.5).length} CÂU CẦN KIỂM TRA`:`TIMELINE CŨ · HÃY CHẠY LẠI BỘ V6.1`:"NẠP ĐÚNG FILE ÂM THANH CỦA VIDEO"}</b><span>Nghe bằng mô hình Large V3 Turbo, đối chiếu lyric và tự tách giọng khi cần · miễn phí trên máy.</span></div><label className="auto-audio-picker">{alignmentFile?`✓ ${alignmentFile.name}`:"+ CHỌN FILE ÂM THANH"}<input type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.aac,.ogg" onChange={(event)=>{const file=event.target.files?.[0]??null;setAlignmentFile(file);setAutoAlignStatus(file?`Đã nạp ${file.name}. Sẵn sàng căn ${baseTimeline.length} câu và tạo LRC.`:"Chưa nạp file âm thanh.");}}/></label><button type="button" onClick={()=>void autoAlignVideoLyrics()} disabled={autoAlignBusy||!alignmentFile||!baseTimeline.length}>{autoAlignBusy?"ĐANG NGHE · CÓ THỂ TỰ TÁCH GIỌNG…":"TỰ ĐỘNG NGHE & TẠO LRC"}</button>{hasAutoTimeline&&<button type="button" className="clear-auto-timeline" onClick={()=>{setAutoVideoTimes([]);setAutoLineConfidences([]);setVideoTimeOffset(0);setAutoAlignStatus("Đã bỏ timeline tự động; hệ thống quay về lyric ban đầu.");}}>BỎ TIMELINE</button>}<p>{autoAlignStatus}</p></div>
           <div className="video-sync-tools"><div><small>BÙ PHẦN INTRO CỦA VIDEO (NẾU CẦN)</small><span>Sau khi tự gắn, nếu video có thêm đoạn mở đầu, phát tới một câu rồi gán một mốc để dịch chuyển đồng đều toàn bộ timeline AI.</span></div><label>CÂU MỐC<input type="number" min="1" max={Math.max(1,timeline.length)} value={Math.min(syncAnchorLine+1,Math.max(1,timeline.length))} onChange={(event)=>setSyncAnchorLine(Math.max(0,Math.min(timeline.length-1,Number(event.target.value)-1||0)))}/></label><button type="button" onClick={alignVideoToLyric} disabled={!timeline.length||playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN CÂU NÀY TẠI THỜI ĐIỂM ĐANG PHÁT</button><button type="button" className="sync-reset" onClick={()=>{setVideoTimeOffset(0);setDirectVideoNote("Đã bỏ phần bù intro; timeline tự động vẫn được giữ nguyên.");}}>BỎ BÙ INTRO</button><output>{hasAutoTimeline?`AI ${autoVideoTimes.length}/${baseTimeline.length}`:Math.abs(videoTimeOffset)<.01?"TIMELINE GỐC":`VIDEO ${videoTimeOffset>0?"+":""}${videoTimeOffset.toFixed(2)} GIÂY`}</output></div>
         </section>
 
@@ -704,9 +731,9 @@ export default function LyricStudio(){
         </section>}
 
         {timeline.length>0&&<div className="line-editor">
-          <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":"GẦN ĐÚNG"}</span></div>
-          {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing":"")} key={index}>
-            <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i></span>
+          <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{song.syncedLyrics?"ĐỒNG BỘ":hasAutoTimeline?"ĐÃ CĂN TỰ ĐỘNG":"CHƯA CÓ MỐC"}</span></div>
+          {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing ":"")+(hasAlignmentConfidence?(autoLineConfidences[index]>=.7?"align-good":autoLineConfidences[index]>=.5?"align-medium":"align-review"):"")} key={index}>
+            <span className="line-number">{String(index+1).padStart(2,"0")}<i>{Math.floor(line.time/60)}:{String(Math.floor(line.time%60)).padStart(2,"0")}</i>{hasAlignmentConfidence&&<em>{autoLineConfidences[index]>=.7?"✓ TỐT":autoLineConfidences[index]>=.5?"~ KIỂM TRA":"! CẦN SỬA"}</em>}</span>
             <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button>
           </div>)}

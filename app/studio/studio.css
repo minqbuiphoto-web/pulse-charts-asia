@@ -57,3 +57,4 @@
 @media(max-width:720px){.direct-video-lookup>div{grid-template-columns:1fr}.direct-video-lookup button{height:44px}}
 @media(max-width:900px){.video-sync-tools{grid-template-columns:1fr 90px}.video-sync-tools>div{grid-column:1/-1}.video-sync-tools>button:first-of-type{grid-column:1/-1}.video-sync-tools output{justify-self:end}}
 @media(max-width:900px){.auto-video-align{grid-template-columns:1fr}.auto-video-align>button,.auto-audio-picker{min-height:46px}}
+.line-number em{display:block;margin-top:7px;font:800 7px Manrope;font-style:normal;letter-spacing:.05em}.lyric-row.align-good{box-shadow:inset 2px 0 #62d98b66}.lyric-row.align-good .line-number em{color:#62d98b}.lyric-row.align-medium{box-shadow:inset 2px 0 #e8c65a66}.lyric-row.align-medium .line-number em{color:#e8c65a}.lyric-row.align-review{background:#25131655;box-shadow:inset 3px 0 #ff6b7a88}.lyric-row.align-review .line-number em{color:#ff8290}

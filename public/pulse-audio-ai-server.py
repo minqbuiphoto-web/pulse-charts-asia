@@ -15,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="5.8")
+app = FastAPI(title="Pulse Audio AI", version="6.1")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -34,7 +34,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "UVR MDX-Net + Demucs fallback + multilingual faster-whisper + ffmpeg", "version": "5.8", "alignment": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "large-v3-turbo lyric-prompted forced alignment + Demucs", "version": "6.1", "alignment": True, "forcedAlignmentV2": True, "alignmentConfidence": True, "lyricPromptRecognition": True, "whisperTurbo": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -221,7 +221,7 @@ def get_whisper_model():
     global whisper_model
     if whisper_model is None:
         from faster_whisper import WhisperModel
-        whisper_model = WhisperModel("small", device="cpu", compute_type="int8")
+        whisper_model = WhisperModel("large-v3-turbo", device="cpu", compute_type="int8")
     return whisper_model
 
 
@@ -269,10 +269,11 @@ def prepare_alignment_audio(source: Path, work: Path) -> Path:
     return target
 
 
-def alignment_cache_path(source: Path, language: str = "auto") -> Path:
+def alignment_cache_path(source: Path, language: str = "auto", lyric_key: str = "") -> Path:
     digest = hashlib.sha256()
-    digest.update(b"multilingual-v1\0")
+    digest.update(b"forced-alignment-v4-turbo\0")
     digest.update(language.encode("utf-8"))
+    digest.update(unicodedata.normalize("NFKC", lyric_key).encode("utf-8"))
     with source.open("rb") as stream:
         while chunk := stream.read(4 * 1024 * 1024):
             digest.update(chunk)
@@ -381,6 +382,191 @@ def token_similarity(left: str, right: str) -> float:
     if len(left) <= 2 or len(right) <= 2:
         return 0.0
     return SequenceMatcher(None, left, right).ratio()
+
+
+def alignment_units(value: str, language: str = "auto") -> list[str]:
+    """Convert supplied and recognized text to comparable acoustic units.
+
+    Chinese characters are compared by pinyin when the optional lightweight
+    pypinyin dependency is available. This lets homophonic ASR substitutions
+    still anchor the correct sung phrase instead of destroying the timeline.
+    """
+    raw_units = word_units(value)
+    if language != "zh":
+        return [unit for raw in raw_units if (unit := normalize_word(raw))]
+    try:
+        from pypinyin import Style, lazy_pinyin
+        output = []
+        for raw in raw_units:
+            if re.fullmatch(r"[\u3400-\u9fff]", raw):
+                output.extend(lazy_pinyin(raw, style=Style.NORMAL, neutral_tone_with_five=False, errors="default"))
+            else:
+                output.append(raw)
+        return [unit for raw in output if (unit := normalize_word(raw))]
+    except ImportError:
+        return [unit for raw in raw_units if (unit := normalize_word(raw))]
+
+
+def recognized_alignment_units(heard: list[dict], language: str) -> list[dict]:
+    output = []
+    for item in heard:
+        units = alignment_units(str(item.get("word", "")), language)
+        start = float(item.get("start", 0.0))
+        end = float(item.get("end", start))
+        span = max(0.0, end - start)
+        for index, unit in enumerate(units):
+            output.append({
+                "unit": unit,
+                "start": start + span * index / max(len(units), 1),
+                "end": start + span * (index + 1) / max(len(units), 1),
+                "segment_start": bool(item.get("segment_start")) and index == 0,
+            })
+    return output
+
+
+def interpolate_unmatched_lines(lines: list[str], times: list[float | None],
+                                confidences: list[float], heard: list[dict],
+                                duration: float) -> list[float]:
+    audible_start = min((float(item.get("start", 0.0)) for item in heard), default=0.0)
+    audible_end = max((float(item.get("end", 0.0)) for item in heard), default=max(duration, 0.0))
+    audible_end = min(max(duration - .1, audible_start), max(audible_end, audible_start))
+    anchors = [index for index, value in enumerate(times) if value is not None]
+    if not anchors:
+        return proportional_line_times([alignment_units(line) for line in lines], [], duration)
+    boundaries = [-1] + anchors + [len(lines)]
+    boundary_times = [audible_start] + [float(times[index]) for index in anchors] + [audible_end]
+    for block in range(len(boundaries) - 1):
+        left_index, right_index = boundaries[block], boundaries[block + 1]
+        missing = list(range(left_index + 1, right_index))
+        if not missing:
+            continue
+        start, end = boundary_times[block], boundary_times[block + 1]
+        weights = [max(1.0, len(alignment_units(lines[index])) ** .72) for index in missing]
+        total = sum(weights) + (weights[-1] if weights else 1.0)
+        consumed = 0.0
+        for index, weight in zip(missing, weights):
+            consumed += weight
+            times[index] = start + (end - start) * consumed / max(total, 1.0)
+            confidences[index] = min(confidences[index], .18)
+    phrase_starts = sorted(set(round(float(item.get("start", 0.0)), 3) for item in heard if item.get("segment_start")))
+    used = {round(float(times[index]), 3) for index in anchors}
+    for index, confidence in enumerate(confidences):
+        if confidence >= .35 or not phrase_starts:
+            continue
+        lower = float(times[index - 1]) + .12 if index else 0.0
+        upper = float(times[index + 1]) - .12 if index + 1 < len(times) and times[index + 1] is not None else duration
+        candidates = [value for value in phrase_starts if lower <= value <= upper and value not in used]
+        if candidates:
+            chosen = min(candidates, key=lambda value: abs(value - float(times[index])))
+            if abs(chosen - float(times[index])) <= 4.0:
+                times[index] = chosen
+                used.add(chosen)
+                confidences[index] = max(confidences[index], .28)
+    ceiling = max(duration - .1, 0.0)
+    resolved = [min(max(float(value or 0.0), 0.0), ceiling) for value in times]
+    for index in range(1, len(resolved)):
+        resolved[index] = min(ceiling, max(resolved[index], resolved[index - 1] + .12))
+    return [round(value, 3) for value in resolved]
+
+
+def forced_align_line_times(lines: list[str], heard: list[dict], duration: float,
+                            language: str = "auto") -> tuple[list[float], list[float]]:
+    """Globally align known lyric units to recognized sung units.
+
+    Unlike the old proportional mapper, this preserves sequence across the
+    entire song and reports low confidence instead of pretending every line was
+    recognized successfully.
+    """
+    line_units = [alignment_units(line, language) for line in lines]
+    lyric_units = [(unit, line_index) for line_index, units in enumerate(line_units) for unit in units]
+    recognized = recognized_alignment_units(heard, language)
+    if not lyric_units or not recognized:
+        times = proportional_line_times(line_units, [], duration)
+        return times, [0.0] * len(lines)
+    lyric_count, heard_count = len(lyric_units), len(recognized)
+    scores = [[float("-inf")] * (heard_count + 1) for _ in range(lyric_count + 1)]
+    paths = [[""] * (heard_count + 1) for _ in range(lyric_count + 1)]
+    scores[0] = [0.0] * (heard_count + 1)
+    for lyric_index in range(1, lyric_count + 1):
+        scores[lyric_index][0] = scores[lyric_index - 1][0] - .58
+        paths[lyric_index][0] = "U"
+    for lyric_index in range(1, lyric_count + 1):
+        wanted = lyric_units[lyric_index - 1][0]
+        for heard_index in range(1, heard_count + 1):
+            similarity = token_similarity(wanted, recognized[heard_index - 1]["unit"])
+            match_reward = 2.5 * similarity - (.72 if similarity >= .45 else 1.18)
+            options = (
+                (scores[lyric_index - 1][heard_index - 1] + match_reward, "D"),
+                (scores[lyric_index - 1][heard_index] - .58, "U"),
+                (scores[lyric_index][heard_index - 1] - .30, "L"),
+            )
+            scores[lyric_index][heard_index], paths[lyric_index][heard_index] = max(options, key=lambda item: item[0])
+    heard_index = max(range(heard_count + 1), key=lambda index: scores[lyric_count][index])
+    lyric_index = lyric_count
+    matches = []
+    while lyric_index > 0:
+        direction = paths[lyric_index][heard_index]
+        if direction == "D" and heard_index > 0:
+            similarity = token_similarity(lyric_units[lyric_index - 1][0], recognized[heard_index - 1]["unit"])
+            if similarity >= .68:
+                matches.append((lyric_index - 1, heard_index - 1, similarity))
+            lyric_index -= 1
+            heard_index -= 1
+        elif direction == "L" and heard_index > 0:
+            heard_index -= 1
+        else:
+            lyric_index -= 1
+    matches.reverse()
+    by_line = [[] for _ in lines]
+    for lyric_position, recognized_position, similarity in matches:
+        line_index = lyric_units[lyric_position][1]
+        by_line[line_index].append((recognized_position, similarity))
+    times: list[float | None] = [None] * len(lines)
+    confidences = [0.0] * len(lines)
+    for line_index, line_matches in enumerate(by_line):
+        if not line_matches:
+            continue
+        positions = [position for position, _ in line_matches]
+        similarities = [similarity for _, similarity in line_matches]
+        first_position = min(positions)
+        start = float(recognized[first_position]["start"])
+        for candidate in range(first_position, max(-1, first_position - 5), -1):
+            candidate_start = float(recognized[candidate]["start"])
+            if start - candidate_start > 2.2:
+                break
+            if recognized[candidate]["segment_start"]:
+                start = candidate_start
+                break
+        coverage = min(1.0, len(line_matches) / max(len(line_units[line_index]), 1))
+        accuracy = sum(similarities) / max(len(similarities), 1)
+        confidences[line_index] = round(min(1.0, coverage * .72 + accuracy * .28), 3)
+        times[line_index] = start
+    resolved = interpolate_unmatched_lines(lines, times, confidences, heard, duration)
+    return resolved, confidences
+
+
+def recognition_quality(lines: list[str], heard: list[dict], duration: float,
+                        language: str) -> tuple[float, list[float], list[float]]:
+    times, confidences = forced_align_line_times(lines, heard, duration, language)
+    reliable = sum(1 for value in confidences if value >= .50) / max(len(confidences), 1)
+    average = sum(confidences) / max(len(confidences), 1)
+    return round(average * .60 + reliable * .40, 4), times, confidences
+
+
+def transcribe_for_alignment(model, source: Path, lines: list[str], language: str | None,
+                             beam_size: int = 5) -> tuple[list[dict], list[str], float]:
+    # Whisper has a 448-token text context. Keep the acoustic hint deliberately
+    # compact; the full lyric is still used by the global forced aligner below.
+    prompt = "\n".join(lines)[:240]
+    hotwords = " ".join(dict.fromkeys(unit for line in lines for unit in word_units(line)))[:140]
+    segments, info = model.transcribe(
+        str(source), language=language, beam_size=beam_size,
+        word_timestamps=True, vad_filter=True,
+        vad_parameters={"min_silence_duration_ms": 220},
+        initial_prompt=prompt, hotwords=hotwords,
+        condition_on_previous_text=False,
+    )
+    return collect_transcription(list(segments), info)
 
 
 def proportional_line_times(line_words: list[list[str]], recognized: list[tuple], duration: float) -> list[float]:
@@ -583,7 +769,7 @@ async def align_lyrics(
         await write_upload(file, source)
         alignment_log = logging.getLogger("uvicorn.error")
         alignment_log.info("Lyric alignment started: file=%s lines=%s bytes=%s", file.filename, len(lines), source.stat().st_size)
-        cache = alignment_cache_path(source, cache_language)
+        cache = alignment_cache_path(source, cache_language, "\n".join(lines))
         heard, transcript, duration, preparation = [], [], 0.0, ""
         if cache.exists():
             try:
@@ -596,59 +782,104 @@ async def align_lyrics(
                 heard, transcript, duration = [], [], 0.0
         if not heard:
             model = get_whisper_model()
+            candidates = []
             try:
-                segments, info = model.transcribe(
-                    str(source), language=whisper_language, beam_size=3,
-                    word_timestamps=True, vad_filter=True,
-                    vad_parameters={"min_silence_duration_ms": 250},
-                )
-                heard, transcript, duration = collect_transcription(list(segments), info)
-                preparation = "fast direct recognition"
-            except Exception as direct_error:
-                alignment_log.warning("Direct recognition failed; using voice-focus decode: %s", direct_error)
                 audio_for_alignment = prepare_alignment_audio(source, work)
-                segments, info = model.transcribe(
-                    str(audio_for_alignment), language=whisper_language, beam_size=3,
-                    word_timestamps=True, vad_filter=True,
-                    vad_parameters={"min_silence_duration_ms": 250},
+                candidate_heard, candidate_transcript, candidate_duration = transcribe_for_alignment(
+                    model, audio_for_alignment, lines, whisper_language, beam_size=5
                 )
-                heard, transcript, duration = collect_transcription(list(segments), info)
-                preparation = "ffmpeg voice-focus fallback"
-            lyric_word_count = sum(len(word_units(line)) for line in lines)
-            minimum_words = max(24, round(lyric_word_count * .30))
-            if len(heard) < minimum_words:
+                candidate_quality, candidate_times, candidate_confidences = recognition_quality(
+                    lines, candidate_heard, candidate_duration, cache_language
+                )
+                candidates.append({
+                    "quality": candidate_quality, "heard": candidate_heard,
+                    "transcript": candidate_transcript, "duration": candidate_duration,
+                    "times": candidate_times, "confidences": candidate_confidences,
+                    "preparation": "lyric-prompted voice-focus recognition",
+                })
+                alignment_log.info("Voice-focus recognition quality: %.3f", candidate_quality)
+            except Exception as focused_error:
+                alignment_log.warning("Voice-focus recognition failed: %s", focused_error, exc_info=True)
+            def candidate_selection_score(item):
+                candidate_confidences = list(item.get("confidences") or [])
+                if not candidate_confidences:
+                    return float(item.get("quality") or 0.0) - 1.0
+                candidate_review_ratio = sum(1 for value in candidate_confidences if value < .50) / len(candidate_confidences)
+                weak_edge_count = sum(
+                    1 for value in (
+                        candidate_confidences[:min(3, len(candidate_confidences))]
+                        + candidate_confidences[-min(2, len(candidate_confidences)):]
+                    ) if value < .50
+                )
+                return float(item.get("quality") or 0.0) - candidate_review_ratio * .24 - weak_edge_count * .035
+
+            best_candidate = max(candidates, key=candidate_selection_score, default=None)
+            best_quality = float(best_candidate["quality"]) if best_candidate else 0.0
+            best_confidences = list(best_candidate["confidences"]) if best_candidate else []
+            review_ratio = sum(1 for value in best_confidences if value < .50) / max(len(best_confidences), 1)
+            edge_is_weak = bool(best_confidences) and (
+                any(value < .50 for value in best_confidences[:min(3, len(best_confidences))])
+                or any(value < .35 for value in best_confidences[-min(2, len(best_confidences)):])
+            )
+            if best_quality < .78 or review_ratio > .12 or edge_is_weak:
                 try:
-                    alignment_log.info("Recognition is sparse (%s/%s words); isolating vocals once.", len(heard), minimum_words)
+                    alignment_log.info("Recognition requires a vocal pass: quality=%.3f review=%.1f%% weak_edge=%s", best_quality, review_ratio * 100, edge_is_weak)
                     vocal = isolate_vocals(source, work)
-                    segments, info = model.transcribe(
-                        str(vocal), language=whisper_language, beam_size=5,
-                        word_timestamps=True, vad_filter=True,
-                        vad_parameters={"min_silence_duration_ms": 250},
+                    vocal_heard, vocal_transcript, vocal_duration = transcribe_for_alignment(
+                        model, vocal, lines, whisper_language, beam_size=6
                     )
-                    vocal_heard, vocal_transcript, vocal_duration = collect_transcription(list(segments), info)
-                    if len(vocal_heard) > len(heard):
-                        heard, transcript, duration = vocal_heard, vocal_transcript, vocal_duration
-                        preparation = "demucs vocal recognition"
+                    vocal_quality, vocal_times, vocal_confidences = recognition_quality(
+                        lines, vocal_heard, vocal_duration, cache_language
+                    )
+                    candidates.append({
+                        "quality": vocal_quality, "heard": vocal_heard,
+                        "transcript": vocal_transcript, "duration": vocal_duration,
+                        "times": vocal_times, "confidences": vocal_confidences,
+                        "preparation": "Demucs vocals + lyric-prompted recognition",
+                    })
+                    alignment_log.info("Isolated-vocal recognition quality: %.3f", vocal_quality)
                 except Exception as vocal_error:
-                    alignment_log.warning("Vocal isolation failed; retaining direct recognition: %s", vocal_error, exc_info=True)
+                    alignment_log.warning("Vocal isolation failed; retaining best available pass: %s", vocal_error, exc_info=True)
+            if not candidates:
+                raise RuntimeError("The recognition engine could not decode this audio")
+            selected = max(candidates, key=candidate_selection_score)
+            alignment_log.info(
+                "Selected recognition pass: %s quality=%.3f score=%.3f",
+                selected["preparation"], selected["quality"], candidate_selection_score(selected)
+            )
+            heard = selected["heard"]
+            transcript = selected["transcript"]
+            duration = selected["duration"]
+            preparation = selected["preparation"]
             try:
                 cache.write_text(json.dumps({"heard": heard, "transcript": transcript, "duration": duration, "preparation": preparation}, ensure_ascii=False), encoding="utf-8")
             except OSError as cache_error:
                 alignment_log.warning("Could not save alignment cache: %s", cache_error)
-        phrase_times = acoustic_phrase_times(lines, heard, duration, parsed_reference)
-        use_acoustic_phrases = bool(phrase_times) and (parsed_reference is not None or cache_language in {"zh", "ja"})
-        times = phrase_times if use_acoustic_phrases else align_line_times(lines, heard, duration)
-        alignment_strategy = ("synced reference + acoustic phrase onsets" if parsed_reference is not None and use_acoustic_phrases
-                              else "acoustic phrase onsets" if use_acoustic_phrases
-                              else "transcript + lyric alignment")
+        quality, times, confidences = recognition_quality(lines, heard, duration, cache_language)
+        if parsed_reference is not None:
+            phrase_times = acoustic_phrase_times(lines, heard, duration, parsed_reference)
+            if phrase_times:
+                reference_confidence = min(.92, max(.62, quality + .18))
+                times = phrase_times
+                confidences = [round(max(value, reference_confidence), 3) for value in confidences]
+                quality = round(sum(confidences) / max(len(confidences), 1), 4)
+                alignment_strategy = "synced reference + acoustic phrase onsets"
+            else:
+                alignment_strategy = "global lyric forced alignment"
+        else:
+            alignment_strategy = "global lyric forced alignment"
         ends = align_line_ends(lines, times, heard, duration)
-        alignment_log.info("Lyric alignment completed: file=%s lines=%s words=%s method=%s", file.filename, len(lines), len(heard), preparation)
+        needs_review = [index for index, value in enumerate(confidences) if value < .50]
+        alignment_log.info("Lyric alignment completed: file=%s lines=%s words=%s quality=%.3f review=%s method=%s", file.filename, len(lines), len(heard), quality, len(needs_review), preparation)
         background_tasks.add_task(shutil.rmtree, work, True)
         return {
             "ok": True,
-            "method": f"{preparation} + faster-whisper-small + {alignment_strategy}",
+            "method": f"{preparation} + faster-whisper-large-v3-turbo + {alignment_strategy}",
             "times": times,
             "ends": ends,
+            "confidences": confidences,
+            "needsReview": needs_review,
+            "quality": quality,
             "lineCount": len(lines),
             "recognizedWords": len(heard),
             "recognizedPhrases": sum(1 for item in heard if item.get("segment_start")),

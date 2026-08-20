@@ -36,7 +36,7 @@ copy /Y "%SERVER_SOURCE%" "%ENGINE_DIR%\server.py" >nul
 if not exist "%ENGINE_DIR%\venv\Scripts\python.exe" python -m venv "%ENGINE_DIR%\venv"
 call "%ENGINE_DIR%\venv\Scripts\activate.bat"
 python -m pip install --upgrade pip
-python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg "audio-separator[cpu]"
+python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg pypinyin "audio-separator[cpu]"
 
 echo Dang cai bo tu khoi dong cung Windows...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { (New-Object Net.WebClient).DownloadFile('%STARTER_URL%','%STARTER_FILE%'); exit 0 } catch { exit 1 }"
