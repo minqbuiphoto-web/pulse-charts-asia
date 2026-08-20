@@ -15,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="6.1")
+app = FastAPI(title="Pulse Audio AI", version="6.2")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -28,13 +28,14 @@ app.add_middleware(
     ],
     allow_methods=["GET", "POST"],
     allow_headers=["*"],
+    allow_private_network=True,
     expose_headers=["Content-Disposition", "X-Pulse-Separation-Engine", "X-Pulse-Mix-Engine", "X-Pulse-Platform-Safe"],
 )
 
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "large-v3-turbo lyric-prompted forced alignment + Demucs", "version": "6.1", "alignment": True, "forcedAlignmentV2": True, "alignmentConfidence": True, "lyricPromptRecognition": True, "whisperTurbo": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "large-v3-turbo lyric-prompted forced alignment + Demucs", "version": "6.2", "privateNetworkAccess": True, "alignment": True, "forcedAlignmentV2": True, "alignmentConfidence": True, "lyricPromptRecognition": True, "whisperTurbo": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -1004,7 +1005,7 @@ async def enhance_mix(
         output,
         media_type="audio/wav",
         filename=f"{source.stem}_mix_enhanced_24bit.wav",
-        headers={"X-Pulse-Mix-Engine": "Finished Mix Enhance · FFmpeg DSP · -14 LUFS · -1 dBTP"},
+        headers={"X-Pulse-Mix-Engine": "Finished Mix Enhance - FFmpeg DSP - -14 LUFS - -1 dBTP"},
     )
 
 
@@ -1065,7 +1066,7 @@ async def mix_stems(
         output,
         media_type="audio/wav",
         filename=f"{Path(vocal.filename or 'vocal').stem}_with_{Path(beat.filename or 'beat').stem}_mix_24bit.wav",
-        headers={"X-Pulse-Mix-Engine": "Vocal + Beat Mix · vocal ambience · FFmpeg DSP · -14 LUFS · -1 dBTP"},
+        headers={"X-Pulse-Mix-Engine": "Vocal + Beat Mix - vocal ambience - FFmpeg DSP - -14 LUFS - -1 dBTP"},
     )
 
 
