@@ -5,7 +5,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./studio.css";
 
 type LookupState="idle"|"searching"|"ready"|"error";
-type LyricsPayload={lyrics?:string;syncedLyrics?:string;matchedTrack?:string;matchedArtist?:string};
+type LyricsPayload={lyrics?:string;syncedLyrics?:string;matchedTrack?:string;matchedArtist?:string;matchedDuration?:number|null};
 type SearchResult={videoId:string;title:string;artist:string;lyrics:string;syncedLyrics:string};
 type StudioSong=SearchResult;
 type TimedLine={time:number;text:string};
@@ -314,13 +314,14 @@ export default function LyricStudio(){
     setLookupState("searching");setLookupNote("Đang tìm trên YouTube và thư viện lyric miễn phí…");setResult(null);
     try{
       const encoded=encodeURIComponent(term);
-      const [videoResponse,lyricsResponse]=await Promise.all([
-        fetch("/api/youtube-search?q="+encoded+"%20official%20music%20video",{signal:AbortSignal.timeout(12000)}),
-        fetch("/api/lyrics-search?title="+encoded+"&artist=",{signal:AbortSignal.timeout(12000)})
-      ]);
+      const videoResponse=await fetch("/api/youtube-search?q="+encoded+"%20official%20music%20video",{signal:AbortSignal.timeout(12000)});
       if(!videoResponse.ok)throw new Error("Không tìm thấy video YouTube có thể phát.");
-      const video=await videoResponse.json() as {videoId?:string};
+      const video=await videoResponse.json() as {videoId?:string;durationSeconds?:number|null;channel?:string};
       if(!video.videoId)throw new Error("Kết quả video chưa đầy đủ.");
+      const videoArtist=String(video.channel??"").replace(/\s*-\s*Topic\s*$/i,"").trim();
+      const lyricsParams=new URLSearchParams({title:term,artist:videoArtist});
+      if(Number.isFinite(video.durationSeconds)&&Number(video.durationSeconds)>0)lyricsParams.set("duration",String(Math.round(Number(video.durationSeconds))));
+      const lyricsResponse=await fetch("/api/lyrics-search?"+lyricsParams.toString(),{signal:AbortSignal.timeout(12000)});
       let lyricsPayload:LyricsPayload={};
       if(lyricsResponse.ok)lyricsPayload=await lyricsResponse.json() as LyricsPayload;
       const nextResult:SearchResult={
@@ -331,7 +332,10 @@ export default function LyricStudio(){
         syncedLyrics:String(lyricsPayload.syncedLyrics??"").trim()
       };
       setResult(nextResult);setLookupState("ready");
-      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?"Đã tìm thấy lyric đồng bộ — sẵn sàng chạy sáng từng câu.":"Đã tìm thấy lyric thường — hệ thống sẽ tự canh thời gian gần đúng."):"Đã tìm thấy video nhưng chưa có lyric. Bạn có thể dán lyric gốc sau khi đưa bài vào studio.");
+      const videoSeconds=Number(video.durationSeconds)||0;
+      const lyricSeconds=Number(lyricsPayload.matchedDuration)||0;
+      const durationMatch=videoSeconds>0&&lyricSeconds>0&&Math.abs(videoSeconds-lyricSeconds)<=8;
+      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?"Đã tìm thấy lyric đồng bộ đúng bản — sẵn sàng chạy sáng từng câu.":durationMatch?`Đã chọn lyric đúng bản (${Math.round(lyricSeconds)}s) gần video (${Math.round(videoSeconds)}s). Bản này chưa có mốc từng câu; nạp file âm thanh để bộ nghe tự gắn chính xác.`:"Đã tìm thấy lyric thường nhưng chưa có mốc từng câu — nạp file âm thanh để bộ nghe tự gắn chính xác."):"Đã tìm thấy video nhưng chưa có lyric. Bạn có thể dán lyric gốc sau khi đưa bài vào studio.");
     }catch(error){
       setLookupState("error");setLookupNote(error instanceof Error?error.message:"Tìm kiếm thất bại. Hãy nhập rõ hơn tên bài hát và ca sĩ.");
     }

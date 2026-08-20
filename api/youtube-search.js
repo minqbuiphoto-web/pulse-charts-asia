@@ -18,9 +18,14 @@ function extractInitialData(html){
 function collectVideos(value,output=[]){if(!value||typeof value!=="object")return output;if(value.videoRenderer)output.push(value.videoRenderer);for(const child of Object.values(value))collectVideos(child,output);return output;}
 const runsText=(runs)=>runs?.map((item)=>item.text).join("")??"";
 const numericViews=(value)=>Number(String(value??"").replaceAll(",","").match(/([0-9]+)/)?.[1]??0);
+const durationSeconds=(value)=>{
+  const parts=String(value??"").trim().split(":").map(Number);
+  if(!parts.length||parts.some((part)=>!Number.isFinite(part)||part<0))return null;
+  return parts.reduce((total,part)=>total*60+part,0);
+};
 const normalize=(value)=>String(value??"").normalize("NFKC").toLowerCase().replace(/[^\p{L}\p{N}]+/gu," ").trim();
-const LIVE_SOURCE_PATTERN=/(^|\s)(live|concert|fancam|fan cam|stage|festival|showcase|acoustic live|radio live)(\s|$)|ì§ìº |ë¼ì´ë¸Œ|ë¬´ëŒ€|ì½˜ì„œíŠ¸|í˜„ìž¥|çŽ°åœº|ç¾å ´|æ¼”å”±ä¼š|æ¼”å”±æœƒ|èˆžå°|ç›´æ’­|éŸ³æ¨‚ç¯€|éŸ³ä¹èŠ‚/u;
-const WRONG_SOURCE_PATTERN=/(^|\s)(cover|karaoke|reaction|teaser|trailer|shorts?|dance practice)(\s|$)|ì»¤ë²„|ë…¸ëž˜ë°©|ç¿»å”±|ä¼´å¥/u;
+const LIVE_SOURCE_PATTERN=/(^|\s)(live|concert|fancam|fan cam|stage|festival|showcase|acoustic live|radio live)(\s|$)|직캠|라이브|무대|콘서트|현장|现场|現場|演唱会|演唱會|舞台|直播|音樂節|音乐节/u;
+const WRONG_SOURCE_PATTERN=/(^|\s)(cover|karaoke|reaction|teaser|trailer|shorts?|dance practice)(\s|$)|커버|노래방|翻唱|伴奏/u;
 const STUDIO_SOURCE_PATTERN=/(official\s*(music\s*)?video|official\s*mv|official\s*audio|audio\s*only|provided\s*to\s*youtube|studio\s*version|studio\s*audio)/;
 
 function videoCandidate(video){
@@ -30,7 +35,8 @@ function videoCandidate(video){
     videoId,
     title:runsText(video.title?.runs)||video.title?.simpleText||"",
     channel:runsText(video.ownerText?.runs)||runsText(video.longBylineText?.runs)||"",
-    viewCount:numericViews(video.viewCountText?.simpleText||runsText(video.viewCountText?.runs))
+    viewCount:numericViews(video.viewCountText?.simpleText||runsText(video.viewCountText?.runs)),
+    durationSeconds:durationSeconds(video.lengthText?.simpleText||runsText(video.lengthText?.runs))
   };
 }
 
@@ -106,11 +112,10 @@ export default async function handler(request,response){
       }
     }catch(error){console.warn("[youtube-search] stats-unavailable",{videoId,error:String(error)});}
     response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
-    console.log("[youtube-search] success",{query,videoId,viewCount,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
-    return response.status(200).json({videoId,viewCount,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
+    console.log("[youtube-search] success",{query,videoId,viewCount,durationSeconds:selected.durationSeconds,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
+    return response.status(200).json({videoId,viewCount,durationSeconds:selected.durationSeconds,title:selected.title,channel:selected.channel,sourceType:selected.sourceType});
   }catch(error){
     console.error("[youtube-search] failed",{query,error:String(error)});
     return response.status(502).json({error:"Video lookup failed"});
   }
 }
-

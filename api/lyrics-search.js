@@ -17,23 +17,44 @@ function searchTerms(value){
   return uniqueTerms([original,cjk,latin]);
 }
 
-function scoreResult(item,title,artist){
+function durationScore(itemDuration,targetDuration){
+  const found=Number(itemDuration),wanted=Number(targetDuration);
+  if(!Number.isFinite(found)||found<=0||!Number.isFinite(wanted)||wanted<=0)return 0;
+  const difference=Math.abs(found-wanted);
+  if(difference<=3)return 16;
+  if(difference<=8)return 12;
+  if(difference<=15)return 7;
+  if(difference<=30)return 2;
+  if(difference<=45)return -6;
+  return -16;
+}
+
+function scoreResult(item,title,artist,targetDuration){
   const wantedTitle=normalize(title);
   const wantedArtist=normalize(artist);
   const foundTitle=normalize(item.trackName);
   const foundArtist=normalize(item.artistName);
   let score=0;
   if(foundTitle===wantedTitle)score+=6;else if(foundTitle.includes(wantedTitle)||wantedTitle.includes(foundTitle))score+=3;
-  if(foundArtist===wantedArtist)score+=4;else if(foundArtist.includes(wantedArtist)||wantedArtist.includes(foundArtist))score+=2;
+  if(wantedArtist&&foundArtist===wantedArtist)score+=4;else if(wantedArtist&&(foundArtist.includes(wantedArtist)||wantedArtist.includes(foundArtist)))score+=2;
   if(item.plainLyrics||item.syncedLyrics)score+=1;
+  if(item.syncedLyrics)score+=10;
+  score+=durationScore(item.duration,targetDuration);
   return score;
+}
+
+function selectBestLyrics(items,title,artist,targetDuration){
+  return items
+    .filter((item)=>item.plainLyrics||item.syncedLyrics)
+    .sort((a,b)=>scoreResult(b,title,artist,targetDuration)-scoreResult(a,title,artist,targetDuration))[0];
 }
 
 export default async function handler(request,response){
   const title=String(Array.isArray(request.query?.title)?request.query.title[0]:request.query?.title??"").trim().slice(0,140);
   const artist=String(Array.isArray(request.query?.artist)?request.query.artist[0]:request.query?.artist??"").trim().slice(0,140);
+  const targetDuration=Number(Array.isArray(request.query?.duration)?request.query.duration[0]:request.query?.duration??0);
   if(!title)return response.status(400).json({error:"Missing title"});
-  console.log("[lyrics-search] lookup",{title,artist});
+  console.log("[lyrics-search] lookup",{title,artist,targetDuration:Number.isFinite(targetDuration)&&targetDuration>0?targetDuration:null});
   const titleTerms=searchTerms(title);
   const artistTerms=searchTerms(artist);
   const pairs=[
@@ -58,11 +79,13 @@ export default async function handler(request,response){
   }));
   const results=batches.flat();
   const unique=[...new Map(results.map((item)=>[item.id??(item.trackName+"::"+item.artistName),item])).values()];
-  const best=unique.filter((item)=>item.plainLyrics||item.syncedLyrics).sort((a,b)=>scoreResult(b,title,artist)-scoreResult(a,title,artist))[0];
-  if(!best||scoreResult(best,title,artist)<3){console.warn("[lyrics-search] no-result",{title,artist});return response.status(404).json({error:"Lyrics not found"});}
+  const best=selectBestLyrics(unique,title,artist,targetDuration);
+  if(!best||scoreResult(best,title,artist,targetDuration)<3){console.warn("[lyrics-search] no-result",{title,artist,targetDuration});return response.status(404).json({error:"Lyrics not found"});}
   const lyrics=String(best.plainLyrics??"").trim()||stripTimedLyrics(best.syncedLyrics);
   if(!lyrics)return response.status(404).json({error:"Lyrics not found"});
   response.setHeader("Cache-Control","s-maxage=86400, stale-while-revalidate=604800");
-  console.log("[lyrics-search] success",{title,artist,id:best.id});
-  return response.status(200).json({lyrics,syncedLyrics:String(best.syncedLyrics??"").trim(),source:"LRCLIB",matchedTrack:best.trackName,matchedArtist:best.artistName});
+  console.log("[lyrics-search] success",{title,artist,id:best.id,matchedDuration:best.duration,hasSyncedLyrics:Boolean(best.syncedLyrics)});
+  return response.status(200).json({lyrics,syncedLyrics:String(best.syncedLyrics??"").trim(),source:"LRCLIB",matchedTrack:best.trackName,matchedArtist:best.artistName,matchedDuration:Number(best.duration)||null});
 }
+
+export {durationScore,selectBestLyrics};
