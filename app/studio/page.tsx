@@ -718,15 +718,11 @@ export default function LyricStudio(){
       .filter((item)=>Number.isInteger(item.index)&&Number.isFinite(item.time))
       .sort((a,b)=>a.time-b.time);
     if(!assigned.length)return;
-    let active=assigned[0].index;
-    for(const item of assigned){if(time+.05>=item.time)active=item.index;else break;}
-    setManualCursor((current)=>{
-      if(!Number.isFinite(manualLineTimes[current])){
-        const previous=[...assigned].reverse().find((item)=>item.index<current);
-        if(previous&&time+.05>=previous.time)return current;
-      }
-      return active;
-    });
+    let active=assigned[0];
+    for(const item of assigned){if(time+.05>=item.time)active=item;else break;}
+    const nextIndex=Math.min(baseTimeline.length-1,active.index+1);
+    const shouldWaitForNext=!Number.isFinite(manualLineTimes[nextIndex])&&nextIndex>active.index&&time>=active.time+.25;
+    setManualCursor(shouldWaitForNext?nextIndex:active.index);
   };
 
   const addReplyNote=()=>{
