@@ -158,6 +158,41 @@ function safeManualTimes(value:unknown,count=Infinity){
   });
   return output;
 }
+function nextUnassignedLine(afterIndex:number,times:Record<number,number>,count:number){
+  for(let index=afterIndex+1;index<count;index+=1)if(!Number.isFinite(times[index]))return index;
+  for(let index=0;index<=afterIndex&&index<count;index+=1)if(!Number.isFinite(times[index]))return index;
+  return Math.max(0,Math.min(afterIndex,count-1));
+}
+function mergedManualTimes(fallback:number[],manual:Record<number,number>){
+  const anchors=Object.entries(manual)
+    .map(([index,time])=>({index:Number(index),time:Number(time)}))
+    .filter((item)=>Number.isInteger(item.index)&&item.index>=0&&item.index<fallback.length&&Number.isFinite(item.time))
+    .sort((a,b)=>a.index-b.index);
+  if(!anchors.length)return fallback;
+  const output=[...fallback];
+  const first=anchors[0];
+  if(first.index>0){
+    const sourceSpan=Math.max(0,fallback[first.index]-fallback[0]);
+    for(let index=0;index<first.index;index+=1){
+      const ratio=index/first.index;
+      output[index]=sourceSpan>0?Math.max(0,first.time-sourceSpan*(1-ratio)):Math.max(0,first.time*ratio);
+    }
+  }
+  for(let anchorIndex=0;anchorIndex<anchors.length-1;anchorIndex+=1){
+    const left=anchors[anchorIndex],right=anchors[anchorIndex+1];
+    const sourceSpan=fallback[right.index]-fallback[left.index];
+    for(let index=left.index+1;index<right.index;index+=1){
+      const ratio=sourceSpan>0?(fallback[index]-fallback[left.index])/sourceSpan:(index-left.index)/(right.index-left.index);
+      output[index]=left.time+(right.time-left.time)*Math.max(0,Math.min(1,ratio));
+    }
+  }
+  const last=anchors[anchors.length-1];
+  for(let index=last.index+1;index<fallback.length;index+=1){
+    output[index]=last.time+Math.max((index-last.index)*.05,fallback[index]-fallback[last.index]);
+  }
+  anchors.forEach(({index,time})=>{output[index]=time;});
+  return output;
+}
 function clockTime(seconds:number){
   const value=Math.max(0,Number(seconds)||0);
   return `${Math.floor(value/60)}:${(value%60).toFixed(2).padStart(5,"0")}`;
@@ -236,6 +271,7 @@ export default function LyricStudio(){
   const timerRef=useRef<number|undefined>(undefined);
   const lineRefs=useRef<Array<HTMLDivElement|null>>([]);
   const manualAudioRef=useRef<HTMLAudioElement|null>(null);
+  const manualLineTimesRef=useRef<Record<number,number>>({});
 
   useEffect(()=>{
     const timer=window.setTimeout(()=>{
@@ -253,6 +289,8 @@ export default function LyricStudio(){
     setManualAudioUrl(url);setManualAudioTime(0);setManualAudioDuration(0);
     return()=>URL.revokeObjectURL(url);
   },[alignmentFile]);
+
+  useEffect(()=>{manualLineTimesRef.current=manualLineTimes;},[manualLineTimes]);
 
   useEffect(()=>{
     if(window.YT?.Player){window.setTimeout(()=>setYtReady(true),0);return;}
@@ -331,17 +369,26 @@ export default function LyricStudio(){
   const hasAlignmentConfidence=hasAutoTimeline&&autoLineConfidences.length===baseTimeline.length;
   const manualAssignedCount=useMemo(()=>baseTimeline.filter((_,index)=>Number.isFinite(manualLineTimes[index])).length,[baseTimeline,manualLineTimes]);
   const manualCursorAssignedTime=manualLineTimes[manualCursor];
+  const manualPairLeftIndex=useMemo(()=>{
+    if(Number.isFinite(manualLineTimes[manualCursor]))return manualCursor;
+    for(let index=manualCursor-1;index>=0;index-=1)if(Number.isFinite(manualLineTimes[index]))return index;
+    return -1;
+  },[manualCursor,manualLineTimes]);
+  const manualPairRightIndex=manualPairLeftIndex>=0?Math.min(baseTimeline.length-1,manualPairLeftIndex+1):Math.min(manualCursor,Math.max(0,baseTimeline.length-1));
   const hasCompleteManualTimeline=baseTimeline.length>0&&manualAssignedCount===baseTimeline.length;
   const hasUsableTimeline=hasCompleteManualTimeline||hasAutoTimeline||syncedTimeline.length===baseTimeline.length;
-  const timeline=useMemo(()=>baseTimeline.map((line,index)=>{
-    const manual=manualLineTimes[index];
-    const source=Number.isFinite(manual)?manual:hasAutoTimeline?autoVideoTimes[index]:line.time;
+  const timeline=useMemo(()=>{
+    const fallback=baseTimeline.map((line,index)=>hasAutoTimeline?autoVideoTimes[index]:line.time);
+    const sources=manualAssignedCount?mergedManualTimes(fallback,manualLineTimes):fallback;
+    return baseTimeline.map((line,index)=>{
+    const source=sources[index];
     return {...line,time:Math.max(0,source+videoTimeOffset)};
-  }),[baseTimeline,manualLineTimes,autoVideoTimes,videoTimeOffset,hasAutoTimeline]);
+  });
+  },[baseTimeline,manualLineTimes,manualAssignedCount,autoVideoTimes,videoTimeOffset,hasAutoTimeline]);
   const currentLineIndex=useMemo(()=>{
     let active=-1;
     for(let index=0;index<timeline.length;index+=1){
-      if(currentTime+0.15>=timeline[index].time)active=index;else break;
+      if(currentTime+0.15>=timeline[index].time)active=index;
     }
     return active;
   },[currentTime,timeline]);
@@ -680,8 +727,11 @@ export default function LyricStudio(){
       if(times.length!==baseTimeline.length)throw new Error(`Bộ nghe trả về ${times.length}/${baseTimeline.length} câu, chưa thể áp dụng an toàn.`);
       const confidences=safeConfidences(payload.confidences,times.length);
       const reviewCount=confidences.filter((score)=>score<.5).length;
-      setAutoVideoTimes(times);setAutoLineConfidences(confidences);setManualLineTimes({});setManualCursor(0);setVideoTimeOffset(0);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
-      setAutoAlignStatus(`Đã căn ${times.length} câu · độ tin cậy ${Math.round((Number(payload.quality)||0)*100)}% · ${reviewCount} câu cần kiểm tra. Timeline và độ tin cậy đã được tự lưu.`);
+      const trustedTimes:Record<number,number>={};
+      confidences.forEach((score,index)=>{if(score>=.7)trustedTimes[index]=times[index];});
+      manualLineTimesRef.current=trustedTimes;
+      setAutoVideoTimes(times);setAutoLineConfidences(confidences);setManualLineTimes(trustedTimes);setManualCursor(nextUnassignedLine(-1,trustedTimes,baseTimeline.length));setVideoTimeOffset(0);setSyncAnchorLine(0);setFollowPlayback(true);setEditingLine(null);
+      setAutoAlignStatus(`Đã căn ${times.length} câu · ${Object.keys(trustedTimes).length} câu ✓ TỐT đã được gán sẵn · độ tin cậy ${Math.round((Number(payload.quality)||0)*100)}% · ${reviewCount} câu cần kiểm tra.`);
       setDirectVideoNote("Timeline tự động đã sẵn sàng. Hãy phát video để kiểm tra; nếu video có thêm intro, canh một câu bên dưới để bù đúng phần intro.");
     }catch(error){setAutoAlignStatus(error instanceof Error?error.message:"Không tự gắn được lyric.");}
     finally{setAutoAlignBusy(false);}
@@ -689,22 +739,34 @@ export default function LyricStudio(){
 
   const assignManualLine=(index=manualCursor,time?:number)=>{
     const audio=manualAudioRef.current;
-    const nextTime=Number.isFinite(time)?Number(time):audio?.currentTime;
-    if(!alignmentFile||!audio||!Number.isFinite(nextTime)){setManualAlignStatus("Hãy nạp file âm thanh trước khi gán câu.");return;}
+    const usesPlayerTime=Number.isFinite(time);
+    const nextTime=usesPlayerTime?Number(time):audio?.currentTime;
+    if(!usesPlayerTime&&(!alignmentFile||!audio)){setManualAlignStatus("Hãy nạp file âm thanh trước khi dùng thanh gán phía trên.");return;}
+    if(!Number.isFinite(nextTime)){setManualAlignStatus("Chưa đọc được vị trí đang phát. Hãy bấm PHÁT rồi gán lại câu.");return;}
     const value=Math.max(0,Number(nextTime));
-    const previous=Array.from({length:index},(_,offset)=>index-offset-1).find((line)=>Number.isFinite(manualLineTimes[line]));
-    const following=Array.from({length:Math.max(0,baseTimeline.length-index-1)},(_,offset)=>index+offset+1).find((line)=>Number.isFinite(manualLineTimes[line]));
-    if(previous!==undefined&&value<=manualLineTimes[previous]){setManualAlignStatus(`Mốc câu ${index+1} phải nằm sau câu ${previous+1}. Hãy phát tới đúng vị trí rồi gán lại.`);return;}
-    if(following!==undefined&&value>=manualLineTimes[following]){setManualAlignStatus(`Mốc câu ${index+1} phải nằm trước câu ${following+1}. Hãy sửa hoặc xóa mốc sau trước.`);return;}
-    setManualLineTimes((current)=>({...current,[index]:Number(value.toFixed(3))}));
-    const nextIndex=Math.min(baseTimeline.length-1,index+1);
+    const current=manualLineTimesRef.current;
+    const previous=Array.from({length:index},(_,offset)=>index-offset-1).find((line)=>Number.isFinite(current[line]));
+    const following=Array.from({length:Math.max(0,baseTimeline.length-index-1)},(_,offset)=>index+offset+1).find((line)=>Number.isFinite(current[line]));
+    if(previous!==undefined&&value<=current[previous]){setManualAlignStatus(`Mốc câu ${index+1} phải nằm sau câu ${previous+1}. Hãy phát tới đúng vị trí rồi gán lại.`);return;}
+    if(following!==undefined&&value>=current[following]){setManualAlignStatus(`Mốc câu ${index+1} phải nằm trước câu ${following+1}. Hãy sửa hoặc xóa mốc sau trước.`);return;}
+    const nextTimes={...current,[index]:Number(value.toFixed(3))};
+    manualLineTimesRef.current=nextTimes;setManualLineTimes(nextTimes);
+    const nextIndex=nextUnassignedLine(index,nextTimes,baseTimeline.length);
     setManualCursor(nextIndex);
-    setManualAlignStatus(`Đã gán câu ${String(index+1).padStart(2,"0")} tại ${clockTime(value)}${index+1<baseTimeline.length?` · đang chờ câu ${String(index+2).padStart(2,"0")}`:" · đã đến câu cuối"}.`);
+    const complete=Object.keys(nextTimes).length>=baseTimeline.length;
+    setManualAlignStatus(`Đã gán câu ${String(index+1).padStart(2,"0")} tại ${clockTime(value)}${complete?" · đã gán đủ toàn bộ câu":` · đang chờ câu ${String(nextIndex+1).padStart(2,"0")}`}.`);
   };
 
   const removeManualLine=(index:number)=>{
-    setManualLineTimes((current)=>{const next={...current};delete next[index];return next;});
+    const next={...manualLineTimesRef.current};delete next[index];manualLineTimesRef.current=next;setManualLineTimes(next);
     setManualCursor(index);setManualAlignStatus(`Đã xóa mốc câu ${String(index+1).padStart(2,"0")}. Phát tới đúng chỗ và gán lại.`);
+  };
+
+  const editManualLine=(index:number,raw:string)=>{
+    const next={...manualLineTimesRef.current};
+    if(raw==="")delete next[index];
+    else{const value=Number(raw);if(!Number.isFinite(value)||value<0)return;next[index]=Number(value.toFixed(3));}
+    manualLineTimesRef.current=next;setManualLineTimes(next);setManualCursor(index);
   };
 
   const seekManualAudio=(seconds:number)=>{
@@ -713,16 +775,17 @@ export default function LyricStudio(){
   };
 
   const followManualTimeline=(time:number)=>{
-    const assigned=Object.entries(manualLineTimes)
+    const current=manualLineTimesRef.current;
+    const assigned=Object.entries(current)
       .map(([index,value])=>({index:Number(index),time:Number(value)}))
       .filter((item)=>Number.isInteger(item.index)&&Number.isFinite(item.time))
       .sort((a,b)=>a.time-b.time);
     if(!assigned.length)return;
+    if(time+.05<assigned[0].time){setManualCursor(assigned[0].index);return;}
     let active=assigned[0];
     for(const item of assigned){if(time+.05>=item.time)active=item;else break;}
-    const nextIndex=Math.min(baseTimeline.length-1,active.index+1);
-    const shouldWaitForNext=!Number.isFinite(manualLineTimes[nextIndex])&&nextIndex>active.index&&time>=active.time+.25;
-    setManualCursor(shouldWaitForNext?nextIndex:active.index);
+    const immediateNext=active.index+1;
+    setManualCursor(immediateNext<baseTimeline.length&&!Number.isFinite(current[immediateNext])?immediateNext:active.index);
   };
 
   const addReplyNote=()=>{
@@ -777,7 +840,7 @@ export default function LyricStudio(){
           <div className="auto-video-align"><div><small>TỰ ĐỘNG NGHE & TẠO LRC · BỘ CĂN CHỈNH V6.1 TURBO</small><b>{hasAutoTimeline?hasAlignmentConfidence?`ĐÃ CĂN ${autoVideoTimes.length} CÂU · ${autoLineConfidences.filter((score)=>score<.5).length} CÂU CẦN KIỂM TRA`:`TIMELINE CŨ · HÃY CHẠY LẠI BỘ V6.1`:"NẠP ĐÚNG FILE ÂM THANH CỦA VIDEO"}</b><span>Nghe bằng mô hình Large V3 Turbo, đối chiếu lyric và tự tách giọng khi cần · miễn phí trên máy.</span></div><label className="auto-audio-picker">{alignmentFile?`✓ ${alignmentFile.name}`:"+ CHỌN FILE ÂM THANH"}<input type="file" accept="audio/*,.wav,.mp3,.m4a,.flac,.aac,.ogg" onChange={(event)=>{const file=event.target.files?.[0]??null;setAlignmentFile(file);setAutoAlignStatus(file?`Đã nạp ${file.name}. Sẵn sàng căn ${baseTimeline.length} câu và tạo LRC.`:"Chưa nạp file âm thanh.");}}/></label><button type="button" onClick={()=>void autoAlignVideoLyrics()} disabled={autoAlignBusy||!alignmentFile||!baseTimeline.length}>{autoAlignBusy?"ĐANG NGHE · CÓ THỂ TỰ TÁCH GIỌNG…":"TỰ ĐỘNG NGHE & TẠO LRC"}</button>{hasAutoTimeline&&<button type="button" className="clear-auto-timeline" onClick={()=>{setAutoVideoTimes([]);setAutoLineConfidences([]);setVideoTimeOffset(0);setAutoAlignStatus("Đã bỏ timeline tự động; hệ thống quay về lyric ban đầu.");}}>BỎ TIMELINE</button>}<p>{autoAlignStatus}</p></div>
           <section className="manual-timeline-panel">
             <div className="manual-timeline-head"><div><small>GÁN TIMELINE TỪNG CÂU · CHÍNH XÁC THỦ CÔNG</small><b>{manualAssignedCount}/{baseTimeline.length} CÂU ĐÃ GÁN</b><span>Phát file âm thanh. Khi câu đang chọn bắt đầu được hát, bấm GÁN; hệ thống tự chuyển sang câu kế tiếp.</span></div><button type="button" onClick={()=>{setManualLineTimes({});setManualCursor(0);setManualAlignStatus("Đã xóa toàn bộ mốc thủ công. Bắt đầu lại từ câu 01.");}} disabled={!manualAssignedCount}>XÓA TẤT CẢ</button></div>
-            {manualAudioUrl?<><audio ref={manualAudioRef} src={manualAudioUrl} controls preload="metadata" onLoadedMetadata={(event)=>setManualAudioDuration(event.currentTarget.duration||0)} onTimeUpdate={(event)=>{const time=event.currentTarget.currentTime||0;setManualAudioTime(time);followManualTimeline(time);}} onSeeked={(event)=>followManualTimeline(event.currentTarget.currentTime||0)}/><div className="manual-now"><span>CÂU {String(manualCursor+1).padStart(2,"0")} / {String(baseTimeline.length).padStart(2,"0")}{Number.isFinite(manualCursorAssignedTime)?" · ✓ ĐÃ GÁN":""}</span><b>{baseTimeline[manualCursor]?.text??"Chưa có lyric"}</b><output>{Number.isFinite(manualCursorAssignedTime)?`MỐC ${clockTime(manualCursorAssignedTime)} · PHÁT ${clockTime(manualAudioTime)}`:`${clockTime(manualAudioTime)} / ${clockTime(manualAudioDuration)}`}</output></div><div className="manual-timeline-controls"><button type="button" onClick={()=>seekManualAudio(-1)}>−1 GIÂY</button><button type="button" onClick={()=>setManualCursor((value)=>Math.max(0,value-1))}>← CÂU TRƯỚC</button><button type="button" className="manual-assign-main" onClick={()=>assignManualLine()} disabled={!baseTimeline.length}>{Number.isFinite(manualCursorAssignedTime)?`✓ ĐÃ GÁN ${clockTime(manualCursorAssignedTime)} · GÁN LẠI TẠI ${clockTime(manualAudioTime)}`:`✓ GÁN CÂU NÀY TẠI ${clockTime(manualAudioTime)}`}</button><button type="button" onClick={()=>setManualCursor((value)=>Math.min(baseTimeline.length-1,value+1))}>CÂU SAU →</button><button type="button" onClick={()=>removeManualLine(manualCursor)} disabled={!Number.isFinite(manualLineTimes[manualCursor])}>XÓA MỐC CÂU</button></div></>:<p className="manual-no-audio">Chọn file âm thanh ở ô phía trên để mở bộ phát và bắt đầu gán từng câu.</p>}
+            {manualAudioUrl?<><audio ref={manualAudioRef} src={manualAudioUrl} controls preload="metadata" onLoadedMetadata={(event)=>setManualAudioDuration(event.currentTarget.duration||0)} onTimeUpdate={(event)=>{const time=event.currentTarget.currentTime||0;setManualAudioTime(time);followManualTimeline(time);}} onSeeked={(event)=>followManualTimeline(event.currentTarget.currentTime||0)}/><div className="manual-now-pair"><article className="manual-pair-assigned"><small>CÂU BÊN TRÁI · ĐÃ GÁN</small>{manualPairLeftIndex>=0?<><span>CÂU {String(manualPairLeftIndex+1).padStart(2,"0")} · MỐC {clockTime(manualLineTimes[manualPairLeftIndex])}</span><b>{baseTimeline[manualPairLeftIndex]?.text??""}</b></>:<><span>CHƯA CÓ MỐC</span><b>Hãy gán câu đầu tiên khi lời hát bắt đầu.</b></>}</article><article className="manual-pair-next"><small>CÂU BÊN PHẢI · KẾ TIẾP</small><span>CÂU {String(manualPairRightIndex+1).padStart(2,"0")} / {String(baseTimeline.length).padStart(2,"0")}{Number.isFinite(manualLineTimes[manualPairRightIndex])?` · ✓ ĐÃ GÁN ${clockTime(manualLineTimes[manualPairRightIndex])}`:" · CHỜ GÁN"}</span><b>{baseTimeline[manualPairRightIndex]?.text??"Chưa có lyric"}</b></article></div><div className="manual-play-clock">ĐANG PHÁT <b>{clockTime(manualAudioTime)}</b> / {clockTime(manualAudioDuration)}</div><div className="manual-timeline-controls"><button type="button" onClick={()=>seekManualAudio(-1)}>−1 GIÂY</button><button type="button" onClick={()=>setManualCursor((value)=>Math.max(0,value-1))}>← CÂU TRƯỚC</button><button type="button" className="manual-assign-main" onClick={()=>assignManualLine()} disabled={!baseTimeline.length}>{Number.isFinite(manualCursorAssignedTime)?`✓ ĐÃ GÁN ${clockTime(manualCursorAssignedTime)} · GÁN LẠI TẠI ${clockTime(manualAudioTime)}`:`✓ GÁN CÂU NÀY TẠI ${clockTime(manualAudioTime)}`}</button><button type="button" onClick={()=>setManualCursor((value)=>Math.min(baseTimeline.length-1,value+1))}>CÂU SAU →</button><button type="button" onClick={()=>removeManualLine(manualCursor)} disabled={!Number.isFinite(manualLineTimes[manualCursor])}>XÓA MỐC CÂU</button></div></>:<p className="manual-no-audio">Chọn file âm thanh ở ô phía trên để mở bộ phát và bắt đầu gán từng câu.</p>}
             <p className="manual-align-status">{manualAlignStatus}</p>
           </section>
           <div className="video-sync-tools"><div><small>BÙ TOÀN BỘ TIMELINE THEO INTRO VIDEO</small><span>Công cụ này chỉ dịch chuyển đồng đều cả bài. Muốn sửa riêng từng câu, dùng bảng GÁN TIMELINE TỪNG CÂU phía trên.</span></div><label>CÂU MỐC<input type="number" min="1" max={Math.max(1,timeline.length)} value={Math.min(syncAnchorLine+1,Math.max(1,timeline.length))} onChange={(event)=>setSyncAnchorLine(Math.max(0,Math.min(timeline.length-1,Number(event.target.value)-1||0)))}/></label><button type="button" onClick={alignVideoToLyric} disabled={!timeline.length||playerState==="LOADING"||playerState==="VIDEO_ERROR"}>BÙ TOÀN BỘ THEO CÂU MỐC</button><button type="button" className="sync-reset" onClick={()=>{setVideoTimeOffset(0);setDirectVideoNote("Đã bỏ phần bù intro; timeline từng câu vẫn được giữ nguyên.");}}>BỎ BÙ INTRO</button><output>{hasCompleteManualTimeline?`ĐÃ GÁN ${manualAssignedCount}/${baseTimeline.length}`:hasAutoTimeline?`AI ${autoVideoTimes.length}/${baseTimeline.length}`:Math.abs(videoTimeOffset)<.01?"TIMELINE GỐC":`VIDEO ${videoTimeOffset>0?"+":""}${videoTimeOffset.toFixed(2)} GIÂY`}</output></div>
@@ -815,7 +878,7 @@ export default function LyricStudio(){
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing ":"")+(index===manualCursor?"manual-selected ":"")+(Number.isFinite(manualLineTimes[index])?"manual-assigned ":hasAlignmentConfidence?(autoLineConfidences[index]>=.7?"align-good":autoLineConfidences[index]>=.5?"align-medium":"align-review"):"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{clockTime(line.time)}</i>{Number.isFinite(manualLineTimes[index])?<em>✓ ĐÃ GÁN</em>:hasAlignmentConfidence&&<em>{autoLineConfidences[index]>=.7?"✓ TỐT":autoLineConfidences[index]>=.5?"~ KIỂM TRA":"! CẦN SỬA"}</em>}</span>
             <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
-            <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>{const raw=event.currentTarget.value;setManualLineTimes((current)=>{const next={...current};if(raw==="")delete next[index];else{const value=Number(raw);if(Number.isFinite(value)&&value>=0)next[index]=value;}return next;});}}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index)} disabled={!manualAudioUrl}>GÁN TẠI {clockTime(manualAudioTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button><button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button></div>
+            <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>editManualLine(index,event.currentTarget.value)}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index,currentTime)} disabled={playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN THEO NHẠC {clockTime(currentTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button><button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button></div>
           </div>)}
         </div>}
       </div>
