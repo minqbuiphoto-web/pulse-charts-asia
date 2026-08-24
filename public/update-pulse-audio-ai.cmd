@@ -11,8 +11,9 @@ echo Dang cap nhat bo dung de font tren review va MP4 giong nhau...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { (New-Object Net.WebClient).DownloadFile('%SERVER_URL%','%SERVER_NEW%'); if((Get-Item '%SERVER_NEW%').Length -lt 10000){exit 2}; exit 0 } catch { exit 1 }"
 if errorlevel 1 goto download_failed
 
-powershell -NoProfile -ExecutionPolicy Bypass -Command "$ids=@(); try { $ids+=(Get-NetTCPConnection -LocalPort 8765 -State Listen -ErrorAction Stop).OwningProcess } catch {}; try { $ids+=Get-CimInstance Win32_Process -ErrorAction Stop ^| Where-Object { $_.CommandLine -like '*PulseChartsAudioAI*server.py*' } ^| Select-Object -ExpandProperty ProcessId } catch {}; $ids ^| Sort-Object -Unique ^| Where-Object { $_ -and $_ -ne $PID } ^| ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }"
-timeout /t 2 /nobreak >nul
+if exist "%SERVER_FILE%" copy /Y "%SERVER_FILE%" "%ENGINE_DIR%\server.py.before-font-fix.bak" >nul
+for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8765 .*LISTENING"') do taskkill /PID %%P /F >nul 2>nul
+powershell -NoProfile -Command "Start-Sleep -Seconds 2"
 copy /Y "%SERVER_NEW%" "%SERVER_FILE%" >nul
 
 if exist "%ENGINE_DIR%\start-hidden.vbs" (
@@ -20,27 +21,27 @@ if exist "%ENGINE_DIR%\start-hidden.vbs" (
 ) else (
   start "" /min "%ENGINE_DIR%\start.cmd" --silent
 )
-timeout /t 5 /nobreak >nul
+powershell -NoProfile -Command "Start-Sleep -Seconds 5"
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { $h=Invoke-RestMethod 'http://127.0.0.1:8765/health' -TimeoutSec 5; if($h.mvExtendedFontFamilies -and $h.mvFontWeightStyleParity){exit 0}; exit 2 } catch { exit 1 }"
 if errorlevel 1 goto start_failed
 
 echo.
 echo Da cap nhat xong. Font tren review va file MP4 bay gio dung cung mot kieu.
 echo Quay lai MV Studio, bam KIEM TRA KET NOI roi xuat lai MV.
-pause
+if /I not "%~1"=="--silent" pause
 exit /b 0
 
 :not_installed
 echo May chua co Pulse Charts Audio AI. Hay dung nut CAI MOT LAN tren MV Studio.
-pause
+if /I not "%~1"=="--silent" pause
 exit /b 2
 
 :download_failed
 echo Khong tai duoc ban cap nhat. Hay kiem tra Internet roi chay lai.
-pause
+if /I not "%~1"=="--silent" pause
 exit /b 1
 
 :start_failed
 echo Da chep ban moi nhung bo dung chua khoi dong. Hay mo lai Pulse Charts Audio AI roi kiem tra ket noi.
-pause
+if /I not "%~1"=="--silent" pause
 exit /b 1
