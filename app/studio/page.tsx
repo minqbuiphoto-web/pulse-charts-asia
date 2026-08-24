@@ -5,8 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import "./studio.css";
 
 type LookupState="idle"|"searching"|"ready"|"error";
-type LyricsPayload={lyrics?:string;syncedLyrics?:string;matchedTrack?:string;matchedArtist?:string;matchedDuration?:number|null};
-type SearchResult={videoId:string;title:string;artist:string;lyrics:string;syncedLyrics:string};
+type LyricLanguage="auto"|"ko"|"zh"|"ja";
+type LyricsPayload={lyrics?:string;syncedLyrics?:string;matchedTrack?:string;matchedArtist?:string;matchedDuration?:number|null;detectedLanguage?:string;requestedLanguage?:string;error?:string};
+type SearchResult={videoId:string;title:string;artist:string;lyrics:string;syncedLyrics:string;lyricLanguage?:string};
 type StudioSong=SearchResult;
 type TimedLine={time:number;text:string};
 type ChatMessage={role:"assistant"|"user";text:string};
@@ -67,6 +68,17 @@ function parseTimedLyrics(value:string){
 
 function plainLines(value:string){
   return value.split(/\r?\n+/).map((line)=>line.trim()).filter(Boolean);
+}
+
+function inferredLyricLanguage(value:string):LyricLanguage{
+  if(/[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/u.test(value))return "ko";
+  if(/[\u3040-\u30ff\u31f0-\u31ff]/u.test(value))return "ja";
+  if(/[\u3400-\u4dbf\u4e00-\u9fff]/u.test(value))return "zh";
+  return "auto";
+}
+
+function lyricLanguageLabel(value?:string){
+  return value==="ko"?"LRC TIẾNG HÀN":value==="zh"?"LRC TIẾNG HOA":value==="ja"?"LRC TIẾNG NHẬT":"LRC CHƯA XÁC ĐỊNH";
 }
 
 const PROJECT_LIBRARY_KEY="pulse-studio::project-library-v1";
@@ -226,6 +238,7 @@ async function copyText(value:string){
 
 export default function LyricStudio(){
   const [query,setQuery]=useState("");
+  const [lyricLanguagePreference,setLyricLanguagePreference]=useState<LyricLanguage>("auto");
   const [lookupState,setLookupState]=useState<LookupState>("idle");
   const [lookupNote,setLookupNote]=useState("Tìm bằng tên bài hát, có thể kèm hoặc không kèm tên ca sĩ.");
   const [result,setResult]=useState<SearchResult|null>(null);
@@ -412,26 +425,29 @@ export default function LyricStudio(){
       const encoded=encodeURIComponent(term);
       const videoResponse=await fetch("/api/youtube-search?q="+encoded+"%20official%20music%20video",{signal:AbortSignal.timeout(12000)});
       if(!videoResponse.ok)throw new Error("Không tìm thấy video YouTube có thể phát.");
-      const video=await videoResponse.json() as {videoId?:string;durationSeconds?:number|null;channel?:string};
+      const video=await videoResponse.json() as {videoId?:string;durationSeconds?:number|null;channel?:string;title?:string};
       if(!video.videoId)throw new Error("Kết quả video chưa đầy đủ.");
       const videoArtist=String(video.channel??"").replace(/\s*-\s*Topic\s*$/i,"").trim();
       const lyricsParams=new URLSearchParams({title:term,artist:videoArtist});
+      const requestedLanguage=lyricLanguagePreference==="auto"?inferredLyricLanguage(`${term} ${video.title??""} ${videoArtist}`):lyricLanguagePreference;
+      if(requestedLanguage!=="auto")lyricsParams.set("language",requestedLanguage);
       if(Number.isFinite(video.durationSeconds)&&Number(video.durationSeconds)>0)lyricsParams.set("duration",String(Math.round(Number(video.durationSeconds))));
       const lyricsResponse=await fetch("/api/lyrics-search?"+lyricsParams.toString(),{signal:AbortSignal.timeout(12000)});
       let lyricsPayload:LyricsPayload={};
-      if(lyricsResponse.ok)lyricsPayload=await lyricsResponse.json() as LyricsPayload;
+      try{lyricsPayload=await lyricsResponse.json() as LyricsPayload;}catch{}
       const nextResult:SearchResult={
         videoId:video.videoId,
         title:lyricsPayload.matchedTrack?.trim()||term,
         artist:lyricsPayload.matchedArtist?.trim()||"Artist from YouTube result",
         lyrics:String(lyricsPayload.lyrics??"").trim(),
-        syncedLyrics:String(lyricsPayload.syncedLyrics??"").trim()
+        syncedLyrics:String(lyricsPayload.syncedLyrics??"").trim(),
+        lyricLanguage:lyricsPayload.detectedLanguage
       };
       setResult(nextResult);setLookupState("ready");
       const videoSeconds=Number(video.durationSeconds)||0;
       const lyricSeconds=Number(lyricsPayload.matchedDuration)||0;
       const durationMatch=videoSeconds>0&&lyricSeconds>0&&Math.abs(videoSeconds-lyricSeconds)<=8;
-      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?"Đã tìm thấy lyric đồng bộ đúng bản — sẵn sàng chạy sáng từng câu.":durationMatch?`Đã chọn lyric đúng bản (${Math.round(lyricSeconds)}s) gần video (${Math.round(videoSeconds)}s). Bản này chưa có mốc từng câu; nạp file âm thanh để bộ nghe tự gắn chính xác.`:"Đã tìm thấy lyric thường nhưng chưa có mốc từng câu — nạp file âm thanh để bộ nghe tự gắn chính xác."):"Đã tìm thấy video nhưng chưa có lyric. Bạn có thể dán lyric gốc sau khi đưa bài vào studio.");
+      setLookupNote(nextResult.lyrics?(nextResult.syncedLyrics?`Đã tìm thấy ${lyricLanguageLabel(nextResult.lyricLanguage).toLocaleLowerCase("vi")} đồng bộ đúng bản — sẵn sàng chạy sáng từng câu.`:durationMatch?`Đã chọn lyric đúng bản (${Math.round(lyricSeconds)}s) gần video (${Math.round(videoSeconds)}s). Bản này chưa có mốc từng câu; nạp file âm thanh để bộ nghe tự gắn chính xác.`:"Đã tìm thấy lyric thường nhưng chưa có mốc từng câu — nạp file âm thanh để bộ nghe tự gắn chính xác."):lyricsPayload.error||"Đã tìm thấy video nhưng chưa có lyric đúng ngôn ngữ. Bạn có thể đổi mục NGÔN NGỮ LỜI GỐC rồi tìm lại.");
     }catch(error){
       setLookupState("error");setLookupNote(error instanceof Error?error.message:"Tìm kiếm thất bại. Hãy nhập rõ hơn tên bài hát và ca sĩ.");
     }
@@ -813,11 +829,12 @@ export default function LyricStudio(){
 
     <section className="studio-search">
       <label><span>TÊN BÀI HÁT / CA SĨ</span><div><input value={query} onChange={(event)=>setQuery(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")void searchSong();}} placeholder="Ví dụ: 光年之外 G.E.M. hoặc Through the Night IU"/><button onClick={searchSong} disabled={lookupState==="searching"||!query.trim()}>{lookupState==="searching"?"ĐANG TÌM…":"TÌM BÀI HÁT"}</button></div></label>
+      <label className="lyric-language-choice"><span>NGÔN NGỮ LỜI GỐC</span><select value={lyricLanguagePreference} onChange={(event)=>setLyricLanguagePreference(event.target.value as LyricLanguage)}><option value="auto">TỰ NHẬN DIỆN</option><option value="ko">TIẾNG HÀN</option><option value="zh">TIẾNG HOA</option><option value="ja">TIẾNG NHẬT</option></select><small>Chọn TIẾNG HÀN sẽ loại hoàn toàn LRC bản Nhật có cùng tên bài.</small></label>
       <p className={"lookup-note "+lookupState}>{lookupNote}</p>
       {!song&&<div className="direct-video-lookup"><span>HOẶC DÁN LINK YOUTUBE TRỰC TIẾP</span><div><input value={directVideoUrl} onChange={(event)=>setDirectVideoUrl(event.target.value)} onKeyDown={(event)=>{if(event.key==="Enter")applyDirectVideo();}} placeholder="youtube.com/watch…, youtu.be…, Shorts hoặc Live…"/><button type="button" onClick={applyDirectVideo} disabled={!directVideoUrl.trim()}>NHẬN LINK</button></div><small>{directVideoNote}</small></div>}
       {result&&<article className="search-result">
         <div className="result-disc"><i/><b>BEST<br/>MATCH</b></div>
-        <div><small>ĐÃ TÌM THẤY BÀI</small><h2>{result.title}</h2><p>{result.artist}</p><span>{result.syncedLyrics?"LYRIC ĐỒNG BỘ":result.lyrics?"LYRIC THƯỜNG · TỰ CANH GIỜ":"CHỈ CÓ VIDEO · TỰ DÁN LYRIC"}</span></div>
+        <div><small>ĐÃ TÌM THẤY BÀI</small><h2>{result.title}</h2><p>{result.artist}</p><span>{result.lyrics?`${lyricLanguageLabel(result.lyricLanguage)} · ${result.syncedLyrics?"ĐỒNG BỘ":"TỰ CANH GIỜ"}`:"CHỈ CÓ VIDEO · TỰ DÁN LYRIC"}</span></div>
         <a href={"https://www.youtube.com/watch?v="+result.videoId} target="_blank" rel="noreferrer">KIỂM TRA ↗</a>
         <button onClick={applySong}>ĐƯA VÀO STUDIO</button>
       </article>}
