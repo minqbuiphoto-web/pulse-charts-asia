@@ -40,6 +40,8 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+__pycache__/
+*.py[cod]
 # local publishing tools and audit output
 /.tools/
 /.audit-*.json
