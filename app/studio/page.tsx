@@ -70,6 +70,12 @@ function plainLines(value:string){
   return value.split(/\r?\n+/).map((line)=>line.trim()).filter(Boolean);
 }
 
+function customLyricLines(value:string){
+  return plainLines(value)
+    .map((line)=>line.replace(/^\[(?:ar|ti|al|by|offset|length|re|ve):[^\]]*\]\s*/i,"").replace(/^\[[0-9:.]+\]\s*/,"").trim())
+    .filter(Boolean);
+}
+
 function inferredLyricLanguage(value:string):LyricLanguage{
   if(/[\u1100-\u11ff\u3130-\u318f\uac00-\ud7af]/u.test(value))return "ko";
   if(/[\u3040-\u30ff\u31f0-\u31ff]/u.test(value))return "ja";
@@ -244,6 +250,8 @@ export default function LyricStudio(){
   const [result,setResult]=useState<SearchResult|null>(null);
   const [song,setSong]=useState<StudioSong|null>(null);
   const [manualLyrics,setManualLyrics]=useState("");
+  const [customLrcDraft,setCustomLrcDraft]=useState("");
+  const [customLrcNote,setCustomLrcNote]=useState("Dán LRC khác hoặc tải file .lrc nếu bản hệ thống chọn không đúng.");
   const [translations,setTranslations]=useState<Record<number,string>>({});
   const [literalMeanings,setLiteralMeanings]=useState<Record<number,string>>({});
   const [tonePatterns,setTonePatterns]=useState<Record<number,string>>({});
@@ -571,6 +579,22 @@ export default function LyricStudio(){
     updateTonePattern(lineIndex,slots.join(","));
   };
 
+  const applyCustomLrc=()=>{
+    if(!song||!customLrcDraft.trim())return;
+    const timed=parseTimedLyrics(customLrcDraft);
+    const lines=timed.length?timed.map((line)=>line.text):customLyricLines(customLrcDraft);
+    if(!lines.length){setCustomLrcNote("Không đọc được câu lyric nào. Hãy dán LRC chuẩn hoặc mỗi câu trên một dòng.");return;}
+    const next:StudioSong={...song,lyrics:lines.join("\n"),syncedLyrics:timed.length?customLrcDraft.trim():"",lyricLanguage:inferredLyricLanguage(lines.join("\n"))};
+    setSong(next);setAutoVideoTimes([]);setAutoLineConfidences([]);setManualLineTimes({});setManualCursor(0);setVideoTimeOffset(0);
+    setCustomLrcNote(timed.length?`Đã áp LRC của bạn: ${timed.length} câu có mốc thời gian. Timeline cũ đã được bỏ, lời Việt và nghĩa sát vẫn được giữ.`:`Đã áp lyric của bạn: ${lines.length} câu. File chưa có mốc thời gian; bạn có thể dùng bộ nghe để tạo LRC.`);
+    setCustomLrcDraft("");
+  };
+
+  const loadCustomLrcFile=async(file:File|null)=>{
+    if(!file)return;
+    try{setCustomLrcDraft(await file.text());setCustomLrcNote(`Đã nạp ${file.name}. Kiểm tra nội dung rồi bấm ÁP LRC NÀY.`);}catch{setCustomLrcNote("Không thể đọc file này. Hãy dùng file .lrc hoặc .txt mã UTF-8.");}
+  };
+
   const pasteToneSlots=(lineIndex:number,slotIndex:number,value:string)=>{
     const pasted=pastedToneValues(value);
     if(!pasted.length)return;
@@ -880,6 +904,12 @@ export default function LyricStudio(){
             <button className={followPlayback?"follow-on":""} onClick={()=>setFollowPlayback((value)=>!value)}>{followPlayback?"ĐANG BÁM THEO":"ĐANG KHÓA VỊ TRÍ"}</button>
           </div>
         </div>
+
+        <section className="custom-lrc-panel">
+          <div className="custom-lrc-head"><div><small>LRC DỰ PHÒNG · ƯU TIÊN BẢN BẠN KIỂM TRA</small><h3>Áp LRC khác nếu hệ thống chọn sai</h3><p>Dán toàn bộ nội dung LRC hoặc nạp file `.lrc`. Có mốc thời gian thì dùng ngay; chỉ có lời thì vẫn có thể dùng bộ nghe để tạo timeline sau.</p></div><label className="custom-lrc-upload">+ NẠP FILE .LRC<input type="file" accept=".lrc,.txt,text/plain" onChange={(event)=>void loadCustomLrcFile(event.target.files?.[0]??null)}/></label></div>
+          <textarea value={customLrcDraft} onChange={(event)=>setCustomLrcDraft(event.target.value)} placeholder={"[00:12.50] 첫 번째 câu lyric\n[00:18.20] 두 번째 câu lyric\n\nHoặc dán lyric thường, mỗi câu một dòng…"}/>
+          <div className="custom-lrc-actions"><button type="button" onClick={applyCustomLrc} disabled={!customLrcDraft.trim()}>ÁP LRC NÀY VÀO BÀI</button><span>{customLrcNote}</span></div>
+        </section>
 
         {!timeline.length&&<div className="manual-lyrics"><h3>Không tìm thấy lyric gốc</h3><p>Dán lyric gốc vào dưới đây. Mỗi dòng không trống sẽ trở thành một câu dịch và được canh giờ gần đúng.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Dán mỗi câu lyric trên một dòng…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>DÙNG LYRIC NÀY</button></div>}
 
