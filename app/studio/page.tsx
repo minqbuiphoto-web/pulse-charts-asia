@@ -122,17 +122,25 @@ function pastedToneValues(value:string){
   return upper.match(/[NHS]/g)??[];
 }
 
-function normalizedLine(value:string){
-  return value.normalize("NFKC").toLocaleLowerCase("en").replace(/^\s*(?:[-–—•*]|\d+[.)])\s*/,"").replace(/\s+/g," ").trim();
-}
-
-function literalLines(value:string,originals:string[]){
-  const originalSet=new Set(originals.map(normalizedLine));
+function literalLines(value:string){
   return value.split(/\r?\n/)
     .map((line)=>line.replace(/^\s*(?:[-–—•*]|\d+[.)])\s*/,"").trim())
     .filter(Boolean)
-    .filter((line)=>!originalSet.has(normalizedLine(line)))
     .filter((line)=>!/^(?:bản dịch|dịch sát nghĩa|nghĩa tiếng việt)\s*:?$/i.test(line));
+}
+
+function hasVietnameseMarks(value:string){
+  return /[àáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđ]/iu.test(value);
+}
+
+function formatLiteralMeanings(lines:string[],lineCount:number){
+  const pairCount=Math.min(Math.floor(lines.length/2),lineCount);
+  const looksBilingual=pairCount>0&&Array.from({length:pairCount},(_,index)=>{
+    const first=lines[index*2]??"",second=lines[index*2+1]??"";
+    return !hasVietnameseMarks(first)&&hasVietnameseMarks(second);
+  }).every(Boolean);
+  if(looksBilingual)return Array.from({length:pairCount},(_,index)=>`${lines[index*2]}\n${lines[index*2+1]}`);
+  return lines.slice(0,lineCount);
 }
 
 function safeFileName(value:string){
@@ -546,14 +554,16 @@ export default function LyricStudio(){
 
   const applyLiteralDraft=()=>{
     if(!song||!timeline.length||!literalDraft.trim())return;
-    const parsed=literalLines(literalDraft,timeline.map((line)=>line.text));
+    const sourceLines=literalLines(literalDraft);
+    const parsed=formatLiteralMeanings(sourceLines,timeline.length);
     const next:Record<number,string>={...literalMeanings};
     parsed.slice(0,timeline.length).forEach((line,index)=>{next[index]=line;});
     setLiteralMeanings(next);
     try{localStorage.setItem(literalStorageKey(song),JSON.stringify(next));}catch{}
+    const bilingual=parsed.length>0&&parsed.some((value)=>value.includes("\n"));
     setLiteralNote(parsed.length===timeline.length
-      ?"Đã ghép đủ "+parsed.length+" câu dịch sát nghĩa với lời gốc."
-      :"Đã ghép "+Math.min(parsed.length,timeline.length)+"/"+timeline.length+" câu. Bạn có thể sửa trực tiếp từng dòng còn thiếu.");
+      ?`Đã ghép đủ ${parsed.length} câu ${bilingual?"song ngữ Anh + Việt":"dịch sát nghĩa"} với lời gốc.`
+      :`Đã ghép ${Math.min(parsed.length,timeline.length)}/${timeline.length} câu${bilingual?" song ngữ Anh + Việt":""}. Bạn có thể sửa trực tiếp từng dòng còn thiếu.`);
   };
 
   const updateLiteralMeaning=(index:number,value:string)=>{
@@ -914,8 +924,8 @@ export default function LyricStudio(){
         {!timeline.length&&<div className="manual-lyrics"><h3>Không tìm thấy lyric gốc</h3><p>Dán lyric gốc vào dưới đây. Mỗi dòng không trống sẽ trở thành một câu dịch và được canh giờ gần đúng.</p><textarea value={manualLyrics} onChange={(event)=>setManualLyrics(event.target.value)} placeholder="Dán mỗi câu lyric trên một dòng…"/><button onClick={applyManualLyrics} disabled={!manualLyrics.trim()}>DÙNG LYRIC NÀY</button></div>}
 
         {timeline.length>0&&<section className="literal-import">
-          <div className="literal-import-head"><div><small>BƯỚC ĐỆM · DỊCH SÁT NGHĨA</small><h3>Áp nghĩa tiếng Việt theo từng câu</h3><p>Bản dịch này dùng để hiểu đúng nội dung; ô “Lời Việt” bên dưới vẫn dành cho câu hát bạn sáng tác.</p></div><span>{Object.values(literalMeanings).filter((value)=>value.trim()).length}/{timeline.length} CÂU</span></div>
-          <textarea value={literalDraft} onChange={(event)=>setLiteralDraft(event.target.value)} placeholder={"Dán toàn bộ bản dịch sát nghĩa vào đây. Có thể dán dạng:\nLời gốc câu 1\nNghĩa tiếng Việt câu 1\nLời gốc câu 2\nNghĩa tiếng Việt câu 2"} />
+          <div className="literal-import-head"><div><small>BƯỚC ĐỆM · DỊCH SÁT NGHĨA</small><h3>Áp nghĩa Anh + Việt theo từng câu</h3><p>Khi dán theo cặp, hệ thống giữ cả dòng tiếng Anh và tiếng Việt trong đúng một câu, không còn bỏ tiếng Anh làm lệch thứ tự. Ô “Lời Việt” bên dưới vẫn dành cho câu hát bạn sáng tác.</p></div><span>{Object.values(literalMeanings).filter((value)=>value.trim()).length}/{timeline.length} CÂU</span></div>
+          <textarea value={literalDraft} onChange={(event)=>setLiteralDraft(event.target.value)} placeholder={"Dán mỗi câu thành 2 dòng theo đúng thứ tự:\nIt's a beautiful life\nAnh sẽ ở bên cạnh em\n\nIt's a beautiful life\nAnh sẽ đứng phía sau em"} />
           <div className="literal-import-actions"><button onClick={applyLiteralDraft} disabled={!literalDraft.trim()}>ÁP VÀO TỪNG CÂU</button><button onClick={async()=>{await copyText(fullSongTranslationRequest());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP YÊU CẦU DỊCH TOÀN BÀI"}</button></div>
           <p className="literal-note">{literalNote}</p>
         </section>}
