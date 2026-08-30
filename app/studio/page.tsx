@@ -666,15 +666,34 @@ export default function LyricStudio(){
     if(index>=0)playLine(index);
   };
 
-  const downloadTranslation=()=>{
-    if(!song||!timeline.length)return;
-    const content=timeline.map((line,index)=>[line.text,literalMeanings[index]??"",translations[index]??""].filter(Boolean).join("\n")).join("\n\n");
-    const blob=new Blob([content],{type:"text/plain;charset=utf-8"});
+  const downloadTextFile=(content:string,filename:string)=>{
+    const blob=new Blob(["\ufeff",content],{type:"text/plain;charset=utf-8"});
     const url=URL.createObjectURL(blob);
     const anchor=document.createElement("a");
-    anchor.href=url;anchor.download=safeFileName(song.artist+" - "+song.title+" - Vietnamese")+".txt";
+    anchor.href=url;anchor.download=filename;
     document.body.appendChild(anchor);anchor.click();anchor.remove();
     window.setTimeout(()=>URL.revokeObjectURL(url),1000);
+  };
+
+  const downloadOriginalLyrics=()=>{
+    if(!song||!timeline.length)return;
+    const content=timeline.map((line)=>line.text.trim()).join("\n");
+    downloadTextFile(content,safeFileName(song.artist+" - "+song.title+" - Lời gốc")+".txt");
+  };
+
+  const meaningOnly=(value:string)=>{
+    const lines=value.split(/\r?\n/).map((line)=>line.trim()).filter(Boolean);
+    if(!lines.length)return "";
+    if(lines.length===1)return lines[0];
+    const vietnameseLines=lines.filter((line)=>hasVietnameseMarks(line));
+    return (vietnameseLines.length?vietnameseLines:lines.slice(-1)).join("\n");
+  };
+
+  const downloadLiteralMeaning=()=>{
+    if(!song||!timeline.length)return;
+    const content=timeline.map((_,index)=>meaningOnly(literalMeanings[index]??"")).join("\n");
+    if(!content.trim())return;
+    downloadTextFile(content,safeFileName(song.artist+" - "+song.title+" - Nghĩa tiếng Việt")+".txt");
   };
 
   const downloadLrc=()=>{
@@ -882,7 +901,7 @@ export default function LyricStudio(){
     {!song?<section className="studio-empty"><div>♪</div><h2>Bàn dịch lyric đã sẵn sàng.</h2><p>Hãy tìm một bài hát, kiểm tra kết quả rồi đưa bài vào studio để bắt đầu.</p></section>:
     <section className="studio-workspace">
       <div className="translation-column">
-        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{hasCompleteManualTimeline?"LRC ĐÃ GÁN TỪNG CÂU":song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ"}</span><button onClick={downloadTranslation} disabled={!timeline.length}>XUẤT BẢN SONG NGỮ .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={downloadLrc} disabled={!hasUsableTimeline}>TẢI FILE .LRC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
+        <div className="workspace-title"><div><small>ĐANG DỊCH</small><h2>{song.title}</h2><p>{song.artist}</p></div><div><span>{hasCompleteManualTimeline?"LRC ĐÃ GÁN TỪNG CÂU":song.syncedLyrics?"LRC ĐỒNG BỘ":"CANH GIỜ"}</span><button onClick={downloadOriginalLyrics} disabled={!timeline.length}>XUẤT LỜI GỐC .TXT</button><button onClick={downloadLiteralMeaning} disabled={!Object.values(literalMeanings).some((value)=>value.trim())}>XUẤT NGHĨA TIẾNG VIỆT .TXT</button><button onClick={downloadVietnameseWord} disabled={!Object.values(translations).some((value)=>value.trim())}>XUẤT LỜI VIỆT .DOC</button><button onClick={downloadLrc} disabled={!hasUsableTimeline}>TẢI FILE .LRC</button><button onClick={()=>exportProject()} disabled={!song}>TẢI DỰ PHÒNG .JSON</button><small className="save-note">{saveNote}</small></div></div>
 
         <section className={"direct-video-panel "+(playerState==="VIDEO_ERROR"?"has-error":"")}>
           <div><small>VIDEO YOUTUBE TRỰC TIẾP</small><b>{playerState==="VIDEO_ERROR"?"VIDEO HIỆN TẠI KHÔNG PHÁT ĐƯỢC":"THAY VIDEO MÀ KHÔNG MẤT LYRIC"}</b></div>
