@@ -1,0 +1,13 @@
+.git
+.env*
+.npm-cache
+.vercel-user-data
+.vercel-user-config
+.openai
+.site-tmp
+.tmp-runtime
+.wrangler
+.next
+node_modules
+dist
+out

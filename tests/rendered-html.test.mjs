@@ -39,7 +39,8 @@ test("renders the free MV and karaoke studio", async () => {
   const html = await response.text();
   assert.match(html, /MV CA NHẠC/);
   assert.match(html, /MV KARAOKE/);
-  assert.match(html, /XUẤT MV \.WEBM/);
+  assert.match(html, /TẠO &amp; TẢI MV/);
+  assert.match(html, /\.MP4/);
 });
 
 test("supports sentence-by-sentence literal meanings before lyric adaptation", async () => {
@@ -72,11 +73,20 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /TẢI DỰ PHÒNG \.JSON/);
 });
 
-test("exports Vietnamese lyrics as a continuous Word document", async () => {
+test("exports original lyrics and literal Vietnamese meanings separately", async () => {
   const source = await readFile(new URL("../app/studio/page.tsx", import.meta.url), "utf8");
-  assert.match(source, /XUẤT LỜI VIỆT \.DOC/);
-  assert.match(source, /application\/msword/);
-  assert.match(source, /vietnameseLines/);
+  assert.match(source, /XUẤT LỜI GỐC \.TXT/);
+  assert.match(source, /XUẤT NGHĨA TIẾNG VIỆT \.TXT/);
+  assert.match(source, /downloadLiteralMeaning/);
+  assert.doesNotMatch(source, /XUẤT LỜI VIỆT \.DOC/);
+});
+
+test("Audio Lab exposes the official Suno link player and honest download handoff", async () => {
+  const response = await render("/audio-lab/");
+  assert.equal(response.status, 200);
+  const html = await response.text();
+  assert.match(html, /LINK BÀI HÁT SUNO/);
+  assert.match(html, /KHÔNG NHẬP MẬT KHẨU TẠI ĐÂY/);
 });
 
 test("recovers from unavailable YouTube embeds", async () => {

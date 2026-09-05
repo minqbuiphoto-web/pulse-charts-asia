@@ -45,3 +45,6 @@ __pycache__/
 # local publishing tools and audit output
 /.tools/
 /.audit-*.json
+/.npm-cache/
+/.vercel-user-data/
+/.vercel-user-config/
