@@ -110,7 +110,6 @@ function lyricToneUnits(value:string){
   const mixed=clean.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]|[\p{L}\p{N}]+/gu)??[];
   return mixed.filter((unit)=>/[\p{L}\p{N}]/u.test(unit));
 }
-
 function toneSlotValues(value:string,count:number){
   const raw=value.includes(",")?value.split(","):value.trim().split(/\s+/);
   return Array.from({length:count},(_,index)=>/^[NHS]$/.test(raw[index]??"")?raw[index]:"");
@@ -142,7 +141,6 @@ function formatLiteralMeanings(lines:string[],lineCount:number){
   if(looksBilingual)return Array.from({length:pairCount},(_,index)=>`${lines[index*2]}\n${lines[index*2+1]}`);
   return lines.slice(0,lineCount);
 }
-
 function safeFileName(value:string){
   return value.normalize("NFKC").replace(/[\\/:*?"<>|]+/g,"-").trim().slice(0,120)||"lyric-translation";
 }
@@ -316,7 +314,6 @@ export default function LyricStudio(){
   },[alignmentFile]);
 
   useEffect(()=>{manualLineTimesRef.current=manualLineTimes;},[manualLineTimes]);
-
   useEffect(()=>{
     if(window.YT?.Player){window.setTimeout(()=>setYtReady(true),0);return;}
     const existing=document.querySelector('script[src="https://www.youtube.com/iframe_api"]');
@@ -577,7 +574,6 @@ export default function LyricStudio(){
       return next;
     });
   };
-
   const updateToneSlot=(lineIndex:number,slotIndex:number,value:string)=>{
     const count=lyricToneUnits(timeline[lineIndex]?.text??"").length;
     const slots=toneSlotValues(tonePatterns[lineIndex]??"",count);
@@ -817,7 +813,6 @@ export default function LyricStudio(){
     else{const value=Number(raw);if(!Number.isFinite(value)||value<0)return;next[index]=Number(value.toFixed(3));}
     manualLineTimesRef.current=next;setManualLineTimes(next);setManualCursor(index);
   };
-
   const seekManualAudio=(seconds:number)=>{
     const audio=manualAudioRef.current;if(!audio)return;
     audio.currentTime=Math.max(0,Math.min(audio.duration||Infinity,audio.currentTime+seconds));setManualAudioTime(audio.currentTime);
