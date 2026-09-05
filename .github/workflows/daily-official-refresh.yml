@@ -1,9 +1,9 @@
-name: Weekly Pulse Charts refresh
+name: Daily official chart refresh
 
 on:
   schedule:
-    # 09:00 Monday in Bangkok (UTC+7)
-    - cron: "0 2 * * 1"
+    # 10:17 Bangkok; providers publish at different times/days.
+    - cron: "17 3 * * *"
   workflow_dispatch:
 
 permissions:
@@ -16,7 +16,7 @@ concurrency:
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,22 +25,17 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
-      - name: Refresh official rankings, OST albums, measured YouTube views, and verify every chart
-        run: npm run refresh:weekly
-      - name: Build the production site
-        run: npm run build:pages
-      - name: Save verified changes
+      - name: Fetch source rankings and validate snapshot
+        run: node scripts/refresh-official-charts.mjs && node scripts/sync-charts.mjs
+      - name: Save verified data for the live website
         shell: bash
         run: |
           if git diff --quiet; then
-            echo "No chart data changed."
             exit 0
           fi
           git config user.name "pulse-charts-bot"
           git config user.email "pulse-charts-bot@users.noreply.github.com"
-          git add app/charts-*.json public/charts.json
-          git commit -m "chore(charts): weekly verified refresh"
+          git add app/charts-main.json app/charts-ost.json public/charts.json
+          git commit -m "chore(charts): daily official ranking refresh"
           git pull --rebase origin main
           git push

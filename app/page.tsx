@@ -13,7 +13,7 @@ import ValidatedYouTubePlayer,{ type YouTubeFailure } from "./validated-youtube-
 
 type Market="KR"|"JP"|"CN";
 type Song={ rank:number; id:string; title:string; artist:string; releaseDate:string; genre:string; artworkUrl:string; url:string; artistUrl:string; videoId?:string; viewCount?:number; durationSeconds?:number; filmTitle?:string; album?:string; albumTrackCount?:number; albumTracks?:Song[] };
-type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; syncWarning?:string; songs:Song[] };
+type Chart={ id:string; label:string; shortLabel:string; market:Market; source:string; sourceUrl:string; updatedAt:string; checkedAt?:string; syncWarning?:string; songs:Song[] };
 type ChartData={ generatedAt:string; charts:Chart[] };
 const initialData={ generatedAt:mainSnapshot.generatedAt, charts:[...mainSnapshot.charts,...ostSnapshot.charts,...classicsSnapshot.charts,...rnbSnapshot.charts] } as ChartData;
 
@@ -62,7 +62,24 @@ function formatViewCount(value:number){
 }
 
 export default function Home(){
-  const data=initialData;
+  const [data,setData]=useState(initialData);
+  const [chartStatus,setChartStatus]=useState("Đang kiểm tra bản BXH mới…");
+  useEffect(()=>{
+    const controller=new AbortController();
+    async function refresh(){
+      try {
+        const response=await fetch("/api/charts-latest",{signal:controller.signal});
+        if(!response.ok)throw new Error("unavailable");
+        const next=await response.json() as ChartData;
+        if(!Array.isArray(next.charts)||next.charts.length!==19||!Number.isFinite(Date.parse(next.generatedAt)))throw new Error("invalid");
+        setData(previous=>Date.parse(next.generatedAt)>Date.parse(previous.generatedAt)?next:previous);
+        setChartStatus("Đã kiểm tra bản cập nhật. Ngày/kỳ bên dưới là của từng nguồn, không phải ngày mở trang.");
+      }catch{if(!controller.signal.aborted)setChartStatus("Chưa kết nối được nguồn cập nhật; đang hiển thị bản lưu đã xác minh. Xem ngày/kỳ bên dưới.");}
+    }
+    void refresh();
+    const timer=window.setInterval(()=>void refresh(),300_000);
+    return()=>{controller.abort();window.clearInterval(timer);};
+  },[]);
   const [activeId,setActiveId]=useState(initialData.charts[0]?.id??"");
   const [market,setMarket]=useState<Market|"ALL">("ALL");
   const [query,setQuery]=useState("");
@@ -318,9 +335,10 @@ export default function Home(){
     <section className="workspace">
       <div className="chart-panel">
         <div className="panel-heading">
-          <div><p className="kicker"><span>02</span> {isOstChart&&ostView==="albums"?`${songs.length} FILMS / ${ostTrackTotal} OST TRACKS`:"CURRENT TOP 50"}</p><h2>{active?.label??"Loading chart"}</h2>{isOstChart&&<div className="ost-view-toggle" role="group" aria-label="OST display mode"><button className={ostView==="albums"?"active":""} onClick={()=>setOstView("albums")}>OST ALBUMS</button><button className={ostView==="tracks"?"active":""} onClick={()=>setOstView("tracks")}>ALL TRACKS</button></div>}</div>
+          <div><p className="kicker"><span>02</span> {isOstChart&&ostView==="albums"?`${songs.length} FILMS / ${ostTrackTotal} OST TRACKS`:`${active?.id.includes("trending")||active?.id.includes("evergreen")?"TUYỂN CHỌN":"BẢNG CHÍNH THỨC"} · ${active?.songs.length??0} BÀI`}</p><h2>{active?.label??"Loading chart"}</h2>{isOstChart&&<div className="ost-view-toggle" role="group" aria-label="OST display mode"><button className={ostView==="albums"?"active":""} onClick={()=>setOstView("albums")}>OST ALBUMS</button><button className={ostView==="tracks"?"active":""} onClick={()=>setOstView("tracks")}>ALL TRACKS</button></div>}</div>
           {active&&<div className="sync-time"><span className="status-dot"/>CHART PERIOD<br/><b>{formatDate(active.updatedAt)}</b></div>}
         </div>
+        <p className="sync-warning" role="status">{chartStatus}{active?.checkedAt&&<> Kiểm tra nguồn: {formatDate(active.checkedAt,true)}.</>}</p>
         <div className="column-head"><span>#</span><span>{isOstChart&&ostView==="albums"?"FILM / OST ALBUM":"TRACK"}</span><span>{isOstChart&&ostView==="albums"?"TRACKS":active?.id.includes("evergreen")?"YOUTUBE VIEWS":active?.id.includes("trending")?"LISTENING SIGNAL":"SCORE"}</span><span>{active?.id.includes("trending")||active?.id.includes("evergreen")?"RELEASED":"MARKET"}</span><span/></div>
         {active?.syncWarning&&<div className="sync-warning">{active.syncWarning}</div>}
         {songs.length===0&&<div className="empty-state">No matching tracks found.</div>}

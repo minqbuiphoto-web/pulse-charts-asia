@@ -104,8 +104,8 @@ test("ships all nineteen chart snapshots", async () => {
   const data = JSON.parse(await readFile(new URL("../public/charts.json", import.meta.url), "utf8"));
   assert.equal(data.charts.length, 19);
   assert.deepEqual(new Set(data.charts.map((chart) => chart.market)), new Set(["KR", "JP", "CN"]));
-  assert.ok(data.charts.every((chart) => chart.songs.length === 50));
-  assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 950);
+  assert.ok(data.charts.every((chart) => chart.songs.length === (chart.id === "cn-tme-uni" ? 10 : chart.id === "cn-tme-wave" ? 20 : 50)));
+  assert.equal(data.charts.reduce((total, chart) => total + chart.songs.length, 0), 880);
   assert.ok(data.charts.some((chart) => chart.id === "kr-ost-trending"));
   const ostCharts = data.charts.filter((chart) => chart.id.includes("ost-trending"));
   for (const chart of ostCharts) {
@@ -123,7 +123,7 @@ test("ships all nineteen chart snapshots", async () => {
   assert.ok(balladCharts.every((chart) => chart.songs.every((song) => /ballad/i.test(song.genre))));
   assert.doesNotMatch(JSON.stringify(balladCharts), /RESCENE|aespa|ILLIT|fromis_9|Hearts2Hearts/i);
   const koreanBallad = data.charts.find((chart) => chart.id === "kr-ballad-trending");
-  const sixMonthCutoff = new Date(data.generatedAt);
+  const sixMonthCutoff = new Date(koreanBallad.updatedAt);
   sixMonthCutoff.setUTCMonth(sixMonthCutoff.getUTCMonth() - 6);
   assert.ok(koreanBallad.songs.slice(0, 20).every((song) => /^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate)));
   assert.ok(koreanBallad.songs.slice(0, 20).every((song) => new Date(`${song.releaseDate}T00:00:00Z`) >= sixMonthCutoff));

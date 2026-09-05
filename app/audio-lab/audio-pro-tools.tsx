@@ -5,15 +5,53 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 type BeatMode = "ai" | "quick";
 type MixMode = "finished" | "stems";
 type AudioResult = { url: string; name: string; details: string };
+type SunoResult = { title: string; iframeUrl: string; originalUrl: string };
 
 const LOCAL_ENGINE = "http://127.0.0.1:8765";
 const AUDIO_PATTERN = /\.(mp3|wav|m4a|aac|ogg|flac|webm)$/i;
 
 export default function AudioProTools() {
-  return <section className="audio-pro-suite" aria-label="Tách giọng, lấy beat và mix audio">
+  return <section className="audio-pro-suite" aria-label="Nghe nhạc Suno, tách giọng, lấy beat và mix audio">
+    <SunoLinkPlayer/>
     <BeatExtractor/>
     <MixEnhancer/>
   </section>;
+}
+
+function SunoLinkPlayer() {
+  const [link, setLink] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState("Dán link bài do bạn sở hữu trên Suno để nghe bằng trình phát chính thức.");
+  const [result, setResult] = useState<SunoResult | null>(null);
+
+  const connect = async () => {
+    if (!link.trim() || busy) return;
+    setBusy(true);
+    setResult(null);
+    setStatus("Đang kết nối với Suno…");
+    try {
+      const response = await fetch(`/api/suno-oembed?url=${encodeURIComponent(link.trim())}`);
+      const data = await response.json().catch(() => ({}));
+      if (!response.ok) throw new Error(data.error || "Không mở được bài hát Suno này.");
+      setResult(data as SunoResult);
+      setStatus("Đã mở bài. Bạn có thể nghe tại đây; tài khoản và quyền tải được xác nhận trên Suno, không phải trên trang này.");
+    } catch (error) {
+      setStatus(error instanceof Error ? error.message : "Không mở được bài hát Suno này.");
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  return <article className="audio-pro-card suno-card">
+    <header><span>03</span><div><small>SUNO LINK PLAYER</small><h2>Nghe và tải bài hát từ Suno</h2><p>Dán link bài hát Suno. Hệ thống dùng trình phát chính thức; quyền tải do tài khoản Suno của bạn xác nhận.</p></div><b>OFFICIAL PLAYER</b></header>
+    <form className="suno-link-form" onSubmit={(event) => { event.preventDefault(); void connect(); }}>
+      <label htmlFor="suno-song-link">LINK BÀI HÁT SUNO</label>
+      <div><input id="suno-song-link" type="url" inputMode="url" placeholder="https://suno.com/song/... hoặc https://suno.com/s/..." value={link} onChange={(event) => setLink(event.target.value)} autoComplete="url"/><button type="submit" disabled={!link.trim() || busy}>{busy ? "ĐANG MỞ…" : "MỞ BÀI"}</button></div>
+    </form>
+    <p className="suno-account-note"><b>KHÔNG NHẬP MẬT KHẨU TẠI ĐÂY.</b> Nút tải mở trang Suno chính thức và dùng phiên đăng nhập sẵn có trong trình duyệt.</p>
+    <p className="pro-status" aria-live="polite">{status}</p>
+    {result ? <div className="suno-result"><div><b>{result.title}</b><small>Trình phát do Suno cung cấp</small></div><iframe title={`Suno · ${result.title}`} src={result.iframeUrl} width="100%" height="140" loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowFullScreen/><div className="suno-actions"><a className="download" href={result.originalUrl} target="_blank" rel="noreferrer">MỞ SUNO ĐỂ TẢI BÀI ↗</a></div><small className="suno-download-help">Trên Suno: đăng nhập tài khoản chính chủ → bấm dấu ⋯ của bài → Download → chọn định dạng được tài khoản cho phép. Đây không phải nút tải trực tiếp trong Audio Lab.</small></div> : null}
+  </article>;
 }
 
 function BeatExtractor() {
@@ -69,7 +107,7 @@ function BeatExtractor() {
   };
 
   return <article className="audio-pro-card beat-card">
-    <header><span>03</span><div><small>BEAT EXTRACTOR</small><h2>Tách giọng, lấy beat</h2><p>AI stem cho chất lượng cao; Beat Draft là phương án miễn phí chạy ngay trong trình duyệt.</p></div><b>FREE-FIRST</b></header>
+    <header><span>04</span><div><small>BEAT EXTRACTOR</small><h2>Tách giọng, lấy beat</h2><p>AI stem cho chất lượng cao; Beat Draft là phương án miễn phí chạy ngay trong trình duyệt.</p></div><b>FREE-FIRST</b></header>
     <div className="audio-mode-tabs" role="group" aria-label="Chọn chất lượng tách beat">
       <button className={mode === "ai" ? "active" : ""} onClick={() => setMode("ai")}><b>AI STUDIO</b><small>UVR Inst HQ 3 · chất lượng cao</small></button>
       <button className={mode === "quick" ? "active" : ""} onClick={() => setMode("quick")}><b>BEAT DRAFT</b><small>Chạy ngay · không cài đặt</small></button>
@@ -144,7 +182,7 @@ function MixEnhancer() {
   };
 
   return <article className="audio-pro-card mix-card">
-    <header><span>04</span><div><small>MIX ENHANCE</small><h2>Làm giọng vang, sáng và liền hơn</h2><p>Mix local miễn phí · không mở rộng stereo thêm · xuất WAV 24-bit chuẩn −14 LUFS.</p></div><b>LOCAL DSP</b></header>
+    <header><span>05</span><div><small>MIX ENHANCE</small><h2>Làm giọng vang, sáng và liền hơn</h2><p>Mix local miễn phí · không mở rộng stereo thêm · xuất WAV 24-bit chuẩn −14 LUFS.</p></div><b>LOCAL DSP</b></header>
     <div className="audio-mode-tabs" role="group" aria-label="Chọn cách mix">
       <button className={mode==="stems"?"active":""} onClick={()=>{setMode("stems");clearResult(resultUrl,setResult);setStatus("Chất lượng tốt nhất: xử lý không gian trên riêng vocal.");}}><b>VOCAL + BEAT</b><small>Khuyên dùng · vang đúng phần giọng</small></button>
       <button className={mode==="finished"?"active":""} onClick={()=>{setMode("finished");clearResult(resultUrl,setResult);setStatus("Xử lý nhẹ toàn bài; không thay thế mix từ stem.");}}><b>BẢN ĐÃ GHÉP</b><small>Nhanh · cải thiện vừa phải</small></button>

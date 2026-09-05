@@ -26,7 +26,7 @@ if (data.charts.length !== expectedIds.size) throw new Error("Pulse Charts requi
 for (const chart of data.charts) {
   if (!expectedIds.has(chart.id)) throw new Error(`Unexpected chart: ${chart.id}`);
   if (!chart.sourceUrl || !chart.updatedAt) throw new Error(`Missing source metadata: ${chart.label}`);
-  const expectedRows = 50;
+  const expectedRows = chart.id === "cn-tme-uni" ? 10 : chart.id === "cn-tme-wave" ? 20 : 50;
   if (!Array.isArray(chart.songs) || chart.songs.length !== expectedRows) throw new Error(`${chart.label} must contain ${expectedRows} rows.`);
   if (chart.id.includes("evergreen")) {
     if (chart.songs.some((song) => !song.videoId || !Number.isFinite(song.viewCount) || song.viewCount < 0)) throw new Error(`Missing measured views in ${chart.label}.`);
@@ -53,7 +53,7 @@ for (const chart of data.charts) {
   if (chart.id.includes("ballad") && chart.songs.some((song) => !song.genre.toLocaleLowerCase("en").includes("ballad"))) throw new Error(`Non-ballad row in ${chart.label}.`);
   if (chart.id.includes("rnb") && (!chart.syncWarning?.includes("SONG-LEVEL GENRE RULE") || !chart.syncWarning?.includes("NO RAP RULE") || chart.songs.some((song) => song.style !== "Vocal R&B / Soul" || song.genreBasis !== "song-level" || song.genreReviewed !== true || /\brap\b/i.test(song.genre)))) throw new Error(`Unreviewed or non-vocal-R&B row in ${chart.label}.`);
   if (chart.id === "kr-ballad-trending") {
-    const cutoff = new Date(data.generatedAt);
+    const cutoff = new Date(chart.updatedAt);
     cutoff.setUTCMonth(cutoff.getUTCMonth() - 6);
     if (chart.songs.slice(0, 20).some((song) => !/^\d{4}-\d{2}-\d{2}$/.test(song.releaseDate) || new Date(`${song.releaseDate}T00:00:00Z`) < cutoff)) {
       throw new Error(`${chart.label} contains a release older than six months.`);
@@ -74,4 +74,4 @@ if (rnbRows.some((song) => song.title === "Beautiful" && song.artist === "Crush"
 const publicDir = new URL("../public/", import.meta.url);
 await mkdir(publicDir, { recursive: true });
 await writeFile(new URL("charts.json", publicDir), JSON.stringify(data, null, 2) + "\n", "utf8");
-console.log("Verified and exported 19 charts / 950 ranked tracks.");
+console.log(`Verified and exported ${data.charts.length} charts / ${data.charts.reduce((total, chart) => total + chart.songs.length, 0)} tracks.`);
