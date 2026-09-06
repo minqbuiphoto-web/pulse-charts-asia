@@ -4,7 +4,7 @@ import test from "node:test";
 
 test("delays the intact song instead of concatenating synthetic intro audio",async()=>{
   const source=await readFile(new URL("../public/pulse-audio-ai-server.py",import.meta.url),"utf8");
-  assert.match(source,/version="5\.2"/);
+  assert.match(source,/version="6\.3\.1"/);
   assert.match(source,/mvExactAudioIntro/);
   assert.match(source,/mvAudioHeadPreserved/);
   assert.match(source,/mvAudioPtsReset/);
@@ -61,7 +61,7 @@ test("cuts a finished video accurately and can prepend a thumbnail",async()=>{
     readFile(new URL("../public/pulse-audio-ai-server.py",import.meta.url),"utf8"),
   ]);
   assert.match(server,/@app\.post\("\/trim-video"\)/);
-  assert.match(server,/"-i", str\(source\), "-ss", f"\{start:\.3f\}"/);
+  assert.match(server,/trim=start=\{start:\.3f\}:end=\{end:\.3f\}/);
   assert.match(server,/thumbnail_duration/);
   assert.match(server,/mvVideoTrim/);
   assert.match(server,/mvTrimThumbnail/);
@@ -82,7 +82,8 @@ test("exports YouTube and TikTok safe MP4 tracks without edit lists",async()=>{
   assert.match(server,/"-bf", "0"/);
   assert.match(server,/"-use_editlist", "0"/);
   assert.match(server,/validate_platform_safe_mp4\(output\)/);
-  assert.match(server,/abs\(video_duration - audio_duration\) > 0\.025/);
+  assert.match(server,/abs\(video_duration - audio_duration\) > platform_track_duration_tolerance\(\)/);
+  assert.match(server,/abs\(video_start\) > 0\.001 or abs\(audio_start\) > 0\.001/);
   assert.match(server,/X-Pulse-Platform-Safe/);
   assert.match(page,/YOUTUBE · TIKTOK SAFE/);
   assert.match(page,/Đã kiểm tra YouTube\/TikTok Safe/);
