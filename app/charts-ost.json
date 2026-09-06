@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-05T11:29:41.031Z",
+  "generatedAt": "2026-09-06T07:55:45.672Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-05T19:10:00+08:00",
+      "updatedAt": "2026-09-06T15:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第35期（08.31-09.06）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "没有你是漫长雨季",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "97.06 score",
+          "genre": "97.13 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "好巧是你",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.63 score",
+          "genre": "96.67 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "天生刺猬",
           "artist": "张月",
           "releaseDate": "CN",
-          "genre": "96.06 score",
+          "genre": "96.08 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "来我的岛",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "95.87 score",
+          "genre": "96.02 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "我们不散",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "95.50 score",
+          "genre": "95.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -70,7 +70,7 @@
           "title": "甲乙丙丁 (你我怎么两清)",
           "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "95.42 score",
+          "genre": "95.66 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -81,7 +81,7 @@
           "title": "VIBE",
           "artist": "展轩",
           "releaseDate": "CN",
-          "genre": "95.37 score",
+          "genre": "95.58 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hope to Remain",
-          "artist": "严浩翔",
+          "title": "贰拾肆",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "93.84 score",
+          "genre": "95.04 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -103,7 +103,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "93.70 score",
+          "genre": "94.92 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Steal The Moon",
-          "artist": "王俊凯",
+          "title": "Hope to Remain",
+          "artist": "严浩翔",
           "releaseDate": "CN",
-          "genre": "93.66 score",
+          "genre": "94.76 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-05T11:29:41.031Z"
+      "checkedAt": "2026-09-06T07:55:45.672Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-05T11:29:41.031Z"
+      "checkedAt": "2026-09-06T07:55:45.672Z"
     },
     {
       "id": "cn-ost-trending",
