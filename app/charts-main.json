@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-07T08:20:56.891Z",
+  "generatedAt": "2026-09-08T08:07:06.689Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-07T08:20:56.891Z"
+      "checkedAt": "2026-09-08T08:07:06.689Z"
     },
     {
       "id": "kr-circle-download",
@@ -719,7 +719,7 @@
         },
         {
           "title": "Without Wings",
-          "artist": "SF9",
+          "artist": "SF9 (에스에프나인)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-07T08:20:56.891Z"
+      "checkedAt": "2026-09-08T08:07:06.689Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5614,7 +5614,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-07T08:20:56.891Z"
+      "checkedAt": "2026-09-08T08:07:06.689Z"
     }
   ]
 }
