@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-09T08:11:02.529Z",
+  "generatedAt": "2026-09-10T08:09:48.524Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-09T15:50:00+08:00",
+      "updatedAt": "2026-09-10T15:50:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第36期（09.07-09.13）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "冰箱没有鸡蛋",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "97.48 score",
+          "genre": "97.57 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "没有你是漫长雨季",
-          "artist": "梓渝",
+          "title": "再一次见面",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.12 score",
+          "genre": "96.26 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "再一次见面",
-          "artist": "周深",
+          "title": "没有你是漫长雨季",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.07 score",
+          "genre": "96.23 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "95.10 score",
+          "genre": "95.66 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "穿帮",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "94.26 score",
+          "genre": "94.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -70,7 +70,7 @@
           "title": "潮汐锁定",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "93.97 score",
+          "genre": "94.41 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -81,7 +81,7 @@
           "title": "如是春",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "93.50 score",
+          "genre": "93.86 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -92,7 +92,7 @@
           "title": "黑与红",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "93.47 score",
+          "genre": "93.83 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "RUN IT",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "91.96 score",
+          "genre": "93.39 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "贰拾肆",
-          "artist": "梓渝",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "91.75 score",
+          "genre": "93.32 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-09T08:11:02.529Z"
+      "checkedAt": "2026-09-10T08:09:48.524Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-09T08:11:02.529Z"
+      "checkedAt": "2026-09-10T08:09:48.524Z"
     },
     {
       "id": "cn-ost-trending",
