@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-11T08:05:19.199Z",
+  "generatedAt": "2026-09-12T07:56:37.313Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-11T15:50:00+08:00",
+      "updatedAt": "2026-09-12T15:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第36期（09.07-09.13）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "冰箱没有鸡蛋",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "97.66 score",
+          "genre": "97.76 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "再一次见面",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.41 score",
+          "genre": "96.52 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "没有你是漫长雨季",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.35 score",
+          "genre": "96.45 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "96.05 score",
+          "genre": "96.17 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "世界如此",
-          "artist": "田栩宁",
+          "title": "RUN IT",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "95.83 score",
+          "genre": "96.10 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "RUN IT",
-          "artist": "梓渝",
+          "title": "世界如此",
+          "artist": "田栩宁",
           "releaseDate": "CN",
-          "genre": "95.47 score",
+          "genre": "96.08 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "穿帮",
-          "artist": "马嘉祺",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "94.96 score",
+          "genre": "95.28 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "94.77 score",
+          "genre": "95.18 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -103,7 +103,7 @@
           "title": "贰拾肆",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "94.76 score",
+          "genre": "95.09 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "潮汐锁定",
+          "title": "穿帮",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "94.68 score",
+          "genre": "95.07 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-11T08:05:19.199Z"
+      "checkedAt": "2026-09-12T07:56:37.313Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-11T08:05:19.199Z"
+      "checkedAt": "2026-09-12T07:56:37.313Z"
     },
     {
       "id": "cn-ost-trending",
