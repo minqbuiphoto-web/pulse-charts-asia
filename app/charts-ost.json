@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-14T07:40:15.579Z",
+  "generatedAt": "2026-09-14T08:57:56.733Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-14T15:20:00+08:00",
+      "updatedAt": "2026-09-14T16:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第37期（09.14-09.20）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "大梦归",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "91.32 score",
+          "genre": "91.63 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "90.30 score",
+          "genre": "90.48 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "时间漫步",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "90.11 score",
+          "genre": "90.33 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "信",
           "artist": "张月",
           "releaseDate": "CN",
-          "genre": "87.98 score",
+          "genre": "88.19 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "Someone Like You",
           "artist": "张真源",
           "releaseDate": "CN",
-          "genre": "87.87 score",
+          "genre": "87.93 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -70,7 +70,7 @@
           "title": "冰箱没有鸡蛋",
           "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "86.67 score",
+          "genre": "87.01 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -81,7 +81,7 @@
           "title": "甲乙丙丁 (你我怎么两清)",
           "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "85.22 score",
+          "genre": "85.93 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -92,7 +92,7 @@
           "title": "钗头凤",
           "artist": "云朵",
           "releaseDate": "CN",
-          "genre": "82.78 score",
+          "genre": "83.02 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -103,7 +103,7 @@
           "title": "Steal The Moon",
           "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "82.24 score",
+          "genre": "82.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -114,7 +114,7 @@
           "title": "Nonchalant",
           "artist": "张月",
           "releaseDate": "CN",
-          "genre": "81.87 score",
+          "genre": "81.96 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-14T07:39:43.176Z"
+      "checkedAt": "2026-09-14T08:57:56.733Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-14T07:39:43.176Z"
+      "checkedAt": "2026-09-14T08:57:56.733Z"
     },
     {
       "id": "cn-ost-trending",
