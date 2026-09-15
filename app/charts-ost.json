@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-14T08:57:56.733Z",
+  "generatedAt": "2026-09-15T08:42:52.324Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-14T16:40:00+08:00",
+      "updatedAt": "2026-09-15T16:30:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第37期（09.14-09.20）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "大梦归",
-          "artist": "周深",
+          "title": "I Love You But I Gotta Let You Go (NINGNING Solo)",
+          "artist": "aespa",
           "releaseDate": "CN",
-          "genre": "91.63 score",
+          "genre": "95.85 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "她",
-          "artist": "刘宇宁",
+          "title": "大梦归",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "90.48 score",
+          "genre": "95.45 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "时间漫步",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "90.33 score",
+          "genre": "95.36 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -45,10 +45,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "信",
-          "artist": "张月",
+          "title": "她",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "88.19 score",
+          "genre": "93.54 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Someone Like You",
-          "artist": "张真源",
+          "title": "After Everything",
+          "artist": "曾沛慈",
           "releaseDate": "CN",
-          "genre": "87.93 score",
+          "genre": "90.96 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "冰箱没有鸡蛋",
-          "artist": "马嘉祺",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "87.01 score",
+          "genre": "90.82 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "冰箱没有鸡蛋",
+          "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "85.93 score",
+          "genre": "90.35 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "钗头凤",
-          "artist": "云朵",
+          "title": "信",
+          "artist": "张月",
           "releaseDate": "CN",
-          "genre": "83.02 score",
+          "genre": "90.13 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Steal The Moon",
-          "artist": "王俊凯",
+          "title": "Someone Like You",
+          "artist": "张真源",
           "releaseDate": "CN",
-          "genre": "82.68 score",
+          "genre": "89.62 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Nonchalant",
-          "artist": "张月",
+          "title": "Steal The Moon",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "81.96 score",
+          "genre": "89.52 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-14T08:57:56.733Z"
+      "checkedAt": "2026-09-15T08:42:52.324Z"
     },
     {
       "id": "cn-tme-wave",
@@ -131,14 +131,14 @@
       "market": "CN",
       "source": "Tencent Music Wave Chart",
       "sourceUrl": "https://chart.tencentmusic.com/wave-chart",
-      "updatedAt": "2026-07-31T23:59:00+08:00",
-      "syncWarning": "OFFICIAL TOP 20 · 2026年7月榜. Đây là kỳ mới nhất nguồn TME Wave đang công bố, không phải bảng tuần. Không chèn bài từ kỳ cũ.",
+      "updatedAt": "2026-08-31T23:59:00+08:00",
+      "syncWarning": "OFFICIAL TOP 20 · 2026年8月榜. Đây là kỳ mới nhất nguồn TME Wave đang công bố, không phải bảng tuần. Không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "所以",
-          "artist": "罗大佑",
+          "title": "LAVA",
+          "artist": "单依纯",
           "releaseDate": "CN",
-          "genre": "8.48 expert score",
+          "genre": "8.37 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 1,
@@ -146,10 +146,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "媚人",
-          "artist": "薛之谦",
+          "title": "牧羊人与木塔稞",
+          "artist": "张羽涵Leezi",
           "releaseDate": "CN",
-          "genre": "8.31 expert score",
+          "genre": "8.37 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 2,
@@ -157,10 +157,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Glue",
-          "artist": "希林娜依高",
+          "title": "微观宇宙",
+          "artist": "萨顶顶",
           "releaseDate": "CN",
-          "genre": "8.19 expert score",
+          "genre": "8.32 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 3,
@@ -168,10 +168,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "哈姆雷特下班了",
-          "artist": "Kiri T",
+          "title": "晴天娃娃",
+          "artist": "吴青峰",
           "releaseDate": "CN",
-          "genre": "8.19 expert score",
+          "genre": "8.27 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 4,
@@ -179,10 +179,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "姓名 (An unforgettable name)",
-          "artist": "许钧",
+          "title": "Hope",
+          "artist": "王力宏",
           "releaseDate": "CN",
-          "genre": "8.13 expert score",
+          "genre": "8.27 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 5,
@@ -190,10 +190,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "还有人在",
-          "artist": "陈珊妮",
+          "title": "打开2.0",
+          "artist": "黄霄雲",
           "releaseDate": "CN",
-          "genre": "8.13 expert score",
+          "genre": "8.27 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 6,
@@ -201,10 +201,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "夜光",
-          "artist": "万芳",
+          "title": "STRANGE",
+          "artist": "刘雨昕",
           "releaseDate": "CN",
-          "genre": "8.13 expert score",
+          "genre": "8.23 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 7,
@@ -212,10 +212,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "四季",
-          "artist": "LilJee小吉、普阿山",
+          "title": "黄金时代",
+          "artist": "林志炫",
           "releaseDate": "CN",
-          "genre": "8.08 expert score",
+          "genre": "8.23 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 8,
@@ -223,10 +223,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "过招 (Youngsters VS The World)",
-          "artist": "许钧",
+          "title": "等等等等",
+          "artist": "容祖儿",
           "releaseDate": "CN",
-          "genre": "8.08 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 9,
@@ -234,10 +234,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "凌月",
-          "artist": "丁世光",
+          "title": "远距离",
+          "artist": "梁咏琪",
           "releaseDate": "CN",
-          "genre": "8.08 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 10,
@@ -245,10 +245,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "不愿醒的梦",
-          "artist": "蔡健雅",
+          "title": "昨天，今天",
+          "artist": "莫文蔚",
           "releaseDate": "CN",
-          "genre": "8.08 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 11,
@@ -256,10 +256,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "电影里",
-          "artist": "尧十三",
+          "title": "变形记",
+          "artist": "法兰Fran",
           "releaseDate": "CN",
-          "genre": "8.02 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 12,
@@ -267,10 +267,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "伞",
-          "artist": "安又琪",
+          "title": "RIA",
+          "artist": "艾热AIR",
           "releaseDate": "CN",
-          "genre": "8.02 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 13,
@@ -278,10 +278,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "故事还有呢",
-          "artist": "林志炫",
+          "title": "LOOP",
+          "artist": "LÜCY、Moyka",
           "releaseDate": "CN",
-          "genre": "8.02 expert score",
+          "genre": "8.18 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 14,
@@ -289,10 +289,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "我要你爱我",
-          "artist": "张碧晨",
+          "title": "晨昏线绮梦 (Love is Love)",
+          "artist": "莫非定律乐团",
           "releaseDate": "CN",
-          "genre": "8.02 expert score",
+          "genre": "8.13 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 15,
@@ -300,10 +300,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "tip toe",
-          "artist": "moon tang",
+          "title": "天才",
+          "artist": "苏见信 (信)",
           "releaseDate": "CN",
-          "genre": "7.96 expert score",
+          "genre": "8.09 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 16,
@@ -311,10 +311,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "爱上你不是我决定",
-          "artist": "萧敬腾、A-Lin",
+          "title": "十七奏鸣曲",
+          "artist": "Gordon Flanders",
           "releaseDate": "CN",
-          "genre": "7.96 expert score",
+          "genre": "8.04 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 17,
@@ -322,10 +322,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "千山后",
-          "artist": "黄雅莉",
+          "title": "光透进来的地方",
+          "artist": "岑宁儿",
           "releaseDate": "CN",
-          "genre": "7.96 expert score",
+          "genre": "8.04 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 18,
@@ -333,10 +333,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "散光 (The Lasik)",
-          "artist": "泳儿",
+          "title": "人类爱情学",
+          "artist": "陈蕾",
           "releaseDate": "CN",
-          "genre": "7.96 expert score",
+          "genre": "7.99 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 19,
@@ -344,10 +344,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "乌兰",
-          "artist": "赵照",
+          "title": "好钟意！",
+          "artist": "陈康堤",
           "releaseDate": "CN",
-          "genre": "7.90 expert score",
+          "genre": "7.95 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 20,
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-14T08:57:56.733Z"
+      "checkedAt": "2026-09-15T08:42:52.324Z"
     },
     {
       "id": "cn-ost-trending",
