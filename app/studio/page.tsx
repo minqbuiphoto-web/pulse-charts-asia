@@ -30,6 +30,7 @@ type YTPlayer={
   getCurrentTime:()=>number;
   getDuration:()=>number;
   playVideo:()=>void;
+  loadVideoById:(options:{videoId:string;startSeconds:number;endSeconds?:number})=>void;
   pauseVideo:()=>void;
   seekTo:(seconds:number,allowSeekAhead:boolean)=>void;
 };
@@ -292,6 +293,7 @@ export default function LyricStudio(){
   const playerMountRef=useRef<HTMLDivElement|null>(null);
   const playerRef=useRef<YTPlayer|null>(null);
   const timerRef=useRef<number|undefined>(undefined);
+  const linePlaybackRef=useRef(false);
   const lineRefs=useRef<Array<HTMLDivElement|null>>([]);
   const manualAudioRef=useRef<HTMLAudioElement|null>(null);
   const manualLineTimesRef=useRef<Record<number,number>>({});
@@ -330,6 +332,7 @@ export default function LyricStudio(){
     if(timerRef.current)window.clearInterval(timerRef.current);
     try{playerRef.current?.destroy();}catch{}
     playerRef.current=null;
+    linePlaybackRef.current=false;
     playerMountRef.current.innerHTML="";
     const player=new window.YT.Player(playerMountRef.current,{
       videoId:song.videoId,
@@ -624,29 +627,44 @@ export default function LyricStudio(){
   const togglePlayback=()=>{
     const player=playerRef.current;
     if(!player)return;
-    if(playerState==="PLAYING")player.pauseVideo();else player.playVideo();
+    if(playerState==="PLAYING")player.pauseVideo();else{
+      // Seeking explicitly removes YouTube's endSeconds limit for normal playback.
+      if(linePlaybackRef.current){
+        player.seekTo(player.getCurrentTime()||0,true);
+        linePlaybackRef.current=false;
+      }
+      player.playVideo();
+    }
   };
 
   const seekBy=(seconds:number)=>{
     const player=playerRef.current;
     if(!player)return;
+    linePlaybackRef.current=false;
     player.seekTo(Math.max(0,Math.min(duration||Infinity,currentTime+seconds)),true);
   };
 
   const playLine=(index:number)=>{
     const player=playerRef.current;
     const line=timeline[index];
-    if(!player||!line)return;
+    if(!player||!line||!song)return;
     const videoTime=Math.max(0,line.time);
-    player.seekTo(videoTime,true);
+    // Use the resolved timeline (manual/AI/LRC + offset), and let YouTube
+    // enforce the boundary even when the browser throttles background timers.
+    const nextTime=timeline.slice(index+1).find((next)=>next.time>videoTime)?.time;
+    const videoDuration=player.getDuration()||duration;
+    const endSeconds=Math.min(nextTime??Infinity,videoDuration>0?videoDuration:Infinity);
+    if(endSeconds<=videoTime)return;
+    linePlaybackRef.current=true;
+    player.loadVideoById({videoId:song.videoId,startSeconds:videoTime,...(Number.isFinite(endSeconds)?{endSeconds}:{})});
     setCurrentTime(videoTime);
     setFollowPlayback(true);
-    player.playVideo();
   };
 
   const restartSong=()=>{
     const player=playerRef.current;
     if(!player)return;
+    linePlaybackRef.current=false;
     player.seekTo(0,true);
     setCurrentTime(0);
     setFollowPlayback(true);
@@ -928,7 +946,7 @@ export default function LyricStudio(){
           <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{hasCompleteManualTimeline?"ĐÃ GÁN TỪNG CÂU":manualAssignedCount?`ĐÃ GÁN ${manualAssignedCount}/${timeline.length}`:song.syncedLyrics?"ĐỒNG BỘ":hasAutoTimeline?"ĐÃ CĂN TỰ ĐỘNG":"CHƯA CÓ MỐC"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing ":"")+(index===manualCursor?"manual-selected ":"")+(Number.isFinite(manualLineTimes[index])?"manual-assigned ":hasAlignmentConfidence?(autoLineConfidences[index]>=.7?"align-good":autoLineConfidences[index]>=.5?"align-medium":"align-review"):"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{clockTime(line.time)}</i>{Number.isFinite(manualLineTimes[index])?<em>✓ ĐÃ GÁN</em>:hasAlignmentConfidence&&<em>{autoLineConfidences[index]>=.7?"✓ TỐT":autoLineConfidences[index]>=.5?"~ KIỂM TRA":"! CẦN SỬA"}</em>}</span>
-            <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Phát lại từ câu này"><span>{line.text}</span><small>▶ BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
+            <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Nghe riêng câu này, dừng khi đến câu tiếp theo"><span>{line.text}</span><small>▶ NGHE RIÊNG CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>editManualLine(index,event.currentTarget.value)}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index,currentTime)} disabled={playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN THEO NHẠC {clockTime(currentTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button><button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button></div>
           </div>)}
         </div>}
