@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-18T08:16:57.346Z",
+  "generatedAt": "2026-09-19T08:05:00.072Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-18T16:00:00+08:00",
+      "updatedAt": "2026-09-19T15:50:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第37期（09.14-09.20）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "时间漫步",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.68 score",
+          "genre": "96.78 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "大梦归",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.41 score",
+          "genre": "96.54 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "I Love You But I Gotta Let You Go (NINGNING Solo)",
-          "artist": "aespa",
+          "title": "她",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "96.16 score",
+          "genre": "96.31 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -45,10 +45,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "她",
-          "artist": "刘宇宁",
+          "title": "I Love You But I Gotta Let You Go (NINGNING Solo)",
+          "artist": "aespa",
           "releaseDate": "CN",
-          "genre": "96.14 score",
+          "genre": "96.22 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "TWINROSE",
-          "artist": "刘竞屿,熊艺文",
+          "title": "态度 (Attitude)",
+          "artist": "田栩宁",
           "releaseDate": "CN",
-          "genre": "95.59 score",
+          "genre": "95.88 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "态度 (Attitude)",
-          "artist": "田栩宁",
+          "title": "TWINROSE",
+          "artist": "刘竞屿,熊艺文",
           "releaseDate": "CN",
-          "genre": "95.52 score",
+          "genre": "95.72 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -81,7 +81,7 @@
           "title": "甲乙丙丁 (你我怎么两清)",
           "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "95.04 score",
+          "genre": "95.35 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "After Everything",
-          "artist": "曾沛慈",
+          "title": "贰拾肆",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "94.57 score",
+          "genre": "95.13 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "回家",
-          "artist": "张云雷",
+          "title": "After Everything",
+          "artist": "曾沛慈",
           "releaseDate": "CN",
-          "genre": "93.78 score",
+          "genre": "95.04 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -114,7 +114,7 @@
           "title": "Steal The Moon",
           "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "93.33 score",
+          "genre": "94.54 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-18T08:16:57.346Z"
+      "checkedAt": "2026-09-19T08:05:00.072Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-18T08:16:57.346Z"
+      "checkedAt": "2026-09-19T08:05:00.072Z"
     },
     {
       "id": "cn-ost-trending",
