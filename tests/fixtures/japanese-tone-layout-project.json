@@ -1,0 +1,24 @@
+{
+  "version": 1,
+  "key": "pulse-studio::qa japanese::qa",
+  "song": {
+    "videoId": "dQw4w9WgXcQ",
+    "title": "QA Japanese",
+    "artist": "QA",
+    "lyrics": "明日また会えるかな",
+    "syncedLyrics": "",
+    "lyricLanguage": "ja"
+  },
+  "translations": {},
+  "literalMeanings": {},
+  "tonePatterns": {
+    "0": "N,H,S,N,H,S,N,H"
+  },
+  "toneSlotCounts": {
+    "0": 8
+  },
+  "toneBreaks": {
+    "0": [4]
+  },
+  "updatedAt": "2026-09-24T00:00:00.000Z"
+}

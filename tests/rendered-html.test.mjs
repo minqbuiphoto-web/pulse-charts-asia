@@ -56,7 +56,7 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /restartSong/);
   assert.match(source, /VỀ ĐẦU/);
   assert.match(source, /playLine/);
-  assert.match(source, /BẤM ĐỂ NGHE LẠI TỪ CÂU NÀY/);
+  assert.match(source, /NGHE RIÊNG CÂU NÀY/);
   assert.match(source, /tonePatterns/);
   assert.match(source, /toneStorageKey/);
   assert.match(source, /N NGANG/);
@@ -64,6 +64,12 @@ test("supports sentence-by-sentence literal meanings before lyric adaptation", a
   assert.match(source, /S SẮC/);
   assert.match(source, /lyricToneUnits/);
   assert.match(source, /toneSlotValues/);
+  assert.match(source, /toneSlotCounts/);
+  assert.match(source, /toneBreaks/);
+  assert.match(source, /changeToneSlotCount/);
+  assert.match(source, /toggleToneBreak/);
+  assert.match(source, /\+ Ô/);
+  assert.match(source, /ngắt câu sau ô/);
   assert.match(source, /maxLength={1}/);
   assert.match(source, /replace\(\/\[\?!！？\]\//);
   assert.match(source, /PROJECT_LIBRARY_KEY/);

@@ -22,6 +22,8 @@ type SavedProject={
   translations:Record<number,string>;
   literalMeanings:Record<number,string>;
   tonePatterns:Record<number,string>;
+  toneSlotCounts?:Record<number,number>;
+  toneBreaks?:Record<number,number[]>;
   updatedAt:string;
 };
 
@@ -102,6 +104,10 @@ function toneStorageKey(song:Pick<StudioSong,"title"|"artist">){
   return storageKey(song)+"::tone-pattern";
 }
 
+function toneLayoutStorageKey(song:Pick<StudioSong,"title"|"artist">){
+  return storageKey(song)+"::tone-layout";
+}
+
 function cleanTonePattern(value:string){
   return value.toLocaleUpperCase("en").replace(/[^NHS\s,]/g,"").replace(/\s+/g," ").trimStart();
 }
@@ -114,6 +120,21 @@ function lyricToneUnits(value:string){
 function toneSlotValues(value:string,count:number){
   const raw=value.includes(",")?value.split(","):value.trim().split(/\s+/);
   return Array.from({length:count},(_,index)=>/^[NHS]$/.test(raw[index]??"")?raw[index]:"");
+}
+
+function safeToneSlotCounts(value:unknown){
+  if(!value||typeof value!=="object")return{};
+  return Object.fromEntries(Object.entries(value as Record<string,unknown>).flatMap(([key,count])=>{
+    const line=Number(key),slots=Math.floor(Number(count));
+    return Number.isInteger(line)&&line>=0&&Number.isFinite(slots)&&slots>0?[[line,Math.min(slots,120)]]:[];
+  })) as Record<number,number>;
+}
+
+function safeToneBreaks(value:unknown){
+  if(!value||typeof value!=="object")return{};
+  return Object.fromEntries(Object.entries(value as Record<string,unknown>).map(([key,breaks])=>[
+    Number(key),Array.isArray(breaks)?[...new Set(breaks.map(Number).filter((gap)=>Number.isInteger(gap)&&gap>0&&gap<120))].sort((a,b)=>a-b):[]
+  ])) as Record<number,number[]>;
 }
 
 function pastedToneValues(value:string){
@@ -258,6 +279,8 @@ export default function LyricStudio(){
   const [translations,setTranslations]=useState<Record<number,string>>({});
   const [literalMeanings,setLiteralMeanings]=useState<Record<number,string>>({});
   const [tonePatterns,setTonePatterns]=useState<Record<number,string>>({});
+  const [toneSlotCounts,setToneSlotCounts]=useState<Record<number,number>>({});
+  const [toneBreaks,setToneBreaks]=useState<Record<number,number[]>>({});
   const [savedProjects,setSavedProjects]=useState<SavedProject[]>([]);
   const [saveNote,setSaveNote]=useState("Chưa có thay đổi để lưu.");
   const [literalDraft,setLiteralDraft]=useState("");
@@ -372,7 +395,7 @@ export default function LyricStudio(){
   useEffect(()=>{
     if(!song)return;
     const timer=window.setTimeout(()=>{
-      const project:SavedProject={version:1,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()};
+      const project:SavedProject={version:1,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns,toneSlotCounts,toneBreaks,updatedAt:new Date().toISOString()};
       setSavedProjects((current)=>{
         const next=[project,...current.filter((item)=>item.key!==project.key)].sort((a,b)=>b.updatedAt.localeCompare(a.updatedAt)).slice(0,20);
         try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
@@ -381,7 +404,7 @@ export default function LyricStudio(){
       setSaveNote("Đã tự lưu lúc "+new Date().toLocaleTimeString("vi-VN",{hour:"2-digit",minute:"2-digit"}));
     },350);
     return()=>window.clearTimeout(timer);
-  },[song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns]);
+  },[song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns,toneSlotCounts,toneBreaks]);
 
   const syncedTimeline=useMemo(()=>parseTimedLyrics(song?.syncedLyrics??""),[song?.syncedLyrics]);
   const baseTimeline=useMemo(()=>{
@@ -480,6 +503,10 @@ export default function LyricStudio(){
       const savedTones=JSON.parse(localStorage.getItem(toneStorageKey(result))??"{}") as Record<number,string>;
       setTonePatterns(savedTones);
     }catch{setTonePatterns({});}
+    try{
+      const layout=JSON.parse(localStorage.getItem(toneLayoutStorageKey(result))??"{}") as {counts?:unknown;breaks?:unknown};
+      setToneSlotCounts(safeToneSlotCounts(layout.counts));setToneBreaks(safeToneBreaks(layout.breaks));
+    }catch{setToneSlotCounts({});setToneBreaks({});}
     setLiteralDraft("");
     setLiteralNote("Dán bản dịch sát nghĩa; hệ thống sẽ ghép lần lượt với từng câu gốc.");
   };
@@ -492,13 +519,14 @@ export default function LyricStudio(){
     setTranslations(project.translations??{});
     setLiteralMeanings(project.literalMeanings??{});
     setTonePatterns(project.tonePatterns??{});
+    setToneSlotCounts(safeToneSlotCounts(project.toneSlotCounts));setToneBreaks(safeToneBreaks(project.toneBreaks));
     setCurrentTime(0);setDuration(0);setPlayerState("LOADING");setFollowPlayback(true);setEditingLine(null);
     setSaveNote("Đã mở bản lưu gần nhất.");
     window.setTimeout(()=>document.querySelector(".studio-workspace")?.scrollIntoView({behavior:"smooth",block:"start"}),50);
   };
 
   const exportProject=(project?:SavedProject)=>{
-    const selected=project??(song?{version:1 as const,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns,updatedAt:new Date().toISOString()}:null);
+    const selected=project??(song?{version:1 as const,key:storageKey(song),song,videoTimeOffset,autoVideoTimes,autoLineConfidences,manualLineTimes,translations,literalMeanings,tonePatterns,toneSlotCounts,toneBreaks,updatedAt:new Date().toISOString()}:null);
     if(!selected)return;
     const blob=new Blob([JSON.stringify(selected,null,2)],{type:"application/json;charset=utf-8"});
     const url=URL.createObjectURL(blob);
@@ -519,9 +547,10 @@ export default function LyricStudio(){
       localStorage.removeItem(project.key);
       localStorage.removeItem(literalStorageKey(project.song));
       localStorage.removeItem(toneStorageKey(project.song));
+      localStorage.removeItem(toneLayoutStorageKey(project.song));
     }catch{}
     if(song&&storageKey(song)===project.key){
-      setSong(null);setTranslations({});setLiteralMeanings({});setTonePatterns({});setAutoVideoTimes([]);setAutoLineConfidences([]);setManualLineTimes({});setAlignmentFile(null);setVideoTimeOffset(0);setCurrentTime(0);setDuration(0);setPlayerState("WAITING");
+      setSong(null);setTranslations({});setLiteralMeanings({});setTonePatterns({});setToneSlotCounts({});setToneBreaks({});setAutoVideoTimes([]);setAutoLineConfidences([]);setManualLineTimes({});setAlignmentFile(null);setVideoTimeOffset(0);setCurrentTime(0);setDuration(0);setPlayerState("WAITING");
     }
     setSaveNote(`Đã xóa bản tạm “${project.song.title}”.`);
   };
@@ -531,7 +560,7 @@ export default function LyricStudio(){
     try{
       const candidate=JSON.parse(await file.text()) as SavedProject;
       if(candidate.version!==1||!candidate.song?.videoId||!candidate.song?.title||!candidate.song?.artist)throw new Error("invalid");
-      const project:SavedProject={...candidate,key:storageKey(candidate.song),videoTimeOffset:Number.isFinite(candidate.videoTimeOffset)?Number(candidate.videoTimeOffset):0,autoVideoTimes:safeAutoTimes(candidate.autoVideoTimes),autoLineConfidences:safeConfidences(candidate.autoLineConfidences),manualLineTimes:safeManualTimes(candidate.manualLineTimes),translations:candidate.translations??{},literalMeanings:candidate.literalMeanings??{},tonePatterns:candidate.tonePatterns??{},updatedAt:new Date().toISOString()};
+      const project:SavedProject={...candidate,key:storageKey(candidate.song),videoTimeOffset:Number.isFinite(candidate.videoTimeOffset)?Number(candidate.videoTimeOffset):0,autoVideoTimes:safeAutoTimes(candidate.autoVideoTimes),autoLineConfidences:safeConfidences(candidate.autoLineConfidences),manualLineTimes:safeManualTimes(candidate.manualLineTimes),translations:candidate.translations??{},literalMeanings:candidate.literalMeanings??{},tonePatterns:candidate.tonePatterns??{},toneSlotCounts:safeToneSlotCounts(candidate.toneSlotCounts),toneBreaks:safeToneBreaks(candidate.toneBreaks),updatedAt:new Date().toISOString()};
       setSavedProjects((current)=>{
         const next=[project,...current.filter((item)=>item.key!==project.key)].slice(0,20);
         try{localStorage.setItem(PROJECT_LIBRARY_KEY,JSON.stringify(next));}catch{}
@@ -577,8 +606,28 @@ export default function LyricStudio(){
       return next;
     });
   };
+  const toneDefaultCount=(lineIndex:number)=>lyricToneUnits(timeline[lineIndex]?.text??"").length;
+  const toneSlotCount=(lineIndex:number)=>Math.max(toneDefaultCount(lineIndex),toneSlotCounts[lineIndex]??0);
+  const saveToneLayout=(counts:Record<number,number>,breaks:Record<number,number[]>)=>{
+    if(song)try{localStorage.setItem(toneLayoutStorageKey(song),JSON.stringify({counts,breaks}));}catch{}
+  };
+  const changeToneSlotCount=(lineIndex:number,delta:number)=>{
+    const minimum=toneDefaultCount(lineIndex),current=toneSlotCount(lineIndex);
+    const nextCount=Math.max(minimum,Math.min(120,current+delta));
+    const nextCounts={...toneSlotCounts,[lineIndex]:nextCount};
+    const nextBreaks={...toneBreaks,[lineIndex]:(toneBreaks[lineIndex]??[]).filter((gap)=>gap<nextCount)};
+    setToneSlotCounts(nextCounts);setToneBreaks(nextBreaks);saveToneLayout(nextCounts,nextBreaks);
+    const slots=toneSlotValues(tonePatterns[lineIndex]??"",nextCount);
+    updateTonePattern(lineIndex,slots.join(","));
+  };
+  const toggleToneBreak=(lineIndex:number,gapIndex:number)=>{
+    const current=toneBreaks[lineIndex]??[];
+    const lineBreaks=current.includes(gapIndex)?current.filter((gap)=>gap!==gapIndex):[...current,gapIndex].sort((a,b)=>a-b);
+    const next={...toneBreaks,[lineIndex]:lineBreaks};
+    setToneBreaks(next);saveToneLayout(toneSlotCounts,next);
+  };
   const updateToneSlot=(lineIndex:number,slotIndex:number,value:string)=>{
-    const count=lyricToneUnits(timeline[lineIndex]?.text??"").length;
+    const count=toneSlotCount(lineIndex);
     const slots=toneSlotValues(tonePatterns[lineIndex]??"",count);
     slots[slotIndex]=value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);
     updateTonePattern(lineIndex,slots.join(","));
@@ -603,15 +652,16 @@ export default function LyricStudio(){
   const pasteToneSlots=(lineIndex:number,slotIndex:number,value:string)=>{
     const pasted=pastedToneValues(value);
     if(!pasted.length)return;
-    const count=lyricToneUnits(timeline[lineIndex]?.text??"").length;
+    const count=toneSlotCount(lineIndex);
     const slots=toneSlotValues(tonePatterns[lineIndex]??"",count);
     pasted.slice(0,count-slotIndex).forEach((tone,index)=>{slots[slotIndex+index]=tone;});
     updateTonePattern(lineIndex,slots.join(","));
   };
 
   const copyToneSlots=async(lineIndex:number)=>{
-    const count=lyricToneUnits(timeline[lineIndex]?.text??"").length;
-    await copyText(toneSlotValues(tonePatterns[lineIndex]??"",count).join(","));
+    const count=toneSlotCount(lineIndex),breaks=toneBreaks[lineIndex]??[];
+    const copied=toneSlotValues(tonePatterns[lineIndex]??"",count).map((tone,index)=>tone+(breaks.includes(index+1)?" | ":index<count-1?",":"")).join("");
+    await copyText(copied);
     setCopiedToneLine(lineIndex);
     window.setTimeout(()=>setCopiedToneLine((current)=>current===lineIndex?null:current),1600);
   };
@@ -946,7 +996,7 @@ export default function LyricStudio(){
           <div className="line-editor-head"><span>#</span><span>LỜI GỐC · NGHĨA SÁT · LỜI VIỆT</span><span>{hasCompleteManualTimeline?"ĐÃ GÁN TỪNG CÂU":manualAssignedCount?`ĐÃ GÁN ${manualAssignedCount}/${timeline.length}`:song.syncedLyrics?"ĐỒNG BỘ":hasAutoTimeline?"ĐÃ CĂN TỰ ĐỘNG":"CHƯA CÓ MỐC"}</span></div>
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing ":"")+(index===manualCursor?"manual-selected ":"")+(Number.isFinite(manualLineTimes[index])?"manual-assigned ":hasAlignmentConfidence?(autoLineConfidences[index]>=.7?"align-good":autoLineConfidences[index]>=.5?"align-medium":"align-review"):"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{clockTime(line.time)}</i>{Number.isFinite(manualLineTimes[index])?<em>✓ ĐÃ GÁN</em>:hasAlignmentConfidence&&<em>{autoLineConfidences[index]>=.7?"✓ TỐT":autoLineConfidences[index]>=.5?"~ KIỂM TRA":"! CẦN SỬA"}</em>}</span>
-            <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Nghe riêng câu này, dừng khi đến câu tiếp theo"><span>{line.text}</span><small>▶ NGHE RIÊNG CÂU NÀY</small></button><div className="tone-slot-panel"><div><span>THANH ÂM</span><small>{lyricToneUnits(line.text).length} Ô · N NGANG · H HUYỀN · S SẮC</small><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div><div className="tone-slots">{lyricToneUnits(line.text).map((unit,toneIndex)=><input key={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",lyricToneUnits(line.text).length)[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.nextElementSibling as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.previousElementSibling as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>)}</div></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
+            <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Nghe riêng câu này, dừng khi đến câu tiếp theo"><span>{line.text}</span><small>▶ NGHE RIÊNG CÂU NÀY</small></button><div className="tone-slot-panel"><div className="tone-slot-head"><span>THANH ÂM</span><small>{toneSlotCount(index)} Ô{toneSlotCount(index)>toneDefaultCount(index)?` · +${toneSlotCount(index)-toneDefaultCount(index)} ÂM TIẾT`:""} · N NGANG · H HUYỀN · S SẮC</small><div className="tone-slot-actions"><button type="button" onClick={()=>changeToneSlotCount(index,-1)} disabled={toneSlotCount(index)<=toneDefaultCount(index)} aria-label={"Bớt một ô thanh âm câu "+(index+1)} title="Bớt một ô thêm">− Ô</button><button type="button" onClick={()=>changeToneSlotCount(index,1)} aria-label={"Thêm một ô thanh âm câu "+(index+1)} title="Thêm một âm tiết">+ Ô</button><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div></div><div className="tone-slots">{Array.from({length:toneSlotCount(index)},(_,toneIndex)=>{const units=lyricToneUnits(line.text),unit=units[toneIndex]??"Âm tiết thêm",hasBreak=(toneBreaks[index]??[]).includes(toneIndex+1);return <span className="tone-slot-item" key={toneIndex}><input data-tone-index={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",toneSlotCount(index))[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.parentElement?.parentElement?.querySelector(`[data-tone-index="${toneIndex+1}"]`) as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.parentElement?.parentElement?.querySelector(`[data-tone-index="${toneIndex-1}"]`) as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>{toneIndex<toneSlotCount(index)-1&&<button className={"tone-break "+(hasBreak?"on":"")} type="button" onClick={()=>toggleToneBreak(index,toneIndex+1)} aria-pressed={hasBreak} aria-label={(hasBreak?"Bỏ":"Thêm")+" ngắt câu sau ô "+(toneIndex+1)} title="Bấm để bật hoặc bỏ ngắt câu"/>}</span>;})}</div><p className="tone-slot-help">+ Ô cho cách đọc nhiều âm tiết · bấm khe giữa hai ô để đặt vạch ngắt câu</p></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
             <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>editManualLine(index,event.currentTarget.value)}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index,currentTime)} disabled={playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN THEO NHẠC {clockTime(currentTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button><button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button></div>
           </div>)}
         </div>}
