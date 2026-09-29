@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-28T09:49:37.210Z",
+  "generatedAt": "2026-09-29T09:52:07.545Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-09-28T17:30:00+08:00",
+      "updatedAt": "2026-09-29T17:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第39期（09.28-10.04）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "Trouble In My DMs",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "97.02 score",
+          "genre": "97.17 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "U&ME",
-          "artist": "檀健次",
+          "title": "异想天开",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "95.96 score",
+          "genre": "97.13 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Silk Sheets",
-          "artist": "檀健次",
+          "title": "不合时宜",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "95.72 score",
+          "genre": "96.49 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -45,10 +45,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Drop",
-          "artist": "檀健次",
+          "title": "Allez, aimez!",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "95.38 score",
+          "genre": "96.42 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Silk Sheets",
-          "artist": "檀健次",
+          "title": "遥远的不是爱",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "93.97 score",
+          "genre": "96.42 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Dive",
+          "title": "U&ME",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "93.20 score",
+          "genre": "96.36 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "幻火",
+          "title": "Dead Reflex (intro)",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "91.94 score",
+          "genre": "96.24 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "游爱场",
+          "title": "Silk Sheets",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "91.73 score",
+          "genre": "96.23 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "别放过",
+          "title": "Drop",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "91.41 score",
+          "genre": "96.16 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "辩友",
+          "title": "Silk Sheets",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "91.09 score",
+          "genre": "95.92 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-28T09:49:37.210Z"
+      "checkedAt": "2026-09-29T09:52:07.545Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-09-28T09:49:37.210Z"
+      "checkedAt": "2026-09-29T09:52:07.545Z"
     },
     {
       "id": "cn-ost-trending",
