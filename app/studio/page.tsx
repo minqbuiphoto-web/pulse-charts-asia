@@ -10,7 +10,6 @@ type LyricsPayload={lyrics?:string;syncedLyrics?:string;matchedTrack?:string;mat
 type SearchResult={videoId:string;title:string;artist:string;lyrics:string;syncedLyrics:string;lyricLanguage?:string};
 type StudioSong=SearchResult;
 type TimedLine={time:number;text:string};
-type ChatMessage={role:"assistant"|"user";text:string};
 type SavedProject={
   version:1;
   key:string;
@@ -306,11 +305,6 @@ export default function LyricStudio(){
   const [playerState,setPlayerState]=useState("WAITING");
   const [followPlayback,setFollowPlayback]=useState(true);
   const [editingLine,setEditingLine]=useState<number|null>(null);
-  const [question,setQuestion]=useState("");
-  const [replyDraft,setReplyDraft]=useState("");
-  const [chatMessages,setChatMessages]=useState<ChatMessage[]>([
-    {role:"assistant",text:"Chọn Hỏi tại một câu để tạo yêu cầu dịch sát nghĩa, hoặc sao chép yêu cầu dịch toàn bài ở nút phía dưới."}
-  ]);
   const [copied,setCopied]=useState(false);
   const [copiedToneLine,setCopiedToneLine]=useState<number|null>(null);
   const playerMountRef=useRef<HTMLDivElement|null>(null);
@@ -774,15 +768,6 @@ export default function LyricStudio(){
     return "Dịch sát nghĩa lời bài hát \""+song.title+"\" của "+song.artist+":\n\n"+timeline.map((line)=>line.text).join("\n");
   };
 
-  const askChatGPT=async()=>{
-    if(!song||!question.trim())return;
-    const prompt=question.trim();
-    await copyText(prompt);
-    setChatMessages((current)=>[...current,{role:"user",text:question.trim()},{role:"assistant",text:"Đã sao chép yêu cầu ngắn gọn. ChatGPT Free đang mở ở tab mới — hãy dán yêu cầu vào đó."}]);
-    setQuestion("");setCopied(true);
-    window.setTimeout(()=>setCopied(false),2500);
-    window.open("https://chatgpt.com/","_blank","noopener,noreferrer");
-  };
 
   const applyDirectVideo=()=>{
     const videoId=youtubeVideoId(directVideoUrl);
@@ -900,17 +885,7 @@ export default function LyricStudio(){
     setManualCursor(immediateNext<baseTimeline.length&&!Number.isFinite(current[immediateNext])?immediateNext:active.index);
   };
 
-  const addReplyNote=()=>{
-    if(!replyDraft.trim())return;
-    setChatMessages((current)=>[...current,{role:"assistant",text:replyDraft.trim()}]);
-    setReplyDraft("");
-  };
 
-  const useDraftInChat=()=>{
-    if(!song||!currentVietnameseDraft)return;
-    setQuestion("Góp ý bản lời Việt hiện tại của bài \""+song.title+"\" - "+song.artist+":\n\n"+currentVietnameseDraft);
-    window.setTimeout(()=>document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus(),0);
-  };
 
   return <main className="studio-shell">
     <header className="studio-header">
@@ -919,8 +894,8 @@ export default function LyricStudio(){
     </header>
 
     <section className="studio-hero">
-      <div><p>KHÔNG GIAN DỊCH LỜI BÀI HÁT</p><h1>Nghe từng câu.<br/><em>Viết đúng nghĩa.</em></h1><span>Tìm bài, đồng bộ, dịch và trao đổi từng câu lyric.</span></div>
-      <div className="studio-stats"><b>01</b><span>TÌM & ĐƯA BÀI VÀO</span><b>02</b><span>NGHE & VIẾT BẢN DỊCH</span><b>03</b><span>TRAO ĐỔI VỚI CHATGPT</span></div>
+      <div><p>KHÔNG GIAN DỊCH LỜI BÀI HÁT</p><h1>Nghe từng câu.<br/><em>Viết đúng nghĩa.</em></h1><span>Tìm bài, đồng bộ và viết lời Việt theo từng câu lyric.</span></div>
+      <div className="studio-stats"><b>01</b><span>TÌM & ĐƯA BÀI VÀO</span><b>02</b><span>NGHE & VIẾT BẢN DỊCH</span><b>03</b><span>XEM & SAO CHÉP BẢN NHÁP</span></div>
     </section>
 
     <section className="studio-search">
@@ -997,24 +972,18 @@ export default function LyricStudio(){
           {timeline.map((line,index)=><div ref={(element)=>{lineRefs.current[index]=element;}} className={"lyric-row "+(index===currentLineIndex?"active ":"")+(index===editingLine?"editing ":"")+(index===manualCursor?"manual-selected ":"")+(Number.isFinite(manualLineTimes[index])?"manual-assigned ":hasAlignmentConfidence?(autoLineConfidences[index]>=.7?"align-good":autoLineConfidences[index]>=.5?"align-medium":"align-review"):"")} key={index}>
             <span className="line-number">{String(index+1).padStart(2,"0")}<i>{clockTime(line.time)}</i>{Number.isFinite(manualLineTimes[index])?<em>✓ ĐÃ GÁN</em>:hasAlignmentConfidence&&<em>{autoLineConfidences[index]>=.7?"✓ TỐT":autoLineConfidences[index]>=.5?"~ KIỂM TRA":"! CẦN SỬA"}</em>}</span>
             <div className="lyric-writing"><div className="original-line-tools"><button className="line-seek" onClick={()=>playLine(index)} title="Nghe riêng câu này, dừng khi đến câu tiếp theo"><span>{line.text}</span><small>▶ NGHE RIÊNG CÂU NÀY</small></button><div className="tone-slot-panel"><div className="tone-slot-head"><span>THANH ÂM</span><small>{toneSlotCount(index)} Ô{toneSlotCount(index)>toneDefaultCount(index)?` · +${toneSlotCount(index)-toneDefaultCount(index)} ÂM TIẾT`:""} · N NGANG · H HUYỀN · S SẮC</small><div className="tone-slot-actions"><button type="button" onClick={()=>changeToneSlotCount(index,-1)} disabled={toneSlotCount(index)<=toneDefaultCount(index)} aria-label={"Bớt một ô thanh âm câu "+(index+1)} title="Bớt một ô thêm">− Ô</button><button type="button" onClick={()=>changeToneSlotCount(index,1)} aria-label={"Thêm một ô thanh âm câu "+(index+1)} title="Thêm một âm tiết">+ Ô</button><button className="copy-tone-slots" type="button" onClick={()=>copyToneSlots(index)} aria-label={"Sao chép thanh âm câu "+(index+1)}>{copiedToneLine===index?"ĐÃ COPY":"COPY"}</button></div></div><div className="tone-slots">{Array.from({length:toneSlotCount(index)},(_,toneIndex)=>{const units=lyricToneUnits(line.text),unit=units[toneIndex]??"Âm tiết thêm",hasBreak=(toneBreaks[index]??[]).includes(toneIndex+1);return <span className="tone-slot-item" key={toneIndex}><input data-tone-index={toneIndex} maxLength={1} value={toneSlotValues(tonePatterns[index]??"",toneSlotCount(index))[toneIndex]} onChange={(event)=>{const value=event.currentTarget.value.toLocaleUpperCase("en").replace(/[^NHS]/g,"").slice(-1);updateToneSlot(index,toneIndex,value);if(value)(event.currentTarget.parentElement?.parentElement?.querySelector(`[data-tone-index="${toneIndex+1}"]`) as HTMLInputElement|null)?.focus();}} onPaste={(event)=>{const pasted=event.clipboardData.getData("text");if(!pastedToneValues(pasted).length)return;event.preventDefault();pasteToneSlots(index,toneIndex,pasted);}} onKeyDown={(event)=>{if(event.key==="Backspace"&&!event.currentTarget.value)(event.currentTarget.parentElement?.parentElement?.querySelector(`[data-tone-index="${toneIndex-1}"]`) as HTMLInputElement|null)?.focus();}} aria-label={"Thanh âm "+(toneIndex+1)+" cho "+unit} title={unit+" · nhập N, H hoặc S; có thể dán cả hàng"}/>{toneIndex<toneSlotCount(index)-1&&<button className={"tone-break "+(hasBreak?"on":"")} type="button" onClick={()=>toggleToneBreak(index,toneIndex+1)} aria-pressed={hasBreak} aria-label={(hasBreak?"Bỏ":"Thêm")+" ngắt câu sau ô "+(toneIndex+1)} title="Bấm để bật hoặc bỏ ngắt câu"/>}</span>;})}</div><p className="tone-slot-help">+ Ô cho cách đọc nhiều âm tiết · bấm khe giữa hai ô để đặt vạch ngắt câu</p></div></div><label className="literal-field"><span>NGHĨA SÁT</span><textarea value={literalMeanings[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateLiteralMeaning(index,event.target.value)} placeholder="Nghĩa tiếng Việt sát với câu gốc…"/></label><label className="adaptation-field"><span>LỜI VIỆT</span><textarea value={translations[index]??""} onFocus={()=>{setEditingLine(index);setFollowPlayback(false);}} onBlur={()=>setEditingLine((current)=>current===index?null:current)} onChange={(event)=>updateTranslation(index,event.target.value)} placeholder="Viết lyric tiếng Việt có thể hát cho câu này…"/></label></div>
-            <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>editManualLine(index,event.currentTarget.value)}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index,currentTime)} disabled={playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN THEO NHẠC {clockTime(currentTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button><button onClick={()=>{setQuestion("Dịch sát nghĩa câu \""+line.text+"\"");document.querySelector<HTMLTextAreaElement>(".chat-compose textarea")?.focus();}}>HỎI</button></div>
+            <div className="line-side-actions"><button type="button" className="select-manual-line" onClick={()=>setManualCursor(index)}>CHỌN CÂU</button><label>MỐC GIÂY<input type="number" min="0" step="0.01" value={Number.isFinite(manualLineTimes[index])?manualLineTimes[index]:""} placeholder={hasAutoTimeline?String(autoVideoTimes[index]?.toFixed(2)??""):""} onChange={(event)=>editManualLine(index,event.currentTarget.value)}/></label><button type="button" className="assign-at-playing" onClick={()=>assignManualLine(index,currentTime)} disabled={playerState==="LOADING"||playerState==="VIDEO_ERROR"}>GÁN THEO NHẠC {clockTime(currentTime)}</button><button type="button" className="delete-line-mark" onClick={()=>removeManualLine(index)} disabled={!Number.isFinite(manualLineTimes[index])}>XÓA MỐC</button></div>
           </div>)}
         </div>}
       </div>
 
       <aside className="chat-column">
-        <div className="chat-head"><div className="chat-orb">✦</div><div><small>TRỢ LÝ MIỄN PHÍ</small><h2>Trao đổi với ChatGPT</h2><p>Ý nghĩa · sắc thái · cách diễn đạt tiếng Việt</p></div></div>
-        <div className="free-explainer"><b>VÌ SAO PHẢI SAO CHÉP VÀ MỞ TAB?</b><p>ChatGPT không cho phép nhúng miễn phí vào website bên ngoài. Khung này chỉ chuẩn bị một yêu cầu dịch sát nghĩa ngắn gọn, sau đó mở ChatGPT Free để bạn dán yêu cầu mà không phát sinh phí API.</p></div>
-        <div className="chat-log">{chatMessages.map((message,index)=><div className={"chat-message "+message.role} key={index}><span>{message.role==="user"?"BẠN":"GPT"}</span><p>{message.text}</p></div>)}</div>
         <section className="current-vietnamese-draft">
           <div className="current-draft-head"><div><small>BẢN NHÁP TRỰC TIẾP</small><h3>Lời Việt hiện tại</h3></div><span>{completedVietnameseLines}/{timeline.length} CÂU</span></div>
           <textarea readOnly value={currentVietnameseDraft} placeholder="Các câu lời Việt bạn vừa viết sẽ tự xuất hiện tại đây theo đúng thứ tự…" aria-label="Bản lời Việt hiện tại"/>
-          <div className="current-draft-actions"><button onClick={async()=>{await copyText(currentVietnameseDraft);setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!currentVietnameseDraft}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP BẢN NHÁP"}</button><button onClick={useDraftInChat} disabled={!currentVietnameseDraft}>ĐƯA VÀO Ô HỎI CHATGPT</button></div>
+          <div className="current-draft-actions"><button onClick={async()=>{await copyText(currentVietnameseDraft);setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!currentVietnameseDraft}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP BẢN NHÁP"}</button></div>
           <p>Ô này cập nhật ngay khi bạn sửa lời Việt; chỉ lấy những câu đã viết và không kèm lời gốc hay nhãn.</p>
         </section>
-        <div className="chat-compose"><label>CÂU HỎI CỦA BẠN</label><textarea value={question} onChange={(event)=>setQuestion(event.target.value)} placeholder='Ví dụ: Dịch sát nghĩa câu "..."'/><button onClick={askChatGPT} disabled={!question.trim()||!song}>{copied?"ĐÃ SAO CHÉP — ĐANG MỞ CHATGPT…":"HỎI CHATGPT MIỄN PHÍ ↗"}</button><small>Yêu cầu bạn viết sẽ được sao chép nguyên văn, không chèn thêm ngữ cảnh dài.</small></div>
-        <details className="reply-note"><summary>DÁN CÂU TRẢ LỜI HỮU ÍCH TỪ CHATGPT VÀO ĐÂY</summary><textarea value={replyDraft} onChange={(event)=>setReplyDraft(event.target.value)} placeholder="Dán phần giải thích bạn muốn lưu cạnh bản dịch…"/><button onClick={addReplyNote} disabled={!replyDraft.trim()}>THÊM VÀO GHI CHÚ TRAO ĐỔI</button></details>
-        <button className="copy-context" onClick={async()=>{await copyText(fullSongTranslationRequest());setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!timeline.length}>SAO CHÉP YÊU CẦU DỊCH SÁT NGHĨA TOÀN BÀI</button>
       </aside>
     </section>}
 
