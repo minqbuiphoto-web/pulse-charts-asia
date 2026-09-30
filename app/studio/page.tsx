@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import "./studio.css";
+import SongRequestsBoard from "./song-requests-board";
 
 type LookupState="idle"|"searching"|"ready"|"error";
 type LyricLanguage="auto"|"ko"|"zh"|"ja";
@@ -984,6 +985,7 @@ export default function LyricStudio(){
           <div className="current-draft-actions"><button onClick={async()=>{await copyText(currentVietnameseDraft);setCopied(true);window.setTimeout(()=>setCopied(false),2000);}} disabled={!currentVietnameseDraft}>{copied?"ĐÃ SAO CHÉP":"SAO CHÉP BẢN NHÁP"}</button></div>
           <p>Ô này cập nhật ngay khi bạn sửa lời Việt; chỉ lấy những câu đã viết và không kèm lời gốc hay nhãn.</p>
         </section>
+        <SongRequestsBoard/>
       </aside>
     </section>}
 
