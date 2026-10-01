@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Yêu cầu bài hát — MinqCa Studio</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="layout">
+    <section class="card">
+      <span class="eyebrow">MINQCA STUDIO - GÓC YÊU CẦU</span>
+      <h1>Một bài hát<br><em>bạn muốn nghe.</em></h1>
+      <p>Hãy yêu cầu từ từ để mình có thời gian hoàn thiện nhé. Xin cám ơn !</p>
+      <form id="request-form" hidden>
+        <label for="title">Tên bài hát<input id="title" name="title" required maxlength="160" placeholder="Ví dụ: Tam Bái Hồng Trần Lương"></label>
+        <label for="artist">Ca sĩ<input id="artist" name="artist" required maxlength="120" placeholder="Ví dụ: Doãn Tích Miên"></label>
+        <button id="submit" type="submit">Gửi yêu cầu bài hát</button>
+        <small>Kiểm tra tên bài hát và ca sĩ trước khi gửi.</small>
+      </form>
+      <div id="success" class="success" role="status" hidden>
+        <h2>Đã nhận yêu cầu của bạn</h2>
+        <strong id="saved-title"></strong>
+        <p id="saved-artist"></p>
+        <time id="saved-time"></time>
+        <p>Cảm ơn bạn đã gửi yêu cầu!</p>
+        <button id="another" type="button">Yêu cầu bài khác</button>
+      </div>
+      <p id="status" role="status">Đang kiểm tra kết nối…</p>
+      <div id="error" class="error" role="alert" hidden><span id="error-text"></span><button id="retry" type="button" hidden>Thử kết nối lại</button></div>
+    </section>
+    <aside class="card support" aria-labelledby="support-title">
+      <h2 id="support-title">☕ Ủng hộ MinqCa một ly cà phê hay một ổ bánh mì nhé!</h2>
+      <p>Nếu bạn yêu thích những gì MinqCa Studio đang làm, có thể góp một ly cà phê hay một ổ bánh mì để tiếp thêm chút năng lượng cho những sản phẩm tiếp theo. 🥐💜</p>
+      <p>Link : <a href="https://drive.google.com/file/d/1UTIctBxYslFk1tBwspEBsqgMlLpwF90y/view?usp=drive_link" target="_blank" rel="noopener noreferrer">https://drive.google.com/file/d/1UTIctBxYslFk1tBwspEBsqgMlLpwF90y/view?usp=drive_link</a></p>
+      <p><strong>Mọi sự ủng hộ đều rất đáng quý. Cảm ơn bạn thật nhiều!</strong></p>
+    </aside>
+  </main>
+  <script src="/request.js" defer></script>
+</body>
+</html>

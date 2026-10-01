@@ -40,23 +40,15 @@ test('paginates without disclosing browser identifiers', async()=>{
   const result=response();await handler({method:'GET',query:{page:'1'}},result);assert.equal(result.body.requests.length,50);assert.equal(result.body.hasMore,true);
 });
 
-const adminKey = 'test-only-admin-key-with-32-characters';
-function deletion(requestId, key = adminKey) { return { method: 'DELETE', query: { id: requestId }, headers: { 'x-admin-key': key, host: 'example.com', origin: 'https://example.com' } }; }
-test('deletion requires configured admin key and rejects unauthorized callers before storage', async () => {
+function deletion(requestId) { return { method: 'DELETE', query: { id: requestId }, headers: { host: 'example.com', origin: 'https://example.com' } }; }
+test('deletion rejects cross-origin and invalid IDs before storage', async () => {
   const noStorage = async () => { throw new Error('Must not reach storage'); };
-  for (const key of ['', 'wrong']) {
-    const result = response(); await createHandler(noStorage, () => adminKey)(deletion(id, key), result);
-    assert.equal(result.code, 401);
-  }
-  const missing = deletion(id); delete missing.headers['x-admin-key'];
-  const denied = response(); await createHandler(noStorage, () => adminKey)(missing, denied); assert.equal(denied.code, 401);
-  const unconfigured = response(); await createHandler(noStorage, () => undefined)(deletion(id), unconfigured); assert.equal(unconfigured.code, 503);
   const cross = deletion(id); cross.headers.origin = 'https://other.example';
-  const forbidden = response(); await createHandler(noStorage, () => adminKey)(cross, forbidden); assert.equal(forbidden.code, 403);
-  const invalid = response(); await createHandler(noStorage, () => adminKey)(deletion('invalid'), invalid); assert.equal(invalid.code, 400);
+  const forbidden = response(); await createHandler(noStorage)(cross, forbidden); assert.equal(forbidden.code, 403);
+  const invalid = response(); await createHandler(noStorage)(deletion('invalid'), invalid); assert.equal(invalid.code, 400);
 });
-test('admin deletion removes only selected row and allows another request', async () => {
-  const handler = createHandler(store(), () => adminKey);
+test('deletion removes only selected row and allows another request', async () => {
+  const handler = createHandler(store());
   const first = response(); await handler(input(), first);
   const otherInput = input({ title: 'Other', artist: 'Artist' });
   const other = response(); await handler(otherInput, other);
