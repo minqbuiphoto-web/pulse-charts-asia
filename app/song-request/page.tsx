@@ -49,7 +49,7 @@ export default function SongRequestPage() {
   }
 
   return <main className="song-request-page" lang="vi"><div className="song-request-layout"><section className="song-request-card">
-    <span className="request-eyebrow">PULSE · GÓC YÊU CẦU</span>
+    <span className="request-eyebrow">MINQCA STUDIO - GÓC YÊU CẦU</span>
     <h1>Một bài hát<br/><em>bạn muốn nghe.</em></h1>
     <p>Nhập tên bài hát và ca sĩ. Mỗi trình duyệt được gửi một yêu cầu.</p>
     {checking ? <p role="status">Đang kiểm tra yêu cầu…</p> : request ? <div className="request-success" role="status">
@@ -57,8 +57,8 @@ export default function SongRequestPage() {
       <time dateTime={request.createdAt}>{new Date(request.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</time>
       <p>Trình duyệt này đã gửi một bài. Cảm ơn bạn!</p>
     </div> : <form onSubmit={submit}>
-      <label htmlFor="requested-title">Tên bài hát<input id="requested-title" required maxLength={160} value={title} onChange={e => setTitle(e.target.value)} placeholder="Ví dụ: Có chàng trai viết lên cây" disabled={busy}/></label>
-      <label htmlFor="requested-artist">Ca sĩ<input id="requested-artist" required maxLength={120} value={artist} onChange={e => setArtist(e.target.value)} placeholder="Ví dụ: Phan Mạnh Quỳnh" disabled={busy}/></label>
+      <label htmlFor="requested-title">Tên bài hát<input id="requested-title" required maxLength={160} value={title} onChange={e => setTitle(e.target.value)} placeholder="Ví dụ: Tam Bái Hồng Trần Lương" disabled={busy}/></label>
+      <label htmlFor="requested-artist">Ca sĩ<input id="requested-artist" required maxLength={120} value={artist} onChange={e => setArtist(e.target.value)} placeholder="Ví dụ: Doãn Tích Miên" disabled={busy}/></label>
       <button disabled={!ready || busy || !title.trim() || !artist.trim()}>{busy ? 'Đang gửi…' : 'Gửi yêu cầu bài hát'}</button>
       <small>Kiểm tra thông tin trước khi gửi. Sau khi gửi thành công, bạn không thể gửi thêm trên trình duyệt này.</small>
     </form>}
