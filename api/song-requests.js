@@ -2,13 +2,6 @@ import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 
 const PREFIX = 'pulse:song-requests:v1';
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
-const ADD_ONCE = `
-local old = redis.call('HGET', KEYS[1], ARGV[1])
-if old then return {0, old} end
-redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
-redis.call('LPUSH', KEYS[2], ARGV[2])
-return {1, ARGV[2]}
-`;
 
 export function createHandler(command, adminSecret = () => process.env.SONG_REQUESTS_ADMIN_KEY) {
   return async function handler(req, res) {
@@ -27,7 +20,7 @@ export function createHandler(command, adminSecret = () => process.env.SONG_REQU
         if (req.headers?.origin && new URL(req.headers.origin).host !== req.headers?.host) return res.status(403).json({ error: 'Hãy thao tác từ trang chính thức.' });
         const id = req.query?.id;
         if (typeof id !== 'string' || !UUID.test(id)) return res.status(400).json({ error: 'Yêu cầu không hợp lệ.' });
-        // Remove only the queue entry; retain the browser record and its one-request limit.
+        // Remove the completed request from the visible queue.
         for (let offset = 0; ; offset += 100) {
           const entries = await command(['LRANGE', `${PREFIX}:list`, offset, offset + 99]);
           const entry = entries.find(value => JSON.parse(value).id === id);
@@ -36,19 +29,11 @@ export function createHandler(command, adminSecret = () => process.env.SONG_REQU
         }
         return res.status(200).json({ deleted: true });
       }
-      if (req.method === 'GET' && req.query?.view !== 'mine') {
+      if (req.method === 'GET') {
         const page = Number(req.query?.page ?? 0);
         if (!Number.isInteger(page) || page < 0 || page > 10000) return res.status(400).json({ error: 'Trang không hợp lệ.' });
         const entries = await command(['LRANGE', `${PREFIX}:list`, page * 50, page * 50 + 50]);
         return res.status(200).json({ requests: entries.slice(0, 50).map(value => JSON.parse(value)), hasMore: entries.length > 50 });
-      }
-      const cookieId = /(?:^|;\s*)pulse_song_request=([^;]+)/.exec(req.headers?.cookie || '')?.[1];
-      const browserId = UUID.test(cookieId || '') ? cookieId : req.headers?.['x-request-browser'];
-      if (typeof browserId !== 'string' || !UUID.test(browserId)) return res.status(400).json({ error: 'Không nhận diện được trình duyệt. Hãy tải lại trang.' });
-      const browserHash = createHash('sha256').update(browserId).digest('hex');
-      if (req.method === 'GET') {
-        const entry = await command(['HGET', `${PREFIX}:browsers`, browserHash]);
-        return res.status(200).json({ request: entry ? JSON.parse(entry) : null });
       }
       const origin = req.headers?.origin;
       if (origin && new URL(origin).host !== req.headers?.host) return res.status(403).json({ error: 'Hãy gửi yêu cầu từ trang chính thức.' });
@@ -62,11 +47,10 @@ export function createHandler(command, adminSecret = () => process.env.SONG_REQU
         return res.status(400).json({ error: 'Nhập tên bài hát (tối đa 160 ký tự) và ca sĩ (tối đa 120 ký tự).' });
       }
       const entry = { id: randomUUID(), title, artist, createdAt: new Date().toISOString() };
-      const [created, saved] = await command(['EVAL', ADD_ONCE, 2, `${PREFIX}:browsers`, `${PREFIX}:list`, browserHash, JSON.stringify(entry)]);
-      res.setHeader('Set-Cookie', `pulse_song_request=${browserId}; Path=/; Max-Age=34560000; HttpOnly; Secure; SameSite=Lax`);
-      return res.status(created ? 201 : 200).json({ request: JSON.parse(saved), alreadySubmitted: !created });
+      await command(['LPUSH', `${PREFIX}:list`, JSON.stringify(entry)]);
+      return res.status(201).json({ request: entry });
     } catch (error) {
-      return res.status(503).json({ error: error?.code === 'NOT_CONFIGURED' ? 'Trang nhận yêu cầu chưa được mở. Vui lòng quay lại sau.' : 'Chưa kết nối được kho yêu cầu. Vui lòng thử lại; yêu cầu của bạn sẽ không bị gửi trùng.' });
+      return res.status(503).json({ error: error?.code === 'NOT_CONFIGURED' ? 'Trang nhận yêu cầu chưa được mở. Vui lòng quay lại sau.' : 'Chưa kết nối được kho yêu cầu. Vui lòng thử lại.' });
     }
   };
 }

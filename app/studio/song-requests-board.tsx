@@ -14,7 +14,7 @@ export default function SongRequestsBoard() {
   const [deleting, setDeleting] = useState('');
   const [notice, setNotice] = useState('');
   async function remove(item: RequestEntry) {
-    if (!adminKey || deleting || !window.confirm(`Xóa yêu cầu “${item.title}” — ${item.artist} khỏi danh sách sau khi làm xong? Người gửi vẫn không thể gửi thêm bài.`)) return;
+    if (!adminKey || deleting || !window.confirm(`Xóa yêu cầu “${item.title}” — ${item.artist} khỏi danh sách sau khi làm xong?`)) return;
     setDeleting(item.id); setError(''); setNotice('');
     try {
       const response = await fetch(`/api/song-requests?id=${encodeURIComponent(item.id)}`, { method: 'DELETE', headers: { 'x-admin-key': adminKey }, signal: AbortSignal.timeout(15000) });
@@ -53,7 +53,7 @@ export default function SongRequestsBoard() {
   return <section className="song-requests-board" aria-label="Yêu cầu bài hát">
     <h3>Yêu cầu bài hát</h3>
     <div className="song-request-toolbar"><div className="song-request-links"><button type="button" onClick={copy}>{copied ? 'Đã sao chép' : 'Sao chép link gửi yêu cầu'}</button><button type="button" onClick={() => setRefresh(value => value + 1)}>Làm mới</button></div><a className="song-request-open" href="/song-request/" target="_blank" rel="noopener noreferrer">Mở trang yêu cầu ↗</a></div>
-    <p>Mỗi trình duyệt một bài · Tự cập nhật mỗi 30 giây.</p>
+    <p>Mọi người có thể yêu cầu nhiều bài · Tự cập nhật mỗi 30 giây.</p>
     <details className="song-request-admin"><summary>Quản lý yêu cầu (chỉ chủ trang)</summary><label>Mã quản trị<input type="password" value={adminKey} maxLength={512} autoComplete="off" onChange={event => setAdminKey(event.target.value)} placeholder="Nhập mã quản trị để xóa" /></label><p>Mã chỉ giữ trong tab này, không lưu trên trình duyệt.</p>{adminKey && <button type="button" onClick={() => setAdminKey('')}>Khóa quản lý</button>}</details>
     {notice && <p role="status">{notice}</p>}
     {error && <p role="alert">{error}</p>}
