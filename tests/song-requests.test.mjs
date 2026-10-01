@@ -16,6 +16,7 @@ function store() {
     }
     if (command[0] === 'HGET') return browsers.get(command[2]) || null;
     if (command[0] === 'LRANGE') return entries.slice(command[2], command[3] + 1);
+    if (command[0] === 'LREM') { const index = entries.indexOf(command[3]); if (index < 0) return 0; entries.splice(index, 1); return 1; }
     throw new Error('Unexpected command');
   };
 }
@@ -51,4 +52,30 @@ test('storage errors never report success or set submission cookie', async () =>
 test('paginates without disclosing browser identifiers', async()=>{
   const handler=createHandler(async command=>{assert.deepEqual(command,['LRANGE','pulse:song-requests:v1:list',50,100]);return Array.from({length:51},(_,i)=>JSON.stringify({id:String(i),title:'A',artist:'B',createdAt:new Date().toISOString()}));});
   const result=response();await handler({method:'GET',query:{page:'1'}},result);assert.equal(result.body.requests.length,50);assert.equal(result.body.hasMore,true);
+});
+
+const adminKey = 'test-only-admin-key-with-32-characters';
+function deletion(requestId, key = adminKey) { return { method: 'DELETE', query: { id: requestId }, headers: { 'x-admin-key': key, host: 'example.com', origin: 'https://example.com' } }; }
+test('deletion requires configured admin key and rejects unauthorized callers before storage', async () => {
+  const noStorage = async () => { throw new Error('Must not reach storage'); };
+  for (const key of ['', 'wrong']) {
+    const result = response(); await createHandler(noStorage, () => adminKey)(deletion(id, key), result);
+    assert.equal(result.code, 401);
+  }
+  const missing = deletion(id); delete missing.headers['x-admin-key'];
+  const denied = response(); await createHandler(noStorage, () => adminKey)(missing, denied); assert.equal(denied.code, 401);
+  const unconfigured = response(); await createHandler(noStorage, () => undefined)(deletion(id), unconfigured); assert.equal(unconfigured.code, 503);
+  const cross = deletion(id); cross.headers.origin = 'https://other.example';
+  const forbidden = response(); await createHandler(noStorage, () => adminKey)(cross, forbidden); assert.equal(forbidden.code, 403);
+  const invalid = response(); await createHandler(noStorage, () => adminKey)(deletion('invalid'), invalid); assert.equal(invalid.code, 400);
+});
+test('admin deletion removes only selected row, keeps submission limit and is idempotent', async () => {
+  const handler = createHandler(store(), () => adminKey);
+  const first = response(); await handler(input(), first);
+  const otherInput = input({ title: 'Other', artist: 'Artist' }); otherInput.headers['x-request-browser'] = '06d9bbed-8492-4432-8813-47f78172ab44';
+  const other = response(); await handler(otherInput, other);
+  for (let i = 0; i < 2; i++) { const removed = response(); await handler(deletion(first.body.request.id), removed); assert.equal(removed.code, 200); }
+  const list = response(); await handler({ method: 'GET', query: {} }, list); assert.deepEqual(list.body.requests, [other.body.request]);
+  const again = response(); await handler(input(), again); assert.equal(again.body.alreadySubmitted, true);
+  const after = response(); await handler({ method: 'GET', query: {} }, after); assert.equal(after.body.requests.length, 1);
 });

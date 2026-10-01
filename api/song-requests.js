@@ -1,4 +1,4 @@
-import { createHash, randomUUID } from 'node:crypto';
+import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 
 const PREFIX = 'pulse:song-requests:v1';
 const UUID = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
@@ -10,15 +10,32 @@ redis.call('LPUSH', KEYS[2], ARGV[2])
 return {1, ARGV[2]}
 `;
 
-export function createHandler(command) {
+export function createHandler(command, adminSecret = () => process.env.SONG_REQUESTS_ADMIN_KEY) {
   return async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store');
     res.setHeader('X-Content-Type-Options', 'nosniff');
-    if (!['GET', 'POST'].includes(req.method)) {
-      res.setHeader('Allow', 'GET, POST');
+    if (!['GET', 'POST', 'DELETE'].includes(req.method)) {
+      res.setHeader('Allow', 'GET, POST, DELETE');
       return res.status(405).json({ error: 'Phương thức không được hỗ trợ.' });
     }
     try {
+      if (req.method === 'DELETE') {
+        const secret = adminSecret();
+        if (!secret || secret.length < 32) return res.status(503).json({ error: 'Chưa cấu hình mã quản trị trên máy chủ.' });
+        const supplied = req.headers?.['x-admin-key'];
+        if (typeof supplied !== 'string' || supplied.length > 512 || !timingSafeEqual(createHash('sha256').update(supplied).digest(), createHash('sha256').update(secret).digest())) return res.status(401).json({ error: 'Mã quản trị không đúng.' });
+        if (req.headers?.origin && new URL(req.headers.origin).host !== req.headers?.host) return res.status(403).json({ error: 'Hãy thao tác từ trang chính thức.' });
+        const id = req.query?.id;
+        if (typeof id !== 'string' || !UUID.test(id)) return res.status(400).json({ error: 'Yêu cầu không hợp lệ.' });
+        // Remove only the queue entry; retain the browser record and its one-request limit.
+        for (let offset = 0; ; offset += 100) {
+          const entries = await command(['LRANGE', `${PREFIX}:list`, offset, offset + 99]);
+          const entry = entries.find(value => JSON.parse(value).id === id);
+          if (entry) { await command(['LREM', `${PREFIX}:list`, 1, entry]); break; }
+          if (entries.length < 100) break;
+        }
+        return res.status(200).json({ deleted: true });
+      }
       if (req.method === 'GET' && req.query?.view !== 'mine') {
         const page = Number(req.query?.page ?? 0);
         if (!Number.isInteger(page) || page < 0 || page > 10000) return res.status(400).json({ error: 'Trang không hợp lệ.' });
