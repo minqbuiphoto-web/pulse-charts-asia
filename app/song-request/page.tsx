@@ -46,7 +46,7 @@ export default function SongRequestPage() {
   return <main className="song-request-page" lang="vi"><div className="song-request-layout"><section className="song-request-card">
     <span className="request-eyebrow">MINQCA STUDIO - GÓC YÊU CẦU</span>
     <h1>Một bài hát<br/><em>bạn muốn nghe.</em></h1>
-    <p>Nhập tên bài hát và ca sĩ. Hãy yêu cầu từ từ để mình có thời gian hoàn thiện nhé. Xin cám ơn !</p>
+    <p>Hãy yêu cầu từ từ để mình có thời gian hoàn thiện nhé. Xin cám ơn !</p>
     {checking ? <p role="status">Đang kiểm tra yêu cầu…</p> : request ? <div className="request-success" role="status">
       <h2>Đã nhận yêu cầu của bạn</h2><strong>{request.title}</strong><p>{request.artist}</p>
       <time dateTime={request.createdAt}>{new Date(request.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}</time>
