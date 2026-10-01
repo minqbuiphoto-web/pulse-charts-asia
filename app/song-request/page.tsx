@@ -66,6 +66,7 @@ export default function SongRequestPage() {
   </section><aside className="song-support-card" aria-labelledby="song-support-title">
     <h2 id="song-support-title">☕ Mời MinqCa một ly cà phê nhé!</h2>
     <p>Nếu bạn yêu thích những gì MinqCa Studio đang làm, có thể góp một ly cà phê hay một ổ bánh mì để tiếp thêm chút năng lượng cho những sản phẩm tiếp theo. 🥐💜</p>
+    <p>Link : <a href="https://drive.google.com/file/d/1UTIctBxYslFk1tBwspEBsqgMlLpwF90y/view?usp=drive_link" target="_blank" rel="noopener noreferrer">https://drive.google.com/file/d/1UTIctBxYslFk1tBwspEBsqgMlLpwF90y/view?usp=drive_link</a></p>
     <p><strong>Mọi sự ủng hộ đều rất đáng quý. Cảm ơn bạn thật nhiều!</strong></p>
   </aside></div></main>;
 }

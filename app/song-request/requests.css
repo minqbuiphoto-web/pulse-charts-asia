@@ -4,6 +4,7 @@
 .song-support-card h2{margin:0 0 22px;font-size:clamp(24px,3vw,30px);line-height:1.35;color:#e6c9ff}
 .song-support-card p{margin:0 0 22px;color:#c4becf;font-size:16px;line-height:1.85}
 .song-support-card p:last-child{margin-bottom:0}.song-support-card strong{color:#f2e5ff}
+.song-support-card a{color:#d2ff48;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}.song-support-card a:focus-visible{outline:2px solid #cda3ff;outline-offset:4px}
 @media(max-width:760px){.song-request-layout{max-width:540px;grid-template-columns:minmax(0,1fr)}}
 .song-request-card{width:100%;max-width:540px;padding:36px;border:1px solid #33333e;border-radius:24px;background:#101219}
 .request-eyebrow{font-size:12px;letter-spacing:2px;color:#d2ff48}
