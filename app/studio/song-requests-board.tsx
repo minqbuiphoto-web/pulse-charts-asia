@@ -36,7 +36,7 @@ export default function SongRequestsBoard() {
   }, []);
   return <section className="song-requests-board" aria-label="Yêu cầu bài hát">
     <h3>Yêu cầu bài hát</h3>
-    <div className="song-request-links"><button type="button" onClick={copy}>{copied ? 'Đã sao chép' : 'Sao chép link gửi yêu cầu'}</button><a href="/song-request/" target="_blank" rel="noopener noreferrer">Mở trang yêu cầu ↗</a><button type="button" onClick={() => setRefresh(value => value + 1)}>Làm mới</button></div>
+    <div className="song-request-toolbar"><div className="song-request-links"><button type="button" onClick={copy}>{copied ? 'Đã sao chép' : 'Sao chép link gửi yêu cầu'}</button><button type="button" onClick={() => setRefresh(value => value + 1)}>Làm mới</button></div><a className="song-request-open" href="/song-request/" target="_blank" rel="noopener noreferrer">Mở trang yêu cầu ↗</a></div>
     <p>Mỗi trình duyệt một bài · Tự cập nhật mỗi 30 giây.</p>
     {error && <p role="alert">{error}</p>}
     {loading ? <p role="status">Đang tải yêu cầu…</p> : requests.length === 0 && !error ? <p>Chưa có yêu cầu bài hát.</p> : requests.length > 0 && <div className="song-request-table"><table><thead><tr><th>Tên bài hát</th><th>Ca sĩ</th><th>Ngày yêu cầu</th></tr></thead><tbody>{requests.map(item => <tr key={item.id}><td>{item.title}</td><td>{item.artist}</td><td><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}<br/>{new Date(item.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' })}</time></td></tr>)}</tbody></table></div>}
