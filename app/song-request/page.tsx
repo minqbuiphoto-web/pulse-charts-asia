@@ -48,7 +48,7 @@ export default function SongRequestPage() {
     finally { setBusy(false); }
   }
 
-  return <main className="song-request-page" lang="vi"><section className="song-request-card">
+  return <main className="song-request-page" lang="vi"><div className="song-request-layout"><section className="song-request-card">
     <span className="request-eyebrow">PULSE · GÓC YÊU CẦU</span>
     <h1>Một bài hát<br/><em>bạn muốn nghe.</em></h1>
     <p>Nhập tên bài hát và ca sĩ. Mỗi trình duyệt được gửi một yêu cầu.</p>
@@ -63,5 +63,9 @@ export default function SongRequestPage() {
       <small>Kiểm tra thông tin trước khi gửi. Sau khi gửi thành công, bạn không thể gửi thêm trên trình duyệt này.</small>
     </form>}
     {error && <div role="alert" className="request-error">{error}{!ready && <button type="button" onClick={() => setRetry(value => value + 1)}>Thử kết nối lại</button>}</div>}
-  </section></main>;
+  </section><aside className="song-support-card" aria-labelledby="song-support-title">
+    <h2 id="song-support-title">☕ Mời MinqCa một ly cà phê nhé!</h2>
+    <p>Nếu bạn yêu thích những gì MinqCa Studio đang làm, có thể góp một ly cà phê hay một ổ bánh mì để tiếp thêm chút năng lượng cho những sản phẩm tiếp theo. 🥐💜</p>
+    <p><strong>Mọi sự ủng hộ đều rất đáng quý. Cảm ơn bạn thật nhiều!</strong></p>
+  </aside></div></main>;
 }

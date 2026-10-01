@@ -13,6 +13,7 @@ const modules = [
 
 export default function ModuleSwitcher() {
   const path = usePathname();
+  if (path === "/song-request" || path.startsWith("/song-request/")) return null;
   const active = path.startsWith("/audio-lab") ? "audio" : path.startsWith("/studio") ? "lyric" : path.startsWith("/mv-studio") ? "mv" : path.startsWith("/cover-studio") ? "cover" : "charts";
 
   return <nav className="global-modules" aria-label="Chuyển chức năng">
