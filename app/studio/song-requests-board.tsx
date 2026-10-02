@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import '../song-request/requests.css';
 type RequestEntry = { id: string; title: string; artist: string; createdAt: string };
+const REQUEST_URL = 'https://minqca-song-request.vercel.app/';
 export default function SongRequestsBoard() {
   const [requests, setRequests] = useState<RequestEntry[]>([]);
   const [error, setError] = useState('');
@@ -46,12 +47,12 @@ export default function SongRequestsBoard() {
     return () => { controller.abort(); clearInterval(timer); window.removeEventListener('focus', focus); };
   }, [page, refresh]);
   const copy = useCallback(async () => {
-    try { await navigator.clipboard.writeText(`${window.location.origin}/song-request/`); setCopied(true); window.setTimeout(() => setCopied(false), 2000); }
+    try { await navigator.clipboard.writeText(REQUEST_URL); setCopied(true); window.setTimeout(() => setCopied(false), 2000); }
     catch { setError('Chưa sao chép được. Bạn có thể mở trang yêu cầu rồi sao chép địa chỉ.'); }
   }, []);
   return <section className="song-requests-board" aria-label="Yêu cầu bài hát">
     <h3>Yêu cầu bài hát</h3>
-    <div className="song-request-toolbar"><div className="song-request-links"><button type="button" onClick={copy}>{copied ? 'Đã sao chép' : 'Sao chép link gửi yêu cầu'}</button><button type="button" onClick={() => setRefresh(value => value + 1)}>Làm mới</button></div><a className="song-request-open" href="/song-request/" target="_blank" rel="noopener noreferrer">Mở trang yêu cầu ↗</a></div>
+    <div className="song-request-toolbar"><div className="song-request-links"><button type="button" onClick={copy}>{copied ? 'Đã sao chép' : 'Sao chép link gửi yêu cầu'}</button><button type="button" onClick={() => setRefresh(value => value + 1)}>Làm mới</button></div><a className="song-request-open" href={REQUEST_URL} target="_blank" rel="noopener noreferrer">Mở trang yêu cầu ↗</a></div>
     <p>Mọi người có thể yêu cầu nhiều bài · Tự cập nhật mỗi 30 giây.</p>
     {notice && <p role="status">{notice}</p>}
     {error && <p role="alert">{error}</p>}
