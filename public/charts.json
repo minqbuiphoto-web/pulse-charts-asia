@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-01T10:10:48.584Z",
+  "generatedAt": "2026-10-02T09:48:35.379Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-01T10:10:48.584Z"
+      "checkedAt": "2026-10-02T09:48:35.379Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-01T10:10:48.584Z"
+      "checkedAt": "2026-10-02T09:48:35.379Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5592,7 +5592,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-01T10:10:48.584Z"
+      "checkedAt": "2026-10-02T09:48:35.379Z"
     },
     {
       "id": "cn-tme-uni",
@@ -5601,14 +5601,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-01T17:50:00+08:00",
+      "updatedAt": "2026-10-02T17:30:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第39期（09.28-10.04）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "异想天开",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "97.65 score",
+          "genre": "97.75 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -5619,7 +5619,7 @@
           "title": "Trouble In My DMs",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "97.29 score",
+          "genre": "97.32 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -5630,7 +5630,7 @@
           "title": "不合时宜",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "96.91 score",
+          "genre": "96.95 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -5641,7 +5641,7 @@
           "title": "Allez, aimez!",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "96.82 score",
+          "genre": "96.86 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -5652,7 +5652,7 @@
           "title": "遥远的不是爱",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "96.80 score",
+          "genre": "96.83 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -5663,7 +5663,7 @@
           "title": "U&ME",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.51 score",
+          "genre": "96.53 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -5674,7 +5674,7 @@
           "title": "贰拾肆",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.39 score",
+          "genre": "96.47 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -5685,7 +5685,7 @@
           "title": "Silk Sheets",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.35 score",
+          "genre": "96.38 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -5696,7 +5696,7 @@
           "title": "Drop",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.30 score",
+          "genre": "96.34 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -5707,7 +5707,7 @@
           "title": "Dead Reflex (intro)",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.30 score",
+          "genre": "96.31 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -5715,7 +5715,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-01T10:10:48.584Z"
+      "checkedAt": "2026-10-02T09:48:35.379Z"
     },
     {
       "id": "cn-tme-wave",
@@ -5948,7 +5948,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-01T10:10:48.584Z"
+      "checkedAt": "2026-10-02T09:48:35.379Z"
     },
     {
       "id": "cn-ost-trending",
