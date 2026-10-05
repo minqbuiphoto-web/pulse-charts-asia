@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-04T09:50:29.332Z",
+  "generatedAt": "2026-10-05T08:33:10.301Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-04T17:30:00+08:00",
-      "syncWarning": "OFFICIAL TOP 10 · 第39期（09.28-10.04）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
+      "updatedAt": "2026-10-05T16:20:00+08:00",
+      "syncWarning": "OFFICIAL TOP 10 · 第40期（10.05-10.11）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "异想天开",
-          "artist": "肖战",
+          "title": "大梦归",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "97.93 score",
+          "genre": "91.53 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Trouble In My DMs",
-          "artist": "檀健次",
+          "title": "异想天开",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "97.39 score",
+          "genre": "90.71 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "不合时宜",
-          "artist": "肖战",
+          "title": "此间是少年",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "97.02 score",
+          "genre": "90.31 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -45,10 +45,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Allez, aimez!",
-          "artist": "肖战",
+          "title": "她",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "96.92 score",
+          "genre": "89.73 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "遥远的不是爱",
-          "artist": "肖战",
+          "title": "U&ME",
+          "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.89 score",
+          "genre": "86.34 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "U&ME",
-          "artist": "檀健次",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "96.58 score",
+          "genre": "85.39 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "贰拾肆",
-          "artist": "梓渝",
+          "title": "Trouble In My DMs",
+          "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.56 score",
+          "genre": "84.47 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Silk Sheets",
-          "artist": "檀健次",
+          "title": "像晴天像雨天",
+          "artist": "汪苏泷",
           "releaseDate": "CN",
-          "genre": "96.43 score",
+          "genre": "83.21 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Drop",
-          "artist": "檀健次",
+          "title": "龙腾东方",
+          "artist": "云朵",
           "releaseDate": "CN",
-          "genre": "96.40 score",
+          "genre": "82.43 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Dead Reflex (intro)",
+          "title": "Drop",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "96.34 score",
+          "genre": "82.12 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-04T09:50:29.332Z"
+      "checkedAt": "2026-10-05T08:32:39.142Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-04T09:50:29.332Z"
+      "checkedAt": "2026-10-05T08:32:39.142Z"
     },
     {
       "id": "cn-ost-trending",
@@ -486,7 +486,7 @@
           "filmTitle": "千香",
           "album": "《千香》影视原声带",
           "videoId": "2rIOe7-e5kQ",
-          "viewCount": 152836,
+          "viewCount": 167147,
           "durationSeconds": 195,
           "videoTitle": "周深《千香》（《千香》網劇主題曲）官方MV｜騰訊音樂發行頻道",
           "videoChannel": "腾讯音乐发行",
@@ -1308,7 +1308,7 @@
           "filmTitle": "爱情有烟火",
           "album": "《爱情有烟火》影视原声带",
           "videoId": "kj11GU_h7IQ",
-          "viewCount": 33672,
+          "viewCount": 39709,
           "durationSeconds": 226,
           "videoTitle": "有你(電視劇《愛情有煙火》片尾曲) - 劉宇寧『You ni(Dian shi ju《Ai qing you yan huo 》Pian wei qu) - Liu yu ning』",
           "videoChannel": "Dreamer Music",
@@ -1852,7 +1852,7 @@
           "filmTitle": "我看见两朵一样的云",
           "album": "《我看见两朵一样的云》影视原声带",
           "videoId": "41MkOkGmSQY",
-          "viewCount": 2444,
+          "viewCount": 2760,
           "durationSeconds": 273,
           "videoTitle": "王源《蚱蜢跃入星空》歌词纯享版 - “越相似的人  越懂相思的分寸”",
           "videoChannel": "听见鹣鲽",
@@ -2078,7 +2078,7 @@
           "filmTitle": "大鱼海棠",
           "album": "《大鱼海棠》影视原声带",
           "videoId": "OpaV2Pjh0es",
-          "viewCount": 24946652,
+          "viewCount": 25060079,
           "durationSeconds": 272,
           "videoTitle": "【纯享版】 周深/郭沁《大鱼》当打歌手周深似妖似仙嗓音 一开口即跪的天籁之音 《中国新歌声2》第10期 SING!CHINA S2 EP.10 20170915 [浙江卫视官方HD]",
           "videoChannel": "浙江卫视音乐频道 ZJSTV Music Channel - 欢迎订阅 -",
@@ -2269,7 +2269,7 @@
           "filmTitle": "三生三世十里桃花",
           "album": "《三生三世十里桃花》影视原声带",
           "videoId": "Dr7PSTEWUXA",
-          "viewCount": 20660485,
+          "viewCount": 20808385,
           "durationSeconds": 325,
           "videoTitle": "【纯享版】韩雪/李鑫一高音合唱神曲《凉凉》 舞台重现《三生三世》情缘 《天赐的声音》EP3 纯享版No Noice /浙江卫视官方HD/",
           "videoChannel": "浙江卫视音乐频道 ZJSTV Music Channel - 欢迎订阅 -",
@@ -3692,7 +3692,7 @@
           "filmTitle": "主角",
           "album": "《主角》影视原声带",
           "videoId": "adsrNFdIxLg",
-          "viewCount": 1114696,
+          "viewCount": 1204154,
           "durationSeconds": 285,
           "videoTitle": "王菲 Faye Wong《主角》電視劇同名主題曲 (Official MV)",
           "videoChannel": "Faye Wong Official Channel 王菲 官方頻道",
@@ -4194,12 +4194,12 @@
           "title": "光年之外 Light Years Away",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2016",
-          "genre": "Ballad ? 307,945,834 YouTube views",
+          "genre": "Ballad ? 308,116,784 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=T4SimnaiktU",
           "artistUrl": "https://www.youtube.com/watch?v=T4SimnaiktU",
           "videoId": "T4SimnaiktU",
-          "viewCount": 307945834
+          "viewCount": 308116784
         },
         {
           "rank": 22,
@@ -4207,12 +4207,12 @@
           "title": "你，好不好 How Have You Been",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2016",
-          "genre": "Ballad ? 283,587,255 YouTube views",
+          "genre": "Ballad ? 283,924,282 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wSBXfzgqHtE",
           "artistUrl": "https://www.youtube.com/watch?v=wSBXfzgqHtE",
           "videoId": "wSBXfzgqHtE",
-          "viewCount": 283587255
+          "viewCount": 283924282
         },
         {
           "rank": 23,
@@ -4220,12 +4220,12 @@
           "title": "怎么了 What's Wrong",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2019",
-          "genre": "Ballad ? 209,724,776 YouTube views",
+          "genre": "Ballad ? 209,989,018 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Y2ge3KrdeWs",
           "artistUrl": "https://www.youtube.com/watch?v=Y2ge3KrdeWs",
           "videoId": "Y2ge3KrdeWs",
-          "viewCount": 209724776
+          "viewCount": 209989018
         },
         {
           "rank": 24,
@@ -4233,12 +4233,12 @@
           "title": "如果可以 Red Scarf",
           "artist": "WeiBird 韦礼安",
           "releaseDate": "2021",
-          "genre": "Ballad ? 208,470,755 YouTube views",
+          "genre": "Ballad ? 208,793,175 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=8MG--WuNW1Y",
           "artistUrl": "https://www.youtube.com/watch?v=8MG--WuNW1Y",
           "videoId": "8MG--WuNW1Y",
-          "viewCount": 208470755
+          "viewCount": 208793175
         },
         {
           "rank": 25,
@@ -4246,12 +4246,12 @@
           "title": "年少有为 If I Were Young",
           "artist": "Li Ronghao 李荣浩",
           "releaseDate": "2018",
-          "genre": "Ballad ? 166,855,653 YouTube views",
+          "genre": "Ballad ? 166,928,210 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Dnj5Tcpev0Q",
           "artistUrl": "https://www.youtube.com/watch?v=Dnj5Tcpev0Q",
           "videoId": "Dnj5Tcpev0Q",
-          "viewCount": 166855653
+          "viewCount": 166928210
         },
         {
           "rank": 26,
@@ -4259,12 +4259,12 @@
           "title": "倒数 Tik Tok",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2018",
-          "genre": "Ballad ? 153,835,282 YouTube views",
+          "genre": "Ballad ? 153,952,571 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ma7r2HGqwXs",
           "artistUrl": "https://www.youtube.com/watch?v=ma7r2HGqwXs",
           "videoId": "ma7r2HGqwXs",
-          "viewCount": 153835282,
+          "viewCount": 153952571,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -4287,12 +4287,12 @@
           "title": "如果雨之后 The Chaos After You",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2017",
-          "genre": "Ballad ? 145,333,947 YouTube views",
+          "genre": "Ballad ? 145,406,960 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=gdGdO6KjF1I",
           "artistUrl": "https://www.youtube.com/watch?v=gdGdO6KjF1I",
           "videoId": "gdGdO6KjF1I",
-          "viewCount": 145333947
+          "viewCount": 145406960
         },
         {
           "rank": 29,
@@ -4300,12 +4300,12 @@
           "title": "永不失联的爱 Unbreakable Love",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2017",
-          "genre": "Ballad ? 101,547,581 YouTube views",
+          "genre": "Ballad ? 101,598,342 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=WJK8486VjfU",
           "artistUrl": "https://www.youtube.com/watch?v=WJK8486VjfU",
           "videoId": "WJK8486VjfU",
-          "viewCount": 101547581
+          "viewCount": 101598342
         },
         {
           "rank": 30,
@@ -4313,12 +4313,12 @@
           "title": "飞鸟和蝉",
           "artist": "Ren Ran 任然",
           "releaseDate": "2020",
-          "genre": "Ballad ? 86,419,760 YouTube views",
+          "genre": "Ballad ? 86,525,480 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=V0XUd8f2pz8",
           "artistUrl": "https://www.youtube.com/watch?v=V0XUd8f2pz8",
           "videoId": "V0XUd8f2pz8",
-          "viewCount": 86419760,
+          "viewCount": 86525480,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -4328,12 +4328,12 @@
           "title": "你的答案 Your Answer",
           "artist": "A Rong 阿冗",
           "releaseDate": "2019",
-          "genre": "Ballad ? 84,987,439 YouTube views",
+          "genre": "Ballad ? 85,112,151 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ye4jAQ0uxcQ",
           "artistUrl": "https://www.youtube.com/watch?v=ye4jAQ0uxcQ",
           "videoId": "ye4jAQ0uxcQ",
-          "viewCount": 84987439
+          "viewCount": 85112151
         },
         {
           "rank": 32,
@@ -4341,12 +4341,12 @@
           "title": "很久以后 Long After",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2019",
-          "genre": "Ballad ? 73,147,317 YouTube views",
+          "genre": "Ballad ? 73,214,753 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=2BEFukvLZfI",
           "artistUrl": "https://www.youtube.com/watch?v=2BEFukvLZfI",
           "videoId": "2BEFukvLZfI",
-          "viewCount": 73147317
+          "viewCount": 73214753
         },
         {
           "rank": 33,
@@ -4354,12 +4354,12 @@
           "title": "像鱼 Like a Fish",
           "artist": "Wang Erlang 王贰浪",
           "releaseDate": "2018",
-          "genre": "Ballad ? 71,029,214 YouTube views",
+          "genre": "Ballad ? 71,159,875 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=UWajXXM9s5U",
           "artistUrl": "https://www.youtube.com/watch?v=UWajXXM9s5U",
           "videoId": "UWajXXM9s5U",
-          "viewCount": 71029214
+          "viewCount": 71159875
         },
         {
           "rank": 34,
@@ -4367,12 +4367,12 @@
           "title": "句号 Full Stop",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2019",
-          "genre": "Ballad ? 66,815,545 YouTube views",
+          "genre": "Ballad ? 66,873,226 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=7XlqcS6B7WA",
           "artistUrl": "https://www.youtube.com/watch?v=7XlqcS6B7WA",
           "videoId": "7XlqcS6B7WA",
-          "viewCount": 66815545
+          "viewCount": 66873226
         },
         {
           "rank": 35,
@@ -4380,12 +4380,12 @@
           "title": "嘉宾 Guest",
           "artist": "Zhang Yuan 张远",
           "releaseDate": "2020",
-          "genre": "Ballad ? 61,780,482 YouTube views",
+          "genre": "Ballad ? 61,795,207 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=8ux25IcLr8w",
           "artistUrl": "https://www.youtube.com/watch?v=8ux25IcLr8w",
           "videoId": "8ux25IcLr8w",
-          "viewCount": 61780482,
+          "viewCount": 61795207,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -4421,12 +4421,12 @@
           "title": "体面 Decency",
           "artist": "Kelly Yu 于文文",
           "releaseDate": "2017",
-          "genre": "Ballad ? 41,788,779 YouTube views",
+          "genre": "Ballad ? 41,927,682 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=-kfVp3tqYvc",
           "artistUrl": "https://www.youtube.com/watch?v=-kfVp3tqYvc",
           "videoId": "-kfVp3tqYvc",
-          "viewCount": 41788779
+          "viewCount": 41927682
         },
         {
           "rank": 39,
@@ -4449,12 +4449,12 @@
           "title": "世界这么大还是遇见你",
           "artist": "Cheng Xiang 程响",
           "releaseDate": "2020",
-          "genre": "Ballad ? 41,080,952 YouTube views",
+          "genre": "Ballad ? 41,147,322 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wRmedql89Ro",
           "artistUrl": "https://www.youtube.com/watch?v=wRmedql89Ro",
           "videoId": "wRmedql89Ro",
-          "viewCount": 41080952
+          "viewCount": 41147322
         },
         {
           "rank": 41,
@@ -4462,12 +4462,12 @@
           "title": "大鱼 Big Fish",
           "artist": "Zhou Shen 周深",
           "releaseDate": "2016",
-          "genre": "Ballad ? 37,792,783 YouTube views",
+          "genre": "Ballad ? 37,930,532 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=-aMdBA00Ijc",
           "artistUrl": "https://www.youtube.com/watch?v=-aMdBA00Ijc",
           "videoId": "-aMdBA00Ijc",
-          "viewCount": 37792783,
+          "viewCount": 37930532,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -4492,12 +4492,12 @@
           "title": "起风了 The Wind Rises",
           "artist": "Wu Qingfeng",
           "releaseDate": "2019",
-          "genre": "Ballad ? 36,808,600 YouTube views",
+          "genre": "Ballad ? 36,931,459 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=4o0BD1KUL5g",
           "artistUrl": "https://www.youtube.com/watch?v=4o0BD1KUL5g",
           "videoId": "4o0BD1KUL5g",
-          "viewCount": 36808600,
+          "viewCount": 36931459,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -4550,12 +4550,12 @@
           "title": "麻雀 Sparrow",
           "artist": "Li Ronghao 李荣浩",
           "releaseDate": "2019",
-          "genre": "Ballad ? 22,045,035 YouTube views",
+          "genre": "Ballad ? 22,114,130 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=2l4x_TvBKiw",
           "artistUrl": "https://www.youtube.com/watch?v=2l4x_TvBKiw",
           "videoId": "2l4x_TvBKiw",
-          "viewCount": 22045035,
+          "viewCount": 22114130,
           "videoType": "verified-original",
           "reviewed": true
         },
