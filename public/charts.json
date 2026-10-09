@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-08T10:37:41.616Z",
+  "generatedAt": "2026-10-09T10:36:30.858Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-08T10:37:41.616Z"
+      "checkedAt": "2026-10-09T10:36:30.858Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-08T10:37:41.616Z"
+      "checkedAt": "2026-10-09T10:36:30.858Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5614,7 +5614,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-08T10:37:41.616Z"
+      "checkedAt": "2026-10-09T10:36:30.858Z"
     },
     {
       "id": "cn-tme-uni",
@@ -5623,14 +5623,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-08T18:20:00+08:00",
+      "updatedAt": "2026-10-09T18:20:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第40期（10.05-10.11）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "大梦归",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.79 score",
+          "genre": "97.01 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -5641,7 +5641,7 @@
           "title": "异想天开",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "96.64 score",
+          "genre": "96.78 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -5652,7 +5652,7 @@
           "title": "此间是少年",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.47 score",
+          "genre": "96.64 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -5663,7 +5663,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "95.48 score",
+          "genre": "95.98 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -5671,10 +5671,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "自由的你",
-          "artist": "G.E.M.邓紫棋",
+          "title": "奇迹",
+          "artist": "贺峻霖",
           "releaseDate": "CN",
-          "genre": "95.16 score",
+          "genre": "95.67 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -5682,10 +5682,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "自由的你",
+          "artist": "G.E.M.邓紫棋",
           "releaseDate": "CN",
-          "genre": "93.57 score",
+          "genre": "95.40 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -5693,10 +5693,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "忘飞的鸽",
-          "artist": "黄子弘凡",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "92.27 score",
+          "genre": "94.84 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -5704,10 +5704,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "那页夏天",
-          "artist": "王俊凯",
+          "title": "忘飞的鸽",
+          "artist": "黄子弘凡",
           "releaseDate": "CN",
-          "genre": "92.05 score",
+          "genre": "93.28 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -5715,10 +5715,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "快乐",
-          "artist": "宋雨琦 (YUQI)",
+          "title": "那页夏天",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "91.95 score",
+          "genre": "92.94 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -5726,10 +5726,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "U&ME",
-          "artist": "檀健次",
+          "title": "快乐",
+          "artist": "宋雨琦 (YUQI)",
           "releaseDate": "CN",
-          "genre": "91.94 score",
+          "genre": "92.90 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -5737,7 +5737,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-08T10:37:41.616Z"
+      "checkedAt": "2026-10-09T10:36:30.858Z"
     },
     {
       "id": "cn-tme-wave",
@@ -5970,7 +5970,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-08T10:37:41.616Z"
+      "checkedAt": "2026-10-09T10:36:30.858Z"
     },
     {
       "id": "cn-ost-trending",
