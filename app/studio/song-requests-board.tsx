@@ -1,7 +1,7 @@
 'use client';
 import { useCallback, useEffect, useState } from 'react';
 import '../song-request/requests.css';
-type RequestEntry = { id: string; title: string; artist: string; createdAt: string };
+type RequestEntry = { id: string; requester?: string; title: string; artist: string; createdAt: string };
 const REQUEST_URL = 'https://minqca-song-request.vercel.app/';
 export default function SongRequestsBoard() {
   const [requests, setRequests] = useState<RequestEntry[]>([]);
@@ -56,7 +56,7 @@ export default function SongRequestsBoard() {
     <p>Mọi người có thể yêu cầu nhiều bài · Tự cập nhật mỗi 30 giây.</p>
     {notice && <p role="status">{notice}</p>}
     {error && <p role="alert">{error}</p>}
-    {loading ? <p role="status">Đang tải yêu cầu…</p> : requests.length === 0 && !error ? <p>Chưa có yêu cầu bài hát.</p> : requests.length > 0 && <div className="song-request-table"><table><thead><tr><th>Tên bài hát</th><th>Ca sĩ</th><th>Ngày yêu cầu</th><th>Thao tác</th></tr></thead><tbody>{requests.map(item => <tr key={item.id}><td>{item.title}</td><td>{item.artist}</td><td><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}<br/>{new Date(item.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' })}</time></td><td><button type="button" className="song-request-delete" disabled={!!deleting} title="Xóa yêu cầu đã làm xong" onClick={() => void remove(item)}>{deleting === item.id ? 'Đang xóa…' : 'Xóa'}</button></td></tr>)}</tbody></table></div>}
+    {loading ? <p role="status">Đang tải yêu cầu…</p> : requests.length === 0 && !error ? <p>Chưa có yêu cầu bài hát.</p> : requests.length > 0 && <div className="song-request-table"><table><thead><tr><th>Người yêu cầu</th><th>Tên bài hát</th><th>Ca sĩ</th><th>Ngày yêu cầu</th><th>Thao tác</th></tr></thead><tbody>{requests.map(item => <tr key={item.id}><td>{item.requester || '—'}</td><td>{item.title}</td><td>{item.artist}</td><td><time dateTime={item.createdAt}>{new Date(item.createdAt).toLocaleDateString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' })}<br/>{new Date(item.createdAt).toLocaleTimeString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit' })}</time></td><td><button type="button" className="song-request-delete" disabled={!!deleting} title="Xóa yêu cầu đã làm xong" onClick={() => void remove(item)}>{deleting === item.id ? 'Đang xóa…' : 'Xóa'}</button></td></tr>)}</tbody></table></div>}
     {(page > 0 || more) && <div className="song-request-links"><button disabled={page === 0 || loading} onClick={() => setPage(value => value - 1)}>Trang trước</button><span>{page + 1}</span><button disabled={!more || loading} onClick={() => setPage(value => value + 1)}>Trang sau</button></div>}
   </section>;
 }

@@ -4,7 +4,7 @@ import { createHandler } from '../api/song-requests.js';
 
 const id = 'a9a5e5ba-bc73-4ddc-8ee0-42dd248d2f94';
 function response() { return { code: 200, headers: {}, status(code) { this.code = code; return this; }, setHeader(k, v) { this.headers[k] = v; }, json(body) { this.body = body; return this; } }; }
-function input(body = { title: '  Bài hát  ', artist: 'Ca sĩ' }) { return { method: 'POST', headers: { 'content-type': 'application/json', host: 'example.com', origin: 'https://example.com' }, body }; }
+function input(body = { requester: '  Minh  ', title: '  Bài hát  ', artist: 'Ca sĩ' }) { return { method: 'POST', headers: { 'content-type': 'application/json', host: 'example.com', origin: 'https://example.com' }, body }; }
 function store() {
   const entries = [];
   return async command => {
@@ -17,16 +17,16 @@ function store() {
 test('allows multiple requests and exposes only public fields', async () => {
   const handler = createHandler(store());
   const first = response(); await handler(input(), first);
-  assert.equal(first.code, 201); assert.equal(first.body.request.title, 'Bài hát');
+  assert.equal(first.code, 201); assert.equal(first.body.request.title, 'Bài hát'); assert.equal(first.body.request.requester, 'Minh');
   assert.ok(Number.isFinite(Date.parse(first.body.request.createdAt)));
-  const second = response(); await handler(input({ title: 'Another song', artist: 'Different artist' }), second);
+  const second = response(); await handler(input({ requester: 'Lan', title: 'Another song', artist: 'Different artist' }), second);
   assert.equal(second.code, 201); assert.notEqual(second.body.request.id, first.body.request.id);
   const list = response(); await handler({ method: 'GET', query: {} }, list);
-  assert.equal(list.body.requests.length, 2); assert.deepEqual(Object.keys(list.body.requests[0]).sort(), ['artist','createdAt','id','title']);
+  assert.equal(list.body.requests.length, 2); assert.deepEqual(Object.keys(list.body.requests[0]).sort(), ['artist','createdAt','id','requester','title']);
 });
 test('rejects empty, oversized and invalid input before storage', async () => {
   const handler = createHandler(async () => { throw new Error('Must not reach storage'); });
-  for (const body of [{title:' ',artist:'A'}, {title:'A',artist:''}, {title:'x'.repeat(161),artist:'A'}, {title:['A'],artist:'A'}]) {
+  for (const body of [{requester:' ',title:'A',artist:'A'}, {requester:'A',title:' ',artist:'A'}, {requester:'A',title:'A',artist:''}, {requester:'x'.repeat(81),title:'A',artist:'A'}, {requester:'A',title:'x'.repeat(161),artist:'A'}, {requester:'A',title:['A'],artist:'A'}]) {
     const result=response(); await handler(input(body),result); assert.equal(result.code,400);
   }
   const crossOrigin=input(); crossOrigin.headers.origin='https://other.example'; const cross=response(); await handler(crossOrigin,cross); assert.equal(cross.code,403);
@@ -50,7 +50,7 @@ test('deletion rejects cross-origin and invalid IDs before storage', async () =>
 test('deletion removes only selected row and allows another request', async () => {
   const handler = createHandler(store());
   const first = response(); await handler(input(), first);
-  const otherInput = input({ title: 'Other', artist: 'Artist' });
+  const otherInput = input({ requester: 'B', title: 'Other', artist: 'Artist' });
   const other = response(); await handler(otherInput, other);
   for (let i = 0; i < 2; i++) { const removed = response(); await handler(deletion(first.body.request.id), removed); assert.equal(removed.code, 200); }
   const list = response(); await handler({ method: 'GET', query: {} }, list); assert.deepEqual(list.body.requests, [other.body.request]);

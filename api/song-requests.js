@@ -38,11 +38,11 @@ export function createHandler(command) {
       let body = req.body;
       if (typeof body === 'string') { try { body = JSON.parse(body); } catch { return res.status(400).json({ error: 'Dữ liệu không hợp lệ.' }); } }
       const clean = value => typeof value === 'string' ? value.trim().replace(/\s+/g, ' ') : '';
-      const title = clean(body?.title), artist = clean(body?.artist);
-      if (!title || !artist || title.length > 160 || artist.length > 120 || /[\u0000-\u001f\u007f]/.test(title + artist)) {
-        return res.status(400).json({ error: 'Nhập tên bài hát (tối đa 160 ký tự) và ca sĩ (tối đa 120 ký tự).' });
+      const requester = clean(body?.requester), title = clean(body?.title), artist = clean(body?.artist);
+      if (!requester || !title || !artist || requester.length > 80 || title.length > 160 || artist.length > 120 || /[\u0000-\u001f\u007f]/.test(requester + title + artist)) {
+        return res.status(400).json({ error: 'Nhập người yêu cầu (tối đa 80 ký tự), tên bài hát (160 ký tự) và ca sĩ (120 ký tự).' });
       }
-      const entry = { id: randomUUID(), title, artist, createdAt: new Date().toISOString() };
+      const entry = { id: randomUUID(), requester, title, artist, createdAt: new Date().toISOString() };
       await command(['LPUSH', `${PREFIX}:list`, JSON.stringify(entry)]);
       return res.status(201).json({ request: entry });
     } catch (error) {

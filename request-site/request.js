@@ -35,11 +35,12 @@ form.addEventListener('submit', async event => {
   submit.textContent = 'Đang gửi…';
   error.hidden = true;
   try {
-    const body = { title: form.elements.title.value, artist: form.elements.artist.value };
+    const body = { requester: form.elements.requester.value, title: form.elements.title.value, artist: form.elements.artist.value };
     const response = await fetch('/api/song-requests', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal: AbortSignal.timeout(12000) });
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || 'Chưa gửi được yêu cầu.');
     const saved = data.request;
+    document.querySelector('#saved-requester').textContent = `Người yêu cầu: ${saved.requester}`;
     document.querySelector('#saved-title').textContent = saved.title;
     document.querySelector('#saved-artist').textContent = saved.artist;
     document.querySelector('#saved-time').textContent = new Date(saved.createdAt).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' });
