@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-14T08:45:30.788Z",
+  "generatedAt": "2026-10-15T08:20:03.829Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-14T16:30:00+08:00",
+      "updatedAt": "2026-10-15T16:00:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第41期（10.12-10.18）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "大梦归",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "96.52 score",
+          "genre": "96.79 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "闯",
-          "artist": "梓渝",
+          "title": "光·影",
+          "artist": "云旗,郝熠然",
           "releaseDate": "CN",
-          "genre": "96.27 score",
+          "genre": "96.76 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "火种",
-          "artist": "成毅",
+          "title": "闯",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "95.09 score",
+          "genre": "96.56 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -45,10 +45,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "异想天开",
-          "artist": "肖战",
+          "title": "火种",
+          "artist": "成毅",
           "releaseDate": "CN",
-          "genre": "94.92 score",
+          "genre": "95.73 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "94.85 score",
+          "genre": "95.42 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "异想天开",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "91.55 score",
+          "genre": "95.34 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "那页夏天",
-          "artist": "王俊凯",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "90.72 score",
+          "genre": "92.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Trouble In My DMs",
-          "artist": "檀健次",
+          "title": "那页夏天",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "90.50 score",
+          "genre": "91.52 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "自由的你",
-          "artist": "G.E.M.邓紫棋",
+          "title": "Trouble In My DMs",
+          "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "90.36 score",
+          "genre": "91.32 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "大江南",
-          "artist": "刀郎",
+          "title": "自由的你",
+          "artist": "G.E.M.邓紫棋",
           "releaseDate": "CN",
-          "genre": "89.19 score",
+          "genre": "90.89 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-14T08:45:30.788Z"
+      "checkedAt": "2026-10-15T08:20:03.829Z"
     },
     {
       "id": "cn-tme-wave",
@@ -131,14 +131,14 @@
       "market": "CN",
       "source": "Tencent Music Wave Chart",
       "sourceUrl": "https://chart.tencentmusic.com/wave-chart",
-      "updatedAt": "2026-08-31T23:59:00+08:00",
-      "syncWarning": "OFFICIAL TOP 20 · 2026年8月榜. Đây là kỳ mới nhất nguồn TME Wave đang công bố, không phải bảng tuần. Không chèn bài từ kỳ cũ.",
+      "updatedAt": "2026-09-30T23:59:00+08:00",
+      "syncWarning": "OFFICIAL TOP 20 · 2026年9月榜. Đây là kỳ mới nhất nguồn TME Wave đang công bố, không phải bảng tuần. Không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "LAVA",
-          "artist": "单依纯",
+          "title": "果",
+          "artist": "田馥甄",
           "releaseDate": "CN",
-          "genre": "8.37 expert score",
+          "genre": "8.27 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 1,
@@ -146,10 +146,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "牧羊人与木塔稞",
-          "artist": "张羽涵Leezi",
+          "title": "蚊螆",
+          "artist": "moon tang",
           "releaseDate": "CN",
-          "genre": "8.37 expert score",
+          "genre": "8.19 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 2,
@@ -157,10 +157,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "微观宇宙",
-          "artist": "萨顶顶",
+          "title": "干净的房间",
+          "artist": "田馥甄",
           "releaseDate": "CN",
-          "genre": "8.32 expert score",
+          "genre": "8.19 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 3,
@@ -168,10 +168,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "晴天娃娃",
-          "artist": "吴青峰",
+          "title": "眼泪是什么",
+          "artist": "莫西子诗",
           "releaseDate": "CN",
-          "genre": "8.27 expert score",
+          "genre": "8.10 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 4,
@@ -179,10 +179,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hope",
-          "artist": "王力宏",
+          "title": "青春多美丽",
+          "artist": "LAWA、汉堡黄",
           "releaseDate": "CN",
-          "genre": "8.27 expert score",
+          "genre": "8.03 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 5,
@@ -190,10 +190,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "打开2.0",
-          "artist": "黄霄雲",
+          "title": "思念若是一首诗",
+          "artist": "万妮达Vinida Weng",
           "releaseDate": "CN",
-          "genre": "8.27 expert score",
+          "genre": "8.03 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 6,
@@ -201,10 +201,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "STRANGE",
-          "artist": "刘雨昕",
+          "title": "删了一百遍",
+          "artist": "A-Lin",
           "releaseDate": "CN",
-          "genre": "8.23 expert score",
+          "genre": "8.03 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 7,
@@ -212,10 +212,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "黄金时代",
-          "artist": "林志炫",
+          "title": "阳光普照",
+          "artist": "容祖儿",
           "releaseDate": "CN",
-          "genre": "8.23 expert score",
+          "genre": "7.98 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 8,
@@ -223,10 +223,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "等等等等",
-          "artist": "容祖儿",
+          "title": "一面之词",
+          "artist": "徐暐翔",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.98 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 9,
@@ -234,10 +234,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "远距离",
-          "artist": "梁咏琪",
+          "title": "tunnel vision",
+          "artist": "Gareth.T",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.94 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 10,
@@ -245,10 +245,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "昨天，今天",
-          "artist": "莫文蔚",
+          "title": "太极太极",
+          "artist": "黄龄",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.90 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 11,
@@ -256,10 +256,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "变形记",
-          "artist": "法兰Fran",
+          "title": "失温拥抱",
+          "artist": "陈楚生",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.90 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 12,
@@ -267,10 +267,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "RIA",
-          "artist": "艾热AIR",
+          "title": "OVERHEAT",
+          "artist": "李幸倪",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.90 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 13,
@@ -278,10 +278,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "LOOP",
-          "artist": "LÜCY、Moyka",
+          "title": "穿帮",
+          "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "8.18 expert score",
+          "genre": "7.90 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 14,
@@ -289,10 +289,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "晨昏线绮梦 (Love is Love)",
-          "artist": "莫非定律乐团",
+          "title": "Drifting",
+          "artist": "希林娜依高",
           "releaseDate": "CN",
-          "genre": "8.13 expert score",
+          "genre": "7.90 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 15,
@@ -300,10 +300,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "天才",
-          "artist": "苏见信 (信)",
+          "title": "OK",
+          "artist": "打扰一下乐团",
           "releaseDate": "CN",
-          "genre": "8.09 expert score",
+          "genre": "7.86 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 16,
@@ -311,10 +311,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "十七奏鸣曲",
-          "artist": "Gordon Flanders",
+          "title": "我脑海中的泡沫展厅",
+          "artist": "蒋敦豪",
           "releaseDate": "CN",
-          "genre": "8.04 expert score",
+          "genre": "7.86 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 17,
@@ -322,10 +322,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "光透进来的地方",
-          "artist": "岑宁儿",
+          "title": "说分手的人也会难过",
+          "artist": "曾沛慈",
           "releaseDate": "CN",
-          "genre": "8.04 expert score",
+          "genre": "7.86 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 18,
@@ -333,10 +333,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "人类爱情学",
-          "artist": "陈蕾",
+          "title": "THAT'S HOW WE MOVE",
+          "artist": "KALAI 家丽",
           "releaseDate": "CN",
-          "genre": "7.99 expert score",
+          "genre": "7.82 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 19,
@@ -344,10 +344,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "好钟意！",
-          "artist": "陈康堤",
+          "title": "Fashion in T town",
+          "artist": "傻子与白痴",
           "releaseDate": "CN",
-          "genre": "7.95 expert score",
+          "genre": "7.82 expert score",
           "url": "https://chart.tencentmusic.com/wave-chart",
           "artistUrl": "https://chart.tencentmusic.com/wave-chart",
           "rank": 20,
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-14T08:45:30.788Z"
+      "checkedAt": "2026-10-15T08:20:03.829Z"
     },
     {
       "id": "cn-ost-trending",
