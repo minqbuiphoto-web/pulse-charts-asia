@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-16T08:12:51.899Z",
+  "generatedAt": "2026-10-17T07:50:05.033Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-16T16:00:00+08:00",
+      "updatedAt": "2026-10-17T15:30:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第41期（10.12-10.18）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "大梦归",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "97.04 score",
+          "genre": "97.16 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "光·影",
           "artist": "云旗,郝熠然",
           "releaseDate": "CN",
-          "genre": "96.99 score",
+          "genre": "97.04 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "闯",
           "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.74 score",
+          "genre": "96.82 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "火种",
           "artist": "成毅",
           "releaseDate": "CN",
-          "genre": "96.08 score",
+          "genre": "96.16 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "95.85 score",
+          "genre": "96.06 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -70,7 +70,7 @@
           "title": "异想天开",
           "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "95.66 score",
+          "genre": "95.92 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -81,7 +81,7 @@
           "title": "甲乙丙丁 (你我怎么两清)",
           "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "93.81 score",
+          "genre": "94.98 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -92,7 +92,7 @@
           "title": "那页夏天",
           "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "92.30 score",
+          "genre": "93.05 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -103,7 +103,7 @@
           "title": "Trouble In My DMs",
           "artist": "檀健次",
           "releaseDate": "CN",
-          "genre": "92.16 score",
+          "genre": "92.91 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "自由的你",
-          "artist": "G.E.M.邓紫棋",
+          "title": "贰拾肆",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "91.39 score",
+          "genre": "92.50 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-16T08:12:51.899Z"
+      "checkedAt": "2026-10-17T07:50:05.033Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-16T08:12:51.899Z"
+      "checkedAt": "2026-10-17T07:50:05.033Z"
     },
     {
       "id": "cn-ost-trending",
