@@ -947,6 +947,7 @@ export default function LyricStudio(){
           <div className="sticky-controls">
             <button onClick={restartSong}>VỀ ĐẦU</button>
             <button onClick={()=>seekBy(-5)}>−5s</button>
+            <button type="button" onClick={()=>seekBy(-1)} title="Lùi 1 giây" aria-label="Lùi 1 giây">−1s</button>
             <button className="main-control" onClick={togglePlayback}>{playerState==="PLAYING"?"TẠM DỪNG":"PHÁT"}</button>
             <button onClick={replayWorkingLine} disabled={currentLineIndex<0&&editingLine===null}>PHÁT LẠI CÂU</button>
             <button className={followPlayback?"follow-on":""} onClick={()=>setFollowPlayback((value)=>!value)}>{followPlayback?"ĐANG BÁM THEO":"ĐANG KHÓA VỊ TRÍ"}</button>
