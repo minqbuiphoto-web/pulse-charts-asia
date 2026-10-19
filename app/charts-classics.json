@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-12T08:46:27.421Z",
+  "generatedAt": "2026-10-19T07:25:55.712Z",
   "charts": [
     {
       "id": "kr-ballad-evergreen-2016-2026",
@@ -8,7 +8,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -17,12 +17,12 @@
           "title": "Stay With Me",
           "artist": "CHANYEOL & Punch",
           "releaseDate": "2016",
-          "genre": "Ballad · 591,299,910 YouTube views",
+          "genre": "Ballad · 592,425,772 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=pcKR0LPwoYs",
           "artistUrl": "https://www.youtube.com/watch?v=pcKR0LPwoYs",
           "videoId": "pcKR0LPwoYs",
-          "viewCount": 591299910
+          "viewCount": 592425772
         },
         {
           "rank": 2,
@@ -30,12 +30,12 @@
           "title": "Say Yes",
           "artist": "Loco & Punch",
           "releaseDate": "2016",
-          "genre": "Ballad · 380,999,847 YouTube views",
+          "genre": "Ballad · 381,994,359 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=6GC8JF2FOgA",
           "artistUrl": "https://www.youtube.com/watch?v=6GC8JF2FOgA",
           "videoId": "6GC8JF2FOgA",
-          "viewCount": 380999847
+          "viewCount": 381994359
         },
         {
           "rank": 3,
@@ -43,12 +43,12 @@
           "title": "This Love",
           "artist": "Davichi",
           "releaseDate": "2016",
-          "genre": "Ballad · 303,892,499 YouTube views",
+          "genre": "Ballad · 304,496,068 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=XyzaMpAVm3s",
           "artistUrl": "https://www.youtube.com/watch?v=XyzaMpAVm3s",
           "videoId": "XyzaMpAVm3s",
-          "viewCount": 303892499
+          "viewCount": 304496068
         },
         {
           "rank": 4,
@@ -56,12 +56,12 @@
           "title": "Drowning",
           "artist": "WOODZ",
           "releaseDate": "2023",
-          "genre": "Ballad · 233,304,443 YouTube views",
+          "genre": "Ballad · 239,697,376 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=NbKH4iZqq1Y",
           "artistUrl": "https://www.youtube.com/watch?v=NbKH4iZqq1Y",
           "videoId": "NbKH4iZqq1Y",
-          "viewCount": 233304443,
+          "viewCount": 239697376,
           "videoType": "official-audio",
           "videoChannel": "WOODZ",
           "reviewed": true
@@ -72,12 +72,12 @@
           "title": "Beautiful",
           "artist": "Crush",
           "releaseDate": "2016",
-          "genre": "Ballad · 161,985,189 YouTube views",
+          "genre": "Ballad · 162,222,937 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=W0cs6ciCt_k",
           "artistUrl": "https://www.youtube.com/watch?v=W0cs6ciCt_k",
           "videoId": "W0cs6ciCt_k",
-          "viewCount": 161985189
+          "viewCount": 162222937
         },
         {
           "rank": 6,
@@ -85,12 +85,12 @@
           "title": "Breathe",
           "artist": "Lee Hi",
           "releaseDate": "2016",
-          "genre": "Ballad · 143,404,829 YouTube views",
+          "genre": "Ballad · 143,540,406 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=5iSlfF8TQ9k",
           "artistUrl": "https://www.youtube.com/watch?v=5iSlfF8TQ9k",
           "videoId": "5iSlfF8TQ9k",
-          "viewCount": 143404829
+          "viewCount": 143540406
         },
         {
           "rank": 7,
@@ -98,12 +98,12 @@
           "title": "Start Over",
           "artist": "Gaho",
           "releaseDate": "2020",
-          "genre": "Ballad · 127,919,657 YouTube views",
+          "genre": "Ballad · 127,986,556 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=O0StKlRHVeE",
           "artistUrl": "https://www.youtube.com/watch?v=O0StKlRHVeE",
           "videoId": "O0StKlRHVeE",
-          "viewCount": 127919657
+          "viewCount": 127986556
         },
         {
           "rank": 8,
@@ -111,12 +111,12 @@
           "title": "Through the Night",
           "artist": "IU",
           "releaseDate": "2017",
-          "genre": "Ballad · 117,761,169 YouTube views",
+          "genre": "Ballad · 117,814,673 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=BzYnNdJhZQw",
           "artistUrl": "https://www.youtube.com/watch?v=BzYnNdJhZQw",
           "videoId": "BzYnNdJhZQw",
-          "viewCount": 117761169
+          "viewCount": 117814673
         },
         {
           "rank": 9,
@@ -124,12 +124,12 @@
           "title": "Love wins all",
           "artist": "IU",
           "releaseDate": "2024",
-          "genre": "Ballad · 115,142,508 YouTube views",
+          "genre": "Ballad · 115,528,824 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=JleoAppaxi0",
           "artistUrl": "https://www.youtube.com/watch?v=JleoAppaxi0",
           "videoId": "JleoAppaxi0",
-          "viewCount": 115142508
+          "viewCount": 115528824
         },
         {
           "rank": 10,
@@ -137,12 +137,12 @@
           "title": "Always",
           "artist": "Yoon Mirae",
           "releaseDate": "2016",
-          "genre": "Ballad · 114,406,321 YouTube views",
+          "genre": "Ballad · 114,519,845 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=aE0eV2YR51k",
           "artistUrl": "https://www.youtube.com/watch?v=aE0eV2YR51k",
           "videoId": "aE0eV2YR51k",
-          "viewCount": 114406321,
+          "viewCount": 114519845,
           "videoType": "official-mv",
           "videoChannel": "MUSIC&NEW",
           "reviewed": true
@@ -153,12 +153,12 @@
           "title": "Sweet Night",
           "artist": "V",
           "releaseDate": "2020",
-          "genre": "Ballad · 112,909,179 YouTube views",
+          "genre": "Ballad · 113,065,172 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=N5ShoQimivM",
           "artistUrl": "https://www.youtube.com/watch?v=N5ShoQimivM",
           "videoId": "N5ShoQimivM",
-          "viewCount": 112909179
+          "viewCount": 113065172
         },
         {
           "rank": 12,
@@ -166,12 +166,12 @@
           "title": "You Were Beautiful",
           "artist": "DAY6",
           "releaseDate": "2017",
-          "genre": "Ballad · 109,576,023 YouTube views",
+          "genre": "Ballad · 109,776,735 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=BS7tz2rAOSA",
           "artistUrl": "https://www.youtube.com/watch?v=BS7tz2rAOSA",
           "videoId": "BS7tz2rAOSA",
-          "viewCount": 109576023
+          "viewCount": 109776735
         },
         {
           "rank": 13,
@@ -179,12 +179,12 @@
           "title": "Christmas Tree",
           "artist": "V",
           "releaseDate": "2021",
-          "genre": "Ballad · 106,801,536 YouTube views",
+          "genre": "Ballad · 106,993,096 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=lj8TV9q59P4",
           "artistUrl": "https://www.youtube.com/watch?v=lj8TV9q59P4",
           "videoId": "lj8TV9q59P4",
-          "viewCount": 106801536
+          "viewCount": 106993096
         },
         {
           "rank": 14,
@@ -192,12 +192,12 @@
           "title": "Fine",
           "artist": "TAEYEON",
           "releaseDate": "2017",
-          "genre": "Ballad · 102,924,230 YouTube views",
+          "genre": "Ballad · 103,073,458 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=NHXUM-6a3dU",
           "artistUrl": "https://www.youtube.com/watch?v=NHXUM-6a3dU",
           "videoId": "NHXUM-6a3dU",
-          "viewCount": 102924230
+          "viewCount": 103073458
         },
         {
           "rank": 15,
@@ -205,12 +205,12 @@
           "title": "Here I Am Again",
           "artist": "Yerin Baek",
           "releaseDate": "2020",
-          "genre": "Ballad · 99,095,337 YouTube views",
+          "genre": "Ballad · 99,299,670 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=FFmdTU4Cpr8",
           "artistUrl": "https://www.youtube.com/watch?v=FFmdTU4Cpr8",
           "videoId": "FFmdTU4Cpr8",
-          "viewCount": 99095337
+          "viewCount": 99299670
         },
         {
           "rank": 16,
@@ -218,12 +218,12 @@
           "title": "You Are My Everything",
           "artist": "Gummy",
           "releaseDate": "2016",
-          "genre": "Ballad · 99,033,204 YouTube views",
+          "genre": "Ballad · 99,088,365 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ToASX6axGuw",
           "artistUrl": "https://www.youtube.com/watch?v=ToASX6axGuw",
           "videoId": "ToASX6axGuw",
-          "viewCount": 99033204,
+          "viewCount": 99088365,
           "videoType": "official-mv",
           "videoChannel": "MUSIC&NEW",
           "reviewed": true
@@ -234,12 +234,12 @@
           "title": "How can I love the heartbreak, you're the one I love",
           "artist": "AKMU",
           "releaseDate": "2019",
-          "genre": "Ballad · 96,342,414 YouTube views",
+          "genre": "Ballad · 96,779,694 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=m3DZsBw5bnE",
           "artistUrl": "https://www.youtube.com/watch?v=m3DZsBw5bnE",
           "videoId": "m3DZsBw5bnE",
-          "viewCount": 96342414
+          "viewCount": 96779694
         },
         {
           "rank": 18,
@@ -247,12 +247,12 @@
           "title": "I Will Go to You Like the First Snow",
           "artist": "Ailee",
           "releaseDate": "2017",
-          "genre": "Ballad · 87,500,210 YouTube views",
+          "genre": "Ballad · 87,549,284 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=6rS7OUGXUik",
           "artistUrl": "https://www.youtube.com/watch?v=6rS7OUGXUik",
           "videoId": "6rS7OUGXUik",
-          "viewCount": 87500210,
+          "viewCount": 87549284,
           "videoType": "official-audio",
           "videoChannel": "STONE MUSIC",
           "reviewed": true
@@ -263,12 +263,12 @@
           "title": "Me After You",
           "artist": "Paul Kim",
           "releaseDate": "2018",
-          "genre": "Ballad · 72,192,707 YouTube views",
+          "genre": "Ballad · 72,268,062 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=YBzJ0jmHv-4",
           "artistUrl": "https://www.youtube.com/watch?v=YBzJ0jmHv-4",
           "videoId": "YBzJ0jmHv-4",
-          "viewCount": 72192707
+          "viewCount": 72268062
         },
         {
           "rank": 20,
@@ -276,12 +276,12 @@
           "title": "Love, Maybe",
           "artist": "MeloMance",
           "releaseDate": "2022",
-          "genre": "Ballad · 68,439,626 YouTube views",
+          "genre": "Ballad · 68,685,223 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=UoBsiQW23IY",
           "artistUrl": "https://www.youtube.com/watch?v=UoBsiQW23IY",
           "videoId": "UoBsiQW23IY",
-          "viewCount": 68439626,
+          "viewCount": 68685223,
           "videoType": "official-mv",
           "videoChannel": "1theK",
           "reviewed": true
@@ -324,12 +324,12 @@
           "title": "Only Then",
           "artist": "Roy Kim",
           "releaseDate": "2018",
-          "genre": "Ballad · 43,237,866 YouTube views",
+          "genre": "Ballad · 43,324,884 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=SkN_hWI6n28",
           "artistUrl": "https://www.youtube.com/watch?v=SkN_hWI6n28",
           "videoId": "SkN_hWI6n28",
-          "viewCount": 43237866
+          "viewCount": 43324884
         },
         {
           "rank": 24,
@@ -337,12 +337,12 @@
           "title": "Like It",
           "artist": "Yoon Jong Shin",
           "releaseDate": "2017",
-          "genre": "Ballad · 42,602,081 YouTube views",
+          "genre": "Ballad · 42,628,141 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=jy_UiIQn_d0",
           "artistUrl": "https://www.youtube.com/watch?v=jy_UiIQn_d0",
           "videoId": "jy_UiIQn_d0",
-          "viewCount": 42602081,
+          "viewCount": 42628141,
           "nativeTitle": "??",
           "videoType": "official-live",
           "videoChannel": "Dingo Music",
@@ -356,12 +356,12 @@
           "title": "Event Horizon",
           "artist": "YOUNHA",
           "releaseDate": "2022",
-          "genre": "Ballad · 41,716,735 YouTube views",
+          "genre": "Ballad · 41,833,783 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=BBdC1rl5sKY",
           "artistUrl": "https://www.youtube.com/watch?v=BBdC1rl5sKY",
           "videoId": "BBdC1rl5sKY",
-          "viewCount": 41716735,
+          "viewCount": 41833783,
           "videoType": "official-mv",
           "videoChannel": "YOUNHA OFFICIAL",
           "reviewed": true
@@ -388,12 +388,12 @@
           "title": "If There Was Practice in Love",
           "artist": "Lim Jae Hyun",
           "releaseDate": "2018",
-          "genre": "Ballad · 30,831,050 YouTube views",
+          "genre": "Ballad · 31,670,624 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=lNNPWLC8sTo",
           "artistUrl": "https://www.youtube.com/watch?v=lNNPWLC8sTo",
           "videoId": "lNNPWLC8sTo",
-          "viewCount": 30831050,
+          "viewCount": 31670624,
           "videoType": "official-audio",
           "videoChannel": "Lim Jae Hyun Official",
           "reviewed": true
@@ -417,12 +417,12 @@
           "title": "Love Poem",
           "artist": "IU",
           "releaseDate": "2019",
-          "genre": "Ballad · 28,347,210 YouTube views",
+          "genre": "Ballad · 28,405,623 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=OcVmaIlHZ1o",
           "artistUrl": "https://www.youtube.com/watch?v=OcVmaIlHZ1o",
           "videoId": "OcVmaIlHZ1o",
-          "viewCount": 28347210
+          "viewCount": 28405623
         },
         {
           "rank": 30,
@@ -488,12 +488,12 @@
           "title": "Let's Say Goodbye",
           "artist": "Parc Jae Jung",
           "releaseDate": "2023",
-          "genre": "Ballad · 15,981,233 YouTube views",
+          "genre": "Ballad · 16,027,259 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=EYzgL19wj2g",
           "artistUrl": "https://www.youtube.com/watch?v=EYzgL19wj2g",
           "videoId": "EYzgL19wj2g",
-          "viewCount": 15981233,
+          "viewCount": 16027259,
           "videoType": "official-live",
           "videoChannel": "KBS Kpop",
           "reviewed": true
@@ -504,12 +504,12 @@
           "title": "Every Day, Every Moment",
           "artist": "Paul Kim",
           "releaseDate": "2018",
-          "genre": "Ballad · 11,877,991 YouTube views",
+          "genre": "Ballad · 11,985,807 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=EXV8TwTo0A0",
           "artistUrl": "https://www.youtube.com/watch?v=EXV8TwTo0A0",
           "videoId": "EXV8TwTo0A0",
-          "viewCount": 11877991,
+          "viewCount": 11985807,
           "videoType": "official-live",
           "videoChannel": "JTBC",
           "reviewed": true
@@ -520,12 +520,12 @@
           "title": "Goodbye",
           "artist": "WENDY",
           "releaseDate": "2018",
-          "genre": "Ballad · 11,392,422 YouTube views",
+          "genre": "Ballad · 11,410,631 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=A-emJHnVtZ8",
           "artistUrl": "https://www.youtube.com/watch?v=A-emJHnVtZ8",
           "videoId": "A-emJHnVtZ8",
-          "viewCount": 11392422,
+          "viewCount": 11410631,
           "videoType": "official-mv",
           "videoChannel": "VEM",
           "reviewed": true
@@ -549,12 +549,12 @@
           "title": "Done For Me",
           "artist": "Punch",
           "releaseDate": "2019",
-          "genre": "Ballad · 10,420,932 YouTube views",
+          "genre": "Ballad · 10,426,782 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=5hmHeTpMHjg",
           "artistUrl": "https://www.youtube.com/watch?v=5hmHeTpMHjg",
           "videoId": "5hmHeTpMHjg",
-          "viewCount": 10420932
+          "viewCount": 10426782
         },
         {
           "rank": 39,
@@ -684,6 +684,19 @@
         },
         {
           "rank": 48,
+          "id": "kr-ballad-evergreen-2016-2026-49",
+          "title": "All About You",
+          "artist": "TAEYEON",
+          "releaseDate": "2019",
+          "genre": "Ballad · 1,481,840 YouTube views",
+          "artworkUrl": "",
+          "url": "https://www.youtube.com/watch?v=y9dpVNRSA6k",
+          "artistUrl": "https://www.youtube.com/watch?v=y9dpVNRSA6k",
+          "videoId": "y9dpVNRSA6k",
+          "viewCount": 1481840
+        },
+        {
+          "rank": 49,
           "id": "kr-ballad-evergreen-2016-2026-48",
           "title": "The Day Was Beautiful",
           "artist": "Kassy",
@@ -697,19 +710,6 @@
           "videoType": "official-live",
           "videoChannel": "Kassy Official",
           "reviewed": true
-        },
-        {
-          "rank": 49,
-          "id": "kr-ballad-evergreen-2016-2026-49",
-          "title": "All About You",
-          "artist": "TAEYEON",
-          "releaseDate": "2019",
-          "genre": "Ballad · 1,463,108 YouTube views",
-          "artworkUrl": "",
-          "url": "https://www.youtube.com/watch?v=y9dpVNRSA6k",
-          "artistUrl": "https://www.youtube.com/watch?v=y9dpVNRSA6k",
-          "videoId": "y9dpVNRSA6k",
-          "viewCount": 1463108
         },
         {
           "rank": 50,
@@ -733,7 +733,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -742,12 +742,12 @@
           "title": "Eyes, Nose, Lips",
           "artist": "TAEYANG",
           "releaseDate": "2014",
-          "genre": "Ballad · 326,636,555 YouTube views",
+          "genre": "Ballad · 327,382,769 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=UwuAPyOImoI",
           "artistUrl": "https://www.youtube.com/watch?v=UwuAPyOImoI",
           "videoId": "UwuAPyOImoI",
-          "viewCount": 326636555
+          "viewCount": 327382769
         },
         {
           "rank": 2,
@@ -755,12 +755,12 @@
           "title": "Let's Not Fall in Love",
           "artist": "BIGBANG",
           "releaseDate": "2015",
-          "genre": "Ballad · 289,343,415 YouTube views",
+          "genre": "Ballad · 289,723,957 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=9jTo6hTZmiQ",
           "artistUrl": "https://www.youtube.com/watch?v=9jTo6hTZmiQ",
           "videoId": "9jTo6hTZmiQ",
-          "viewCount": 289343415
+          "viewCount": 289723957
         },
         {
           "rank": 3,
@@ -768,12 +768,12 @@
           "title": "Haru Haru",
           "artist": "BIGBANG",
           "releaseDate": "2008",
-          "genre": "Ballad · 248,589,480 YouTube views",
+          "genre": "Ballad · 249,505,211 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=MzCbEdtNbJ0",
           "artistUrl": "https://www.youtube.com/watch?v=MzCbEdtNbJ0",
           "videoId": "MzCbEdtNbJ0",
-          "viewCount": 248589480
+          "viewCount": 249505211
         },
         {
           "rank": 4,
@@ -781,12 +781,12 @@
           "title": "BLUE",
           "artist": "BIGBANG",
           "releaseDate": "2012",
-          "genre": "Ballad · 238,728,085 YouTube views",
+          "genre": "Ballad · 239,261,709 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=2GRP1rkE4O0",
           "artistUrl": "https://www.youtube.com/watch?v=2GRP1rkE4O0",
           "videoId": "2GRP1rkE4O0",
-          "viewCount": 238728085
+          "viewCount": 239261709
         },
         {
           "rank": 5,
@@ -794,12 +794,12 @@
           "title": "Lonely",
           "artist": "2NE1",
           "releaseDate": "2011",
-          "genre": "Ballad · 117,008,533 YouTube views",
+          "genre": "Ballad · 117,127,239 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=5n4V3lGEyG4",
           "artistUrl": "https://www.youtube.com/watch?v=5n4V3lGEyG4",
           "videoId": "5n4V3lGEyG4",
-          "viewCount": 117008533
+          "viewCount": 117127239
         },
         {
           "rank": 6,
@@ -807,12 +807,12 @@
           "title": "Lies",
           "artist": "BIGBANG",
           "releaseDate": "2007",
-          "genre": "Ballad · 89,773,017 YouTube views",
+          "genre": "Ballad · 89,948,803 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=2Cv3phvP8Ro",
           "artistUrl": "https://www.youtube.com/watch?v=2Cv3phvP8Ro",
           "videoId": "2Cv3phvP8Ro",
-          "viewCount": 89773017
+          "viewCount": 89948803
         },
         {
           "rank": 7,
@@ -849,12 +849,12 @@
           "title": "On Rainy Days",
           "artist": "BEAST",
           "releaseDate": "2011",
-          "genre": "Ballad · 83,290,399 YouTube views",
+          "genre": "Ballad · 85,232,532 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=NY47mqz4yCg",
           "artistUrl": "https://www.youtube.com/watch?v=NY47mqz4yCg",
           "videoId": "NY47mqz4yCg",
-          "viewCount": 83290399,
+          "viewCount": 85232532,
           "videoType": "official-audio",
           "videoChannel": "BEAST Topic",
           "reviewed": true
@@ -865,12 +865,12 @@
           "title": "Wedding Dress",
           "artist": "TAEYANG",
           "releaseDate": "2009",
-          "genre": "Ballad · 81,561,835 YouTube views",
+          "genre": "Ballad · 81,628,848 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=qIt6KCwlFPw",
           "artistUrl": "https://www.youtube.com/watch?v=qIt6KCwlFPw",
           "videoId": "qIt6KCwlFPw",
-          "viewCount": 81561835,
+          "viewCount": 81628848,
           "videoType": "official-mv",
           "videoChannel": "YG ENTERTAINMENT",
           "reviewed": true
@@ -881,12 +881,12 @@
           "title": "Memory of the Wind",
           "artist": "Naul",
           "releaseDate": "2012",
-          "genre": "Ballad · 71,915,202 YouTube views",
+          "genre": "Ballad · 72,081,334 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=f5ShDNOqq1E",
           "artistUrl": "https://www.youtube.com/watch?v=f5ShDNOqq1E",
           "videoId": "f5ShDNOqq1E",
-          "viewCount": 71915202
+          "viewCount": 72081334
         },
         {
           "rank": 12,
@@ -907,12 +907,12 @@
           "title": "Wild Flower",
           "artist": "Park Hyo Shin",
           "releaseDate": "2014",
-          "genre": "Ballad · 61,522,144 YouTube views",
+          "genre": "Ballad · 61,584,400 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=OxgiiyLp5pk",
           "artistUrl": "https://www.youtube.com/watch?v=OxgiiyLp5pk",
           "videoId": "OxgiiyLp5pk",
-          "viewCount": 61522144
+          "viewCount": 61584400
         },
         {
           "rank": 14,
@@ -933,12 +933,12 @@
           "title": "Empty",
           "artist": "WINNER",
           "releaseDate": "2014",
-          "genre": "Ballad · 56,268,173 YouTube views",
+          "genre": "Ballad · 56,360,637 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=gEqlF5N8UMs",
           "artistUrl": "https://www.youtube.com/watch?v=gEqlF5N8UMs",
           "videoId": "gEqlF5N8UMs",
-          "viewCount": 56268173
+          "viewCount": 56360637
         },
         {
           "rank": 16,
@@ -946,12 +946,12 @@
           "title": "IF",
           "artist": "TAEYEON",
           "releaseDate": "2008",
-          "genre": "Ballad · 51,463,683 YouTube views",
+          "genre": "Ballad · 51,604,500 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=jJKHTJy_eek",
           "artistUrl": "https://www.youtube.com/watch?v=jJKHTJy_eek",
           "videoId": "jJKHTJy_eek",
-          "viewCount": 51463683,
+          "viewCount": 51604500,
           "videoType": "official-live",
           "videoChannel": "JTBC",
           "reviewed": true
@@ -975,12 +975,12 @@
           "title": "Heaven",
           "artist": "Ailee",
           "releaseDate": "2012",
-          "genre": "Ballad · 47,867,757 YouTube views",
+          "genre": "Ballad · 47,998,244 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=L9ro1KjkJMg",
           "artistUrl": "https://www.youtube.com/watch?v=L9ro1KjkJMg",
           "videoId": "L9ro1KjkJMg",
-          "viewCount": 47867757
+          "viewCount": 47998244
         },
         {
           "rank": 19,
@@ -1020,12 +1020,12 @@
           "title": "You and I",
           "artist": "Park Bom",
           "releaseDate": "2009",
-          "genre": "Ballad · 36,061,567 YouTube views",
+          "genre": "Ballad · 36,148,490 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=64VZUNTmGQM",
           "artistUrl": "https://www.youtube.com/watch?v=64VZUNTmGQM",
           "videoId": "64VZUNTmGQM",
-          "viewCount": 36061567
+          "viewCount": 36148490
         },
         {
           "rank": 22,
@@ -1033,12 +1033,12 @@
           "title": "Return",
           "artist": "Lee Seung Gi",
           "releaseDate": "2012",
-          "genre": "Ballad · 35,663,752 YouTube views",
+          "genre": "Ballad · 35,709,895 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Xw0URnMrFV8",
           "artistUrl": "https://www.youtube.com/watch?v=Xw0URnMrFV8",
           "videoId": "Xw0URnMrFV8",
-          "viewCount": 35663752
+          "viewCount": 35709895
         },
         {
           "rank": 23,
@@ -1075,12 +1075,12 @@
           "title": "Have a Drink",
           "artist": "Zia",
           "releaseDate": "2009",
-          "genre": "Ballad · 23,273,629 YouTube views",
+          "genre": "Ballad · 23,337,488 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=j2t_VmzuZSc",
           "artistUrl": "https://www.youtube.com/watch?v=j2t_VmzuZSc",
           "videoId": "j2t_VmzuZSc",
-          "viewCount": 23273629
+          "viewCount": 23337488
         },
         {
           "rank": 26,
@@ -1101,12 +1101,12 @@
           "title": "Time Walking on Memories",
           "artist": "NELL",
           "releaseDate": "2008",
-          "genre": "Ballad · 20,768,218 YouTube views",
+          "genre": "Ballad · 20,829,277 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=83IfZhO4Pd0",
           "artistUrl": "https://www.youtube.com/watch?v=83IfZhO4Pd0",
           "videoId": "83IfZhO4Pd0",
-          "viewCount": 20768218,
+          "viewCount": 20829277,
           "videoType": "official-live",
           "videoChannel": "ONSTAGE",
           "reviewed": true
@@ -1130,12 +1130,12 @@
           "title": "Turtle",
           "artist": "Davichi",
           "releaseDate": "2013",
-          "genre": "Ballad · 15,003,234 YouTube views",
+          "genre": "Ballad · 16,001,825 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=12u5oZpowzs",
           "artistUrl": "https://www.youtube.com/watch?v=12u5oZpowzs",
           "videoId": "12u5oZpowzs",
-          "viewCount": 15003234,
+          "viewCount": 16001825,
           "videoType": "official-audio",
           "videoChannel": "DAVICHI",
           "reviewed": true
@@ -1146,12 +1146,12 @@
           "title": "I Miss You",
           "artist": "Girl's Day",
           "releaseDate": "2014",
-          "genre": "Ballad · 14,725,049 YouTube views",
+          "genre": "Ballad · 14,737,306 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=eDCqnr1B3Js",
           "artistUrl": "https://www.youtube.com/watch?v=eDCqnr1B3Js",
           "videoId": "eDCqnr1B3Js",
-          "viewCount": 14725049
+          "viewCount": 14737306
         },
         {
           "rank": 31,
@@ -1159,12 +1159,12 @@
           "title": "To You",
           "artist": "Sung Si Kyung",
           "releaseDate": "2013",
-          "genre": "Ballad · 14,101,119 YouTube views",
+          "genre": "Ballad · 14,184,670 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=_kr3bOs5s8U",
           "artistUrl": "https://www.youtube.com/watch?v=_kr3bOs5s8U",
           "videoId": "_kr3bOs5s8U",
-          "viewCount": 14101119
+          "viewCount": 14184670
         },
         {
           "rank": 32,
@@ -1446,7 +1446,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
@@ -1455,12 +1455,12 @@
           "title": "光年之外 Light Years Away",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2016",
-          "genre": "Ballad ? 308,356,771 YouTube views",
+          "genre": "Ballad ? 308,527,782 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=T4SimnaiktU",
           "artistUrl": "https://www.youtube.com/watch?v=T4SimnaiktU",
           "videoId": "T4SimnaiktU",
-          "viewCount": 308356771
+          "viewCount": 308527782
         },
         {
           "rank": 2,
@@ -1468,12 +1468,12 @@
           "title": "你，好不好 How Have You Been",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2016",
-          "genre": "Ballad ? 284,357,262 YouTube views",
+          "genre": "Ballad ? 284,686,915 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wSBXfzgqHtE",
           "artistUrl": "https://www.youtube.com/watch?v=wSBXfzgqHtE",
           "videoId": "wSBXfzgqHtE",
-          "viewCount": 284357262
+          "viewCount": 284686915
         },
         {
           "rank": 3,
@@ -1481,12 +1481,12 @@
           "title": "怎么了 What's Wrong",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2019",
-          "genre": "Ballad ? 210,187,200 YouTube views",
+          "genre": "Ballad ? 210,514,577 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Y2ge3KrdeWs",
           "artistUrl": "https://www.youtube.com/watch?v=Y2ge3KrdeWs",
           "videoId": "Y2ge3KrdeWs",
-          "viewCount": 210187200
+          "viewCount": 210514577
         },
         {
           "rank": 4,
@@ -1494,12 +1494,12 @@
           "title": "如果可以 Red Scarf",
           "artist": "WeiBird 韦礼安",
           "releaseDate": "2021",
-          "genre": "Ballad ? 209,236,508 YouTube views",
+          "genre": "Ballad ? 209,569,333 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=8MG--WuNW1Y",
           "artistUrl": "https://www.youtube.com/watch?v=8MG--WuNW1Y",
           "videoId": "8MG--WuNW1Y",
-          "viewCount": 209236508
+          "viewCount": 209569333
         },
         {
           "rank": 5,
@@ -1507,12 +1507,12 @@
           "title": "年少有为 If I Were Young",
           "artist": "Li Ronghao 李荣浩",
           "releaseDate": "2018",
-          "genre": "Ballad ? 166,928,210 YouTube views",
+          "genre": "Ballad ? 167,023,011 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Dnj5Tcpev0Q",
           "artistUrl": "https://www.youtube.com/watch?v=Dnj5Tcpev0Q",
           "videoId": "Dnj5Tcpev0Q",
-          "viewCount": 166928210
+          "viewCount": 167023011
         },
         {
           "rank": 6,
@@ -1520,12 +1520,12 @@
           "title": "倒数 Tik Tok",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2018",
-          "genre": "Ballad ? 154,061,590 YouTube views",
+          "genre": "Ballad ? 154,182,093 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ma7r2HGqwXs",
           "artistUrl": "https://www.youtube.com/watch?v=ma7r2HGqwXs",
           "videoId": "ma7r2HGqwXs",
-          "viewCount": 154061590,
+          "viewCount": 154182093,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1535,12 +1535,12 @@
           "title": "如果雨之后 The Chaos After You",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2017",
-          "genre": "Ballad ? 145,470,492 YouTube views",
+          "genre": "Ballad ? 145,611,570 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=gdGdO6KjF1I",
           "artistUrl": "https://www.youtube.com/watch?v=gdGdO6KjF1I",
           "videoId": "gdGdO6KjF1I",
-          "viewCount": 145470492
+          "viewCount": 145611570
         },
         {
           "rank": 8,
@@ -1548,12 +1548,12 @@
           "title": "说散就散 Let's Break Up",
           "artist": "JC 陈咏桐",
           "releaseDate": "2016",
-          "genre": "Ballad ? 145,446,266 YouTube views",
+          "genre": "Ballad ? 145,512,985 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=zOEISgh7k_g",
           "artistUrl": "https://www.youtube.com/watch?v=zOEISgh7k_g",
           "videoId": "zOEISgh7k_g",
-          "viewCount": 145446266
+          "viewCount": 145512985
         },
         {
           "rank": 9,
@@ -1561,12 +1561,12 @@
           "title": "永不失联的爱 Unbreakable Love",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2017",
-          "genre": "Ballad ? 101,673,959 YouTube views",
+          "genre": "Ballad ? 101,815,687 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=WJK8486VjfU",
           "artistUrl": "https://www.youtube.com/watch?v=WJK8486VjfU",
           "videoId": "WJK8486VjfU",
-          "viewCount": 101673959
+          "viewCount": 101815687
         },
         {
           "rank": 10,
@@ -1574,12 +1574,12 @@
           "title": "飞鸟和蝉",
           "artist": "Ren Ran 任然",
           "releaseDate": "2020",
-          "genre": "Ballad ? 86,599,703 YouTube views",
+          "genre": "Ballad ? 86,736,783 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=V0XUd8f2pz8",
           "artistUrl": "https://www.youtube.com/watch?v=V0XUd8f2pz8",
           "videoId": "V0XUd8f2pz8",
-          "viewCount": 86599703,
+          "viewCount": 86736783,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1589,12 +1589,12 @@
           "title": "你的答案 Your Answer",
           "artist": "A Rong 阿冗",
           "releaseDate": "2019",
-          "genre": "Ballad ? 85,199,129 YouTube views",
+          "genre": "Ballad ? 85,323,023 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ye4jAQ0uxcQ",
           "artistUrl": "https://www.youtube.com/watch?v=ye4jAQ0uxcQ",
           "videoId": "ye4jAQ0uxcQ",
-          "viewCount": 85199129
+          "viewCount": 85323023
         },
         {
           "rank": 12,
@@ -1602,12 +1602,12 @@
           "title": "很久以后 Long After",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2019",
-          "genre": "Ballad ? 73,250,849 YouTube views",
+          "genre": "Ballad ? 73,325,797 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=2BEFukvLZfI",
           "artistUrl": "https://www.youtube.com/watch?v=2BEFukvLZfI",
           "videoId": "2BEFukvLZfI",
-          "viewCount": 73250849
+          "viewCount": 73325797
         },
         {
           "rank": 13,
@@ -1615,12 +1615,12 @@
           "title": "像鱼 Like a Fish",
           "artist": "Wang Erlang 王贰浪",
           "releaseDate": "2018",
-          "genre": "Ballad ? 71,159,875 YouTube views",
+          "genre": "Ballad ? 71,272,981 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=UWajXXM9s5U",
           "artistUrl": "https://www.youtube.com/watch?v=UWajXXM9s5U",
           "videoId": "UWajXXM9s5U",
-          "viewCount": 71159875
+          "viewCount": 71272981
         },
         {
           "rank": 14,
@@ -1628,12 +1628,12 @@
           "title": "句号 Full Stop",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2019",
-          "genre": "Ballad ? 66,929,818 YouTube views",
+          "genre": "Ballad ? 66,987,606 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=7XlqcS6B7WA",
           "artistUrl": "https://www.youtube.com/watch?v=7XlqcS6B7WA",
           "videoId": "7XlqcS6B7WA",
-          "viewCount": 66929818
+          "viewCount": 66987606
         },
         {
           "rank": 15,
@@ -1641,12 +1641,12 @@
           "title": "嘉宾 Guest",
           "artist": "Zhang Yuan 张远",
           "releaseDate": "2020",
-          "genre": "Ballad ? 61,811,047 YouTube views",
+          "genre": "Ballad ? 61,826,552 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=8ux25IcLr8w",
           "artistUrl": "https://www.youtube.com/watch?v=8ux25IcLr8w",
           "videoId": "8ux25IcLr8w",
-          "viewCount": 61811047,
+          "viewCount": 61826552,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1682,12 +1682,12 @@
           "title": "体面 Decency",
           "artist": "Kelly Yu 于文文",
           "releaseDate": "2017",
-          "genre": "Ballad ? 42,042,069 YouTube views",
+          "genre": "Ballad ? 42,140,523 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=-kfVp3tqYvc",
           "artistUrl": "https://www.youtube.com/watch?v=-kfVp3tqYvc",
           "videoId": "-kfVp3tqYvc",
-          "viewCount": 42042069
+          "viewCount": 42140523
         },
         {
           "rank": 19,
@@ -1695,12 +1695,12 @@
           "title": "世界这么大还是遇见你",
           "artist": "Cheng Xiang 程响",
           "releaseDate": "2020",
-          "genre": "Ballad ? 41,231,863 YouTube views",
+          "genre": "Ballad ? 41,327,239 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wRmedql89Ro",
           "artistUrl": "https://www.youtube.com/watch?v=wRmedql89Ro",
           "videoId": "wRmedql89Ro",
-          "viewCount": 41231863
+          "viewCount": 41327239
         },
         {
           "rank": 20,
@@ -1723,12 +1723,12 @@
           "title": "大鱼 Big Fish",
           "artist": "Zhou Shen 周深",
           "releaseDate": "2016",
-          "genre": "Ballad ? 37,930,532 YouTube views",
+          "genre": "Ballad ? 38,006,119 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=-aMdBA00Ijc",
           "artistUrl": "https://www.youtube.com/watch?v=-aMdBA00Ijc",
           "videoId": "-aMdBA00Ijc",
-          "viewCount": 37930532,
+          "viewCount": 38006119,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1738,12 +1738,12 @@
           "title": "起风了 The Wind Rises",
           "artist": "Wu Qingfeng",
           "releaseDate": "2019",
-          "genre": "Ballad ? 36,931,459 YouTube views",
+          "genre": "Ballad ? 37,017,805 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=4o0BD1KUL5g",
           "artistUrl": "https://www.youtube.com/watch?v=4o0BD1KUL5g",
           "videoId": "4o0BD1KUL5g",
-          "viewCount": 36931459,
+          "viewCount": 37017805,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1826,12 +1826,12 @@
           "title": "可能 Possible",
           "artist": "Cheng Xiang 程响",
           "releaseDate": "2022",
-          "genre": "Ballad ? 19,038,222 YouTube views",
+          "genre": "Ballad ? 19,215,791 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=JnngXODMvnY",
           "artistUrl": "https://www.youtube.com/watch?v=JnngXODMvnY",
           "videoId": "JnngXODMvnY",
-          "viewCount": 19038222,
+          "viewCount": 19215791,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1867,12 +1867,12 @@
           "title": "如愿 As Wished",
           "artist": "Faye Wong 王菲",
           "releaseDate": "2021",
-          "genre": "Ballad ? 11,013,306 YouTube views",
+          "genre": "Ballad ? 11,102,415 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ZoJCN0pV7Qs",
           "artistUrl": "https://www.youtube.com/watch?v=ZoJCN0pV7Qs",
           "videoId": "ZoJCN0pV7Qs",
-          "viewCount": 11013306,
+          "viewCount": 11102415,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -1882,12 +1882,12 @@
           "title": "消愁 Drowning Sorrows",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 9,962,404 YouTube views",
+          "genre": "Ballad ? 10,047,470 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=9C3Nd5dRin8",
           "artistUrl": "https://www.youtube.com/watch?v=9C3Nd5dRin8",
           "videoId": "9C3Nd5dRin8",
-          "viewCount": 9962404
+          "viewCount": 10047470
         },
         {
           "rank": 33,
@@ -1966,12 +1966,12 @@
           "title": "像我这样的人",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 4,673,501 YouTube views",
+          "genre": "Ballad ? 4,743,619 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=nBcYrqsv5tc",
           "artistUrl": "https://www.youtube.com/watch?v=nBcYrqsv5tc",
           "videoId": "nBcYrqsv5tc",
-          "viewCount": 4673501
+          "viewCount": 4743619
         },
         {
           "rank": 39,
@@ -2007,12 +2007,12 @@
           "title": "无问",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 3,852,708 YouTube views",
+          "genre": "Ballad ? 3,858,165 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ZCYqEeIW4WY",
           "artistUrl": "https://www.youtube.com/watch?v=ZCYqEeIW4WY",
           "videoId": "ZCYqEeIW4WY",
-          "viewCount": 3852708
+          "viewCount": 3858165
         },
         {
           "rank": 42,
@@ -2059,6 +2059,19 @@
         },
         {
           "rank": 45,
+          "id": "cn-ballad-evergreen-2016-2026-46",
+          "title": "刚刚好 Just Right",
+          "artist": "Joker Xue 薛之谦",
+          "releaseDate": "2016",
+          "genre": "Ballad ? 1,674,610 YouTube views",
+          "artworkUrl": "",
+          "url": "https://www.youtube.com/watch?v=rXRKupl-uLo",
+          "artistUrl": "https://www.youtube.com/watch?v=rXRKupl-uLo",
+          "videoId": "rXRKupl-uLo",
+          "viewCount": 1674610
+        },
+        {
+          "rank": 46,
           "id": "cn-ballad-evergreen-2016-2026-45",
           "title": "和光同尘",
           "artist": "Zhou Shen 周深",
@@ -2071,30 +2084,17 @@
           "viewCount": 1673484
         },
         {
-          "rank": 46,
-          "id": "cn-ballad-evergreen-2016-2026-46",
-          "title": "刚刚好 Just Right",
-          "artist": "Joker Xue 薛之谦",
-          "releaseDate": "2016",
-          "genre": "Ballad ? 1,605,157 YouTube views",
-          "artworkUrl": "",
-          "url": "https://www.youtube.com/watch?v=rXRKupl-uLo",
-          "artistUrl": "https://www.youtube.com/watch?v=rXRKupl-uLo",
-          "videoId": "rXRKupl-uLo",
-          "viewCount": 1605157
-        },
-        {
           "rank": 47,
           "id": "cn-ballad-evergreen-2016-2026-47",
           "title": "借 Borrow",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2017",
-          "genre": "Ballad ? 1,484,776 YouTube views",
+          "genre": "Ballad ? 1,543,213 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=QIPJBAYLbYg",
           "artistUrl": "https://www.youtube.com/watch?v=QIPJBAYLbYg",
           "videoId": "QIPJBAYLbYg",
-          "viewCount": 1484776
+          "viewCount": 1543213
         },
         {
           "rank": 48,
@@ -2115,12 +2115,12 @@
           "title": "平凡的一天",
           "artist": "Mao Buyi 毛不易",
           "releaseDate": "2018",
-          "genre": "Ballad ? 1,145,126 YouTube views",
+          "genre": "Ballad ? 1,188,059 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=hmJqC--g_as",
           "artistUrl": "https://www.youtube.com/watch?v=hmJqC--g_as",
           "videoId": "hmJqC--g_as",
-          "viewCount": 1145126
+          "viewCount": 1188059
         },
         {
           "rank": 50,
@@ -2144,7 +2144,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
@@ -2153,12 +2153,12 @@
           "title": "以后别做朋友 Let's Not Be Friends Anymore",
           "artist": "Eric Chou 周兴哲",
           "releaseDate": "2014",
-          "genre": "Ballad ? 231,791,369 YouTube views",
+          "genre": "Ballad ? 231,919,566 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Ew4VvF0DPMc",
           "artistUrl": "https://www.youtube.com/watch?v=Ew4VvF0DPMc",
           "videoId": "Ew4VvF0DPMc",
-          "viewCount": 231791369
+          "viewCount": 231919566
         },
         {
           "rank": 2,
@@ -2166,12 +2166,12 @@
           "title": "修炼爱情 Practice Love",
           "artist": "JJ Lin 林俊杰",
           "releaseDate": "2013",
-          "genre": "Ballad ? 163,463,453 YouTube views",
+          "genre": "Ballad ? 163,576,225 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=LWV-f6dMN3Q",
           "artistUrl": "https://www.youtube.com/watch?v=LWV-f6dMN3Q",
           "videoId": "LWV-f6dMN3Q",
-          "viewCount": 163463453
+          "viewCount": 163576225
         },
         {
           "rank": 3,
@@ -2179,12 +2179,12 @@
           "title": "那些年 Those Bygone Years",
           "artist": "Hu Xia 胡夏",
           "releaseDate": "2011",
-          "genre": "Ballad ? 124,300,854 YouTube views",
+          "genre": "Ballad ? 124,577,056 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=KqjgLbKZ1h0",
           "artistUrl": "https://www.youtube.com/watch?v=KqjgLbKZ1h0",
           "videoId": "KqjgLbKZ1h0",
-          "viewCount": 124300854
+          "viewCount": 124577056
         },
         {
           "rank": 4,
@@ -2192,12 +2192,12 @@
           "title": "明明就",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2012",
-          "genre": "Ballad ? 109,418,634 YouTube views",
+          "genre": "Ballad ? 109,506,066 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=UBySINroNkw",
           "artistUrl": "https://www.youtube.com/watch?v=UBySINroNkw",
           "videoId": "UBySINroNkw",
-          "viewCount": 109418634
+          "viewCount": 109506066
         },
         {
           "rank": 5,
@@ -2231,12 +2231,12 @@
           "title": "还是要幸福",
           "artist": "Hebe Tien 田馥甄",
           "releaseDate": "2011",
-          "genre": "Ballad ? 85,953,234 YouTube views",
+          "genre": "Ballad ? 85,994,176 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=1CcQDuuhdXA",
           "artistUrl": "https://www.youtube.com/watch?v=1CcQDuuhdXA",
           "videoId": "1CcQDuuhdXA",
-          "viewCount": 85953234
+          "viewCount": 85994176
         },
         {
           "rank": 8,
@@ -2244,12 +2244,12 @@
           "title": "给我一首歌的时间",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2008",
-          "genre": "Ballad ? 83,968,977 YouTube views",
+          "genre": "Ballad ? 84,112,006 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wt0RKW3aC84",
           "artistUrl": "https://www.youtube.com/watch?v=wt0RKW3aC84",
           "videoId": "wt0RKW3aC84",
-          "viewCount": 83968977
+          "viewCount": 84112006
         },
         {
           "rank": 9,
@@ -2257,12 +2257,12 @@
           "title": "说好的幸福呢",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2008",
-          "genre": "Ballad ? 80,412,130 YouTube views",
+          "genre": "Ballad ? 80,590,217 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=mLFhTFiX0uM",
           "artistUrl": "https://www.youtube.com/watch?v=mLFhTFiX0uM",
           "videoId": "mLFhTFiX0uM",
-          "viewCount": 80412130
+          "viewCount": 80590217
         },
         {
           "rank": 10,
@@ -2270,12 +2270,12 @@
           "title": "青花瓷 Blue and White Porcelain",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2007",
-          "genre": "Ballad ? 75,879,926 YouTube views",
+          "genre": "Ballad ? 76,138,336 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Z8Mqw0b9ADs",
           "artistUrl": "https://www.youtube.com/watch?v=Z8Mqw0b9ADs",
           "videoId": "Z8Mqw0b9ADs",
-          "viewCount": 75879926
+          "viewCount": 76138336
         },
         {
           "rank": 11,
@@ -2283,12 +2283,12 @@
           "title": "可惜没如果 If Only",
           "artist": "JJ Lin 林俊杰",
           "releaseDate": "2014",
-          "genre": "Ballad ? 74,331,395 YouTube views",
+          "genre": "Ballad ? 74,385,756 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=vsBf_0gDxSM",
           "artistUrl": "https://www.youtube.com/watch?v=vsBf_0gDxSM",
           "videoId": "vsBf_0gDxSM",
-          "viewCount": 74331395
+          "viewCount": 74385756
         },
         {
           "rank": 12,
@@ -2296,12 +2296,12 @@
           "title": "说了再见 Say Goodbye",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2010",
-          "genre": "Ballad ? 72,201,037 YouTube views",
+          "genre": "Ballad ? 72,342,578 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=KKsioz-zaZY",
           "artistUrl": "https://www.youtube.com/watch?v=KKsioz-zaZY",
           "videoId": "KKsioz-zaZY",
-          "viewCount": 72201037
+          "viewCount": 72342578
         },
         {
           "rank": 13,
@@ -2309,12 +2309,12 @@
           "title": "多远都要在一起",
           "artist": "G.E.M. 邓紫棋",
           "releaseDate": "2015",
-          "genre": "Ballad ? 71,532,370 YouTube views",
+          "genre": "Ballad ? 71,657,855 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=D9ksLn6hZ7Q",
           "artistUrl": "https://www.youtube.com/watch?v=D9ksLn6hZ7Q",
           "videoId": "D9ksLn6hZ7Q",
-          "viewCount": 71532370
+          "viewCount": 71657855
         },
         {
           "rank": 14,
@@ -2322,12 +2322,12 @@
           "title": "魔鬼中的天使",
           "artist": "Hebe Tien 田馥甄",
           "releaseDate": "2011",
-          "genre": "Ballad ? 71,300,417 YouTube views",
+          "genre": "Ballad ? 71,346,958 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=na_xv5iFt2Y",
           "artistUrl": "https://www.youtube.com/watch?v=na_xv5iFt2Y",
           "videoId": "na_xv5iFt2Y",
-          "viewCount": 71300417
+          "viewCount": 71346958
         },
         {
           "rank": 15,
@@ -2335,12 +2335,12 @@
           "title": "手写的从前",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2014",
-          "genre": "Ballad ? 69,028,025 YouTube views",
+          "genre": "Ballad ? 69,112,587 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=TMB6-YflpA4",
           "artistUrl": "https://www.youtube.com/watch?v=TMB6-YflpA4",
           "videoId": "TMB6-YflpA4",
-          "viewCount": 69028025
+          "viewCount": 69112587
         },
         {
           "rank": 16,
@@ -2361,12 +2361,12 @@
           "title": "不能说的秘密",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2007",
-          "genre": "Ballad ? 50,926,211 YouTube views",
+          "genre": "Ballad ? 51,002,220 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=uIWypArI73w",
           "artistUrl": "https://www.youtube.com/watch?v=uIWypArI73w",
           "videoId": "uIWypArI73w",
-          "viewCount": 50926211
+          "viewCount": 51002220
         },
         {
           "rank": 18,
@@ -2374,12 +2374,12 @@
           "title": "说谎 Fairy Tale",
           "artist": "Yoga Lin 林宥嘉",
           "releaseDate": "2009",
-          "genre": "Ballad ? 46,157,418 YouTube views",
+          "genre": "Ballad ? 46,264,723 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ftfJRzW0MPo",
           "artistUrl": "https://www.youtube.com/watch?v=ftfJRzW0MPo",
           "videoId": "ftfJRzW0MPo",
-          "viewCount": 46157418
+          "viewCount": 46264723
         },
         {
           "rank": 19,
@@ -2387,17 +2387,30 @@
           "title": "红尘客栈",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2012",
-          "genre": "Ballad ? 45,649,388 YouTube views",
+          "genre": "Ballad ? 45,735,251 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=L6joGUdc6y4",
           "artistUrl": "https://www.youtube.com/watch?v=L6joGUdc6y4",
           "videoId": "L6joGUdc6y4",
-          "viewCount": 45649388,
+          "viewCount": 45735251,
           "videoType": "verified-original",
           "reviewed": true
         },
         {
           "rank": 20,
+          "id": "cn-ballad-evergreen-2006-2015-21",
+          "title": "最长的电影 The Longest Movie",
+          "artist": "Jay Chou 周杰伦",
+          "releaseDate": "2007",
+          "genre": "Ballad ? 43,021,842 YouTube views",
+          "artworkUrl": "",
+          "url": "https://www.youtube.com/watch?v=2zxc27bvrO8",
+          "artistUrl": "https://www.youtube.com/watch?v=2zxc27bvrO8",
+          "videoId": "2zxc27bvrO8",
+          "viewCount": 43021842
+        },
+        {
+          "rank": 21,
           "id": "cn-ballad-evergreen-2006-2015-20",
           "title": "学不会",
           "artist": "JJ Lin 林俊杰",
@@ -2408,19 +2421,6 @@
           "artistUrl": "https://www.youtube.com/watch?v=27R6ZavdzzQ",
           "videoId": "27R6ZavdzzQ",
           "viewCount": 42962496
-        },
-        {
-          "rank": 21,
-          "id": "cn-ballad-evergreen-2006-2015-21",
-          "title": "最长的电影 The Longest Movie",
-          "artist": "Jay Chou 周杰伦",
-          "releaseDate": "2007",
-          "genre": "Ballad ? 42,914,944 YouTube views",
-          "artworkUrl": "",
-          "url": "https://www.youtube.com/watch?v=2zxc27bvrO8",
-          "artistUrl": "https://www.youtube.com/watch?v=2zxc27bvrO8",
-          "videoId": "2zxc27bvrO8",
-          "viewCount": 42914944
         },
         {
           "rank": 22,
@@ -2454,12 +2454,12 @@
           "title": "蒲公英的约定",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2007",
-          "genre": "Ballad ? 35,650,964 YouTube views",
+          "genre": "Ballad ? 35,829,274 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=VitJnr3IySc",
           "artistUrl": "https://www.youtube.com/watch?v=VitJnr3IySc",
           "videoId": "VitJnr3IySc",
-          "viewCount": 35650964
+          "viewCount": 35829274
         },
         {
           "rank": 25,
@@ -2493,12 +2493,12 @@
           "title": "陀飞轮",
           "artist": "Eason Chan 陈奕迅",
           "releaseDate": "2010",
-          "genre": "Ballad ? 24,988,088 YouTube views",
+          "genre": "Ballad ? 25,053,675 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=URUIcYDq3_I",
           "artistUrl": "https://www.youtube.com/watch?v=URUIcYDq3_I",
           "videoId": "URUIcYDq3_I",
-          "viewCount": 24988088
+          "viewCount": 25053675
         },
         {
           "rank": 28,
@@ -2506,12 +2506,12 @@
           "title": "烟花易冷",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2010",
-          "genre": "Ballad ? 24,896,423 YouTube views",
+          "genre": "Ballad ? 24,988,865 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=COMHDRqAvYE",
           "artistUrl": "https://www.youtube.com/watch?v=COMHDRqAvYE",
           "videoId": "COMHDRqAvYE",
-          "viewCount": 24896423
+          "viewCount": 24988865
         },
         {
           "rank": 29,
@@ -2519,12 +2519,12 @@
           "title": "背对背拥抱",
           "artist": "JJ Lin 林俊杰",
           "releaseDate": "2009",
-          "genre": "Ballad ? 22,983,398 YouTube views",
+          "genre": "Ballad ? 23,047,349 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=7xgucJEqNDo",
           "artistUrl": "https://www.youtube.com/watch?v=7xgucJEqNDo",
           "videoId": "7xgucJEqNDo",
-          "viewCount": 22983398
+          "viewCount": 23047349
         },
         {
           "rank": 30,
@@ -2569,31 +2569,31 @@
         },
         {
           "rank": 33,
-          "id": "cn-ballad-evergreen-2006-2015-34",
-          "title": "花海",
-          "artist": "Jay Chou 周杰伦",
-          "releaseDate": "2008",
-          "genre": "Ballad ? 17,480,104 YouTube views",
-          "artworkUrl": "",
-          "url": "https://www.youtube.com/watch?v=q1ww6bDjfiI",
-          "artistUrl": "https://www.youtube.com/watch?v=q1ww6bDjfiI",
-          "videoId": "q1ww6bDjfiI",
-          "viewCount": 17480104
-        },
-        {
-          "rank": 34,
           "id": "cn-ballad-evergreen-2006-2015-33",
           "title": "爱情转移",
           "artist": "Eason Chan 陈奕迅",
           "releaseDate": "2007",
-          "genre": "Ballad ? 17,451,021 YouTube views",
+          "genre": "Ballad ? 17,902,997 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=RIq7Tz9nYD8",
           "artistUrl": "https://www.youtube.com/watch?v=RIq7Tz9nYD8",
           "videoId": "RIq7Tz9nYD8",
-          "viewCount": 17451021,
+          "viewCount": 17902997,
           "videoType": "verified-original",
           "reviewed": true
+        },
+        {
+          "rank": 34,
+          "id": "cn-ballad-evergreen-2006-2015-34",
+          "title": "花海",
+          "artist": "Jay Chou 周杰伦",
+          "releaseDate": "2008",
+          "genre": "Ballad ? 17,534,013 YouTube views",
+          "artworkUrl": "",
+          "url": "https://www.youtube.com/watch?v=q1ww6bDjfiI",
+          "artistUrl": "https://www.youtube.com/watch?v=q1ww6bDjfiI",
+          "videoId": "q1ww6bDjfiI",
+          "viewCount": 17534013
         },
         {
           "rank": 35,
@@ -2629,12 +2629,12 @@
           "title": "小幸运 A Little Happiness",
           "artist": "Hebe Tien 田馥甄",
           "releaseDate": "2015",
-          "genre": "Ballad ? 13,760,866 YouTube views",
+          "genre": "Ballad ? 13,861,992 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=CFTZSSJyy7A",
           "artistUrl": "https://www.youtube.com/watch?v=CFTZSSJyy7A",
           "videoId": "CFTZSSJyy7A",
-          "viewCount": 13760866
+          "viewCount": 13861992
         },
         {
           "rank": 38,
@@ -2642,12 +2642,12 @@
           "title": "演员 Actor",
           "artist": "Joker Xue 薛之谦",
           "releaseDate": "2015",
-          "genre": "Ballad ? 12,650,579 YouTube views",
+          "genre": "Ballad ? 12,788,405 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=XaN3kUz4KSw",
           "artistUrl": "https://www.youtube.com/watch?v=XaN3kUz4KSw",
           "videoId": "XaN3kUz4KSw",
-          "viewCount": 12650579
+          "viewCount": 12788405
         },
         {
           "rank": 39,
@@ -2668,12 +2668,12 @@
           "title": "给我一个理由忘记",
           "artist": "A-Lin 黄丽玲",
           "releaseDate": "2010",
-          "genre": "Ballad ? 11,859,553 YouTube views",
+          "genre": "Ballad ? 11,955,369 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Z-8uTUU5SR8",
           "artistUrl": "https://www.youtube.com/watch?v=Z-8uTUU5SR8",
           "videoId": "Z-8uTUU5SR8",
-          "viewCount": 11859553
+          "viewCount": 11955369
         },
         {
           "rank": 41,
@@ -2696,12 +2696,12 @@
           "title": "不分手的恋爱",
           "artist": "Silence Wang 汪苏泷",
           "releaseDate": "2011",
-          "genre": "Ballad ? 7,049,858 YouTube views",
+          "genre": "Ballad ? 7,080,710 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=oTG_6WKh_4c",
           "artistUrl": "https://www.youtube.com/watch?v=oTG_6WKh_4c",
           "videoId": "oTG_6WKh_4c",
-          "viewCount": 7049858,
+          "viewCount": 7080710,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -2711,12 +2711,12 @@
           "title": "画心",
           "artist": "Jane Zhang 张靓颖",
           "releaseDate": "2008",
-          "genre": "Ballad ? 3,879,913 YouTube views",
+          "genre": "Ballad ? 3,928,052 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=A6i0jSfUimg",
           "artistUrl": "https://www.youtube.com/watch?v=A6i0jSfUimg",
           "videoId": "A6i0jSfUimg",
-          "viewCount": 3879913
+          "viewCount": 3928052
         },
         {
           "rank": 44,
@@ -2822,7 +2822,7 @@
       "market": "KR",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 · BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the original artist and song. Compared sources include official MV, official/topic audio, licensed original-artist live stages, and verified original recordings where no canonical upload exists. Covers, karaoke, reactions, compilations, wrong artists and similarly named songs are excluded. Counts are a public YouTube snapshot and may change.",
       "songs": [
         {
@@ -2831,12 +2831,12 @@
           "title": "Heejae",
           "artist": "Sung Si Kyung",
           "releaseDate": "2003",
-          "genre": "Ballad · 93,108,965 YouTube views",
+          "genre": "Ballad · 94,710,245 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=nD1p_H3qo_A",
           "artistUrl": "https://www.youtube.com/watch?v=nD1p_H3qo_A",
           "videoId": "nD1p_H3qo_A",
-          "viewCount": 93108965
+          "viewCount": 94710245
         },
         {
           "rank": 2,
@@ -2844,12 +2844,12 @@
           "title": "Still Beautiful",
           "artist": "Toy",
           "releaseDate": "1999",
-          "genre": "Ballad · 57,063,424 YouTube views",
+          "genre": "Ballad · 58,524,300 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=nuAiFzEkFZM",
           "artistUrl": "https://www.youtube.com/watch?v=nuAiFzEkFZM",
           "videoId": "nuAiFzEkFZM",
-          "viewCount": 57063424,
+          "viewCount": 58524300,
           "videoType": "official-audio",
           "videoChannel": "Toy Topic",
           "reviewed": true
@@ -2918,12 +2918,12 @@
           "title": "Should I Say I Love You Again",
           "artist": "Kim Dong Ryul",
           "releaseDate": "2001",
-          "genre": "Ballad · 24,416,945 YouTube views",
+          "genre": "Ballad · 24,642,809 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=np0s2col2I4",
           "artistUrl": "https://www.youtube.com/watch?v=np0s2col2I4",
           "videoId": "np0s2col2I4",
-          "viewCount": 24416945,
+          "viewCount": 24642809,
           "videoType": "official-live",
           "videoChannel": "KBS",
           "reviewed": true
@@ -2979,12 +2979,12 @@
           "title": "For You",
           "artist": "Yim Jae Beum",
           "releaseDate": "2000",
-          "genre": "Ballad · 16,323,173 YouTube views",
+          "genre": "Ballad · 16,415,743 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=cDS3vu_Ep6E",
           "artistUrl": "https://www.youtube.com/watch?v=cDS3vu_Ep6E",
           "videoId": "cDS3vu_Ep6E",
-          "viewCount": 16323173,
+          "viewCount": 16415743,
           "videoType": "official-live",
           "videoChannel": "MBCkpop",
           "reviewed": true
@@ -2995,12 +2995,12 @@
           "title": "Fixing My Makeup",
           "artist": "Wax",
           "releaseDate": "2001",
-          "genre": "Ballad · 15,482,320 YouTube views",
+          "genre": "Ballad · 15,565,411 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=luwdlYsCQ6M",
           "artistUrl": "https://www.youtube.com/watch?v=luwdlYsCQ6M",
           "videoId": "luwdlYsCQ6M",
-          "viewCount": 15482320,
+          "viewCount": 15565411,
           "videoType": "official-mv",
           "videoChannel": "WEJHYS J",
           "reviewed": true
@@ -3072,12 +3072,12 @@
           "title": "One Love",
           "artist": "M.C the Max",
           "releaseDate": "2002",
-          "genre": "Ballad · 9,527,256 YouTube views",
+          "genre": "Ballad · 9,623,797 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=eo3RlZyls9k",
           "artistUrl": "https://www.youtube.com/watch?v=eo3RlZyls9k",
           "videoId": "eo3RlZyls9k",
-          "viewCount": 9527256,
+          "viewCount": 9623797,
           "videoType": "official-audio",
           "videoChannel": "M.C the MAX Official",
           "reviewed": true
@@ -3133,12 +3133,12 @@
           "title": "Hug",
           "artist": "TVXQ",
           "releaseDate": "2004",
-          "genre": "Ballad · 8,331,991 YouTube views",
+          "genre": "Ballad · 8,367,081 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=xQ635vE2RQI",
           "artistUrl": "https://www.youtube.com/watch?v=xQ635vE2RQI",
           "videoId": "xQ635vE2RQI",
-          "viewCount": 8331991
+          "viewCount": 8367081
         },
         {
           "rank": 22,
@@ -3146,12 +3146,12 @@
           "title": "After You've Gone",
           "artist": "M.C the Max",
           "releaseDate": "2002",
-          "genre": "Ballad · 7,415,672 YouTube views",
+          "genre": "Ballad · 7,454,677 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=g27XtqR7B0c",
           "artistUrl": "https://www.youtube.com/watch?v=g27XtqR7B0c",
           "videoId": "g27XtqR7B0c",
-          "viewCount": 7415672
+          "viewCount": 7454677
         },
         {
           "rank": 23,
@@ -3426,12 +3426,12 @@
           "title": "Tonight",
           "artist": "TVXQ",
           "releaseDate": "2005",
-          "genre": "Ballad · 1,710,519 YouTube views",
+          "genre": "Ballad · 1,723,210 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=FJlXalr3A9E",
           "artistUrl": "https://www.youtube.com/watch?v=FJlXalr3A9E",
           "videoId": "FJlXalr3A9E",
-          "viewCount": 1710519
+          "viewCount": 1723210
         },
         {
           "rank": 42,
@@ -3574,7 +3574,7 @@
       "market": "CN",
       "source": "Measured public YouTube view counts · strict descending snapshot",
       "sourceUrl": "https://returnyoutubedislike.com/docs/fetching",
-      "updatedAt": "2026-10-12T08:46:27.421Z",
+      "updatedAt": "2026-10-19T07:25:55.712Z",
       "syncWarning": "EVERGREEN TOP 50 ? BALLAD ONLY. Ranked strictly by the highest verified public YouTube view count for the same song and original artist. Compared sources include official MV, official/topic audio, licensed original-artist live stages and verified original recordings. Covers, karaoke, reactions, compilations, wrong artists and same-title mismatches are excluded.",
       "songs": [
         {
@@ -3583,12 +3583,12 @@
           "title": "夜曲 Nocturne",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2005",
-          "genre": "Ballad ? 106,626,193 YouTube views",
+          "genre": "Ballad ? 106,849,646 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=6Q0Pd53mojY",
           "artistUrl": "https://www.youtube.com/watch?v=6Q0Pd53mojY",
           "videoId": "6Q0Pd53mojY",
-          "viewCount": 106626193
+          "viewCount": 106849646
         },
         {
           "rank": 2,
@@ -3596,12 +3596,12 @@
           "title": "晴天 Sunny Day",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2003",
-          "genre": "Ballad ? 96,929,095 YouTube views",
+          "genre": "Ballad ? 97,085,487 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=DYptgVvkVLQ",
           "artistUrl": "https://www.youtube.com/watch?v=DYptgVvkVLQ",
           "videoId": "DYptgVvkVLQ",
-          "viewCount": 96929095
+          "viewCount": 97085487
         },
         {
           "rank": 3,
@@ -3609,12 +3609,12 @@
           "title": "枫 Maple Leaf",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2005",
-          "genre": "Ballad ? 85,078,000 YouTube views",
+          "genre": "Ballad ? 85,242,150 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=qzwsQTY-99o",
           "artistUrl": "https://www.youtube.com/watch?v=qzwsQTY-99o",
           "videoId": "qzwsQTY-99o",
-          "viewCount": 85078000
+          "viewCount": 85242150
         },
         {
           "rank": 4,
@@ -3622,12 +3622,12 @@
           "title": "搁浅 Stranded",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2004",
-          "genre": "Ballad ? 83,488,824 YouTube views",
+          "genre": "Ballad ? 83,636,432 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=YJfHuATJYsQ",
           "artistUrl": "https://www.youtube.com/watch?v=YJfHuATJYsQ",
           "videoId": "YJfHuATJYsQ",
-          "viewCount": 83488824
+          "viewCount": 83636432
         },
         {
           "rank": 5,
@@ -3635,12 +3635,12 @@
           "title": "七里香 Common Jasmine Orange",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2004",
-          "genre": "Ballad ? 82,758,526 YouTube views",
+          "genre": "Ballad ? 82,885,194 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Bbp9ZaJD_eA",
           "artistUrl": "https://www.youtube.com/watch?v=Bbp9ZaJD_eA",
           "videoId": "Bbp9ZaJD_eA",
-          "viewCount": 82758526
+          "viewCount": 82885194
         },
         {
           "rank": 6,
@@ -3648,12 +3648,12 @@
           "title": "安静 Silence",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2001",
-          "genre": "Ballad ? 64,986,366 YouTube views",
+          "genre": "Ballad ? 65,076,692 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=1hI-7vj2FhE",
           "artistUrl": "https://www.youtube.com/watch?v=1hI-7vj2FhE",
           "videoId": "1hI-7vj2FhE",
-          "viewCount": 64986366
+          "viewCount": 65076692
         },
         {
           "rank": 7,
@@ -3661,12 +3661,12 @@
           "title": "童话 Fairy Tale",
           "artist": "Michael Wong 光良",
           "releaseDate": "2005",
-          "genre": "Ballad ? 60,487,240 YouTube views",
+          "genre": "Ballad ? 60,663,390 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=IBTmypxD2mU",
           "artistUrl": "https://www.youtube.com/watch?v=IBTmypxD2mU",
           "videoId": "IBTmypxD2mU",
-          "viewCount": 60487240
+          "viewCount": 60663390
         },
         {
           "rank": 8,
@@ -3674,12 +3674,12 @@
           "title": "可惜不是你 Unfortunately Not You",
           "artist": "Fish Leong 梁静茹",
           "releaseDate": "2005",
-          "genre": "Ballad ? 55,808,715 YouTube views",
+          "genre": "Ballad ? 55,854,950 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=k_l7FVsqUyM",
           "artistUrl": "https://www.youtube.com/watch?v=k_l7FVsqUyM",
           "videoId": "k_l7FVsqUyM",
-          "viewCount": 55808715
+          "viewCount": 55854950
         },
         {
           "rank": 9,
@@ -3687,12 +3687,12 @@
           "title": "红豆 Red Bean",
           "artist": "Faye Wong 王菲",
           "releaseDate": "1998",
-          "genre": "Ballad ? 52,581,641 YouTube views",
+          "genre": "Ballad ? 52,660,231 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=5wmfXve11rM",
           "artistUrl": "https://www.youtube.com/watch?v=5wmfXve11rM",
           "videoId": "5wmfXve11rM",
-          "viewCount": 52581641
+          "viewCount": 52660231
         },
         {
           "rank": 10,
@@ -3700,12 +3700,12 @@
           "title": "珊瑚海 Coral Sea",
           "artist": "Jay Chou & Lara",
           "releaseDate": "2005",
-          "genre": "Ballad ? 51,977,427 YouTube views",
+          "genre": "Ballad ? 52,082,303 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=kYhh1PpsOg4",
           "artistUrl": "https://www.youtube.com/watch?v=kYhh1PpsOg4",
           "videoId": "kYhh1PpsOg4",
-          "viewCount": 51977427
+          "viewCount": 52082303
         },
         {
           "rank": 11,
@@ -3713,12 +3713,12 @@
           "title": "听海 Listen to the Sea",
           "artist": "A-Mei 张惠妹",
           "releaseDate": "1997",
-          "genre": "Ballad ? 51,084,755 YouTube views",
+          "genre": "Ballad ? 51,154,451 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=mLk61pfiHQ0",
           "artistUrl": "https://www.youtube.com/watch?v=mLk61pfiHQ0",
           "videoId": "mLk61pfiHQ0",
-          "viewCount": 51084755
+          "viewCount": 51154451
         },
         {
           "rank": 12,
@@ -3726,12 +3726,12 @@
           "title": "江南 River South",
           "artist": "JJ Lin 林俊杰",
           "releaseDate": "2004",
-          "genre": "Ballad ? 43,983,226 YouTube views",
+          "genre": "Ballad ? 44,043,496 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=G97_rOdHcnY",
           "artistUrl": "https://www.youtube.com/watch?v=G97_rOdHcnY",
           "videoId": "G97_rOdHcnY",
-          "viewCount": 43983226,
+          "viewCount": 44043496,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -3741,12 +3741,12 @@
           "title": "至少还有你",
           "artist": "Sandy Lam 林忆莲",
           "releaseDate": "2000",
-          "genre": "Ballad ? 42,408,338 YouTube views",
+          "genre": "Ballad ? 42,478,516 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=pQlAWZLOpgo",
           "artistUrl": "https://www.youtube.com/watch?v=pQlAWZLOpgo",
           "videoId": "pQlAWZLOpgo",
-          "viewCount": 42408338
+          "viewCount": 42478516
         },
         {
           "rank": 14,
@@ -3754,12 +3754,12 @@
           "title": "开不了口 I Find It Hard to Say",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2001",
-          "genre": "Ballad ? 37,822,168 YouTube views",
+          "genre": "Ballad ? 37,856,298 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=H7hpK6cm-6k",
           "artistUrl": "https://www.youtube.com/watch?v=H7hpK6cm-6k",
           "videoId": "H7hpK6cm-6k",
-          "viewCount": 37822168
+          "viewCount": 37856298
         },
         {
           "rank": 15,
@@ -3767,12 +3767,12 @@
           "title": "爱很简单 I Love You",
           "artist": "David Tao 陶喆",
           "releaseDate": "1997",
-          "genre": "Ballad ? 35,728,959 YouTube views",
+          "genre": "Ballad ? 35,809,540 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=lhtaCBSL9AE",
           "artistUrl": "https://www.youtube.com/watch?v=lhtaCBSL9AE",
           "videoId": "lhtaCBSL9AE",
-          "viewCount": 35728959,
+          "viewCount": 35809540,
           "videoType": "verified-original",
           "reviewed": true
         },
@@ -3782,12 +3782,12 @@
           "title": "黑色毛衣 Black Sweater",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2005",
-          "genre": "Ballad ? 22,303,146 YouTube views",
+          "genre": "Ballad ? 22,340,119 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=bX33UI9ZPLk",
           "artistUrl": "https://www.youtube.com/watch?v=bX33UI9ZPLk",
           "videoId": "bX33UI9ZPLk",
-          "viewCount": 22303146
+          "viewCount": 22340119
         },
         {
           "rank": 17,
@@ -3795,12 +3795,12 @@
           "title": "分手快乐 Happy Breakup",
           "artist": "Fish Leong 梁静茹",
           "releaseDate": "2002",
-          "genre": "Ballad ? 22,124,430 YouTube views",
+          "genre": "Ballad ? 22,162,314 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=lBNYpPmjH8M",
           "artistUrl": "https://www.youtube.com/watch?v=lBNYpPmjH8M",
           "videoId": "lBNYpPmjH8M",
-          "viewCount": 22124430
+          "viewCount": 22162314
         },
         {
           "rank": 18,
@@ -3890,12 +3890,12 @@
           "title": "Forever Love",
           "artist": "Leehom Wang 王力宏",
           "releaseDate": "2005",
-          "genre": "Ballad ? 17,799,947 YouTube views",
+          "genre": "Ballad ? 17,872,629 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=ULcmgv837MQ",
           "artistUrl": "https://www.youtube.com/watch?v=ULcmgv837MQ",
           "videoId": "ULcmgv837MQ",
-          "viewCount": 17799947
+          "viewCount": 17872629
         },
         {
           "rank": 25,
@@ -3903,12 +3903,12 @@
           "title": "简单爱 Simple Love",
           "artist": "Jay Chou 周杰伦",
           "releaseDate": "2001",
-          "genre": "Ballad ? 16,100,902 YouTube views",
+          "genre": "Ballad ? 16,152,793 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=Y4xCVlyCvX4",
           "artistUrl": "https://www.youtube.com/watch?v=Y4xCVlyCvX4",
           "videoId": "Y4xCVlyCvX4",
-          "viewCount": 16100902
+          "viewCount": 16152793
         },
         {
           "rank": 26,
@@ -3916,12 +3916,12 @@
           "title": "唯一 The One and Only",
           "artist": "Leehom Wang 王力宏",
           "releaseDate": "2001",
-          "genre": "Ballad ? 14,740,923 YouTube views",
+          "genre": "Ballad ? 14,824,683 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=P7Qv4AV_StM",
           "artistUrl": "https://www.youtube.com/watch?v=P7Qv4AV_StM",
           "videoId": "P7Qv4AV_StM",
-          "viewCount": 14740923
+          "viewCount": 14824683
         },
         {
           "rank": 27,
@@ -3957,12 +3957,12 @@
           "title": "明年今日 Next Year Today",
           "artist": "Eason Chan 陈奕迅",
           "releaseDate": "2002",
-          "genre": "Ballad ? 13,192,837 YouTube views",
+          "genre": "Ballad ? 13,240,852 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=8NJVNkzhJM4",
           "artistUrl": "https://www.youtube.com/watch?v=8NJVNkzhJM4",
           "videoId": "8NJVNkzhJM4",
-          "viewCount": 13192837
+          "viewCount": 13240852
         },
         {
           "rank": 30,
@@ -3970,12 +3970,12 @@
           "title": "人间 Mortal World",
           "artist": "Faye Wong 王菲",
           "releaseDate": "1997",
-          "genre": "Ballad ? 11,880,124 YouTube views",
+          "genre": "Ballad ? 12,016,774 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=US54FpncMz4",
           "artistUrl": "https://www.youtube.com/watch?v=US54FpncMz4",
           "videoId": "US54FpncMz4",
-          "viewCount": 11880124
+          "viewCount": 12016774
         },
         {
           "rank": 31,
@@ -3996,12 +3996,12 @@
           "title": "开始懂了 Realize",
           "artist": "Stefanie Sun 孙燕姿",
           "releaseDate": "2000",
-          "genre": "Ballad ? 11,469,589 YouTube views",
+          "genre": "Ballad ? 11,564,345 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=h5eRbbOnPRc",
           "artistUrl": "https://www.youtube.com/watch?v=h5eRbbOnPRc",
           "videoId": "h5eRbbOnPRc",
-          "viewCount": 11469589
+          "viewCount": 11564345
         },
         {
           "rank": 33,
@@ -4009,12 +4009,12 @@
           "title": "十年 Ten Years",
           "artist": "Eason Chan 陈奕迅",
           "releaseDate": "2003",
-          "genre": "Ballad ? 11,072,048 YouTube views",
+          "genre": "Ballad ? 11,137,057 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=JM9rx_hN1Ko",
           "artistUrl": "https://www.youtube.com/watch?v=JM9rx_hN1Ko",
           "videoId": "JM9rx_hN1Ko",
-          "viewCount": 11072048
+          "viewCount": 11137057
         },
         {
           "rank": 34,
@@ -4048,12 +4048,12 @@
           "title": "大城小爱 Big City Small Love",
           "artist": "Leehom Wang 王力宏",
           "releaseDate": "2005",
-          "genre": "Ballad ? 7,053,053 YouTube views",
+          "genre": "Ballad ? 7,155,328 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=J8mBwCEKRME",
           "artistUrl": "https://www.youtube.com/watch?v=J8mBwCEKRME",
           "videoId": "J8mBwCEKRME",
-          "viewCount": 7053053
+          "viewCount": 7155328
         },
         {
           "rank": 37,
@@ -4061,12 +4061,12 @@
           "title": "勇气 Courage",
           "artist": "Fish Leong 梁静茹",
           "releaseDate": "2000",
-          "genre": "Ballad ? 6,248,840 YouTube views",
+          "genre": "Ballad ? 6,272,181 YouTube views",
           "artworkUrl": "",
           "url": "https://www.youtube.com/watch?v=wUh9-E6KncA",
           "artistUrl": "https://www.youtube.com/watch?v=wUh9-E6KncA",
           "videoId": "wUh9-E6KncA",
-          "viewCount": 6248840
+          "viewCount": 6272181
         },
         {
           "rank": 38,
