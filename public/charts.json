@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-19T08:55:30.793Z",
+  "generatedAt": "2026-10-20T08:35:20.084Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5530,7 +5530,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "cn-tme-uni",
@@ -5539,14 +5539,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-10-19T16:40:00+08:00",
+      "updatedAt": "2026-10-20T16:20:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第42期（10.19-10.25）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "Baby's Horizon",
           "artist": "TF家族-张函瑞",
           "releaseDate": "CN",
-          "genre": "98.14 score",
+          "genre": "98.67 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -5554,10 +5554,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "大梦归",
-          "artist": "周深",
+          "title": "闯",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "91.52 score",
+          "genre": "95.05 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -5565,10 +5565,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "闯",
-          "artist": "梓渝",
+          "title": "大梦归",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "90.51 score",
+          "genre": "95.00 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -5576,10 +5576,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "早上坏",
-          "artist": "黄灿灿",
+          "title": "无法复刻",
+          "artist": "TF_ING童禹坤",
           "releaseDate": "CN",
-          "genre": "88.97 score",
+          "genre": "94.96 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -5590,7 +5590,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "88.46 score",
+          "genre": "91.85 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -5598,10 +5598,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "光·影",
-          "artist": "云旗,郝熠然",
+          "title": "异想天开",
+          "artist": "肖战",
           "releaseDate": "CN",
-          "genre": "86.28 score",
+          "genre": "91.72 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -5609,10 +5609,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "异想天开",
-          "artist": "肖战",
+          "title": "万里长风",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "84.12 score",
+          "genre": "91.46 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -5620,10 +5620,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "光·影",
+          "artist": "云旗,郝熠然",
           "releaseDate": "CN",
-          "genre": "83.67 score",
+          "genre": "90.83 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -5631,10 +5631,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "为你前行",
-          "artist": "云朵",
+          "title": "贰拾肆",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "82.58 score",
+          "genre": "90.74 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -5642,10 +5642,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "那页夏天",
-          "artist": "王俊凯",
+          "title": "早上坏",
+          "artist": "黄灿灿",
           "releaseDate": "CN",
-          "genre": "82.51 score",
+          "genre": "90.65 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -5653,7 +5653,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "cn-tme-wave",
@@ -5886,7 +5886,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "cn-ost-trending",

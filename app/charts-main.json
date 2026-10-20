@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-19T08:55:30.793Z",
+  "generatedAt": "2026-10-20T08:35:20.084Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5530,7 +5530,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-19T08:55:30.793Z"
+      "checkedAt": "2026-10-20T08:35:20.084Z"
     }
   ]
 }
