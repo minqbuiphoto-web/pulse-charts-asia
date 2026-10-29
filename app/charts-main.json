@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-10-28T09:42:04.075Z",
+  "generatedAt": "2026-10-29T10:00:20.026Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -8,14 +8,14 @@
       "market": "KR",
       "source": "Circle Digital Chart",
       "sourceUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
-      "updatedAt": "2026-10-17T23:59:00+09:00",
-      "syncWarning": "OFFICIAL TOP 50 · Circle 2026 Week 42 (2026.10.11~2026.10.17 (42)). Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
+      "updatedAt": "2026-10-24T23:59:00+09:00",
+      "syncWarning": "OFFICIAL TOP 50 · Circle 2026 Week 43 (2026.10.18~2026.10.24 (43)). Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
       "songs": [
         {
           "title": "NEON",
           "artist": "A2O, A2O LITE",
           "releaseDate": "KR",
-          "genre": "15,942,317 pts · NEW",
+          "genre": "27,784,660 pts · SAME",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 1,
@@ -23,10 +23,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Star Trace",
-          "artist": "PLAVE",
+          "title": "퇴사할게여 (Narr. 기안84)",
+          "artist": "소연 (SOYEON)",
           "releaseDate": "KR",
-          "genre": "15,159,594 pts · NEW",
+          "genre": "13,887,948 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 2,
@@ -34,10 +34,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "퇴사할게여 (Narr. 기안84)",
-          "artist": "소연 (SOYEON)",
+          "title": "꿈꾸던 어른이 되었나요?",
+          "artist": "머무르",
           "releaseDate": "KR",
-          "genre": "14,608,884 pts · DOWN 1",
+          "genre": "13,322,905 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "LOVE ATTACK",
           "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "13,284,360 pts · DOWN 1",
+          "genre": "12,547,021 pts · SAME",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 4,
@@ -56,10 +56,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "꿈꾸던 어른이 되었나요?",
-          "artist": "머무르",
+          "title": "Deja Vu",
+          "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "11,609,294 pts · UP 8",
+          "genre": "10,158,380 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Deja Vu",
-          "artist": "RESCENE (리센느)",
+          "title": "REDRED",
+          "artist": "CORTIS (코르티스)",
           "releaseDate": "KR",
-          "genre": "10,413,639 pts · DOWN 2",
+          "genre": "9,450,803 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "REDRED",
-          "artist": "CORTIS (코르티스)",
+          "title": "갑자기",
+          "artist": "아이오아이 (I.O.I)",
           "releaseDate": "KR",
-          "genre": "9,854,947 pts · DOWN 2",
+          "genre": "8,846,317 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "갑자기",
-          "artist": "아이오아이 (I.O.I)",
+          "title": "BAD",
+          "artist": "ATEEZ (에이티즈)",
           "releaseDate": "KR",
-          "genre": "9,179,213 pts · DOWN 2",
+          "genre": "8,768,074 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 8,
@@ -103,7 +103,7 @@
           "title": "Pretty Girl",
           "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "8,973,381 pts · DOWN 2",
+          "genre": "8,488,872 pts · SAME",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "BAD",
-          "artist": "ATEEZ (에이티즈)",
+          "title": "Looks Can Kill",
+          "artist": "IVE (아이브)",
           "releaseDate": "KR",
-          "genre": "8,870,799 pts · DOWN 2",
+          "genre": "8,256,703 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 10,
@@ -122,10 +122,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "CRASH",
-          "artist": "ALLDAY PROJECT",
+          "title": "LEMONADE",
+          "artist": "aespa",
           "releaseDate": "KR",
-          "genre": "8,311,208 pts · UP 7",
+          "genre": "7,743,705 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 11,
@@ -133,10 +133,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "LEMONADE",
-          "artist": "aespa",
+          "title": "노스탈지아",
+          "artist": "BIG Naughty (서동현)",
           "releaseDate": "KR",
-          "genre": "7,880,668 pts · DOWN 3",
+          "genre": "7,664,826 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 12,
@@ -144,10 +144,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "노스탈지아",
-          "artist": "BIG Naughty (서동현)",
+          "title": "Drowning",
+          "artist": "WOODZ (조승연)",
           "releaseDate": "KR",
-          "genre": "7,637,553 pts · DOWN 1",
+          "genre": "7,628,354 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 13,
@@ -155,10 +155,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Drowning",
-          "artist": "WOODZ (조승연)",
+          "title": "사랑하게 될 거야",
+          "artist": "한로로",
           "releaseDate": "KR",
-          "genre": "7,617,204 pts · UP 1",
+          "genre": "7,547,397 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 14,
@@ -166,10 +166,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "사랑하게 될 거야",
-          "artist": "한로로",
+          "title": "CRASH",
+          "artist": "ALLDAY PROJECT",
           "releaseDate": "KR",
-          "genre": "7,589,568 pts · DOWN 4",
+          "genre": "7,488,564 pts · DOWN 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 15,
@@ -180,7 +180,7 @@
           "title": "It`s Me",
           "artist": "아일릿(ILLIT)",
           "releaseDate": "KR",
-          "genre": "7,469,572 pts · DOWN 6",
+          "genre": "7,298,541 pts · SAME",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 16,
@@ -188,10 +188,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "푸른 하늘에 단비",
-          "artist": "PLAVE",
+          "title": "만찬가",
+          "artist": "태연 (TAEYEON)",
           "releaseDate": "KR",
-          "genre": "7,464,857 pts · NEW",
+          "genre": "7,203,154 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 17,
@@ -199,10 +199,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "만찬가",
-          "artist": "태연 (TAEYEON)",
+          "title": "생각을 멈추다 보면",
+          "artist": "최유리",
           "releaseDate": "KR",
-          "genre": "7,381,834 pts · DOWN 4",
+          "genre": "6,958,227 pts · UP 10",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 18,
@@ -210,10 +210,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "꾼",
-          "artist": "PLAVE",
+          "title": "0+0",
+          "artist": "한로로",
           "releaseDate": "KR",
-          "genre": "7,296,902 pts · NEW",
+          "genre": "6,878,351 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 19,
@@ -221,10 +221,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "The Answer Is Yes",
-          "artist": "PLAVE",
+          "title": "RUDE!",
+          "artist": "Hearts2Hearts (하츠투하츠)",
           "releaseDate": "KR",
-          "genre": "7,102,247 pts · NEW",
+          "genre": "6,632,294 pts · UP 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 20,
@@ -232,10 +232,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "0+0",
-          "artist": "한로로",
+          "title": "Pop Off Pop Off",
+          "artist": "KiiiKiii (키키)",
           "releaseDate": "KR",
-          "genre": "7,051,632 pts · DOWN 5",
+          "genre": "6,304,969 pts · UP 5",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 21,
@@ -243,10 +243,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Rewind",
-          "artist": "PLAVE",
+          "title": "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지",
+          "artist": "AKMU (악뮤)",
           "releaseDate": "KR",
-          "genre": "7,013,734 pts · NEW",
+          "genre": "6,158,446 pts · UP 7",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 22,
@@ -254,10 +254,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "UNDEAD",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "캐치 캐치",
+          "artist": "YENA(최예나)",
           "releaseDate": "KR",
-          "genre": "6,954,922 pts · NEW",
+          "genre": "5,992,032 pts · UP 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 23,
@@ -265,10 +265,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "RUDE!",
-          "artist": "Hearts2Hearts (하츠투하츠)",
+          "title": "긴 소원 (Birthday Wish)",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "6,929,770 pts · DOWN 7",
+          "genre": "5,930,048 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 24,
@@ -276,10 +276,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "I SPY",
-          "artist": "NCT WISH",
+          "title": "Good Goodbye",
+          "artist": "화사 (HWASA)",
           "releaseDate": "KR",
-          "genre": "6,673,343 pts · NEW",
+          "genre": "5,860,144 pts · UP 5",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 25,
@@ -287,10 +287,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Pop Off Pop Off",
-          "artist": "KiiiKiii (키키)",
+          "title": "그대만 있다면 (여름날 우리 X 너드커넥션 (Nerd Connection))",
+          "artist": "너드커넥션 (Nerd Connection)",
           "releaseDate": "KR",
-          "genre": "6,523,852 pts · DOWN 5",
+          "genre": "5,638,699 pts · UP 8",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 26,
@@ -298,10 +298,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "캐치 캐치",
-          "artist": "YENA(최예나)",
+          "title": "I SPY",
+          "artist": "NCT WISH",
           "releaseDate": "KR",
-          "genre": "6,275,270 pts · DOWN 8",
+          "genre": "5,552,049 pts · DOWN 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 27,
@@ -309,10 +309,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "생각을 멈추다 보면",
-          "artist": "최유리",
+          "title": "봄 내음보다 너를",
+          "artist": "김나영",
           "releaseDate": "KR",
-          "genre": "6,209,361 pts · DOWN 1",
+          "genre": "5,502,725 pts · UP 10",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 28,
@@ -320,10 +320,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "어떻게 이별까지 사랑하겠어, 널 사랑하는 거지",
-          "artist": "AKMU (악뮤)",
+          "title": "Popcorn",
+          "artist": "도경수(D.O.)",
           "releaseDate": "KR",
-          "genre": "6,107,582 pts · DOWN 4",
+          "genre": "5,442,388 pts · UP 6",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 29,
@@ -331,10 +331,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Good Goodbye",
-          "artist": "화사 (HWASA)",
+          "title": "Lemon Tang",
+          "artist": "Hearts2Hearts (하츠투하츠)",
           "releaseDate": "KR",
-          "genre": "5,993,558 pts · DOWN 7",
+          "genre": "5,371,138 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 30,
@@ -342,10 +342,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Lemon Tang",
-          "artist": "Hearts2Hearts (하츠투하츠)",
+          "title": "너의 모든 순간",
+          "artist": "성시경",
           "releaseDate": "KR",
-          "genre": "5,673,322 pts · DOWN 7",
+          "genre": "5,311,160 pts · UP 9",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 31,
@@ -353,10 +353,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Dear my crazy soulmate",
-          "artist": "아이유 (IU)",
+          "title": "기쁨, 슬픔, 아름다운 마음",
+          "artist": "AKMU (악뮤)",
           "releaseDate": "KR",
-          "genre": "5,665,662 pts · DOWN 12",
+          "genre": "5,254,207 pts · UP 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 32,
@@ -364,10 +364,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "BiiiG",
-          "artist": "BIGBANG (빅뱅)",
+          "title": "Heavy Serenade",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "5,657,041 pts · DOWN 11",
+          "genre": "5,188,604 pts · UP 12",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 33,
@@ -375,10 +375,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "그대만 있다면 (여름날 우리 X 너드커넥션 (Nerd Connection))",
-          "artist": "너드커넥션 (Nerd Connection)",
+          "title": "404 (New Era)",
+          "artist": "KiiiKiii (키키)",
           "releaseDate": "KR",
-          "genre": "5,649,709 pts · DOWN 6",
+          "genre": "5,175,064 pts · UP 5",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 34,
@@ -386,10 +386,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Popcorn",
-          "artist": "도경수(D.O.)",
+          "title": "Star Trace",
+          "artist": "PLAVE",
           "releaseDate": "KR",
-          "genre": "5,629,209 pts · DOWN 9",
+          "genre": "5,147,773 pts · DOWN 33",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 35,
@@ -397,10 +397,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "기쁨, 슬픔, 아름다운 마음",
-          "artist": "AKMU (악뮤)",
+          "title": "Dear my crazy soulmate",
+          "artist": "아이유 (IU)",
           "releaseDate": "KR",
-          "genre": "5,489,828 pts · DOWN 4",
+          "genre": "5,062,544 pts · DOWN 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 36,
@@ -408,10 +408,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "소문의 낙원",
-          "artist": "AKMU (악뮤)",
+          "title": "BiiiG",
+          "artist": "BIGBANG (빅뱅)",
           "releaseDate": "KR",
-          "genre": "5,386,022 pts · DOWN 3",
+          "genre": "4,995,181 pts · DOWN 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 37,
@@ -419,10 +419,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "봄 내음보다 너를",
-          "artist": "김나영",
+          "title": "소문의 낙원",
+          "artist": "AKMU (악뮤)",
           "releaseDate": "KR",
-          "genre": "5,373,088 pts · DOWN 7",
+          "genre": "4,987,575 pts · DOWN 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 38,
@@ -430,10 +430,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "404 (New Era)",
-          "artist": "KiiiKiii (키키)",
+          "title": "타임캡슐",
+          "artist": "다비치",
           "releaseDate": "KR",
-          "genre": "5,359,960 pts · DOWN 9",
+          "genre": "4,940,974 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 39,
@@ -441,10 +441,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "너의 모든 순간",
-          "artist": "성시경",
+          "title": "주저하는 연인들을 위해",
+          "artist": "잔나비",
           "releaseDate": "KR",
-          "genre": "5,318,064 pts · DOWN 7",
+          "genre": "4,928,095 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 40,
@@ -452,10 +452,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "타임캡슐",
-          "artist": "다비치",
+          "title": "입춘",
+          "artist": "한로로",
           "releaseDate": "KR",
-          "genre": "5,110,813 pts · DOWN 5",
+          "genre": "4,891,501 pts · UP 5",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 41,
@@ -463,10 +463,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "주저하는 연인들을 위해",
-          "artist": "잔나비",
+          "title": "Pinball",
+          "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "5,084,808 pts · DOWN 4",
+          "genre": "4,843,898 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 42,
@@ -474,10 +474,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Skibidi",
-          "artist": "소녀시대-효리수 (Girls' Generation-HRS)",
+          "title": "내게 사랑이 뭐냐고 물어본다면",
+          "artist": "로이킴",
           "releaseDate": "KR",
-          "genre": "5,046,701 pts · DOWN 14",
+          "genre": "4,797,369 pts · UP 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 43,
@@ -485,10 +485,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Pinball",
-          "artist": "RESCENE (리센느)",
+          "title": "미장센",
+          "artist": "에픽하이 (EPIK HIGH), 다비치",
           "releaseDate": "KR",
-          "genre": "4,964,655 pts · UP 9",
+          "genre": "4,751,485 pts · UP 34",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 44,
@@ -496,10 +496,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Heavy Serenade",
-          "artist": "NMIXX",
+          "title": "Skibidi",
+          "artist": "소녀시대-효리수 (Girls' Generation-HRS)",
           "releaseDate": "KR",
-          "genre": "4,949,735 pts · UP 5",
+          "genre": "4,715,385 pts · DOWN 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 45,
@@ -507,10 +507,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "입춘",
-          "artist": "한로로",
+          "title": "어제보다 슬픈 오늘",
+          "artist": "우디(Woody)",
           "releaseDate": "KR",
-          "genre": "4,934,556 pts · DOWN 9",
+          "genre": "4,633,164 pts · UP 3",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 46,
@@ -518,10 +518,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "내게 사랑이 뭐냐고 물어본다면",
-          "artist": "로이킴",
+          "title": "Runaway",
+          "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "4,825,027 pts · DOWN 5",
+          "genre": "4,623,856 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 47,
@@ -529,10 +529,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Runaway",
-          "artist": "RESCENE (리센느)",
+          "title": "Blue Valentine",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "4,699,982 pts · DOWN 8",
+          "genre": "4,590,556 pts · UP 6",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 48,
@@ -540,10 +540,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "어제보다 슬픈 오늘",
-          "artist": "우디(Woody)",
+          "title": "이 밤을 빌려 말해요",
+          "artist": "PLAVE",
           "releaseDate": "KR",
-          "genre": "4,674,098 pts · DOWN 8",
+          "genre": "4,575,166 pts · UP 7",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 49,
@@ -551,10 +551,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "여름아 부탁해",
-          "artist": "볼빨간사춘기",
+          "title": "toxic till the end",
+          "artist": "로제 (ROSE)",
           "releaseDate": "KR",
-          "genre": "4,661,397 pts · DOWN 15",
+          "genre": "4,446,106 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=ALL&termGbn=week",
           "rank": 50,
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-28T09:42:04.075Z"
+      "checkedAt": "2026-10-29T10:00:20.026Z"
     },
     {
       "id": "kr-circle-download",
@@ -571,12 +571,12 @@
       "market": "KR",
       "source": "Circle Download Chart",
       "sourceUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
-      "updatedAt": "2026-10-17T23:59:00+09:00",
-      "syncWarning": "OFFICIAL TOP 50 · Circle 2026 Week 42 (2026.10.11~2026.10.17 (42)). Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
+      "updatedAt": "2026-10-24T23:59:00+09:00",
+      "syncWarning": "OFFICIAL TOP 50 · Circle 2026 Week 43 (2026.10.18~2026.10.24 (43)). Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
       "songs": [
         {
-          "title": "Star Trace",
-          "artist": "PLAVE",
+          "title": "Looks Can Kill",
+          "artist": "IVE (아이브)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -586,8 +586,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "UNDEAD",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "12 o`clock",
+          "artist": "정한X조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -597,8 +597,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "푸른 하늘에 단비",
-          "artist": "PLAVE",
+          "title": "긴 소원 (Birthday Wish)",
+          "artist": "NMIXX",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -608,10 +608,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "꾼",
-          "artist": "PLAVE",
+          "title": "NEON",
+          "artist": "A2O, A2O LITE",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 3",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 4,
@@ -619,10 +619,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "The Answer Is Yes",
-          "artist": "PLAVE",
+          "title": "너의 계절이 찾아와 (Bloom)",
+          "artist": "FLARE U (플레어 유)",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 9",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 5,
@@ -630,8 +630,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Rewind",
-          "artist": "PLAVE",
+          "title": "Not personal (JOSHUA Solo)",
+          "artist": "조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -641,10 +641,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "NEON",
-          "artist": "A2O, A2O LITE",
+          "title": "꿈꾸던 어른이 되었나요?",
+          "artist": "머무르",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 4",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 7,
@@ -652,10 +652,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "I SPY",
-          "artist": "NCT WISH",
+          "title": "미야",
+          "artist": "장한별",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 8,
@@ -663,10 +663,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Tic Tac Toe",
-          "artist": "온유 (ONEW), 지코 (ZICO)",
+          "title": "착각",
+          "artist": "온유 (ONEW)",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 8",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 9,
@@ -674,8 +674,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "미야",
-          "artist": "장한별",
+          "title": "삐그덕 (Feat. 아이유)",
+          "artist": "크러쉬 (CRUSH)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -685,10 +685,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "꿈꾸던 어른이 되었나요?",
-          "artist": "머무르",
+          "title": "퇴사할게여 (Narr. 기안84)",
+          "artist": "소연 (SOYEON)",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 2",
+          "genre": "0 pts · UP 2",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 11,
@@ -696,8 +696,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "미장센",
-          "artist": "에픽하이 (EPIK HIGH), 다비치",
+          "title": "Blue",
+          "artist": "강다니엘",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -707,10 +707,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "퇴사할게여 (Narr. 기안84)",
-          "artist": "소연 (SOYEON)",
+          "title": "Star Trace",
+          "artist": "PLAVE",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 10",
+          "genre": "0 pts · DOWN 12",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 13,
@@ -718,8 +718,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "너의 계절이 찾아와 (Bloom)",
-          "artist": "FLARE U (플레어 유)",
+          "title": "Drip",
+          "artist": "ATEEZ (에이티즈)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -729,8 +729,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "GO HARD",
-          "artist": "MEOVV (미야오)",
+          "title": "컬러링 (JEONGHAN Solo)",
+          "artist": "정한 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -740,8 +740,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "꿈결 (Like A Dream)",
-          "artist": "NCT WISH",
+          "title": "Like you",
+          "artist": "정한X조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -751,8 +751,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "We Own This Street",
-          "artist": "NCT WISH",
+          "title": "One plus one",
+          "artist": "정한X조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -762,10 +762,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "CRASH",
-          "artist": "ALLDAY PROJECT",
+          "title": "Outside",
+          "artist": "정한X조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 6",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 18,
@@ -773,8 +773,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hubble Time",
-          "artist": "NCT WISH",
+          "title": "No looking back",
+          "artist": "정한X조슈아 (SEVENTEEN)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -784,10 +784,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Sad Rain",
-          "artist": "성리",
+          "title": "미장센",
+          "artist": "에픽하이 (EPIK HIGH), 다비치",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 5",
+          "genre": "0 pts · DOWN 8",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 20,
@@ -795,10 +795,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "UPGRADE",
+          "title": "I SPY",
           "artist": "NCT WISH",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 13",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 21,
@@ -806,8 +806,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Super Major",
-          "artist": "NCT WISH",
+          "title": "LOOK AT MA",
+          "artist": "EVNNE(이븐)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -817,10 +817,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "당신뿐입니다",
-          "artist": "김용빈",
+          "title": "DESERVE",
+          "artist": "BABYMONSTER",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 17",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 23,
@@ -828,8 +828,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "너의 모든 순간",
-          "artist": "도경수(D.O.)",
+          "title": "황금기",
+          "artist": "볼빨간사춘기",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -839,10 +839,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "SUPERSTAR",
-          "artist": "A2O, A2O SOUL",
+          "title": "사랑빛",
+          "artist": "진해성",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 12",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 25,
@@ -850,10 +850,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "별이 쏟아지는 밤",
-          "artist": "소녀시대-효리수 (Girls' Generation-HRS)",
+          "title": "Sad Rain",
+          "artist": "성리",
           "releaseDate": "KR",
-          "genre": "0 pts · UP 16",
+          "genre": "0 pts · DOWN 6",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 26,
@@ -861,10 +861,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "LOVE ATTACK",
-          "artist": "RESCENE (리센느)",
+          "title": "UNDEAD",
+          "artist": "성한빈 (ZEROBASEONE)",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 5",
+          "genre": "0 pts · DOWN 25",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 27,
@@ -872,10 +872,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "잔불 (Still)",
-          "artist": "엔플라잉 (N.Flying)",
+          "title": "생각을 멈추다 보면",
+          "artist": "최유리",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 18",
+          "genre": "0 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 28,
@@ -883,10 +883,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "생각을 멈추다 보면",
-          "artist": "최유리",
+          "title": "RudE TaLK",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "0 pts · UP 3",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 29,
@@ -894,8 +894,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "이 밤을 빌려 말해요",
-          "artist": "PLAVE",
+          "title": "빈틈을 채워 준 너에게",
+          "artist": "헤이즈 (Heize)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -905,10 +905,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "크게 울어라",
-          "artist": "로이킴",
+          "title": "너는 달 (Sing to the Moon) (LILY, HAEWON)",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 20",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 31,
@@ -916,10 +916,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Obsessed with Youth",
-          "artist": "Xdinary Heroes",
+          "title": "SUPERSTAR",
+          "artist": "A2O, A2O SOUL",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 7",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 32,
@@ -927,10 +927,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "ICONIC HEART (Korean Ver.)",
-          "artist": "Hearts2Hearts (하츠투하츠)",
+          "title": "CRASH",
+          "artist": "ALLDAY PROJECT",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 19",
+          "genre": "0 pts · DOWN 15",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 33,
@@ -938,8 +938,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Star Trace (UK Garage Remix by IMLAY)",
-          "artist": "PLAVE",
+          "title": "Kerosene",
+          "artist": "NMIXX",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -949,7 +949,7 @@
           "artworkUrl": ""
         },
         {
-          "title": "Deja Vu",
+          "title": "LOVE ATTACK",
           "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
           "genre": "0 pts · DOWN 8",
@@ -960,8 +960,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "나를 외치다",
-          "artist": "박예승",
+          "title": "Hot `n Unbothered (SULLYOON, BAE)",
+          "artist": "NMIXX",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -971,8 +971,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "사랑빛",
-          "artist": "진해성",
+          "title": "Come into my world!",
+          "artist": "WOODZ (조승연)",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -982,10 +982,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "세월이길 장사있나",
-          "artist": "박서진",
+          "title": "휙 (WHIP) (JIWOO, KYUJIN)",
+          "artist": "NMIXX",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 34",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 38,
@@ -993,10 +993,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "BAD",
-          "artist": "ATEEZ (에이티즈)",
+          "title": "풀카운트",
+          "artist": "볼빨간사춘기",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 9",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 39,
@@ -1004,10 +1004,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "섬광",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "BAD",
+          "artist": "ATEEZ (에이티즈)",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 40,
@@ -1015,8 +1015,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "3AM",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "BAD HABITS TONITE",
+          "artist": "A2O, A2O MAY",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -1026,8 +1026,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Steal the Thunder",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "너무 보고싶어",
+          "artist": "이영현",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -1037,10 +1037,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Insidious",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "푸른 하늘에 단비",
+          "artist": "PLAVE",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 40",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 43,
@@ -1048,10 +1048,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "DEVIL",
-          "artist": "남우현",
+          "title": "Deja Vu",
+          "artist": "RESCENE (리센느)",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 9",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 44,
@@ -1059,8 +1059,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Killin` Me",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "처음 그 자리에",
+          "artist": "송하영",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -1070,8 +1070,8 @@
           "artworkUrl": ""
         },
         {
-          "title": "Bloody Gravity",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "Good Bye Sadness, Hello Happiness",
+          "artist": "박진서",
           "releaseDate": "KR",
           "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
@@ -1081,10 +1081,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Other Side",
-          "artist": "성한빈 (ZEROBASEONE)",
+          "title": "당신뿐입니다",
+          "artist": "김용빈",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · DOWN 24",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 47,
@@ -1092,10 +1092,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Pretty Girl",
-          "artist": "RESCENE (리센느)",
+          "title": "FIRESTARTER (Feat. Sophie Powers, MIYEON, SOYEON)",
+          "artist": "K/DA, League of Legends, i-dle (아이들), Mimi Webb",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 17",
+          "genre": "0 pts · NEW",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 48,
@@ -1103,10 +1103,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "남자를 몰라",
-          "artist": "이승기",
+          "title": "마음의 숲",
+          "artist": "조선힙합",
           "releaseDate": "KR",
-          "genre": "0 pts · NEW",
+          "genre": "0 pts · UP 17",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 49,
@@ -1114,10 +1114,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "ANIMAL",
-          "artist": "BOYNEXTDOOR",
+          "title": "또또",
+          "artist": "임영웅",
           "releaseDate": "KR",
-          "genre": "0 pts · DOWN 24",
+          "genre": "0 pts · UP 1",
           "url": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "artistUrl": "https://circlechart.kr/page_chart/onoff.circle?serviceGbn=S1020&termGbn=week",
           "rank": 50,
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-28T09:42:04.075Z"
+      "checkedAt": "2026-10-29T10:00:20.026Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5634,7 +5634,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-10-28T09:42:04.075Z"
+      "checkedAt": "2026-10-29T10:00:20.026Z"
     }
   ]
 }
