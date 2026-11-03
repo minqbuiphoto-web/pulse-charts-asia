@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-02T11:12:32.168Z",
+  "generatedAt": "2026-11-03T10:55:09.535Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-02T11:12:32.168Z"
+      "checkedAt": "2026-11-03T10:55:09.535Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-02T11:12:32.168Z"
+      "checkedAt": "2026-11-03T10:55:09.535Z"
     },
     {
       "id": "kr-ost-trending",
@@ -6122,7 +6122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-02T11:12:32.168Z"
+      "checkedAt": "2026-11-03T10:55:09.535Z"
     },
     {
       "id": "cn-tme-uni",
@@ -6131,14 +6131,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-11-02T19:00:00+08:00",
+      "updatedAt": "2026-11-03T18:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第44期（11.02-11.08）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "大梦归",
-          "artist": "周深",
+          "title": "致亲爱的自己",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "92.13 score",
+          "genre": "96.07 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -6146,10 +6146,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Baby's Horizon",
-          "artist": "TF家族-张函瑞",
+          "title": "大梦归",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "90.95 score",
+          "genre": "95.77 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -6157,10 +6157,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "致亲爱的自己",
-          "artist": "梓渝",
+          "title": "Baby's Horizon",
+          "artist": "TF家族-张函瑞",
           "releaseDate": "CN",
-          "genre": "90.90 score",
+          "genre": "93.27 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -6171,7 +6171,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "88.83 score",
+          "genre": "91.43 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -6179,10 +6179,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hope to Remain",
-          "artist": "严浩翔",
+          "title": "折月亮",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "85.65 score",
+          "genre": "90.43 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -6190,10 +6190,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "折月亮",
-          "artist": "刘宇宁",
+          "title": "Hope to Remain",
+          "artist": "严浩翔",
           "releaseDate": "CN",
-          "genre": "85.10 score",
+          "genre": "90.17 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -6201,10 +6201,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "自由的你",
-          "artist": "G.E.M.邓紫棋",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "85.05 score",
+          "genre": "90.16 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -6212,10 +6212,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "自由的你",
+          "artist": "G.E.M.邓紫棋",
           "releaseDate": "CN",
-          "genre": "84.70 score",
+          "genre": "90.05 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -6223,10 +6223,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "为你前行",
-          "artist": "云朵",
+          "title": "那页夏天",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "82.86 score",
+          "genre": "89.33 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -6237,7 +6237,7 @@
           "title": "时过境迁",
           "artist": "苏艺馨Chency",
           "releaseDate": "CN",
-          "genre": "82.51 score",
+          "genre": "88.39 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -6245,7 +6245,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-02T11:12:32.168Z"
+      "checkedAt": "2026-11-03T10:55:09.535Z"
     },
     {
       "id": "cn-tme-wave",
@@ -6478,7 +6478,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-02T11:12:32.168Z"
+      "checkedAt": "2026-11-03T10:55:09.535Z"
     },
     {
       "id": "cn-ost-trending",
