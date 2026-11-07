@@ -25,6 +25,15 @@ if errorlevel 1 (
   exit /b 1
 )
 
+echo Dang cai Matchering mien phi trong moi truong rieng...
+"%PYTHON_EXE%" -m venv "%ENGINE_DIR%\matchering-venv"
+if errorlevel 1 exit /b 1
+"%ENGINE_DIR%\matchering-venv\Scripts\python.exe" -m pip install "matchering==2.0.6"
+if errorlevel 1 (
+  echo Khong cai duoc Matchering. Hay kiem tra Internet roi thu lai.
+  pause
+  exit /b 1
+)
 echo Dang dong engine cu...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "$ids=@(); try { $ids+=(Get-NetTCPConnection -LocalPort 8765 -State Listen -ErrorAction Stop).OwningProcess } catch {}; try { $ids+=Get-CimInstance Win32_Process -ErrorAction Stop | Where-Object { $_.CommandLine -like '*PulseChartsAudioAI*server.py*' } | Select-Object -ExpandProperty ProcessId } catch {}; $ids | Sort-Object -Unique | Where-Object { $_ -and $_ -ne $PID } | ForEach-Object { Stop-Process -Id $_ -Force -ErrorAction SilentlyContinue }"
 timeout /t 2 /nobreak >nul

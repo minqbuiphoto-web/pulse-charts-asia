@@ -38,6 +38,13 @@ call "%ENGINE_DIR%\venv\Scripts\activate.bat"
 python -m pip install --upgrade pip
 python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg pypinyin "audio-separator[cpu]"
 
+echo Dang cai Matchering trong moi truong rieng...
+python -m venv "%ENGINE_DIR%\matchering-venv"
+if errorlevel 1 exit /b 1
+"%ENGINE_DIR%\matchering-venv\Scripts\python.exe" -m pip install "matchering==2.0.6"
+if errorlevel 1 (
+  echo Chua cai duoc Matchering. Hay chay cap nhat engine de thu lai.
+)
 echo Dang cai bo tu khoi dong cung Windows...
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { (New-Object Net.WebClient).DownloadFile('%STARTER_URL%','%STARTER_FILE%'); exit 0 } catch { exit 1 }"
 if errorlevel 1 (

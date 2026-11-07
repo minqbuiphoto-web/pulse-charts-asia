@@ -12,15 +12,15 @@ try{
  const result=await page.evaluate(async()=>{
   const {remasterFile}=await import('/engine.js');const {encodeWAV}=await import('/wavEncoder.js');
   const reports=[];
-  for(const channels of [1,2]){
+  for(const channels of [1,2]) for(const auto of [false,true]){
    const input=new AudioBuffer({numberOfChannels:channels,length:44100*4,sampleRate:44100});
    for(let c=0;c<channels;c++){const d=input.getChannelData(c);for(let i=0;i<d.length;i++)d[i]=0.2*Math.sin(2*Math.PI*(440+c*120)*i/44100)+0.03*Math.sin(2*Math.PI*6000*i/44100)}
    const file=new File([encodeWAV(input,{bitDepth:24})],'signal.wav',{type:'audio/wav'});
-   const out=await remasterFile(file,{eqLow:0,eqLowMid:-2,eqMid:1,eqHighMid:-1,eqHigh:0,cutMud:true,tameHarsh:true,stereoWidth:100,targetLufs:-14});
+   const out=await remasterFile(file,{auto,eqLow:0,eqLowMid:-2,eqMid:1,eqHighMid:-1,eqHigh:0,cutMud:true,tameHarsh:true,stereoWidth:100,targetLufs:-14});
    const bytes=await out.blob.arrayBuffer(),view=new DataView(bytes);
    const ctx=new AudioContext();const decoded=await ctx.decodeAudioData(bytes.slice(0));await ctx.close();
    let max=0;for(let ch=0;ch<decoded.numberOfChannels;ch++)for(const n of decoded.getChannelData(ch)){if(!Number.isFinite(n))throw Error('nonfinite sample');max=Math.max(max,Math.abs(n))}
-   reports.push({channels,depth:view.getUint16(34,true),duration:decoded.duration,after:out.after,max});
+   reports.push({channels,auto,depth:view.getUint16(34,true),duration:decoded.duration,after:out.after,max});
   }
   return reports;
  });

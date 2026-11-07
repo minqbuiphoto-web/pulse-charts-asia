@@ -1404,6 +1404,64 @@ async def render_mv(
         raise HTTPException(500, f"MV render failed: {error}") from error
 
 
+@app.post("/matchering")
+def master_with_reference(background_tasks: BackgroundTasks, file: UploadFile = File(...), reference: UploadFile = File(...)):
+    """Run GPL Matchering as a separate local process with its own dependencies."""
+    runner = Path(__file__).resolve().parent / "matchering-venv" / ("Scripts/python.exe" if sys.platform == "win32" else "bin/python")
+    if not runner.exists():
+        raise HTTPException(503, "Hãy cập nhật bộ xử lý để cài Matchering một lần.")
+    work = Path(tempfile.mkdtemp(prefix="pulse-matchering-"))
+    try:
+        for name, upload in (("target", file), ("reference", reference)):
+            source = work / (name + ".input")
+            size = 0
+            with source.open("wb") as stream:
+                while chunk := upload.file.read(1024 * 1024):
+                    size += len(chunk)
+                    if size > 200 * 1024 * 1024:
+                        raise HTTPException(413, "Mỗi file tối đa 200 MB.")
+                    stream.write(chunk)
+            if not size:
+                raise HTTPException(400, "File âm thanh trống.")
+            # Decode at most 901 seconds; the worker rejects over-length tracks.
+            subprocess.run([ffmpeg_executable(), "-nostdin", "-y", "-v", "error", "-i", str(source),
+                            "-t", "901", "-vn", "-ar", "44100", "-ac", "2", "-c:a", "pcm_f32le",
+                            str(work / (name + ".wav"))], check=True, capture_output=True, timeout=180)
+        worker = """
+import sys
+import soundfile as sf
+import matchering as mg
+from pathlib import Path
+p = Path(sys.argv[1])
+for name in ('target', 'reference'):
+    info = sf.info(str(p / (name + '.wav')))
+    if not 3 <= info.duration <= 900:
+        sys.exit(4)
+mg.process(target=str(p / 'target.wav'), reference=str(p / 'reference.wav'),
+           results=[mg.pcm24(str(p / 'master.wav'))])
+"""
+        completed = subprocess.run([str(runner), "-c", worker, str(work)], capture_output=True, timeout=1100)
+        if completed.returncode == 4:
+            raise HTTPException(400, "Bài gốc và bài mẫu phải dài từ 3 giây đến 15 phút.")
+        if completed.returncode:
+            logging.error("Matchering failed: %s", completed.stderr.decode(errors="replace")[-2000:])
+            raise HTTPException(422, "Không master được hai file này. Hãy dùng WAV có âm thanh rõ và bài mẫu cùng thể loại.")
+        output = work / "master.wav"
+        if not output.exists() or output.stat().st_size < 44:
+            raise HTTPException(500, "Matchering chưa tạo được file WAV.")
+        background_tasks.add_task(shutil.rmtree, work, True)
+        return FileResponse(output, media_type="audio/wav", filename="matchering-master-24bit.wav")
+    except HTTPException:
+        shutil.rmtree(work, ignore_errors=True)
+        raise
+    except subprocess.TimeoutExpired:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(504, "Xử lý quá lâu. Hãy thử file ngắn hơn.")
+    except Exception:
+        shutil.rmtree(work, ignore_errors=True)
+        raise HTTPException(422, "Không đọc được âm thanh. Hãy thử file WAV hoặc MP3 khác.")
+
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8765)

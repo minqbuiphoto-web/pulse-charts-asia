@@ -331,6 +331,7 @@ export async function remasterFile(file, options) {
  try { input=await decoder.decodeAudioData(await file.arrayBuffer()); } finally { await decoder.close(); }
  if(input.duration<0.4)throw new Error("File quá ngắn để đo loudness.");
  if(input.duration>900)throw new Error("Hãy chọn bài dài tối đa 15 phút.");
+ if(options.auto) options={...options,...analyzeAuto(input)};
  const settings={...DEFAULT_SETTINGS,sampleRate:44100,bitDepth:24,normalizeLoudness:true,truePeakLimit:true,truePeakCeiling:-1,centerBass:true,...options};
  const before=measureLUFS(input).integratedLUFS;
  const output=await processAudioOffline(input,settings);
@@ -342,5 +343,31 @@ export async function remasterFile(file, options) {
  }
  const after=measureLUFS(output).integratedLUFS;
  return {blob:new Blob([encodeWAV(output,{bitDepth:24})],{type:"audio/wav"}),before,after};
+}
+
+
+function analyzeAuto(buffer) {
+ // Sample windows across the song. Conservative spectral balance heuristics,
+ // not a model trained on a particular Suno version.
+ const energy=[0,0,0,0,0];let mid=0,side=0;
+ const n=512,rate=buffer.sampleRate;
+ for(let w=0;w<24;w++){
+  const start=Math.floor((buffer.length-n)*w/24),samples=new Float64Array(n);
+  for(let i=0;i<n;i++){
+   const l=buffer.getChannelData(0)[start+i],r=buffer.getChannelData(buffer.numberOfChannels>1?1:0)[start+i];
+   mid+=(l+r)*(l+r);side+=(l-r)*(l-r);samples[i]=(l+r)*0.5*(0.5-0.5*Math.cos(2*Math.PI*i/(n-1)));
+  }
+  for(let k=1;k<n/2;k++){
+   const hz=k*rate/n;if(hz>16000)break;
+   let re=0,im=0;for(let i=0;i<n;i++){const phase=2*Math.PI*k*i/n;re+=samples[i]*Math.cos(phase);im-=samples[i]*Math.sin(phase)}
+   const band=hz<180?0:hz<500?1:hz<2500?2:hz<7000?3:4;energy[band]+=re*re+im*im;
+  }
+ }
+ const total=energy.reduce((a,b)=>a+b,0)||1,ratio=energy.map(v=>v/total);
+ const dull=ratio[3]+ratio[4]<0.08,sharp=ratio[3]+ratio[4]>0.38;
+ return {eqLow:0,eqLowMid:ratio[1]>0.32?-1.5:0,eqMid:0,eqHighMid:sharp?-1:dull?0.5:0,eqHigh:sharp?-1:dull?1:0,
+ cutMud:false,tameHarsh:false,addAir:false,glueCompression:false,
+ stereoWidth:buffer.numberOfChannels>1&&side>mid*0.01&&side<mid*0.5?108:100,
+ targetLufs:-14};
 }
 
