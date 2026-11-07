@@ -45,6 +45,25 @@ try{
  });
  assert.equal(record.size,changed.length);await page.reload();await saved();
  assert.equal(await page.locator('.thumbnail-step img').count(),1);
+ await page.evaluate(async()=>{
+  const db=await new Promise(resolve=>{const r=indexedDB.open('pulse-mv-projects',1);r.onsuccess=()=>resolve(r.result)});
+  const id=localStorage.getItem('pulse-mv-last-project');
+  const record=await new Promise(resolve=>{const r=db.transaction('projects').objectStore('projects').get(id);r.onsuccess=()=>resolve(r.result)});
+  const bytes=new ArrayBuffer(44+44100*12*2),v=new DataView(bytes);
+  const str=(p,s)=>[...s].forEach((c,i)=>v.setUint8(p+i,c.charCodeAt(0)));
+  str(0,'RIFF');v.setUint32(4,bytes.byteLength-8,true);str(8,'WAVEfmt ');v.setUint32(16,16,true);v.setUint16(20,1,true);v.setUint16(22,1,true);v.setUint32(24,44100,true);v.setUint32(28,88200,true);v.setUint16(32,2,true);v.setUint16(34,16,true);str(36,'data');v.setUint32(40,bytes.byteLength-44,true);
+  record.mode='karaoke';record.thumbnailBlob=null;record.thumbnailName='';record.audioBlob=record.beatAudioBlob=new Blob([bytes],{type:'audio/wav'});record.beatAudioName='beat.wav';
+  record.rows=Array.from({length:4},(_,i)=>({time:1+i*2,end:3+i*2,vietnamese:'Line '+(i+1),original:'',literal:''}));
+  record.textPositions.landscape.karaokeLines=2;
+  await new Promise((resolve,reject)=>{const tx=db.transaction('projects','readwrite');tx.objectStore('projects').put(record);tx.oncomplete=resolve;tx.onerror=reject});db.close();
+ });
+ await page.reload();await saved();
+ assert.equal(await page.getByLabel('Số câu Karaoke',{exact:true}).inputValue(),'2');
+ await page.waitForFunction(()=>document.querySelector('audio')?.duration>0);
+ for(const [time,expected] of [[1.5,['Line 1','Line 2']],[3.5,['Line 2','Line 3']],[5.5,['Line 3','Line 4']]]){
+  await page.locator('audio').first().evaluate((audio,t)=>{audio.currentTime=t;audio.dispatchEvent(new Event('timeupdate'))},time);
+  await page.waitForFunction(expected=>JSON.stringify([...document.querySelectorAll('.mv-preview .lyric-vietnamese')].map(e=>e.textContent).sort())===JSON.stringify(expected),expected);
+ }
  assert.deepEqual(errors,[]);
  console.log('PASS: manual save + reload, autosave + reload, same-name media replacement persisted in real IndexedDB; no page errors');
 }finally{await browser.close();server.close()}
