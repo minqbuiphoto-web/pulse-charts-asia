@@ -229,6 +229,23 @@
   pointer-events: none;
 }
 
+.mv-shell.karaoke .mv-preview .lyric-vietnamese.karaoke-dual {
+  width: 84%;
+  max-width: 84%;
+  left: 8% !important;
+  right: 8% !important;
+  transform: none;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.mv-shell.karaoke .mv-preview .lyric-vietnamese.karaoke-dual .karaoke-word {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+.mv-shell.karaoke .mv-preview .lyric-vietnamese.karaoke-dual .karaoke-word::after {
+  -webkit-text-stroke: var(--karaoke-outline) #fff;
+}
+
 .karaoke-beat-box {
   margin-top: 14px;
   padding: 15px;

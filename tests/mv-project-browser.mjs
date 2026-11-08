@@ -64,6 +64,9 @@ try{
   await page.locator('audio').first().evaluate((audio,t)=>{audio.currentTime=t;audio.dispatchEvent(new Event('timeupdate'))},time);
   await page.waitForFunction(expected=>JSON.stringify([...document.querySelectorAll('.mv-preview .lyric-vietnamese')].map(e=>e.textContent).sort())===JSON.stringify(expected),expected);
  }
+ const styles=await page.locator('.mv-preview .karaoke-dual').evaluateAll(elements=>elements.map(el=>{const s=getComputedStyle(el);return {align:s.textAlign,font:s.fontFamily,weight:s.fontWeight,shadow:s.textShadow,transform:s.transform}}));
+ assert.deepEqual(styles.map(s=>s.align),['left','right']);
+ for(const style of styles){assert.match(style.font,/Arial Narrow/);assert.equal(style.weight,'700');assert.notEqual(style.shadow,'none');assert.equal(style.transform,'none')}
  assert.deepEqual(errors,[]);
  console.log('PASS: manual save + reload, autosave + reload, same-name media replacement persisted in real IndexedDB; no page errors');
 }finally{await browser.close();server.close()}

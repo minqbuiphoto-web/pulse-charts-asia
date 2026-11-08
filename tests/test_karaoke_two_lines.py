@@ -23,6 +23,10 @@ with tempfile.TemporaryDirectory() as folder:
         assert any('0:00:05.00,0:00:07.00' in line and 'Line 4' in line for line in waiting)
         positions=[re.search(r'\\pos\(([^)]+)\)',line).group(1) for line in events]
         assert len(set(positions))==2
+        assert f'\\an7\\pos({width*.08:.2f},' in result
+        assert f'\\an9\\pos({width*.92:.2f},' in result
+        assert 'Style: Vietnamese,Arial Narrow,' in result
+        assert '&H00FFFFFF,&H006B1111,&H00000000,-1' in result
         assert '\\\\pos' not in result
     scope['write_ass_subtitles'](target,rows,{},dict(karaokeLines=1),'karaoke',1920,1080,0,20,0,'output',True)
     assert sum(line.startswith('Dialogue:') for line in target.read_text(encoding='utf-8-sig').splitlines())==4
