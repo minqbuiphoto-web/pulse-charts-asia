@@ -65,9 +65,12 @@ try{
   await page.waitForFunction(expected=>JSON.stringify([...document.querySelectorAll('.mv-preview .lyric-vietnamese')].map(e=>e.textContent).sort())===JSON.stringify(expected),expected);
   if(time===3.3){const opacity=await page.locator('.karaoke-left').evaluate(el=>Number(getComputedStyle(el).opacity));assert.ok(opacity>0&&opacity<1)}
  }
- const styles=await page.locator('.mv-preview .karaoke-dual').evaluateAll(elements=>elements.map(el=>{const s=getComputedStyle(el);return {align:s.textAlign,font:s.fontFamily,weight:s.fontWeight,shadow:s.textShadow,transform:s.transform}}));
+ const styles=await page.locator('.mv-preview .karaoke-dual').evaluateAll(elements=>elements.map(el=>{const s=getComputedStyle(el);return {align:s.textAlign,font:s.fontFamily,weight:s.fontWeight,shadow:s.textShadow,filter:s.filter,transform:s.transform}}));
  assert.deepEqual(styles.map(s=>s.align),['left','right']);
- for(const style of styles){assert.match(style.font,/Arial Narrow/);assert.equal(style.weight,'700');assert.notEqual(style.shadow,'none');assert.equal(style.transform,'none')}
+ for(const style of styles){assert.match(style.font,/Arial Narrow/);assert.equal(style.weight,'700');assert.equal(style.shadow,'none');assert.match(style.filter,/drop-shadow/);assert.equal(style.transform,'none')}
+ await page.getByLabel('Độ dày viền',{exact:true}).fill('6');
+ const wordShadows=await page.locator('.mv-preview .karaoke-dual .karaoke-word').evaluateAll(els=>els.map(el=>[getComputedStyle(el).textShadow,getComputedStyle(el,'::after').textShadow]));
+ assert.ok(wordShadows.every(pair=>pair.every(shadow=>shadow==='none')));
  await page.getByLabel('Font Karaoke',{exact:true}).selectOption('Tahoma');
  const beforeTop=await page.locator('.mv-preview .karaoke-dual').evaluateAll(els=>els.map(el=>parseFloat(el.style.top)));
  await page.getByLabel('Vị trí cả hai dòng',{exact:true}).fill('50');

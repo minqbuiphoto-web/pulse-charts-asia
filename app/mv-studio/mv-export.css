@@ -230,6 +230,10 @@
 }
 
 .mv-shell.karaoke .mv-preview .lyric-vietnamese.karaoke-dual {
+  /* Composite the fill, outline and sung overlay before casting one shadow.
+     Per-word text shadows otherwise paint over neighbouring outlined glyphs. */
+  text-shadow: none;
+  paint-order: stroke fill;
   width: 84%;
   max-width: 84%;
   left: 8% !important;
