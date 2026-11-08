@@ -4,7 +4,7 @@ import test from "node:test";
 
 test("delays the intact song instead of concatenating synthetic intro audio",async()=>{
   const source=await readFile(new URL("../public/pulse-audio-ai-server.py",import.meta.url),"utf8");
-  assert.match(source,/version="6\.3\.1"/);
+  assert.match(source,/version="6\.3\.2"/);
   assert.match(source,/mvExactAudioIntro/);
   assert.match(source,/mvAudioHeadPreserved/);
   assert.match(source,/mvAudioPtsReset/);

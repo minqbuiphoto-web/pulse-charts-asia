@@ -15,7 +15,7 @@ from fastapi import BackgroundTasks, FastAPI, File, Form, HTTPException, UploadF
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
-app = FastAPI(title="Pulse Audio AI", version="6.3.1")
+app = FastAPI(title="Pulse Audio AI", version="6.3.2")
 whisper_model = None
 MV_EXPORT_LYRIC_LEAD_SECONDS = 1.0
 UVR_INSTRUMENTAL_MODEL = "UVR-MDX-NET-Inst_HQ_3.onnx"
@@ -35,7 +35,7 @@ app.add_middleware(
 
 @app.get("/health")
 def health():
-    return {"ok": True, "engine": "large-v3-turbo lyric-prompted forced alignment + Demucs", "version": app.version, "mvPacketTailTolerance": True, "privateNetworkAccess": True, "alignment": True, "forcedAlignmentV2": True, "alignmentConfidence": True, "lyricPromptRecognition": True, "whisperTurbo": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvExtendedFontFamilies": True, "mvFontWeightStyleParity": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeAlternatingEdges": True, "mvKaraokeTwoLines": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
+    return {"ok": True, "engine": "large-v3-turbo lyric-prompted forced alignment + Demucs", "version": app.version, "mvPacketTailTolerance": True, "privateNetworkAccess": True, "alignment": True, "forcedAlignmentV2": True, "alignmentConfidence": True, "lyricPromptRecognition": True, "whisperTurbo": True, "lineStartAlignment": True, "fastLyricAlignment": True, "alignmentFallback": True, "alignmentCache": True, "safeDenseLineAlignment": True, "multilingualLyricAlignment": True, "acousticPhraseAlignment": True, "syncedReferenceAlignment": True, "mixEnhance": True, "stemMix": True, "mixTargetLufs": -14, "mixTruePeak": -1, "mvImageScale": True, "mvImageScaleDown": True, "mvImageScaleContinuous": True, "mvImageEnhance": True, "mvRender": True, "mvIntroSeparate": True, "mvExactAudioIntro": True, "mvAudioHeadPreserved": True, "mvAudioPtsReset": True, "mvPhysicalAudioLead": True, "mvVideoTrim": True, "mvTrackAwareTrim": True, "mvTrimThumbnail": True, "mvPlatformSafeExport": True, "mvNoEditLists": True, "mvMatchedTracks": True, "mvLandscapeAudioZeroStart": True, "mvAudioHeadPadding": True, "mvFullPreviewTimeline": True, "mvExactTextSize": True, "mvPreviewParity": True, "mvVietnameseTextRepair": True, "mvUnifiedFont": True, "mvExtendedFontFamilies": True, "mvFontWeightStyleParity": True, "mvDynamicLineGap": True, "mvVerticalMotion": True, "mvVerticalLyricLayout": True, "mvManualLyricPositions": True, "mvSmartLyricWrap": True, "mvUnifiedTimeline": True, "mvExactCutTimeline": True, "mvPreviewExportSameTimeline": True, "mvExportLyricLead": True, "mvFormatSpecificLyricLead": True, "mvFormatLyricOffset": True, "mvIntroLabelSync": True, "mvLiteralAlways": True, "mvLiteralLabelIntent": True, "mvKaraokeAlternatingEdges": True, "mvKaraokeSoftSwap": True, "mvKaraokeTwoLines": True, "mvKaraokeSweep": True, "mvKaraokeReadableSweep": True, "mvAutoKaraokeBeat": True, "mvDirectKaraokeBeat": True, "mvKaraokeIntroClean": True, "uvrInstrumental": True, "uvrModel": UVR_INSTRUMENTAL_MODEL, "mvExportLyricLeadSeconds": 0.0}
 
 
 def ffmpeg_executable() -> str:
@@ -112,10 +112,20 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     original = styles.get("original", {})
     literal = styles.get("literal", {})
     vietnamese = styles.get("vietnamese", {})
+    appearance = positions.get("karaoke") or {}
+    def setting(key, default, low, high):
+        try:
+            return max(low, min(high, float(appearance.get(key, default))))
+        except (ValueError, TypeError):
+            return default
+    waiting_color = ass_color(appearance.get("waitingColor"), "#ffffff")
+    outline_color = ass_color(appearance.get("outlineColor"), "#11116b")
+    sung_outline = ass_color(appearance.get("highlightOutlineColor"), "#ffffff")
+    shadow_color = ass_color(appearance.get("shadowColor"), "#000000")
     if mode == "karaoke":
         vietnamese = {**vietnamese, "color": readable_karaoke_color(vietnamese.get("color"))}
     if mode == "karaoke" and positions.get("karaokeLines") == 2:
-        vietnamese = {**vietnamese, "fontFamily": "Arial Narrow", "fontWeight": 700, "fontStyle": "normal", "letterSpacing": "0", "color": "#ff1616"}
+        vietnamese = {**vietnamese, "fontFamily": appearance.get("fontFamily", "Arial Narrow"), "fontSize": setting("fontSize", 48, 12, 80), "fontWeight": 700, "fontStyle": "normal", "letterSpacing": "0", "color": appearance.get("highlightColor", "#ff1616")}
     defaults = {"original": 48 if height > width else 6, "literal": 60 if height > width else 13, "vietnamese": 72 if height > width else 82}
     def position_margin(key: str) -> int:
         try:
@@ -141,7 +151,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         spacing = max(-10, min(20, spacing))
         outline = 3 if height >= 1080 else 2
         if name == "Vietnamese" and mode == "karaoke" and positions.get("karaokeLines") == 2:
-            return f"Style: {name},{font},{size},{color},&H00FFFFFF,&H006B1111,&H00000000,-1,0,0,0,100,100,0,0,1,2.5,3,{alignment},{round(width*.08)},{round(width*.08)},{margin_v},1"
+            return f"Style: {name},{font},{size},{color},{waiting_color},{outline_color},{shadow_color},-1,0,0,0,100,100,0,0,1,{setting('outlineWidth', 2.5, 0, 6):g},{setting('shadowSize', 3, 0, 10):g},{alignment},{round(width*.08)},{round(width*.08)},{margin_v},1"
         # SecondaryColour is the not-yet-sung karaoke colour. Normal MV text does
         # not use it, while ASS \kf fills it progressively with PrimaryColour.
         return f"Style: {name},{font},{size},{color},&H00C8C8C8,&H00101010,&HA0000000,{bold},{italic},0,0,100,100,{spacing:.2f},0,1,{outline},1,{alignment},45,45,{margin_v},1"
@@ -187,8 +197,17 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
     two_lines = mode == "karaoke" and positions.get("karaokeLines") == 2
     def row_time(row, key):
         return max(intro_duration, float(row.get(key, 0)) - (0 if output_timeline else clip_start - intro_duration) - export_lyric_lead)
-    gap = max(6.0, float(vietnamese.get("fontSize", 36)) * 3 / height * 100)
+    gap = setting("gap", 64, 20, 240) / height * 100
     top = min(position_margin("vietnamese") / height * 100, 90 - gap)
+    transitions = []
+    for index, row in enumerate(visible_rows):
+        other = visible_rows[index + 1] if index + 1 < len(visible_rows) else None
+        trigger = (row_time(other, "time") + min(.2, max(0, row_time(other, "end") - row_time(other, "time")) * .1)
+                   if other else row_time(row, "end") + .2)
+        fade_start = max(row_time(row, "end"), trigger)
+        show_end = min(fade_start + .35, output_end,
+                       row_time(visible_rows[index + 2], "time") if index + 2 < len(visible_rows) else float("inf"))
+        transitions.append((min(fade_start, show_end), show_end))
     for row_index, row in enumerate(visible_rows):
         start = (max(0.0, float(row.get("time", 0))) if output_timeline else
                  max(0.0, float(row.get("time", 0)) - clip_start + intro_duration))
@@ -205,16 +224,16 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
         sweep_end = end
         placement = ""
         if two_lines:
-            display_start = row_time(visible_rows[0], "time") if row_index < 2 else min(start, row_time(visible_rows[row_index - 2], "end"))
-            if row_index + 2 < len(visible_rows):
-                end = min(end, row_time(visible_rows[row_index + 2], "time"))
+            display_start = row_time(visible_rows[0], "time") if row_index < 2 else min(start, transitions[row_index - 2][1])
+            fade_start, end = transitions[row_index]
             y = height * (top + (row_index % 2) * gap) / 100
             alignment = 7 if row_index % 2 == 0 else 9
             x = width * (0.08 if row_index % 2 == 0 else 0.92)
             placement = f"{{\\an{alignment}\\pos({x:.2f},{y:.2f})}}"
             waiting_text = ass_escape(row.get("vietnamese", ""))
             if waiting_text and display_start < start:
-                events.append(f"Dialogue: 0,{ass_time(display_start)},{ass_time(start)},Vietnamese,,0,0,0,,{placement}{{\\1c&H00FFFFFF&}}{waiting_text}")
+                fade_in = round(min(.2, start - display_start) * 1000)
+                events.append(f"Dialogue: 0,{ass_time(display_start)},{ass_time(start)},Vietnamese,,0,0,0,,{placement}{{\\1c{waiting_color}&\\fad({fade_in},0)}}{waiting_text}")
         original_text = ass_escape(row.get("original", ""))
         literal_text = ass_escape(row.get("literal", ""))
         vietnamese_text = ass_escape(row.get("vietnamese", ""))
@@ -238,7 +257,7 @@ def write_ass_subtitles(target: Path, rows: list[dict], styles: dict, positions:
                 vietnamese_text = "".join(
                     f"{{\\kf{duration}}}{part}" for duration, part in zip(word_times, parts)
                 )
-            singing_outline = "{\\3c&H00FFFFFF&}" if two_lines else ""
+            singing_outline = f"{{\\3c{sung_outline}&\\fad(0,{round((end - fade_start) * 1000)})}}" if two_lines else ""
             events.append(f"Dialogue: 0,{ass_time(start)},{ass_time(end)},Vietnamese,,0,0,0,,{placement}{singing_outline}{vietnamese_text}")
     target.write_text("\n".join(header + events), encoding="utf-8-sig")
 

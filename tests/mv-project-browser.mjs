@@ -60,13 +60,21 @@ try{
  await page.reload();await saved();
  assert.equal(await page.getByLabel('Số câu Karaoke',{exact:true}).inputValue(),'2');
  await page.waitForFunction(()=>document.querySelector('audio')?.duration>0);
- for(const [time,expected] of [[1.5,['Line 1','Line 2']],[3.5,['Line 2','Line 3']],[5.5,['Line 3','Line 4']]]){
+ for(const [time,expected] of [[1.5,['Line 1','Line 2']],[3.3,['Line 1','Line 2']],[3.8,['Line 2','Line 3']],[5.8,['Line 3','Line 4']]]){
   await page.locator('audio').first().evaluate((audio,t)=>{audio.currentTime=t;audio.dispatchEvent(new Event('timeupdate'))},time);
   await page.waitForFunction(expected=>JSON.stringify([...document.querySelectorAll('.mv-preview .lyric-vietnamese')].map(e=>e.textContent).sort())===JSON.stringify(expected),expected);
+  if(time===3.3){const opacity=await page.locator('.karaoke-left').evaluate(el=>Number(getComputedStyle(el).opacity));assert.ok(opacity>0&&opacity<1)}
  }
  const styles=await page.locator('.mv-preview .karaoke-dual').evaluateAll(elements=>elements.map(el=>{const s=getComputedStyle(el);return {align:s.textAlign,font:s.fontFamily,weight:s.fontWeight,shadow:s.textShadow,transform:s.transform}}));
  assert.deepEqual(styles.map(s=>s.align),['left','right']);
  for(const style of styles){assert.match(style.font,/Arial Narrow/);assert.equal(style.weight,'700');assert.notEqual(style.shadow,'none');assert.equal(style.transform,'none')}
+ await page.getByLabel('Font Karaoke',{exact:true}).selectOption('Tahoma');
+ await page.getByLabel('Khoảng cách hai dòng',{exact:true}).fill('90');
+ await page.getByLabel('Màu chữ đang hát',{exact:true}).fill('#00ff00');
+ await saved();await page.reload();await saved();
+ assert.equal(await page.getByLabel('Font Karaoke',{exact:true}).inputValue(),'Tahoma');
+ assert.equal(await page.getByLabel('Khoảng cách hai dòng',{exact:true}).inputValue(),'90');
+ assert.equal(await page.getByLabel('Màu chữ đang hát',{exact:true}).inputValue(),'#00ff00');
  assert.deepEqual(errors,[]);
  console.log('PASS: manual save + reload, autosave + reload, same-name media replacement persisted in real IndexedDB; no page errors');
 }finally{await browser.close();server.close()}
