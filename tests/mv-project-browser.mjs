@@ -69,10 +69,16 @@ try{
  assert.deepEqual(styles.map(s=>s.align),['left','right']);
  for(const style of styles){assert.match(style.font,/Arial Narrow/);assert.equal(style.weight,'700');assert.notEqual(style.shadow,'none');assert.equal(style.transform,'none')}
  await page.getByLabel('Font Karaoke',{exact:true}).selectOption('Tahoma');
+ const beforeTop=await page.locator('.mv-preview .karaoke-dual').evaluateAll(els=>els.map(el=>parseFloat(el.style.top)));
+ await page.getByLabel('Vị trí cả hai dòng',{exact:true}).fill('50');
+ const afterTop=await page.locator('.mv-preview .karaoke-dual').evaluateAll(els=>els.map(el=>parseFloat(el.style.top)));
+ assert.equal(afterTop[0],50);
+ assert.ok(Math.abs((beforeTop[1]-beforeTop[0])-(afterTop[1]-afterTop[0]))<.001);
  await page.getByLabel('Khoảng cách hai dòng',{exact:true}).fill('90');
  await page.getByLabel('Màu chữ đang hát',{exact:true}).fill('#00ff00');
  await saved();await page.reload();await saved();
  assert.equal(await page.getByLabel('Font Karaoke',{exact:true}).inputValue(),'Tahoma');
+ assert.equal(await page.getByLabel('Vị trí cả hai dòng',{exact:true}).inputValue(),'50');
  assert.equal(await page.getByLabel('Khoảng cách hai dòng',{exact:true}).inputValue(),'90');
  assert.equal(await page.getByLabel('Màu chữ đang hát',{exact:true}).inputValue(),'#00ff00');
  assert.deepEqual(errors,[]);
