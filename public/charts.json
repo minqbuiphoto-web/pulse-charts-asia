@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-10T11:15:15.979Z",
+  "generatedAt": "2026-11-11T11:00:08.340Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-10T11:15:15.979Z"
+      "checkedAt": "2026-11-11T11:00:08.340Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-10T11:15:15.979Z"
+      "checkedAt": "2026-11-11T11:00:08.340Z"
     },
     {
       "id": "kr-ost-trending",
@@ -5566,13 +5566,13 @@
       "market": "JP",
       "source": "Billboard Japan Hot 100",
       "sourceUrl": "https://www.billboard-japan.com/charts/detail?a=hot100",
-      "updatedAt": "2026-11-04T23:59:00+09:00",
-      "syncWarning": "OFFICIAL TOP 50 · Billboard Japan Hot 100 công bố 2026/11/04. Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
+      "updatedAt": "2026-11-11T23:59:00+09:00",
+      "syncWarning": "OFFICIAL TOP 50 · Billboard Japan Hot 100 công bố 2026/11/11. Toàn bộ vị trí 1–50 được lấy trực tiếp từ bảng chính thức; không chèn dòng discovery.",
       "songs": [
         {
           "rank": 1,
-          "title": "ザッツ!超常",
-          "artist": "M!LK",
+          "title": "Emotion",
+          "artist": "Aぇ! group",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #1",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5582,8 +5582,8 @@
         },
         {
           "rank": 2,
-          "title": "Yes! 東京 (feat. 超特急,M!LK,SUPER★DRAGON,Sakurashimeji,ONE N' ONLY,原因は自分にある。,BUDDiiS,ICEx,Lienel)",
-          "artist": "EBiDAN",
+          "title": "NOW U KNOW",
+          "artist": "BE:FIRST",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #2",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5593,8 +5593,8 @@
         },
         {
           "rank": 3,
-          "title": "しわあわせ",
-          "artist": "Vaundy",
+          "title": "Yes! 東京 (feat. 超特急,M!LK,SUPER★DRAGON,Sakurashimeji,ONE N' ONLY,原因は自分にある。,BUDDiiS,ICEx,Lienel)",
+          "artist": "EBiDAN",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #3",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5604,8 +5604,8 @@
         },
         {
           "rank": 4,
-          "title": "シンデレラ",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "しわあわせ",
+          "artist": "Vaundy",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #4",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5615,8 +5615,8 @@
         },
         {
           "rank": 5,
-          "title": "風の片想い",
-          "artist": "NGT48",
+          "title": "結び",
+          "artist": "Ayumu Imazu",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #5",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5626,8 +5626,8 @@
         },
         {
           "rank": 6,
-          "title": "結び",
-          "artist": "Ayumu Imazu",
+          "title": "ザッツ!超常",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #6",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5637,8 +5637,8 @@
         },
         {
           "rank": 7,
-          "title": "MISTIA",
-          "artist": "ROIROM",
+          "title": "シンデレラ",
+          "artist": "Mrs.GREEN APPLE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #7",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5648,8 +5648,8 @@
         },
         {
           "rank": 8,
-          "title": "ありふれた世界の果てに (feat. Awich, CHICO CARLITO, ONE OK ROCK & Paledusk)",
-          "artist": "YAO",
+          "title": "だって大凶じゃん☆",
+          "artist": "ロージークロニクル",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #8",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5659,8 +5659,8 @@
         },
         {
           "rank": 9,
-          "title": "Brand New",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "New Look",
+          "artist": "IS:SUE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #9",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5670,8 +5670,8 @@
         },
         {
           "rank": 10,
-          "title": "チェックメイト",
-          "artist": "Travis Japan",
+          "title": "Call My Name",
+          "artist": "TWS",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #10",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5681,8 +5681,8 @@
         },
         {
           "rank": 11,
-          "title": "NEON",
-          "artist": "A2O LITE",
+          "title": "Slidin",
+          "artist": "HANA",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #11",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5692,8 +5692,8 @@
         },
         {
           "rank": 12,
-          "title": "It's Me",
-          "artist": "ILLIT",
+          "title": "ありふれた世界の果てに (feat. Awich, CHICO CARLITO, ONE OK ROCK & Paledusk)",
+          "artist": "YAO",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #12",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5703,8 +5703,8 @@
         },
         {
           "rank": 13,
-          "title": "Touch",
-          "artist": "MAZZEL",
+          "title": "You're Under Arrest",
+          "artist": "ILLIT",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #13",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5714,8 +5714,8 @@
         },
         {
           "rank": 14,
-          "title": "運命さがし",
-          "artist": "マカロニえんぴつ",
+          "title": "Brand New",
+          "artist": "Mrs.GREEN APPLE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #14",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5725,8 +5725,8 @@
         },
         {
           "rank": 15,
-          "title": "共犯",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "爆裂愛してる",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #15",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5736,8 +5736,8 @@
         },
         {
           "rank": 16,
-          "title": "爆裂愛してる",
-          "artist": "M!LK",
+          "title": "Sunburst",
+          "artist": "RIIZE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #16",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5747,8 +5747,8 @@
         },
         {
           "rank": 17,
-          "title": "ラブリーズン",
-          "artist": "原因は自分にある。",
+          "title": "It's Me",
+          "artist": "ILLIT",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #17",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5758,8 +5758,8 @@
         },
         {
           "rank": 18,
-          "title": "You're Under Arrest",
-          "artist": "ILLIT",
+          "title": "ラブリーズン",
+          "artist": "原因は自分にある。",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #18",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5769,8 +5769,8 @@
         },
         {
           "rank": 19,
-          "title": "lulu.",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "NEON",
+          "artist": "A2O LITE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #19",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5780,8 +5780,8 @@
         },
         {
           "rank": 20,
-          "title": "咲き誇れ",
-          "artist": "YOASOBI",
+          "title": "共犯",
+          "artist": "Mrs.GREEN APPLE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #20",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5791,8 +5791,8 @@
         },
         {
           "rank": 21,
-          "title": "時空超えてユニバース",
-          "artist": "M!LK",
+          "title": "運命さがし",
+          "artist": "マカロニえんぴつ",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #21",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5802,8 +5802,8 @@
         },
         {
           "rank": 22,
-          "title": "Slidin",
-          "artist": "HANA",
+          "title": "咲き誇れ",
+          "artist": "YOASOBI",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #22",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5813,8 +5813,8 @@
         },
         {
           "rank": 23,
-          "title": "Surprise Box",
-          "artist": "めいちゃん",
+          "title": "好きすぎて滅!",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #23",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5824,8 +5824,8 @@
         },
         {
           "rank": 24,
-          "title": "愛のダバダ",
-          "artist": "Lienel",
+          "title": "Surprise Box",
+          "artist": "めいちゃん",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #24",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5835,8 +5835,8 @@
         },
         {
           "rank": 25,
-          "title": "Moonlit",
-          "artist": "なにわ男子",
+          "title": "lulu.",
+          "artist": "Mrs.GREEN APPLE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #25",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5846,8 +5846,8 @@
         },
         {
           "rank": 26,
-          "title": "好きすぎて滅!",
-          "artist": "M!LK",
+          "title": "SHOCK",
+          "artist": "TREASURE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #26",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5857,8 +5857,8 @@
         },
         {
           "rank": 27,
-          "title": "ぱわーオブらぶ",
-          "artist": "FRUITS ZIPPER",
+          "title": "夜の踊り子",
+          "artist": "サカナクション",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #27",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5868,8 +5868,8 @@
         },
         {
           "rank": 28,
-          "title": "Looks Can Kill",
-          "artist": "IVE",
+          "title": "あなたでなければ",
+          "artist": "竹内まりや",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #28",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5879,8 +5879,8 @@
         },
         {
           "rank": 29,
-          "title": "シチュエーション",
-          "artist": "離婚伝説",
+          "title": "時空超えてユニバース",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #29",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5890,8 +5890,8 @@
         },
         {
           "rank": 30,
-          "title": "Insomnia",
-          "artist": "RIIZE",
+          "title": "マイオンリー",
+          "artist": "SixTONES",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #30",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5901,8 +5901,8 @@
         },
         {
           "rank": 31,
-          "title": "夕星-ゆうづつ-",
-          "artist": "RADWIMPS",
+          "title": "あなたの声になれたら",
+          "artist": "Sakurashimeji",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #31",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5912,8 +5912,8 @@
         },
         {
           "rank": 32,
-          "title": "Mirror Ball",
-          "artist": "Billyrrom",
+          "title": "ラブSHY高!",
+          "artist": "SHY",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #32",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5923,8 +5923,8 @@
         },
         {
           "rank": 33,
-          "title": "雲を抜け風下へ私だけ",
-          "artist": "ヨルシカ",
+          "title": "夕星-ゆうづつ-",
+          "artist": "RADWIMPS",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #33",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5934,8 +5934,8 @@
         },
         {
           "rank": 34,
-          "title": "娑婆堕罵 -Shabadaba-",
-          "artist": "RADWIMPS",
+          "title": "DEPENDS",
+          "artist": "XG",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #34",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5945,8 +5945,8 @@
         },
         {
           "rank": 35,
-          "title": "マイオンリー",
-          "artist": "SixTONES",
+          "title": "娑婆堕罵 -Shabadaba-",
+          "artist": "RADWIMPS",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #35",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5956,8 +5956,8 @@
         },
         {
           "rank": 36,
-          "title": "夜の踊り子",
-          "artist": "サカナクション",
+          "title": "BPM feat. KREVA",
+          "artist": "Kvi Baba",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #36",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5978,8 +5978,8 @@
         },
         {
           "rank": 38,
-          "title": "VIBE",
-          "artist": "GENERATIONS from EXILE TRIBE",
+          "title": "爆裂愛しすぎて滅!(Crazy Mashup by TeddyLoid)",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #38",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -5989,8 +5989,8 @@
         },
         {
           "rank": 39,
-          "title": "見知らぬ糸",
-          "artist": "スピッツ",
+          "title": "Touch",
+          "artist": "MAZZEL",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #39",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6000,8 +6000,8 @@
         },
         {
           "rank": 40,
-          "title": "恋、はじめました。",
-          "artist": "=LOVE",
+          "title": "One Shot",
+          "artist": "THE RAMPAGE from EXILE TRIBE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #40",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6011,8 +6011,8 @@
         },
         {
           "rank": 41,
-          "title": "うららか",
-          "artist": "Da-iCE",
+          "title": "Looks Can Kill",
+          "artist": "IVE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #41",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6022,8 +6022,8 @@
         },
         {
           "rank": 42,
-          "title": "Sunburst",
-          "artist": "RIIZE",
+          "title": "SETSUNA -刹那-",
+          "artist": "風男塾",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #42",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6033,8 +6033,8 @@
         },
         {
           "rank": 43,
-          "title": "アイドルパワー",
-          "artist": "M!LK",
+          "title": "雲を抜け風下へ私だけ",
+          "artist": "ヨルシカ",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #43",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6044,8 +6044,8 @@
         },
         {
           "rank": 44,
-          "title": "IGNITE",
-          "artist": "JO1",
+          "title": "烏",
+          "artist": "米津玄師",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #44",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6066,8 +6066,8 @@
         },
         {
           "rank": 46,
-          "title": "烏",
-          "artist": "米津玄師",
+          "title": "IGNITE",
+          "artist": "JO1",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #46",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6077,8 +6077,8 @@
         },
         {
           "rank": 47,
-          "title": "ライラック",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "恋、はじめました。",
+          "artist": "=LOVE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #47",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6088,8 +6088,8 @@
         },
         {
           "rank": 48,
-          "title": "IRIS OUT",
-          "artist": "米津玄師",
+          "title": "見知らぬ糸",
+          "artist": "スピッツ",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #48",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6099,8 +6099,8 @@
         },
         {
           "rank": 49,
-          "title": "無限大LOVE!!!",
-          "artist": "BUDDiiS",
+          "title": "ライラック",
+          "artist": "Mrs.GREEN APPLE",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #49",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6110,8 +6110,8 @@
         },
         {
           "rank": 50,
-          "title": "ア・ポステリオリ",
-          "artist": "Mrs.GREEN APPLE",
+          "title": "アイドルパワー",
+          "artist": "M!LK",
           "releaseDate": "JP",
           "genre": "Billboard Japan Hot 100 #50",
           "url": "https://www.billboard-japan.com/charts/detail?a=hot100",
@@ -6120,7 +6120,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-10T11:15:15.979Z"
+      "checkedAt": "2026-11-11T11:00:08.340Z"
     },
     {
       "id": "cn-tme-uni",
@@ -6129,14 +6129,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-11-10T19:00:00+08:00",
+      "updatedAt": "2026-11-11T18:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第45期（11.09-11.15）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "致年少的自己",
-          "artist": "马嘉祺",
+          "title": "渝人码头",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "96.17 score",
+          "genre": "96.28 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -6144,10 +6144,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "大梦归",
-          "artist": "周深",
+          "title": "致年少的自己",
+          "artist": "马嘉祺",
           "releaseDate": "CN",
-          "genre": "95.41 score",
+          "genre": "96.25 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -6155,10 +6155,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "渝人码头",
-          "artist": "梓渝",
+          "title": "大梦归",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "95.38 score",
+          "genre": "96.12 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -6169,7 +6169,7 @@
           "title": "她",
           "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "92.39 score",
+          "genre": "94.60 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -6180,7 +6180,7 @@
           "title": "Hope to Remain",
           "artist": "严浩翔",
           "releaseDate": "CN",
-          "genre": "91.38 score",
+          "genre": "92.50 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -6188,10 +6188,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "管他的公路尽头",
-          "artist": "王源",
+          "title": "无梦镇",
+          "artist": "魏晨",
           "releaseDate": "CN",
-          "genre": "90.83 score",
+          "genre": "92.30 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -6199,10 +6199,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "说好一辈子",
-          "artist": "张云雷",
+          "title": "管他的公路尽头",
+          "artist": "王源",
           "releaseDate": "CN",
-          "genre": "90.39 score",
+          "genre": "91.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -6210,10 +6210,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "甲乙丙丁 (你我怎么两清)",
-          "artist": "李佳薇",
+          "title": "Baby's Horizon",
+          "artist": "TF家族-张函瑞",
           "releaseDate": "CN",
-          "genre": "90.09 score",
+          "genre": "91.57 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -6221,10 +6221,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Baby's Horizon",
-          "artist": "TF家族-张函瑞",
+          "title": "说好一辈子",
+          "artist": "张云雷",
           "releaseDate": "CN",
-          "genre": "90.04 score",
+          "genre": "91.09 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -6232,10 +6232,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "那页夏天",
-          "artist": "王俊凯",
+          "title": "甲乙丙丁 (你我怎么两清)",
+          "artist": "李佳薇",
           "releaseDate": "CN",
-          "genre": "88.08 score",
+          "genre": "90.99 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -6243,7 +6243,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-10T11:15:15.979Z"
+      "checkedAt": "2026-11-11T11:00:08.340Z"
     },
     {
       "id": "cn-tme-wave",
@@ -6476,7 +6476,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-10T11:15:15.979Z"
+      "checkedAt": "2026-11-11T11:00:08.340Z"
     },
     {
       "id": "cn-ost-trending",
