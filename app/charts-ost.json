@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-16T11:23:29.212Z",
+  "generatedAt": "2026-11-17T11:54:40.798Z",
   "charts": [
     {
       "id": "cn-tme-uni",
@@ -8,14 +8,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-11-16T19:10:00+08:00",
+      "updatedAt": "2026-11-17T19:40:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第46期（11.16-11.22）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
           "title": "阴天也会有烦恼吗",
           "artist": "TF_ING穆祉丞",
           "releaseDate": "CN",
-          "genre": "98.30 score",
+          "genre": "98.71 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -26,7 +26,7 @@
           "title": "最佳对手",
           "artist": "云旗,郝熠然",
           "releaseDate": "CN",
-          "genre": "94.74 score",
+          "genre": "95.45 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -37,7 +37,7 @@
           "title": "一念焚心",
           "artist": "周深",
           "releaseDate": "CN",
-          "genre": "92.08 score",
+          "genre": "95.41 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -48,7 +48,7 @@
           "title": "Hope to Remain",
           "artist": "严浩翔",
           "releaseDate": "CN",
-          "genre": "90.77 score",
+          "genre": "93.68 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -59,7 +59,7 @@
           "title": "慌啥子嘛",
           "artist": "赵本山",
           "releaseDate": "CN",
-          "genre": "90.52 score",
+          "genre": "93.51 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -67,10 +67,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "她",
-          "artist": "刘宇宁",
+          "title": "不回头的人",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "90.19 score",
+          "genre": "93.50 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -78,10 +78,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "想你就写信",
-          "artist": "郝熠然",
+          "title": "她",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "88.02 score",
+          "genre": "92.52 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -89,10 +89,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "贰拾肆",
-          "artist": "梓渝",
+          "title": "雾读",
+          "artist": "陈卓璇",
           "releaseDate": "CN",
-          "genre": "87.65 score",
+          "genre": "91.90 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -100,10 +100,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "雾读",
-          "artist": "陈卓璇",
+          "title": "Baby's Horizon",
+          "artist": "TF家族-张函瑞",
           "releaseDate": "CN",
-          "genre": "87.52 score",
+          "genre": "91.86 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -111,10 +111,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Baby's Horizon",
-          "artist": "TF家族-张函瑞",
+          "title": "想你就写信",
+          "artist": "郝熠然",
           "releaseDate": "CN",
-          "genre": "87.44 score",
+          "genre": "91.75 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -122,7 +122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-16T11:23:29.212Z"
+      "checkedAt": "2026-11-17T11:54:40.798Z"
     },
     {
       "id": "cn-tme-wave",
@@ -355,7 +355,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-16T11:23:29.212Z"
+      "checkedAt": "2026-11-17T11:54:40.798Z"
     },
     {
       "id": "cn-ost-trending",
