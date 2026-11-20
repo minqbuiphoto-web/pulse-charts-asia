@@ -1,0 +1,154 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  background: #101119;
+  color: #eeedf5;
+  font: 16px/1.5 system-ui;
+  margin: 0;
+}
+main {
+  max-width: 1150px;
+  margin: auto;
+  padding: 24px;
+}
+header,
+section {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+header {
+  justify-content: space-between;
+  align-items: center;
+}
+h1 {
+  font-size: clamp(30px, 5vw, 54px);
+  letter-spacing: -0.06em;
+  margin: 8px 0;
+}
+em,
+a {
+  color: #d4ff55;
+}
+section,
+aside,
+article,
+details {
+  background: #1a1b25;
+  border: 1px solid #393a48;
+  border-radius: 14px;
+  padding: 16px;
+  margin: 12px 0;
+}
+article section {
+  background: transparent;
+  padding: 10px 0;
+  border: 0;
+}
+label,
+small {
+  display: block;
+}
+label {
+  font-size: 0.88rem;
+  color: #d4d1dc;
+}
+input,
+select,
+textarea,
+button {
+  background: #242533;
+  border: 1px solid #505261;
+  color: white;
+  border-radius: 8px;
+  padding: 9px;
+  font: inherit;
+}
+input,
+select,
+textarea {
+  display: block;
+  max-width: 100%;
+}
+textarea {
+  width: 100%;
+}
+button,
+summary {
+  cursor: pointer;
+}
+button:hover,
+button.selected {
+  border-color: #d4ff55;
+}
+.primary {
+  background: #d4ff55;
+  color: #141518;
+  font-weight: 700;
+}
+button:disabled {
+  opacity: 0.55;
+}
+small,
+output {
+  color: #bdb9ce;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr);
+  gap: 16px;
+}
+aside button {
+  display: block;
+  width: 100%;
+  margin-bottom: 6px;
+}
+.frames {
+  display: flex;
+  gap: 12px;
+}
+.frames label {
+  min-width: 0;
+  flex: 1;
+}
+.frames img {
+  display: block;
+  max-width: 100%;
+  max-height: 180px;
+}
+video,
+canvas {
+  max-width: 100%;
+  max-height: 55vh;
+  display: block;
+}
+#status:not(:empty) {
+  position: sticky;
+  bottom: 0;
+  background: #343149;
+  padding: 12px;
+  border-radius: 8px;
+}
+[hidden] {
+  display: none !important;
+}
+@media (max-width: 700px) {
+  main {
+    padding: 10px;
+  }
+  .layout {
+    display: block;
+  }
+  #list {
+    display: flex;
+    overflow: auto;
+  }
+  #list button {
+    min-width: 90px;
+  }
+  .frames {
+    flex-wrap: wrap;
+  }
+}

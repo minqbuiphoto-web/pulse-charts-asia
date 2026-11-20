@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="vi">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Animation Studio 2D</title
+  ><link rel="stylesheet" href="style.css" />
+  <main>
+    <header>
+      <h1>Animation Studio <em>2D</em></h1>
+      <output id="saved"></output>
+    </header>
+    <section>
+      <label>Tên dự án<input id="title" /></label
+      ><label>Dự án<select id="projects"></select></label
+      ><button id="create">Dự án mới</button
+      ><label>Nhạc nền<input id="song" type="file" accept="audio/*" /></label
+      ><audio id="audio" controls></audio
+      ><label
+        >Khung hình<select id="aspect">
+          <option>16:9</option>
+          <option>9:16</option>
+        </select></label
+      >
+      <p id="suggest"></p>
+      <button id="plan">Chia thời lượng theo nhạc</button>
+    </section>
+    <details>
+      <summary>Kết nối AI</summary>
+      <label
+        >Khóa Replicate · tạo clip<input
+          type="password"
+          id="token"
+          autocomplete="off" /></label
+      ><a
+        href="https://replicate.com/account/api-tokens"
+        target="_blank"
+        rel="noreferrer"
+        >Lấy khóa Replicate</a
+      ><label
+        >Khóa Gemini · phân tích tranh<input
+          type="password"
+          id="vision"
+          autocomplete="off" /></label
+      ><a
+        href="https://aistudio.google.com/apikey"
+        target="_blank"
+        rel="noreferrer"
+        >Lấy khóa Gemini</a
+      ><small>Khóa chỉ dùng trong phiên đang mở.</small>
+    </details>
+    <div class="layout">
+      <aside>
+        <h2>Phân cảnh</h2>
+        <div id="list"></div>
+        <button id="add">+ Thêm cảnh</button>
+      </aside>
+      <article>
+        <h2 id="heading"></h2>
+        <section>
+          <label
+            >Chế độ<select id="mode">
+              <option value="one">Một ảnh</option>
+              <option value="two">Ảnh đầu và cuối</option>
+            </select></label
+          ><label
+            >Thời lượng cảnh (giây)<input
+              type="number"
+              id="duration"
+              min=".1"
+              step=".1" /></label
+          ><button id="up">↑ Lên trước</button
+          ><button id="down">↓ Xuống sau</button
+          ><button id="remove">Bỏ cảnh</button>
+        </section>
+        <div class="frames">
+          <label
+            >Ảnh đầu<img id="img1" alt="" /><input
+              id="first"
+              type="file"
+              accept="image/*" /></label
+          ><label id="endbox"
+            >Ảnh cuối<img id="img2" alt="" /><input
+              id="last"
+              type="file"
+              accept="image/*"
+          /></label>
+        </div>
+        <label
+          >Lời hát hoặc ý đồ của cảnh<textarea id="intent"></textarea></label
+        ><button id="analyze">Phân tích ảnh bằng Gemini</button
+        ><small
+          >Phí phân tích tính theo token và hạn mức của khóa Gemini.</small
+        >
+        <p id="analysis"></p>
+        <section>
+          <label>Cảm xúc<select id="mood"></select></label
+          ><label
+            >Cường độ<select id="strength">
+              <option>Nhẹ</option>
+              <option>Vừa</option>
+              <option>Mạnh</option>
+            </select></label
+          ><button id="compose">Gợi ý prompt</button>
+        </section>
+        <label
+          >Prompt tạo chuyển động<textarea id="prompt" rows="4"></textarea>
+        </label>
+        <section>
+          <label
+            >Model<select id="model">
+              <option value="main">Wan A14B Fast</option>
+              <option value="draft">Wan 5B Fast · nháp</option>
+            </select></label
+          ><label
+            >Độ phân giải<select id="resolution">
+              <option>480p</option>
+              <option>720p</option>
+            </select></label
+          ><label
+            >Kéo dài cảnh<select id="extend">
+              <option value="hold">Giữ khung cuối</option>
+              <option value="loop">Lặp chuyển động</option>
+            </select></label
+          >
+        </section>
+        <button class="primary" id="generate"></button
+        ><button id="resume">Kiểm tra tác vụ đang chạy</button>
+        <p id="job"></p>
+        <label>Phiên bản sử dụng<select id="take"></select></label
+        ><video id="clip" controls playsinline></video
+        ><a id="download" download="phan-canh.mp4">Tải clip đã chọn</a
+        ><button id="continueClip">Nối từ khung cuối</button>
+      </article>
+    </div>
+    <section>
+      <h2>Dựng toàn bài</h2>
+      <p id="total"></p>
+      <button id="batch">Tạo các cảnh chưa có clip</button
+      ><button id="preview">Xem bản dựng</button
+      ><button id="render">Xuất MV MP4</button><button id="stop">Dừng</button
+      ><output id="progress"></output><canvas id="canvas" hidden></canvas
+      ><a id="movie" hidden download="animation-studio.mp4">Tải MV đã xuất</a>
+    </section>
+    <p role="status" id="status"></p>
+  </main>
+  <script type="module" src="studio.js"></script>
+</html>
