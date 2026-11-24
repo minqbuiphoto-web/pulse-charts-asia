@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-23T12:48:43.425Z",
+  "generatedAt": "2026-11-24T13:45:37.251Z",
   "charts": [
     {
       "id": "kr-circle-digital",
@@ -562,7 +562,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-23T12:48:43.425Z"
+      "checkedAt": "2026-11-24T13:45:37.251Z"
     },
     {
       "id": "kr-circle-download",
@@ -1125,7 +1125,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-23T12:48:43.425Z"
+      "checkedAt": "2026-11-24T13:45:37.251Z"
     },
     {
       "id": "kr-ost-trending",
@@ -6122,7 +6122,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-23T12:48:43.425Z"
+      "checkedAt": "2026-11-24T13:45:37.251Z"
     },
     {
       "id": "cn-tme-uni",
@@ -6131,14 +6131,14 @@
       "market": "CN",
       "source": "Tencent Music Uni Chart",
       "sourceUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
-      "updatedAt": "2026-11-23T20:30:00+08:00",
+      "updatedAt": "2026-11-24T21:30:00+08:00",
       "syncWarning": "OFFICIAL TOP 10 · 第47期（11.23-11.29）. Nguồn công khai trả 10 vị trí; chỉ hiển thị các vị trí xác minh được, không chèn bài từ kỳ cũ.",
       "songs": [
         {
-          "title": "宿命之外",
-          "artist": "时代少年团",
+          "title": "Hope to Remain",
+          "artist": "严浩翔",
           "releaseDate": "CN",
-          "genre": "96.06 score",
+          "genre": "97.17 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 1,
@@ -6146,10 +6146,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hope to Remain",
-          "artist": "严浩翔",
+          "title": "宿命之外",
+          "artist": "时代少年团",
           "releaseDate": "CN",
-          "genre": "95.95 score",
+          "genre": "96.39 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 2,
@@ -6160,7 +6160,7 @@
           "title": "阴天也会有烦恼吗",
           "artist": "TF_ING穆祉丞",
           "releaseDate": "CN",
-          "genre": "94.40 score",
+          "genre": "95.34 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 3,
@@ -6168,10 +6168,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "一念焚心",
-          "artist": "周深",
+          "title": "不回头的人",
+          "artist": "梓渝",
           "releaseDate": "CN",
-          "genre": "91.41 score",
+          "genre": "95.18 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 4,
@@ -6179,10 +6179,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "那页夏天",
-          "artist": "王俊凯",
+          "title": "一念焚心",
+          "artist": "周深",
           "releaseDate": "CN",
-          "genre": "90.97 score",
+          "genre": "95.17 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 5,
@@ -6190,10 +6190,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "想你就写信",
-          "artist": "郝熠然",
+          "title": "那页夏天",
+          "artist": "王俊凯",
           "releaseDate": "CN",
-          "genre": "90.59 score",
+          "genre": "93.19 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 6,
@@ -6201,10 +6201,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "不回头的人",
-          "artist": "梓渝",
+          "title": "她",
+          "artist": "刘宇宁",
           "releaseDate": "CN",
-          "genre": "90.50 score",
+          "genre": "92.74 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 7,
@@ -6212,10 +6212,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "她",
-          "artist": "刘宇宁",
+          "title": "Hot Shot",
+          "artist": "喻言",
           "releaseDate": "CN",
-          "genre": "90.34 score",
+          "genre": "92.44 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 8,
@@ -6223,10 +6223,10 @@
           "artworkUrl": ""
         },
         {
-          "title": "Hot Shot",
-          "artist": "喻言",
+          "title": "想你就写信",
+          "artist": "郝熠然",
           "releaseDate": "CN",
-          "genre": "90.19 score",
+          "genre": "92.32 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 9,
@@ -6237,7 +6237,7 @@
           "title": "慌啥子嘛",
           "artist": "赵本山",
           "releaseDate": "CN",
-          "genre": "90.07 score",
+          "genre": "92.06 score",
           "url": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "artistUrl": "https://yobang.tencentmusic.com/chart/uni-chart/rankList/",
           "rank": 10,
@@ -6245,7 +6245,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-23T12:48:43.425Z"
+      "checkedAt": "2026-11-24T13:45:37.251Z"
     },
     {
       "id": "cn-tme-wave",
@@ -6478,7 +6478,7 @@
           "artworkUrl": ""
         }
       ],
-      "checkedAt": "2026-11-23T12:48:43.425Z"
+      "checkedAt": "2026-11-24T13:45:37.251Z"
     },
     {
       "id": "cn-ost-trending",
