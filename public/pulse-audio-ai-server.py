@@ -1084,7 +1084,10 @@ def karaoke_secondary(decoded, work):
     except OSError:
         shutil.copy2(binary, alias)
     env = dict(os.environ, PATH=str(tools_dir) + os.pathsep + os.environ.get("PATH", ""))
-    script = ("import runpy,sys,json;from pathlib import Path;"
+    script = ("import runpy,sys,json,inspect,librosa;from pathlib import Path;"
+              "duration=librosa.get_duration;"
+              "librosa.get_duration=(lambda *a,filename=None,**kw: duration(*a,**({'path':filename} if filename else {}),**kw)) "
+              "if 'filename' not in inspect.signature(duration).parameters else duration;"
               "module=runpy.run_path(sys.argv[1]);"
               "path,name=module['separate_instrumental'](Path(sys.argv[2]),Path(sys.argv[3]));"
               "Path(sys.argv[4]).write_text(json.dumps([str(path),name]),encoding='utf8')")
