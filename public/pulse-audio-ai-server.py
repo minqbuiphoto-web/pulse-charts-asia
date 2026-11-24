@@ -962,6 +962,162 @@ async def separate(background_tasks: BackgroundTasks, file: UploadFile = File(..
     )
 
 
+def karaoke_model_assets():
+    import urllib.request
+    directory = Path(__file__).resolve().parent / "models" / "karaoke-large-v2"
+    directory.mkdir(parents=True, exist_ok=True)
+    base = "https://huggingface.co/pcunwa/BS-Roformer-Large-Inst/resolve/94ea5d723ef7aceeeb211472a7bb42ad6ce4ee0d/"
+    for name, checksum in {
+        "bs_large_v2_inst.ckpt": "09251ab8b5bb892414a6ab8aa80a1be30c17852d5e7f4e76943610de049e4bc4",
+        "bs_roformer.py": "fc4a907999e151bc8272b62e7829757ac4384bfccd4aae7dff6ff961a9d1af57",
+        "config.yaml": "85d10906007df21ee48dbb86faa09205609274eb38ea224dce767e2844d0a934",
+    }.items():
+        target = directory / name
+        def valid(path):
+            if not path.is_file():
+                return False
+            with path.open("rb") as stream:
+                digest = hashlib.sha256()
+                for block in iter(lambda: stream.read(1024 * 1024), b""):
+                    digest.update(block)
+                return digest.hexdigest() == checksum
+        if valid(target):
+            continue
+        with tempfile.NamedTemporaryFile(dir=directory, delete=False) as stream:
+            partial = Path(stream.name)
+        try:
+            with urllib.request.urlopen(base + name, timeout=120) as response, partial.open("wb") as output:
+                shutil.copyfileobj(response, output)
+            if not valid(partial):
+                raise RuntimeError("Model tải chưa đầy đủ.")
+            partial.replace(target)
+        finally:
+            partial.unlink(missing_ok=True)
+    return directory
+
+
+def karaoke_primary(mix, rate):
+    import numpy as np
+    import torch
+    import yaml
+    directory = karaoke_model_assets()
+    config = yaml.safe_load((directory / "config.yaml").read_text().replace("!!python/tuple", ""))["model"]
+    source = (directory / "bs_roformer.py").read_text(encoding="utf8").replace(
+        "from models.bs_roformer.attend import Attend",
+        "from audio_separator.separator.uvr_lib_v5.roformer.attend import Attend")
+    namespace = {"__name__": __name__}
+    exec(compile(source, str(directory / "bs_roformer.py"), "exec"), namespace)
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    for key in ("freqs_per_bands", "multi_stft_resolutions_window_sizes"):
+        config[key] = tuple(config[key])
+    net = namespace["BSRoformer"](**config)
+    state = torch.load(directory / "bs_large_v2_inst.ckpt", map_location="cpu", weights_only=True)
+    net.load_state_dict(state.get("state_dict", state))
+    del state
+    net.to(device).eval()
+    # Overlap and taper both ends to avoid discontinuities between estimates.
+    chunk = 441344
+    hop = chunk // 2
+    pad = hop
+    padded = np.pad(mix, ((pad, pad), (0, 0)), mode="reflect")
+    output = np.zeros_like(padded)
+    weights = np.zeros(len(padded), np.float32)
+    window = np.hanning(chunk).astype(np.float32)
+    with torch.inference_mode():
+        for start in range(0, len(padded)-pad, hop):
+            part = padded[start:start+chunk]
+            audio = np.pad(part, ((0, chunk-len(part)), (0, 0))).T.copy()
+            pred = net(torch.from_numpy(audio)[None].to(device)).squeeze(0).cpu().numpy().reshape(2,-1).T
+            length = min(len(part), len(pred))
+            output[start:start+length] += pred[:length] * window[:length,None]
+            weights[start:start+length] += window[:length]
+    return output[pad:pad+len(mix)] / np.maximum(weights[pad:pad+len(mix),None], 1e-7)
+
+
+def karaoke_finish(mix, base, alternate, rate, target):
+    import numpy as np
+    import soundfile as sf
+    from scipy.signal import resample_poly
+    # Estimate level from music-dominant windows only. Use a single gain.
+    step = rate // 2
+    anchors, centers, blends = [], [], []
+    for start in range(0, len(base), step):
+        m, b = mix[start:start+step], base[start:start+step]
+        norm = lambda x: float(np.sqrt(np.mean(x*x) + 1e-12))
+        voice = m-b
+        if norm(b) > .02 and norm(voice) < .18*norm(m):
+            anchors.append(norm(m)/norm(b))
+        blend = 0.
+        if alternate is not None:
+            a = alternate[start:start+step]
+            diff = b-a
+            # Prefer the alternate only when what it removes resembles the
+            # estimated vocal and both estimates retain similar backing energy.
+            corr = float(np.mean(diff*voice))/(norm(diff)*norm(voice))
+            if norm(voice) > .02 and .84 < norm(a)/norm(b) < 1.08 and norm(diff) < .4*norm(b):
+                blend = float(np.clip((corr-.35)*2, 0, .85))
+        centers.append(start+(len(b)-1)/2)
+        blends.append(blend)
+    if alternate is not None:
+        for start in range(0,len(base),rate):
+            end = min(start+rate,len(base))
+            weight = np.interp(np.arange(start,end), centers, blends)[:,None]
+            base[start:end] += weight*(alternate[start:end]-base[start:end])
+    peak = 0.
+    for start in range(0,len(base),rate):
+        region = base[max(0,start-128):min(len(base),start+rate+128)]
+        peak = max(peak,float(np.max(np.abs(resample_poly(region,4,1,axis=0)))))
+    gain = min(np.clip(np.median(anchors), .8, 1.4) if anchors else 1., 10**(-1/20)/max(peak,1e-8))
+    sf.write(target, base*gain, rate, subtype="PCM_24")
+
+
+def render_karaoke(source, work):
+    import numpy as np
+    import soundfile as sf
+    rate = 44100
+    decoded = work / "karaoke-input.wav"
+    def decode(path, output):
+        subprocess.run([ffmpeg_executable(), "-y", "-loglevel", "error", "-i", str(path), "-vn",
+                        "-ar", str(rate), "-ac", "2", "-c:a", "pcm_f32le", str(output)], check=True)
+        return sf.read(output, dtype="float32", always_2d=True)[0]
+    mix = decode(source, decoded)
+    if len(mix)<512:
+        raise ValueError("File nhạc quá ngắn.")
+    base = karaoke_primary(mix,rate)
+    alternate = None
+    engine = "BS-RoFormer Large Inst"
+    try:
+        path, name = separate_instrumental(decoded,work)
+        candidate = decode(path,work/"karaoke-alt.wav")
+        if len(candidate)>=len(mix) and np.isfinite(candidate).all():
+            alternate = candidate[:len(mix)]
+            engine += " + " + ("Demucs" if "Demucs" in name else "UVR HQ3")
+    except Exception:
+        logging.exception("Audio Lab: secondary estimate unavailable")
+    target = work / "karaoke-beat.wav"
+    karaoke_finish(mix,base,alternate,rate,target)
+    return target, engine
+
+
+@app.post("/audio-lab/karaoke-beat")
+async def audio_lab_karaoke(background_tasks: BackgroundTasks, file: UploadFile = File(...)):
+    import asyncio
+    work = Path(tempfile.mkdtemp(prefix="pulse-karaoke-"))
+    try:
+        source = save_upload(file,work)
+        await write_upload(file,source)
+        beat, engine = await asyncio.to_thread(render_karaoke, source, work)
+        background_tasks.add_task(shutil.rmtree,work,True)
+        return FileResponse(beat,media_type="audio/wav",filename="karaoke-beat.wav",
+                            headers={"X-Pulse-Separation-Engine":engine},background=background_tasks)
+    except Exception as error:
+        shutil.rmtree(work,ignore_errors=True)
+        if isinstance(error,HTTPException):
+            raise
+        logging.exception("Audio Lab karaoke failed")
+        raise HTTPException(500,"Chưa tạo được beat. Kiểm tra kết nối tải model, bộ nhớ và nhật ký bộ xử lý.") from error
+
+
 def clamp_mix_value(value: float, minimum: float, maximum: float) -> float:
     try:
         return max(minimum, min(maximum, float(value)))

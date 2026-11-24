@@ -36,7 +36,7 @@ copy /Y "%SERVER_SOURCE%" "%ENGINE_DIR%\server.py" >nul
 if not exist "%ENGINE_DIR%\venv\Scripts\python.exe" python -m venv "%ENGINE_DIR%\venv"
 call "%ENGINE_DIR%\venv\Scripts\activate.bat"
 python -m pip install --upgrade pip
-python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg pypinyin "audio-separator[cpu]"
+python -m pip install demucs faster-whisper fastapi uvicorn python-multipart imageio-ffmpeg pypinyin audioread "audio-separator[cpu]"
 
 echo Dang cai Matchering trong moi truong rieng...
 python -m venv "%ENGINE_DIR%\matchering-venv"

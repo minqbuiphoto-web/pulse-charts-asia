@@ -2,7 +2,7 @@
 
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
-type BeatMode = "ai" | "quick";
+
 import MixEnhancer from "./mix-enhancer";
 type AudioResult = { url: string; name: string; details: string };
 
@@ -18,7 +18,7 @@ export default function AudioProTools() {
 
 function BeatExtractor() {
   const [file, setFile] = useState<File | null>(null);
-  const [mode, setMode] = useState<BeatMode>("ai");
+
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState("Chưa chọn bản nhạc.");
   const [result, setResult] = useState<AudioResult | null>(null);
@@ -28,6 +28,7 @@ function BeatExtractor() {
 
   const choose = (next?: File) => {
     clearResult(resultUrl, setResult);
+    setFile(null);
     if (!next) return;
     if (!isAudio(next)) { setStatus("Định dạng này chưa được nhận diện là audio."); return; }
     if (next.size > 500 * 1024 * 1024) { setStatus("File vượt 500 MB. Hãy dùng WAV/MP3 ngắn hơn."); return; }
@@ -40,24 +41,8 @@ function BeatExtractor() {
     setBusy(true);
     clearResult(resultUrl, setResult);
     try {
-      let blob: Blob;
-      let source: string;
-      if (mode === "ai") {
-        setStatus("Đang chạy Ultimate Vocal Remover · Inst HQ 3 trên máy…");
-        try {
-          const separated = await separateWithLocalAI(file);
-          blob = separated.blob;
-          source = separated.engine.toUpperCase();
-        } catch {
-          setStatus("AI local chưa chạy — đang tự chuyển sang Beat Draft trên thiết bị…");
-          blob = await createQuickBeat(file);
-          source = "BEAT DRAFT · CENTER VOCAL REDUCTION";
-        }
-      } else {
-        setStatus("Đang giảm vocal và giữ lại phần beat…");
-        blob = await createQuickBeat(file);
-        source = "BEAT DRAFT · CENTER VOCAL REDUCTION";
-      }
+      setStatus("Đang tách nhạc nền, kiểm tra phần còn giọng và cân mức xuất WAV…");
+      const { blob, engine: source } = await separateWithLocalAI(file);
       const url = URL.createObjectURL(blob);
       resultUrl.current = url;
       const name = `${baseName(file.name)}_instrumental_beat.wav`;
@@ -69,60 +54,27 @@ function BeatExtractor() {
   };
 
   return <article className="audio-pro-card beat-card">
-    <header><span>03</span><div><small>BEAT EXTRACTOR</small><h2>Tách giọng, lấy beat</h2><p>AI stem cho chất lượng cao; Beat Draft là phương án miễn phí chạy ngay trong trình duyệt.</p></div><b>FREE-FIRST</b></header>
-    <div className="audio-mode-tabs" role="group" aria-label="Chọn chất lượng tách beat">
-      <button className={mode === "ai" ? "active" : ""} onClick={() => setMode("ai")}><b>AI STUDIO</b><small>UVR Inst HQ 3 · chất lượng cao</small></button>
-      <button className={mode === "quick" ? "active" : ""} onClick={() => setMode("quick")}><b>BEAT DRAFT</b><small>Chạy ngay · không cài đặt</small></button>
-    </div>
-    <label className="pro-upload">NHẠC CÓ GIỌNG HÁT<input type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm" onChange={(event:ChangeEvent<HTMLInputElement>) => choose(event.target.files?.[0])}/><b>{file?.name ?? "Chọn WAV / MP3 / M4A"}</b><span>{file ? formatBytes(file.size) : "Audio không được tải lên máy chủ"}</span></label>
-    {mode === "ai" ? <div className="ai-local-box"><div><i/> <b>AI LOCAL ENGINE</b><span>Ưu tiên UVR Inst HQ 3; nếu UVR lỗi, hệ thống tự chuyển sang Demucs.</span></div><details><summary>CÀI ULTIMATE VOCAL REMOVER MIỄN PHÍ</summary><p>Tải hai file dưới đây vào cùng một thư mục, rồi chạy file cài đặt một lần. Model AI chạy trên máy và không gửi bài hát lên mạng.</p><div><a href="/install-pulse-audio-ai.cmd" download>CÀI AI LOCAL .CMD</a><a href="/pulse-audio-ai-server.py" download>ENGINE .PY</a></div></details></div> : <p className="quality-note">Beat Draft giảm âm thanh nằm giữa stereo và giữ lại bass trung tâm. Vocal có reverb hoặc lệch kênh có thể vẫn còn.</p>}
-    <button className="pro-run" disabled={!file || busy} onClick={run}>{busy ? "ĐANG TÁCH BEAT…" : "TÁCH GIỌNG & XUẤT BEAT"}<span>↗</span></button>
+    <header><span>03</span><div><small>BEAT EXTRACTOR</small><h2>Tạo beat karaoke</h2><p>Tách giọng, giữ nhạc nền và xuất WAV stereo 24-bit.</p></div></header>
+    <label className="pro-upload">NHẠC CÓ GIỌNG HÁT<input disabled={busy} type="file" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac,.webm" onChange={(event:ChangeEvent<HTMLInputElement>) => choose(event.target.files?.[0])}/><b>{file?.name ?? "Chọn WAV / MP3 / M4A"}</b><span>{file ? formatBytes(file.size) : "Audio không được tải lên máy chủ"}</span></label>
+    <details className="ai-local-box"><summary>Bộ xử lý trên máy</summary><p>Lần đầu cần tải model. Nếu đã cài Pulse Audio AI, hãy cập nhật để dùng chức năng karaoke.</p><a href="/update-pulse-audio-ai.cmd" download>Cập nhật bộ xử lý</a> · <a href="/install-pulse-audio-ai.cmd" download>Cài lần đầu</a> · <a href="/pulse-audio-ai-server.py" download>Tải tệp engine cho bộ cài</a></details>
+    <button className="pro-run" disabled={!file || busy} onClick={run}>{busy ? "ĐANG TÁCH BEAT…" : "TẠO BEAT KARAOKE"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
     {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI FILE BEAT WAV ↓</a></div> : null}
   </article>;
 }
 
 async function separateWithLocalAI(file:File) {
-  const controller = new AbortController();
-  const timer = window.setTimeout(() => controller.abort(), 20 * 60 * 1000);
-  try {
-    const form = new FormData();
-    form.append("file", file, file.name);
-    const response = await fetch(`${LOCAL_ENGINE}/separate`, { method:"POST", body:form, signal:controller.signal });
-    if (!response.ok) throw new Error("AI local chưa sẵn sàng.");
-    return {
-      blob: await response.blob(),
-      engine: response.headers.get("X-Pulse-Separation-Engine") || "Ultimate Vocal Remover · Inst HQ 3",
-    };
-  } finally { window.clearTimeout(timer); }
+  const form = new FormData();
+  form.append("file", file, file.name);
+  const response = await fetch(LOCAL_ENGINE + "/audio-lab/karaoke-beat", { method:"POST", body:form })
+    .catch(() => { throw new Error("Chưa kết nối được bộ xử lý. Hãy mở Pulse Audio AI trên máy."); });
+  if (response.status === 404) throw new Error("Hãy cập nhật bộ xử lý để tạo beat karaoke.");
+  if (!response.ok) throw new Error((await response.json().catch(() => ({}))).detail || "Bộ xử lý chưa tạo được beat.");
+  return { blob:await response.blob(), engine:response.headers.get("X-Pulse-Separation-Engine") || "Karaoke AI" };
 }
 
-async function createQuickBeat(file:File) {
-  const context = new AudioContext();
-  try {
-    const buffer = await context.decodeAudioData(await file.arrayBuffer());
-    if (buffer.numberOfChannels < 2) throw new Error("Beat Draft cần file stereo. Hãy dùng AI Studio cho file mono.");
-    const left = buffer.getChannelData(0), right = buffer.getChannelData(1);
-    const outLeft = new Float32Array(buffer.length), outRight = new Float32Array(buffer.length);
-    const alpha = 1 - Math.exp(-2 * Math.PI * 180 / buffer.sampleRate);
-    let low = 0;
-    for (let index=0; index<buffer.length; index++) {
-      const mid = (left[index] + right[index]) * .5;
-      const side = (left[index] - right[index]) * .5;
-      low += alpha * (mid - low);
-      outLeft[index] = clamp(side * 1.35 + low * .9);
-      outRight[index] = clamp(-side * 1.35 + low * .9);
-    }
-    normalizeChannels([outLeft,outRight], .891);
-    return encodeWav([outLeft,outRight],buffer.sampleRate);
-  } finally { await context.close().catch(() => undefined); }
-}
-
-function normalizeChannels(channels:Float32Array[],target:number){let peak=0;for(const channel of channels)for(let index=0;index<channel.length;index++)peak=Math.max(peak,Math.abs(channel[index]));if(peak<1e-7)return;const gain=Math.min(8,target/peak);for(const channel of channels)for(let index=0;index<channel.length;index++)channel[index]=clamp(channel[index]*gain);}
-function encodeWav(channels:Float32Array[],sampleRate:number){const frames=channels[0].length,count=channels.length,align=count*2,buffer=new ArrayBuffer(44+frames*align),view=new DataView(buffer),write=(offset:number,value:string)=>{for(let i=0;i<value.length;i++)view.setUint8(offset+i,value.charCodeAt(i));};write(0,"RIFF");view.setUint32(4,36+frames*align,true);write(8,"WAVE");write(12,"fmt ");view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,count,true);view.setUint32(24,sampleRate,true);view.setUint32(28,sampleRate*align,true);view.setUint16(32,align,true);view.setUint16(34,16,true);write(36,"data");view.setUint32(40,frames*align,true);let offset=44;for(let frame=0;frame<frames;frame++)for(let channel=0;channel<count;channel++){const sample=clamp(channels[channel][frame]||0);view.setInt16(offset,sample<0?sample*32768:sample*32767,true);offset+=2;}return new Blob([buffer],{type:"audio/wav"});}
 function isAudio(file:File){return file.type.startsWith("audio/")||AUDIO_PATTERN.test(file.name);}
 function clearResult(ref:React.MutableRefObject<string>,setResult:React.Dispatch<React.SetStateAction<AudioResult|null>>){if(ref.current)URL.revokeObjectURL(ref.current);ref.current="";setResult(null);}
 function friendlyAudioError(message:string){return /decode|encoding/i.test(message)?"Không giải mã được codec này. Hãy thử WAV hoặc MP3.":message;}
 function baseName(name:string){return name.replace(/\.[^.]+$/,"").replace(/[\\/:*?"<>|]+/g,"-").trim()||"pulse-audio";}
 function formatBytes(value:number){const units=["B","KB","MB","GB"];let unit=0;while(value>=1024&&unit<units.length-1){value/=1024;unit++;}return `${value.toLocaleString("vi-VN",{maximumFractionDigits:2})} ${units[unit]}`;}
-function clamp(value:number){return Math.max(-1,Math.min(1,value));}

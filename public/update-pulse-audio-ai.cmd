@@ -11,6 +11,9 @@ echo Dang cap nhat bo dung MV: sua kiem tra sai so khung hinh va giu font dong b
 powershell -NoProfile -ExecutionPolicy Bypass -Command "try { (New-Object Net.WebClient).DownloadFile('%SERVER_URL%','%SERVER_NEW%'); if((Get-Item '%SERVER_NEW%').Length -lt 10000){exit 2}; exit 0 } catch { exit 1 }"
 if errorlevel 1 goto download_failed
 
+"%ENGINE_DIR%\venv\Scripts\python.exe" -m pip install audioread
+if errorlevel 1 goto download_failed
+
 if exist "%SERVER_FILE%" copy /Y "%SERVER_FILE%" "%ENGINE_DIR%\server.py.before-mv-tail-fix.bak" >nul
 for /f "tokens=5" %%P in ('netstat -ano ^| findstr /R /C:":8765 .*LISTENING"') do taskkill /PID %%P /F >nul 2>nul
 powershell -NoProfile -Command "Start-Sleep -Seconds 2"
