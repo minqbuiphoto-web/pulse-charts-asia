@@ -1071,6 +1071,30 @@ def karaoke_finish(mix, base, alternate, rate, target):
     sf.write(target, base*gain, rate, subtype="PCM_24")
 
 
+def karaoke_secondary(decoded, work):
+    import os
+    # UVR probes "ffmpeg" by name. Scope the bundled binary and its PATH to
+    # this child so other local-engine requests retain their environment.
+    binary = Path(ffmpeg_executable())
+    tools_dir = work / "karaoke-tools"
+    tools_dir.mkdir()
+    alias = tools_dir / ("ffmpeg.exe" if os.name == "nt" else "ffmpeg")
+    try:
+        os.link(binary, alias)
+    except OSError:
+        shutil.copy2(binary, alias)
+    env = dict(os.environ, PATH=str(tools_dir) + os.pathsep + os.environ.get("PATH", ""))
+    script = ("import runpy,sys,json;from pathlib import Path;"
+              "module=runpy.run_path(sys.argv[1]);"
+              "path,name=module['separate_instrumental'](Path(sys.argv[2]),Path(sys.argv[3]));"
+              "Path(sys.argv[4]).write_text(json.dumps([str(path),name]),encoding='utf8')")
+    result = work / "karaoke-secondary.json"
+    subprocess.run([sys.executable,"-c",script,str(Path(__file__).resolve()),str(decoded),str(work),str(result)],
+                   env=env,check=True,timeout=7200)
+    path, name = json.loads(result.read_text(encoding="utf8"))
+    return Path(path), name
+
+
 def render_karaoke(source, work):
     import numpy as np
     import soundfile as sf
@@ -1087,7 +1111,7 @@ def render_karaoke(source, work):
     alternate = None
     engine = "BS-RoFormer Large Inst"
     try:
-        path, name = separate_instrumental(decoded,work)
+        path, name = karaoke_secondary(decoded,work)
         candidate = decode(path,work/"karaoke-alt.wav")
         if len(candidate)>=len(mix) and np.isfinite(candidate).all():
             alternate = candidate[:len(mix)]
