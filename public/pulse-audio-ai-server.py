@@ -1034,35 +1034,55 @@ def karaoke_primary(mix, rate):
     return output[pad:pad+len(mix)] / np.maximum(weights[pad:pad+len(mix),None], 1e-7)
 
 
+def restore_karaoke_backing(mix, base, alternate):
+    """Lift shared instrumental detail with a stereo-linked time-frequency mask."""
+    import numpy as np
+    from scipy.fft import rfft, irfft
+    from scipy.ndimage import uniform_filter
+    size, hop = 2048, 512
+    # sqrt-Hann analysis/synthesis with four overlapping windows sums to two.
+    window = np.sqrt(np.hanning(size + 1)[:-1]).astype(np.float32)
+    restored = base.copy()
+    for first in range(-size + hop, len(base), 64 * hop):
+        starts = np.arange(first, min(first + 64 * hop, len(base)), hop)
+        left, right = max(0, first), min(len(base), starts[-1] + size)
+
+        def spectrum(track):
+            section = np.pad(track[left:right], ((left-first, starts[-1]+size-right), (0, 0)))
+            frames = np.lib.stride_tricks.sliding_window_view(section, size, axis=0)[::hop]
+            return rfft(frames * window, axis=-1)
+
+        backing, other, original = map(spectrum, (base, alternate, mix))
+        def power(z):
+            return np.sum(np.abs(z)**2, axis=1)
+        quiet = 1e-10
+        b, a, m = (np.sqrt(power(z) + quiet) for z in (backing, other, original))
+        agreement = np.real((backing.conj()*other).sum(axis=1)) / (b*a)
+        # Limit recovery where the primary detects little backing relative to the mix.
+        support = np.clip((b/m - .04)/.24, 0, 1)
+        gain = np.clip(np.minimum(a, m)/b - 1, 0, 1.5)
+        gain *= support * np.clip((agreement-.55)/.45, 0, 1)
+        gain = uniform_filter(gain, size=(3, 3), mode="nearest") * .8
+        delta = irfft(backing * gain[:, None, :], axis=-1) * window * .5
+        for start, frame in zip(starts, delta):
+            lo, hi = max(0, start), min(len(base), start + size)
+            restored[lo:hi] += frame[:, lo-start:hi-start].T
+    return restored
+
+
 def karaoke_finish(mix, base, alternate, rate, target):
     import numpy as np
     import soundfile as sf
     from scipy.signal import resample_poly
-    # Estimate level from music-dominant windows only. Use a single gain.
     step = rate // 2
-    anchors, centers, blends = [], [], []
+    anchors = []
     for start in range(0, len(base), step):
         m, b = mix[start:start+step], base[start:start+step]
         norm = lambda x: float(np.sqrt(np.mean(x*x) + 1e-12))
-        voice = m-b
-        if norm(b) > .02 and norm(voice) < .18*norm(m):
+        if norm(b) > .02 and norm(m-b) < .18*norm(m):
             anchors.append(norm(m)/norm(b))
-        blend = 0.
-        if alternate is not None:
-            a = alternate[start:start+step]
-            diff = b-a
-            # Prefer the alternate only when what it removes resembles the
-            # estimated vocal and both estimates retain similar backing energy.
-            corr = float(np.mean(diff*voice))/(norm(diff)*norm(voice))
-            if norm(voice) > .02 and .84 < norm(a)/norm(b) < 1.08 and norm(diff) < .4*norm(b):
-                blend = float(np.clip((corr-.35)*2, 0, .85))
-        centers.append(start+(len(b)-1)/2)
-        blends.append(blend)
     if alternate is not None:
-        for start in range(0,len(base),rate):
-            end = min(start+rate,len(base))
-            weight = np.interp(np.arange(start,end), centers, blends)[:,None]
-            base[start:end] += weight*(alternate[start:end]-base[start:end])
+        base = restore_karaoke_backing(mix, base, alternate)
     peak = 0.
     for start in range(0,len(base),rate):
         region = base[max(0,start-128):min(len(base),start+rate+128)]
