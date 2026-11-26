@@ -1165,6 +1165,107 @@ async def audio_lab_karaoke(background_tasks: BackgroundTasks, file: UploadFile 
         raise HTTPException(500,"Chưa tạo được beat. Kiểm tra kết nối tải model, bộ nhớ và nhật ký bộ xử lý.") from error
 
 
+def reduce_guide_phrase(audio, rate, strength):
+    """Follow a prominent pitched line and attenuate its centered harmonics."""
+    import numpy as np
+    from scipy.ndimage import median_filter, gaussian_filter
+    from scipy.signal import stft, istft
+    size, hop = 4096, 512
+    frames = len(audio)
+    if frames < size:
+        audio = np.pad(audio, ((0, size-frames), (0, 0)))
+    def spectrum(values):
+        return stft(values, rate, nperseg=size, noverlap=size-hop)[2]
+    center = spectrum(audio.mean(axis=1))
+    sides = spectrum((audio[:, 0]-audio[:, 1])*.5)
+    magnitude = np.abs(center)
+    floor = median_filter(magnitude, (13, 1))
+    tone = np.maximum(magnitude-floor, 0) * np.clip(1-np.abs(sides)/(magnitude+1e-8), 0, 1)
+    notes = np.arange(47, 91, .5)
+    pitch = 440 * 2**((notes-69)/12)
+    scores = np.zeros((len(notes), center.shape[1]))
+    for harmonic in range(1, 8):
+        bins = np.rint(pitch*harmonic*size/rate).astype(int)
+        scores += np.maximum.reduce([tone[bins+i] for i in (-1, 0, 1)]) / np.sqrt(harmonic)
+    root = tone[np.rint(pitch*size/rate).astype(int)]
+    scores *= np.clip(6*root/(scores+1e-8), .2, 1)
+    scores /= np.maximum(scores.max(axis=0), .25*scores.max(axis=0).mean())+1e-8
+    cost = np.minimum(abs(notes[:, None]-notes), 10)*.2
+    previous = scores[:, 0]
+    parents = np.zeros(scores.shape, dtype=np.int16)
+    for i in range(1, scores.shape[1]):
+        transitions = previous[:, None]-cost
+        parents[:, i] = transitions.argmax(axis=0)
+        previous = transitions.max(axis=0)+scores[:, i]
+    path = np.empty(scores.shape[1], dtype=int)
+    path[-1] = previous.argmax()
+    for i in range(len(path)-1, 0, -1):
+        path[i-1] = parents[path[i], i]
+    frequencies = np.arange(len(center))[:, None]*rate/size
+    mask = np.zeros_like(magnitude)
+    for harmonic in range(1, 14):
+        line = pitch[path]*harmonic
+        offset = (frequencies-line)/np.maximum(15, line*.021)
+        np.maximum(mask, np.exp(-.5*offset**2), out=mask)
+    mask *= scores[path, np.arange(len(path))]*tone/(magnitude+1e-8)
+    cut = center*gaussian_filter(mask, (.4, .8))*strength
+    removed = istft(cut, rate, nperseg=size, noverlap=size-hop)[1][:frames]
+    return audio[:frames]-removed[:, None]
+
+
+def render_guide_beat(source, work, start, strength, preview):
+    import numpy as np
+    import soundfile as sf
+    rate = 44100
+    decoded, target = work/"guide-input.wav", work/"guide-result.wav"
+    subprocess.run([ffmpeg_executable(), "-y", "-loglevel", "error", "-i", str(source), "-vn",
+                    "-ar", str(rate), "-ac", "2", "-c:a", "pcm_f32le", str(decoded)], check=True)
+    with sf.SoundFile(decoded) as track:
+        first = round(start*rate)
+        if first >= len(track):
+            raise HTTPException(400, "Mốc bắt đầu nằm ngoài thời lượng bài.")
+        end = min(first+12*rate, len(track)) if preview else len(track)
+        with sf.SoundFile(target, "w", rate, 2, subtype="PCM_24") as out:
+            if not preview:
+                while track.tell() < first:
+                    out.write(track.read(min(rate*8, first-track.tell()), dtype="float32"))
+            for pos in range(first, end, 8*rate):
+                lo = max(0, pos-rate)
+                hi = min(end, pos+8*rate)
+                track.seek(lo)
+                raw = track.read(min(len(track), pos+9*rate)-lo, dtype="float32")
+                y = reduce_guide_phrase(raw, rate, strength/100)[pos-lo:hi-lo]
+                dry = raw[pos-lo:hi-lo]
+                # Ramp at entry and constrain the subtraction to available PCM headroom.
+                delta = y-dry
+                ramp = np.minimum((np.arange(hi-pos)+pos-first)/(rate*.04), 1)[:, None]
+                room = np.where(delta > 0, 1-2**-23-dry, 1+dry)
+                scale = np.clip(room/(abs(delta)+1e-12), 0, 1).min(axis=1, keepdims=True)
+                out.write(dry+delta*np.minimum(scale, ramp))
+    return target
+
+
+@app.post("/audio-lab/guide-beat")
+async def audio_lab_guide_beat(background_tasks: BackgroundTasks, file: UploadFile = File(...),
+                               start: float = Form(0, ge=0, le=86400),
+                               strength: int = Form(55, ge=0, le=100), preview: bool = Form(False)):
+    import asyncio
+    work = Path(tempfile.mkdtemp(prefix="pulse-guide-"))
+    try:
+        source = save_upload(file, work)
+        await write_upload(file, source)
+        target = await asyncio.to_thread(render_guide_beat, source, work, start, strength, preview)
+        background_tasks.add_task(shutil.rmtree, work, True)
+        return FileResponse(target, media_type="audio/wav", filename="guide-beat.wav", background=background_tasks)
+    except Exception as error:
+        shutil.rmtree(work, ignore_errors=True)
+        if isinstance(error, HTTPException):
+            raise
+        logging.exception("Audio Lab guide-beat failed")
+        raise HTTPException(500, "Không xử lý được beat có nhạc cụ dẫn.") from error
+
+
+
 def clamp_mix_value(value: float, minimum: float, maximum: float) -> float:
     try:
         return max(minimum, min(maximum, float(value)))
