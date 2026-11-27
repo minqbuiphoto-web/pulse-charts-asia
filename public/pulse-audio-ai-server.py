@@ -962,16 +962,27 @@ async def separate(background_tasks: BackgroundTasks, file: UploadFile = File(..
     )
 
 
-def karaoke_model_assets():
+def karaoke_model_assets(hyperace):
     import urllib.request
-    directory = Path(__file__).resolve().parent / "models" / "karaoke-large-v2"
+    if hyperace:
+        folder = "karaoke-hyperace-v2"
+        base = "https://huggingface.co/pcunwa/BS-Roformer-HyperACE/resolve/5b1f8283125d5e4a3614d0e3635a636e09c84059/v2_inst/"
+        files = {
+            "bs_roformer_inst_hyperacev2.ckpt": "4d61178ef966d2b4e9ad456ffbbc6fd5b2828df07a7af32931142c1a5ff1fe6f",
+            "bs_roformer.py": "48571e20d70ea8f245cffc6afbfa279f62042e7ba16fbaa3fe43dd2cbc25e1db",
+            "config.yaml": "85d10906007df21ee48dbb86faa09205609274eb38ea224dce767e2844d0a934",
+        }
+    else:
+        folder = "karaoke-large-v2"
+        base = "https://huggingface.co/pcunwa/BS-Roformer-Large-Inst/resolve/94ea5d723ef7aceeeb211472a7bb42ad6ce4ee0d/"
+        files = {
+            "bs_large_v2_inst.ckpt": "09251ab8b5bb892414a6ab8aa80a1be30c17852d5e7f4e76943610de049e4bc4",
+            "bs_roformer.py": "fc4a907999e151bc8272b62e7829757ac4384bfccd4aae7dff6ff961a9d1af57",
+            "config.yaml": "85d10906007df21ee48dbb86faa09205609274eb38ea224dce767e2844d0a934",
+        }
+    directory = Path(__file__).resolve().parent / "models" / folder
     directory.mkdir(parents=True, exist_ok=True)
-    base = "https://huggingface.co/pcunwa/BS-Roformer-Large-Inst/resolve/94ea5d723ef7aceeeb211472a7bb42ad6ce4ee0d/"
-    for name, checksum in {
-        "bs_large_v2_inst.ckpt": "09251ab8b5bb892414a6ab8aa80a1be30c17852d5e7f4e76943610de049e4bc4",
-        "bs_roformer.py": "fc4a907999e151bc8272b62e7829757ac4384bfccd4aae7dff6ff961a9d1af57",
-        "config.yaml": "85d10906007df21ee48dbb86faa09205609274eb38ea224dce767e2844d0a934",
-    }.items():
+    for name, checksum in files.items():
         target = directory / name
         def valid(path):
             if not path.is_file():
@@ -996,27 +1007,36 @@ def karaoke_model_assets():
     return directory
 
 
-def karaoke_primary(mix, rate):
+def karaoke_primary(mix, rate, *, hyperace=False):
     import numpy as np
     import torch
     import yaml
-    directory = karaoke_model_assets()
+    directory = karaoke_model_assets(hyperace)
     config = yaml.safe_load((directory / "config.yaml").read_text().replace("!!python/tuple", ""))["model"]
     source = (directory / "bs_roformer.py").read_text(encoding="utf8").replace(
         "from models.bs_roformer.attend import Attend",
         "from audio_separator.separator.uvr_lib_v5.roformer.attend import Attend")
+    if hyperace:
+        # This upstream import is unused during inference.
+        source = source.replace("import torchaudio\n", "")
     namespace = {"__name__": __name__}
     exec(compile(source, str(directory / "bs_roformer.py"), "exec"), namespace)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     for key in ("freqs_per_bands", "multi_stft_resolutions_window_sizes"):
         config[key] = tuple(config[key])
     net = namespace["BSRoformer"](**config)
-    state = torch.load(directory / "bs_large_v2_inst.ckpt", map_location="cpu", weights_only=True)
+    checkpoint = "bs_roformer_inst_hyperacev2.ckpt" if hyperace else "bs_large_v2_inst.ckpt"
+    state = torch.load(directory / checkpoint, map_location="cpu", weights_only=True)
     net.load_state_dict(state.get("state_dict", state))
     del state
     net.to(device).eval()
     # Overlap and taper both ends to avoid discontinuities between estimates.
-    chunk = 441344
+    chunk = 18 * rate if hyperace else 441344
+    if hyperace and len(mix) <= chunk:
+        audio = np.pad(mix, ((0, max(0, 2*rate-len(mix))), (0, 0)), mode="reflect")
+        with torch.inference_mode():
+            prediction = net(torch.from_numpy(audio.T.copy())[None].to(device))
+            return prediction.reshape(2, -1).T.cpu().numpy()[:len(mix)]
     hop = chunk // 2
     pad = hop
     padded = np.pad(mix, ((pad, pad), (0, 0)), mode="reflect")
@@ -1130,6 +1150,16 @@ def render_karaoke(source, work):
     mix = decode(source, decoded)
     if len(mix)<512:
         raise ValueError("File nhạc quá ngắn.")
+    target = work / "karaoke-beat.wav"
+    try:
+        backing = karaoke_primary(mix, rate, hyperace=True)
+        if backing.shape != mix.shape or not np.isfinite(backing).all():
+            raise ValueError("Invalid HyperACE output")
+    except Exception:
+        logging.exception("HyperACE unavailable, using the previous Audio Lab separator")
+    else:
+        karaoke_finish(mix, backing, None, rate, target)
+        return target, "HyperACE v2 Inst"
     base = karaoke_primary(mix,rate)
     alternate = None
     engine = "BS-RoFormer Large Inst"
@@ -1141,7 +1171,6 @@ def render_karaoke(source, work):
             engine += " + " + ("Demucs" if "Demucs" in name else "UVR HQ3")
     except Exception:
         logging.exception("Audio Lab: secondary estimate unavailable")
-    target = work / "karaoke-beat.wav"
     karaoke_finish(mix,base,alternate,rate,target)
     return target, engine
 

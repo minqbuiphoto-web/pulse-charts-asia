@@ -72,7 +72,7 @@ function BeatExtractor() {
       <small>Nếu phần đệm bị mỏng, hãy hạ mức giảm.</small>
       <button type="button" disabled={!file || busy} onClick={() => void run(true)}>Nghe thử 12 giây</button>
     </fieldset>}
-    <details className="ai-local-box"><summary>Bộ xử lý trên máy</summary><p>Lần đầu cần tải model. Nếu đã cài Pulse Audio AI, hãy cập nhật để dùng chức năng karaoke.</p><a href="/update-pulse-audio-ai.cmd" download>Cập nhật bộ xử lý</a> · <a href="/install-pulse-audio-ai.cmd" download>Cài lần đầu</a> · <a href="/pulse-audio-ai-server.py" download>Tải tệp engine cho bộ cài</a></details>
+    <details className="ai-local-box"><summary>Bộ xử lý trên máy</summary><p>Với bài có giọng hát, hãy cập nhật Pulse Audio AI để dùng HyperACE v2 Inst. Lần đầu bộ xử lý sẽ tải mô hình về máy.</p><a href="/update-pulse-audio-ai.cmd" download>Cập nhật bộ xử lý</a> · <a href="/install-pulse-audio-ai.cmd" download>Cài lần đầu</a> · <a href="/pulse-audio-ai-server.py" download>Tải tệp engine cho bộ cài</a></details>
     <button className="pro-run" disabled={!file || busy} onClick={() => void run()}>{busy ? "ĐANG XỬ LÝ…" : guide ? "TẠO BEAT GIẢM NHẠC CỤ DẪN" : "TẠO BEAT KARAOKE"}<span>↗</span></button>
     <p className="pro-status" aria-live="polite">{status}</p>
     {result ? <div className="pro-result"><audio controls preload="metadata" src={result.url}/><small>{result.details}</small><a href={result.url} download={result.name}>TẢI FILE BEAT WAV ↓</a></div> : null}
